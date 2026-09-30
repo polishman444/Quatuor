@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EEF0F7">
+<title>Quatuor</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quatuor">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF0F7; --card:#FFFFFF; --edge:#CDD2E3; --ink:#1B2040; --muted:#6B7190; --sel:#1B2040; --sel-ink:#FFFFFF; --sheet:#FFFFFF;
+  /* 4 niveaux : Échauffement, Réflexion, Coriace, Casse-tête */
+  --l0:#45D0B0; --l0e:#27A085; --l1:#FFA552; --l1e:#D27B26; --l2:#EF5B7C; --l2e:#BF3A59; --l3:#2E3A87; --l3e:#18204F;
+  --font:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#12152A; --card:#252A48; --edge:#0A0C1B; --ink:#F1F2FA; --muted:#9AA0C0; --sel:#F1F2FA; --sel-ink:#12152A; --sheet:#1C2039; --l3:#4A58C2; --l3e:#2A347F; }
+}
+:root[data-theme="dark"]{ --bg:#12152A; --card:#252A48; --edge:#0A0C1B; --ink:#F1F2FA; --muted:#9AA0C0; --sel:#F1F2FA; --sel-ink:#12152A; --sheet:#1C2039; --l3:#4A58C2; --l3e:#2A347F; }
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.35;
+  -webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+button{font-family:inherit;color:inherit}
+.app{max-width:480px;margin:0 auto;padding:10px 16px 110px;min-height:100svh;display:flex;flex-direction:column}
+.area{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:10px}
+
+.top{display:flex;align-items:center;justify-content:space-between;height:52px}
+.brand{display:flex;align-items:center;gap:8px}
+.brand .ibtn{margin-left:-8px}
+.mark{display:grid;grid-template-columns:repeat(2,11px);gap:3px}
+.mark i{width:11px;height:11px;border-radius:3px;display:block}
+.mark i:nth-child(1){background:var(--l0)} .mark i:nth-child(2){background:var(--l1)}
+.mark i:nth-child(3){background:var(--l2)} .mark i:nth-child(4){background:var(--l3)}
+h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
+.icons{display:flex;gap:6px}
+.ibtn{width:42px;height:42px;border-radius:12px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer}
+.ibtn svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ibtn:active{background:var(--edge)}
+.sub{margin:4px 2px 14px;color:var(--muted);font-weight:500}
+.sub b{color:var(--ink);font-weight:650}
+
+.stack{display:grid;gap:10px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tile{border:0;border-radius:14px;background:var(--card);box-shadow:0 4px 0 var(--edge);aspect-ratio:1/1;padding:4px;cursor:pointer;
+  display:grid;place-items:center;text-align:center;font-weight:650;line-height:1.08;word-break:keep-all;overflow:hidden;
+  transition:transform .12s ease, box-shadow .12s ease, background .12s, color .12s}
+.tile span{display:block;max-width:100%}
+.tile.on{background:var(--sel);color:var(--sel-ink);transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.tile.jump{animation:jump .42s ease both;animation-delay:calc(var(--i)*70ms)}
+.tile.shake{animation:shake .4s}
+@keyframes jump{0%,100%{transform:translateY(3px)}45%{transform:translateY(-12px)}}
+@keyframes shake{0%,100%{transform:translate(0,3px)}20%{transform:translate(-7px,3px)}40%{transform:translate(7px,3px)}60%{transform:translate(-4px,3px)}80%{transform:translate(4px,3px)}}
+
+/* Groupe trouvé + anecdote */
+.solved{border:0;width:100%;border-radius:14px;padding:12px 14px 11px;text-align:center;cursor:pointer;display:block;font:inherit;
+  animation:land .4s cubic-bezier(.2,1.4,.4,1) both}
+.solved .lvl{font-size:.78rem;font-weight:650;opacity:.8}
+.solved strong{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.01em;margin-top:1px}
+.solved .w{display:block;font-size:.92rem;font-weight:500;margin-top:2px}
+.fact{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.fact>div{overflow:hidden}
+.fact p{margin:10px 0 2px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.28);font-size:.92rem;font-weight:500;line-height:1.35;text-align:left}
+.solved.open .fact{grid-template-rows:1fr}
+.solved .more{display:block;font-size:.78rem;font-weight:650;margin-top:5px;opacity:.75}
+.solved.open .more{display:none}
+.l0{background:var(--l0);box-shadow:0 4px 0 var(--l0e);color:#082A22}
+.l1{background:var(--l1);box-shadow:0 4px 0 var(--l1e);color:#3A1E02}
+.l2{background:var(--l2);box-shadow:0 4px 0 var(--l2e);color:#fff}
+.l3{background:var(--l3);box-shadow:0 4px 0 var(--l3e);color:#fff}
+@keyframes land{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+
+.lives{display:flex;align-items:center;justify-content:center;gap:10px;margin:22px 0 0;color:var(--muted);font-size:.95rem;font-weight:500}
+.lives .dots{display:flex;gap:6px}
+.lives i{width:14px;height:14px;border-radius:4px;background:var(--ink);display:block;transition:transform .25s, opacity .25s}
+.lives i.off{opacity:.15;transform:scale(.7)}
+
+.dock{position:fixed;left:0;right:0;bottom:0;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(to top, var(--bg) 70%, transparent)}
+.dock-in{max-width:480px;margin:0 auto;display:flex;gap:10px;align-items:center}
+.round{flex:none;width:54px;height:54px;border-radius:50%;border:0;background:var(--card);box-shadow:0 4px 0 var(--edge);display:grid;place-items:center;cursor:pointer}
+.round svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pill{flex:1;height:54px;border-radius:27px;border:0;font-size:1.08rem;font-weight:800;cursor:pointer;transition:transform .1s, box-shadow .1s, opacity .15s}
+.pill.main{background:var(--ink);color:var(--bg);box-shadow:0 4px 0 #000}
+.pill.soft{background:var(--card);box-shadow:0 4px 0 var(--edge)}
+.round:active,.pill:active{transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.pill:disabled,.round:disabled{opacity:.35;cursor:default;transform:none}
+button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
+
+.veil{position:fixed;inset:0;background:rgba(10,12,28,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.veil.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--sheet);border-radius:24px 24px 0 0;
+  padding:10px 22px calc(24px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;transform:translateY(105%);
+  transition:transform .35s cubic-bezier(.2,.9,.3,1);max-height:88vh;overflow:auto}
+.sheet.open{transform:translateY(0)}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--edge);margin:0 auto 14px}
+.sheet h2{margin:0 0 6px;font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+.sheet h3{margin:18px 0 8px;font-size:1.1rem;font-weight:800}
+.sheet p{margin:0 0 10px;color:var(--muted)}
+.rule{display:flex;gap:12px;align-items:flex-start;margin:12px 0}
+.rule .n{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800}
+.levels{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:14px 0 20px}
+.levels span{border-radius:10px;padding:8px 6px;text-align:center;font-size:.88rem;font-weight:650}
+.recap{display:grid;gap:4px;justify-content:center;margin:14px 0 16px}
+.recap div{display:flex;gap:4px}
+.recap i{width:26px;height:26px;border-radius:7px;display:block}
+.learned{display:grid;gap:8px;margin-bottom:18px}
+.learned div{border-left:5px solid;padding:6px 0 6px 12px;font-size:.93rem;line-height:1.35}
+.learned b{display:block;font-size:.85rem}
+.learned .b0{border-color:var(--l0)} .learned .b1{border-color:var(--l1)} .learned .b2{border-color:var(--l2)} .learned .b3{border-color:var(--l3)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 20px;text-align:center}
+.stats b{display:block;font-size:1.7rem;font-weight:800;line-height:1.1}
+.stats small{color:var(--muted);font-size:.8rem}
+.row{display:flex;gap:10px}
+
+/* Tiroir des grilles */
+.drawer{position:fixed;top:0;bottom:0;left:0;z-index:21;width:min(86vw,360px);background:var(--sheet);
+  padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-102%);transition:transform .32s cubic-bezier(.2,.9,.3,1);overflow:auto;border-radius:0 22px 22px 0}
+.drawer.open{transform:translateX(0)}
+.drawer h2{margin:0;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.prog{margin:4px 0 14px;color:var(--muted);font-weight:500}
+.bar{height:8px;border-radius:4px;background:var(--edge);overflow:hidden;margin:-6px 0 16px}
+.bar i{display:block;height:100%;background:var(--l0);border-radius:4px}
+.glist{display:grid;gap:8px}
+.gitem{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--bg);border-radius:14px;padding:10px 12px;cursor:pointer;text-align:left;font:inherit}
+.gitem.cur{outline:2.5px solid var(--ink)}
+.gitem .num{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800;background:var(--card);box-shadow:0 3px 0 var(--edge)}
+.gitem.win .num{background:var(--l0);color:#082A22;box-shadow:0 3px 0 var(--l0e)}
+.gitem.lost .num{background:var(--l2);color:#fff;box-shadow:0 3px 0 var(--l2e)}
+.gitem .txt{flex:1;min-width:0}
+.gitem b{display:block;font-weight:700}
+.gitem small{color:var(--muted);font-size:.85rem}
+.tag{flex:none;font-size:.75rem;font-weight:700;padding:4px 8px;border-radius:999px;background:var(--ink);color:var(--bg)}
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translate(-50%,-20px);background:var(--ink);color:var(--bg);
+  padding:10px 18px;border-radius:12px;font-weight:650;opacity:0;transition:opacity .2s, transform .2s;pointer-events:none;z-index:30}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){ .tile.jump,.tile.shake,.solved{animation:none} .sheet,.fact{transition:none} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><button class="ibtn" id="menuBtn" aria-label="Toutes les grilles"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h1>Quatuor</h1></div>
+    <div class="icons">
+      <button class="ibtn" id="helpBtn" aria-label="Règles du jeu"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 1c0 1.8-2.5 2.2-2.5 3.8"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg></button>
+      <button class="ibtn" id="statsBtn" aria-label="Statistiques"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg></button>
+    </div>
+  </header>
+  <div class="sub" id="sub"></div>
+  <div class="area">
+    <div class="stack">
+      <div class="stack" id="solved"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="lives" id="lives">Erreurs restantes <span class="dots"><i></i><i></i><i></i><i></i></span></div>
+  </div>
+</div>
+
+<nav class="dock"><div class="dock-in">
+  <button class="round" id="shuffle" aria-label="Mélanger"><svg viewBox="0 0 24 24"><path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.5M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.5M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/></svg></button>
+  <button class="pill soft" id="clear" disabled>Effacer</button>
+  <button class="pill main" id="submit" disabled>Valider</button>
+</div></nav>
+
+<div class="veil" id="veil"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></div>
+<nav class="drawer" id="drawer" aria-label="Toutes les grilles"></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+// Chaque grille : 4 groupes du plus facile (niveau 0) au plus dur (niveau 3), avec une anecdote
+const G = (name, words, fact) => ({name, words, fact});
+const GRIDS = [
+ [G("Planètes du système solaire",["Mercure","Saturne","Uranus","Neptune"],"Neptune a été découverte par le calcul avant d'être observée : en 1846, le Français Urbain Le Verrier a prédit sa position à partir des perturbations de l'orbite d'Uranus."),
+  G("Gares parisiennes",["Austerlitz","Montparnasse","Saint-Lazare","Bercy"],"Claude Monet a peint en 1877 toute une série de tableaux de la gare Saint-Lazare, fasciné par la vapeur des locomotives."),
+  G("Films d'Alfred Hitchcock",["Psychose","Vertigo","Les Oiseaux","Rebecca"],"« Vertigo » est sorti en France sous le titre « Sueurs froides »."),
+  G("Batailles de Napoléon",["Iéna","Wagram","Marengo","Eylau"],"Paris est remplie de noms de victoires napoléoniennes : pont d'Iéna, avenue de Wagram, avenue d'Eylau… et gare d'Austerlitz, d'où le piège !")],
+ [G("Fleuves français",["Loire","Seine","Garonne","Rhône"],"La Loire est le plus long fleuve de France, avec environ 1 000 km."),
+  G("Personnages de Molière",["Harpagon","Tartuffe","Alceste","Scapin"],"« Tartuffe » a été interdit pendant cinq ans après sa première représentation en 1664, sous la pression des milieux religieux."),
+  G("Mots venus de l'arabe",["Algèbre","Café","Sucre","Zéro"],"« Zéro » et « chiffre » viennent du même mot arabe, ṣifr, qui signifie « vide »."),
+  G("Éléments nommés d'après un pays",["Francium","Germanium","Polonium","Gallium"],"Le gallium a été découvert en 1875 par le Français Lecoq de Boisbaudran, qui l'a nommé d'après la Gaule, Gallia en latin.")],
+ [G("Dieux grecs",["Zeus","Apollon","Poséidon","Athéna"],"Selon le mythe, Athéna serait née adulte et tout armée, jaillissant du crâne de Zeus."),
+  G("Maisons de luxe françaises",["Chanel","Dior","Cartier","Hermès"],"Hermès a été fondé en 1837 comme atelier de harnais et de selles pour chevaux."),
+  G("Peintres impressionnistes",["Monet","Degas","Renoir","Pissarro"],"Le mot « impressionnisme » est né d'une moquerie : un critique s'est inspiré du tableau de Monet « Impression, soleil levant » pour se moquer du groupe."),
+  G("Unités nommées d'après un savant",["Newton","Watt","Ampère","Pascal"],"À 19 ans, Blaise Pascal a inventé l'une des premières machines à calculer, la Pascaline.")],
+ [G("Pâtes italiennes",["Penne","Farfalle","Linguine","Fusilli"],"« Farfalle » signifie « papillons » en italien."),
+  G("Capitales africaines",["Dakar","Nairobi","Accra","Bamako"],"Dakar se trouve sur la presqu'île du Cap-Vert, qui abrite le point le plus à l'ouest de l'Afrique continentale."),
+  G("Mathématiciens français",["Fermat","Descartes","Galois","Laplace"],"Évariste Galois a posé les bases d'une théorie majeure des mathématiques avant de mourir en duel, à 20 ans, en 1832."),
+  G("Mots français utilisés en anglais",["Rendez-vous","Déjà-vu","Cliché","Entrepreneur"],"L'expression « déjà vu » a été popularisée par le chercheur français Émile Boirac à la fin du XIXe siècle.")],
+ [G("Monnaies",["Rouble","Yen","Peso","Dinar"],"« Dinar » vient du latin denarius, le nom d'une pièce de monnaie romaine."),
+  G("Chevaliers de la Table ronde",["Lancelot","Perceval","Gauvain","Galaad"],"C'est Chrétien de Troyes, auteur champenois du XIIe siècle, qui a introduit le Graal dans la littérature avec « Perceval ou le Conte du Graal »."),
+  G("Instruments à cordes",["Violon","Harpe","Luth","Cithare"],"Un luthier était à l'origine un fabricant de luths. Le mot est resté pour tous les instruments à cordes."),
+  G("Constellations",["Orion","Cassiopée","Andromède","Lyre"],"La galaxie d'Andromède, à environ 2,5 millions d'années-lumière, est l'un des objets les plus lointains visibles à l'œil nu.")],
+ [G("Fromages français",["Comté","Brie","Cantal","Munster"],"Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans."),
+  G("Philosophes des Lumières",["Voltaire","Rousseau","Diderot","Montesquieu"],"Voltaire est un pseudonyme : il s'appelait François-Marie Arouet."),
+  G("Os du corps humain",["Fémur","Tibia","Radius","Humérus"],"Le fémur est l'os le plus long du corps humain."),
+  G("Lunes du système solaire",["Titan","Europe","Io","Callisto"],"Titan, la plus grande lune de Saturne, est la seule lune connue à posséder une atmosphère épaisse.")],
+ [G("Prénoms des Beatles",["John","Paul","George","Ringo"],"Ringo Starr est un nom de scène : il s'appelle Richard Starkey."),
+  G("Films de Luc Besson",["Léon","Nikita","Lucy","Le Grand Bleu"],"« Le Grand Bleu » s'inspire de la rivalité entre les plongeurs en apnée Jacques Mayol et Enzo Maiorca."),
+  G("Opéras de Verdi",["Aïda","Nabucco","Otello","Rigoletto"],"« Aïda » a été commandé par l'Égypte et créé au Caire en 1871."),
+  G("Couleurs en héraldique",["Gueules","Azur","Sinople","Sable"],"Sur les blasons, « gueules » désigne le rouge, « sinople » le vert et « sable » le noir.")],
+ [G("Dieux égyptiens",["Râ","Anubis","Isis","Osiris"],"Anubis, représenté avec une tête de chacal, était le dieu de l'embaumement et le protecteur des morts."),
+  G("Cépages",["Merlot","Syrah","Gamay","Chardonnay"],"Le beaujolais est produit presque exclusivement à partir de gamay."),
+  G("Gaz nobles",["Néon","Argon","Krypton","Xénon"],"« Argon » vient du grec argos, « paresseux », parce que ce gaz ne réagit presque avec rien."),
+  G("Palindromes",["Kayak","Radar","Rotor","Ressasser"],"« Ressasser » est souvent cité comme le plus long palindrome courant de la langue française.")],
+ [G("Volcans",["Etna","Vésuve","Stromboli","Fuji"],"L'éruption du Vésuve en l'an 79 a enseveli la ville romaine de Pompéi sous les cendres."),
+  G("Îles françaises",["Corse","Ré","Oléron","Belle-Île"],"Oléron est la plus grande île de France métropolitaine après la Corse."),
+  G("Déserts",["Sahara","Gobi","Atacama","Kalahari"],"Le plus grand désert du monde est l'Antarctique : un désert se définit par la rareté des précipitations, pas par la chaleur."),
+  G("Détroits",["Gibraltar","Béring","Magellan","Ormuz"],"Le détroit de Béring ne sépare la Russie de l'Alaska que d'environ 80 km.")],
+ [G("Présidents de la Ve République",["Pompidou","Giscard","Mitterrand","Chirac"],"Le Centre Pompidou porte le nom du président qui a lancé le projet. Il n'a ouvert qu'en 1977, après sa mort."),
+  G("Châteaux de la Loire",["Chambord","Chenonceau","Amboise","Blois"],"Léonard de Vinci a passé ses dernières années à Amboise, où il est enterré."),
+  G("Explorateurs",["Cartier","Champlain","Cook","Colomb"],"Parti de Saint-Malo, Jacques Cartier a exploré le Saint-Laurent en 1534 et a contribué à répandre le nom « Canada »."),
+  G("Traités historiques",["Versailles","Westphalie","Verdun","Utrecht"],"Le traité de Verdun, en 843, a partagé l'empire de Charlemagne entre ses trois petits-fils.")],
+ [G("Les Trois Mousquetaires",["Athos","Porthos","Aramis","d'Artagnan"],"d'Artagnan a vraiment existé : Charles de Batz de Castelmore était officier des mousquetaires sous Louis XIV."),
+  G("Monstres grecs",["Méduse","Hydre","Minotaure","Cerbère"],"Cerbère, le chien à trois têtes, gardait l'entrée des Enfers."),
+  G("Personnages de Victor Hugo",["Cosette","Gavroche","Quasimodo","Esmeralda"],"Le succès de « Notre-Dame de Paris » a contribué à relancer l'intérêt pour la restauration de la cathédrale au XIXe siècle."),
+  G("Pierres précieuses",["Émeraude","Rubis","Saphir","Diamant"],"Le rubis et le saphir sont le même minéral, le corindon. Seules leurs impuretés changent la couleur.")],
+ [G("Arts martiaux",["Judo","Karaté","Aïkido","Sambo"],"Le sambo a été créé en URSS. Son nom est un acronyme russe qui signifie « autodéfense sans armes »."),
+  G("Tournois du Grand Chelem",["Roland-Garros","Wimbledon","Flushing Meadows","Melbourne"],"Roland Garros était un aviateur : en 1913, il a été le premier à traverser la Méditerranée en avion."),
+  G("Pièces d'échecs",["Fou","Tour","Cavalier","Roi"],"La dame, aujourd'hui la pièce la plus puissante, était à l'origine l'une des plus faibles : elle n'avançait que d'une case en diagonale."),
+  G("Maillots du Tour de France",["Jaune","Vert","Blanc","À pois"],"Le maillot jaune a été choisi en 1919 parce que le journal organisateur, L'Auto, était imprimé sur du papier jaune.")]
+];
+const LEVELS=["Échauffement","Réflexion","Coriace","Casse-tête"];
+const ICON=["🌱","⚡","🔥","🧠"];
+const $=id=>document.getElementById(id);
+const start=new Date(2026,9,1), today=new Date(); today.setHours(0,0,0,0);
+const dayNum=Math.floor((today-start)/864e5)+1;
+const buzz=p=>{ try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const dailyIdx=((dayNum-1)%GRIDS.length+GRIDS.length)%GRIDS.length;
+function loadRes(){ try{ return JSON.parse(localStorage.getItem("quatuor-res"))||{}; }catch(e){ return {}; } }
+function saveRes(r){ try{ localStorage.setItem("quatuor-res",JSON.stringify(r)); }catch(e){} }
+let grid,gridIdx,practice,words,selected,found,mistakes,history,tried,done,busy;
+const shuffleArr=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const groupOf=w=>grid.findIndex(g=>g.words.includes(w));
+
+function newGame(idx){
+  gridIdx=idx; grid=GRIDS[idx]; practice=idx!==dailyIdx;
+  words=shuffleArr(grid.flatMap(g=>g.words)); selected=new Set(); found=[]; mistakes=0; history=[]; tried=new Set(); done=false; busy=false;
+  const d=today.toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
+  $("sub").innerHTML = practice ? `Grille <b>n°${idx+1}</b>` : `Grille du jour · <b>${d}</b>`;
+  $("solved").innerHTML=""; $("lives").style.display="flex"; document.querySelector(".dock").style.display="block";
+  draw();
+}
+function fit(tile){
+  const span=tile.firstChild; let s=17; tile.style.fontSize=s+"px";
+  while(s>10&&(span.scrollWidth>tile.clientWidth-8||span.scrollHeight>tile.clientHeight-8)){ s-=.5; tile.style.fontSize=s+"px"; }
+}
+function draw(){
+  const g=$("grid"); g.innerHTML="";
+  words.forEach(w=>{
+    const b=document.createElement("button");
+    b.className="tile"+(selected.has(w)?" on":""); b.innerHTML="<span></span>"; b.firstChild.textContent=w;
+    b.setAttribute("aria-pressed",selected.has(w)); b.dataset.w=w; b.onclick=()=>toggle(w,b); g.appendChild(b);
+  });
+  requestAnimationFrame(()=>g.querySelectorAll(".tile").forEach(fit));
+  updateUi();
+}
+function updateUi(){
+  [...$("lives").querySelectorAll("i")].forEach((d,i)=>d.classList.toggle("off",i>=4-mistakes));
+  $("submit").disabled=selected.size!==4||done||busy;
+  $("clear").disabled=selected.size===0||done||busy;
+}
+function toggle(w,b){
+  if(done||busy) return;
+  if(selected.has(w)) selected.delete(w); else { if(selected.size>=4){ buzz(15); return; } selected.add(w); }
+  buzz(8); b.classList.toggle("on",selected.has(w)); b.setAttribute("aria-pressed",selected.has(w)); updateUi();
+}
+
+function addSolved(gi,open){
+  const g=grid[gi], d=document.createElement("button");
+  d.className="solved l"+gi+(open?" open":""); d.setAttribute("aria-expanded",!!open);
+  d.innerHTML=`<span class="lvl">${ICON[gi]} ${LEVELS[gi]}</span><strong>${esc(g.name)}</strong><span class="w">${esc(g.words.join(", "))}</span>
+    <span class="more">💡 Voir l'anecdote</span><div class="fact"><div><p>💡 ${esc(g.fact)}</p></div></div>`;
+  d.onclick=()=>{ const o=d.classList.toggle("open"); d.setAttribute("aria-expanded",o); };
+  if(open) $("solved").querySelectorAll(".solved.open").forEach(x=>{ x.classList.remove("open"); x.setAttribute("aria-expanded",false); });
+  $("solved").appendChild(d);
+}
+
+function submit(){
+  if(selected.size!==4||done||busy) return;
+  const sel=[...selected], key=[...sel].sort().join("|");
+  if(tried.has(key)){ toast("Déjà essayé"); return; }
+  tried.add(key); history.push(sel.map(groupOf));
+  const gi=groupOf(sel[0]), tiles=[...document.querySelectorAll(".tile.on")];
+  if(sel.every(w=>groupOf(w)===gi)){
+    busy=true; updateUi(); buzz(30);
+    tiles.forEach((t,i)=>{ t.style.setProperty("--i",i); t.classList.add("jump"); });
+    setTimeout(()=>{
+      found.push(gi); addSolved(gi,true);
+      words=words.filter(w=>!selected.has(w)); selected.clear(); busy=false; draw();
+      if(found.length===4) finish(true);
+    },650);
+  } else {
+    mistakes++; buzz([40,40,40]);
+    const c={}; sel.forEach(w=>c[groupOf(w)]=(c[groupOf(w)]||0)+1);
+    if(Object.values(c).includes(3)) toast("Presque ! Un seul intrus");
+    tiles.forEach(t=>{ t.classList.remove("shake"); void t.offsetWidth; t.classList.add("shake"); });
+    updateUi();
+    if(mistakes>=4){ busy=true; setTimeout(()=>finish(false),500); }
+  }
+}
+
+function finish(win){
+  done=true; selected.clear();
+  const rest=[0,1,2,3].filter(gi=>!found.includes(gi)); let delay=0;
+  rest.forEach(gi=>{ setTimeout(()=>{ addSolved(gi,false); words=words.filter(w=>groupOf(w)!==gi); draw(); },delay); delay+=380; });
+  $("lives").style.display="none"; document.querySelector(".dock").style.display="none";
+  const res=loadRes();
+  if(!res[gridIdx]){ res[gridIdx]={win, mistakes}; saveRes(res); }
+  if(!practice){
+    const s=load();
+    if(s.lastPlayed!==dayNum){
+      s.played=(s.played||0)+1; s.lastPlayed=dayNum;
+      if(win){ s.wins=(s.wins||0)+1; s.streak=(s.lastWin===dayNum-1?(s.streak||0):0)+1; s.lastWin=dayNum; s.best=Math.max(s.best||0,s.streak); }
+      else s.streak=0;
+      save(s);
+    }
+  }
+  setTimeout(()=>openResults(win),delay+600);
+}
+
+function load(){ try{ return JSON.parse(localStorage.getItem("quatuor"))||{}; }catch(e){ return {}; } }
+function save(s){ try{ localStorage.setItem("quatuor",JSON.stringify(s)); }catch(e){} }
+function statsHtml(){
+  const s=load(), alive=s.lastWin===dayNum||s.lastWin===dayNum-1, pct=s.played?Math.round((s.wins||0)/s.played*100):0;
+  return `<div class="stats"><div><b>${s.played||0}</b><small>parties</small></div><div><b>${pct}</b><small>% réussite</small></div>
+    <div><b>${alive?(s.streak||0):0}</b><small>série 🔥</small></div><div><b>${s.best||0}</b><small>record</small></div></div>`;
+}
+function openMenu(){
+  const r=loadRes(), done_=Object.keys(r).length;
+  const order=[dailyIdx, ...GRIDS.map((_,i)=>i).filter(i=>i!==dailyIdx)];
+  const items=order.map(i=>{
+    const x=r[i], st = x ? (x.win?"win":"lost") : "";
+    const sub = x ? (x.win ? (x.mistakes? `Réussie · ${x.mistakes} erreur${x.mistakes>1?"s":""}` : "Réussie sans faute") : "Perdue") : "À jouer";
+    return `<button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):i+1}</span>
+      <span class="txt"><b>Grille n°${i+1}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>`;
+  }).join("");
+  $("drawer").innerHTML=`<h2>Grilles</h2><p class="prog">${done_} sur ${GRIDS.length} terminées</p>
+    <div class="bar"><i style="width:${done_/GRIDS.length*100}%"></i></div><div class="glist">${items}</div>`;
+  $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>newGame(+b.dataset.i),150); });
+  $("veil").classList.add("open"); $("drawer").classList.add("open");
+}
+function openSheet(html){ $("sheetBody").innerHTML=html; $("veil").classList.add("open"); $("sheet").classList.add("open"); }
+function closeSheet(){ $("veil").classList.remove("open"); $("sheet").classList.remove("open"); $("drawer").classList.remove("open"); }
+$("veil").onclick=closeSheet;
+
+function openResults(win){
+  const title = win ? (mistakes===0?"Sans faute !":"Bien joué !") : "Pas cette fois";
+  const text = win ? `Grille résolue avec ${mistakes} erreur${mistakes>1?"s":""}.` : "Tous les groupes sont révélés.";
+  const recap = history.map(r=>`<div>${r.map(i=>`<i class="l${i}"></i>`).join("")}</div>`).join("");
+  const learned = grid.map((g,i)=>`<div class="b${i}"><b>${esc(g.name)}</b>${esc(g.fact)}</div>`).join("");
+  openSheet(`<h2>${title}</h2><p>${text}${practice?"":" Nouvelle grille demain."}</p>
+    <div class="recap">${recap}</div>${practice?"":statsHtml()}
+    <div class="row"><button class="pill main" id="share">Partager</button><button class="pill soft" id="next">Grille suivante</button></div>
+    <h3>Ce que tu as appris aujourd'hui</h3><div class="learned">${learned}</div>`);
+  $("share").onclick=share;
+  $("next").onclick=()=>{ closeSheet(); const r=loadRes(); let i=gridIdx;
+    for(let k=1;k<=GRIDS.length;k++){ const j=(gridIdx+k)%GRIDS.length; if(!r[j]){ i=j; break; } }
+    if(i===gridIdx) i=(gridIdx+1)%GRIDS.length;
+    setTimeout(()=>newGame(i),200); };
+}
+function openHelp(){
+  openSheet(`<h2>Comment jouer</h2>
+    <div class="rule"><span class="n l0">1</span><div>Trouve les <b>4 groupes de 4 mots</b> qui ont un point commun.</div></div>
+    <div class="rule"><span class="n l1">2</span><div>Sélectionne 4 mots, puis touche <b>Valider</b>. Tu as droit à <b>4 erreurs</b>.</div></div>
+    <div class="rule"><span class="n l2">3</span><div>Méfie-toi des pièges : certains mots vont dans plusieurs catégories.</div></div>
+    <div class="rule"><span class="n l3">4</span><div>Chaque groupe trouvé révèle une <b>anecdote</b>. Touche un groupe pour la rouvrir.</div></div>
+    <div class="levels">${LEVELS.map((l,i)=>`<span class="l${i}">${ICON[i]} ${l}</span>`).join("")}</div>
+    <button class="pill main" style="width:100%" id="okHelp">Jouer</button>`);
+  $("okHelp").onclick=closeSheet;
+}
+async function share(){
+  const head=`Quatuor n°${gridIdx+1}`;
+  const text=`${head}\n${history.map(r=>r.map(i=>ICON[i]).join("")).join("\n")}`;
+  if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e.name==="AbortError") return; } }
+  try{ await navigator.clipboard.writeText(text); toast("Résultat copié"); }
+  catch(e){ const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select();
+    try{ document.execCommand("copy"); toast("Résultat copié"); }catch(_){ toast("Copie impossible"); } t.remove(); }
+}
+let tt; function toast(m){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),1500); }
+
+$("submit").onclick=submit;
+$("shuffle").onclick=()=>{ if(busy||done) return; buzz(10); shuffleArr(words); draw(); };
+$("clear").onclick=()=>{ selected.clear(); draw(); };
+$("helpBtn").onclick=openHelp;
+$("menuBtn").onclick=openMenu;
+$("statsBtn").onclick=()=>{ openSheet(`<h2>Statistiques</h2><p>Grilles du jour uniquement.</p>${statsHtml()}<button class="pill main" style="width:100%" id="okS">Fermer</button>`); $("okS").onclick=closeSheet; };
+let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>document.querySelectorAll(".tile").forEach(fit),150); });
+
+newGame(dailyIdx);
+try{ if(!localStorage.getItem("quatuor-seen")){ localStorage.setItem("quatuor-seen","1"); setTimeout(openHelp,300); } }catch(e){}
+if("serviceWorker" in navigator){ addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
+</script>
+</body>
+</html>
