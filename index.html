@@ -58,6 +58,7 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
   display:grid;place-items:center;text-align:center;font-weight:650;line-height:1.08;word-break:keep-all;overflow:hidden;
   transition:transform .12s ease, box-shadow .12s ease, background .12s, color .12s}
 .tile span{display:block;max-width:100%}
+.tile span.hy{-webkit-hyphens:auto;hyphens:auto;overflow-wrap:anywhere}
 .tile.on{background:var(--sel);color:var(--sel-ink);transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
 /* Effet ressort à la sélection : la tuile s'enfonce puis rebondit */
 .tile.spring{animation:sprOff .45s cubic-bezier(.25,.8,.35,1) both}
@@ -157,8 +158,19 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
   padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));
   transform:translateX(-102%);transition:transform .32s cubic-bezier(.4,0,.6,1);overflow:auto;border-radius:0 22px 22px 0;box-shadow:-60px 0 0 var(--sheet)}
 .drawer.open{transform:translateX(0);transition:transform .5s cubic-bezier(.22,1.06,.4,1)}
-.drawer h2{margin:0;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.drawer h2{margin:0 0 -4px;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
 .prog{margin:4px 0 14px;color:var(--muted);font-weight:500}
+.prog b{color:var(--ink)}
+.drawer .sec{margin:16px 0 8px;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.dtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.dtab{border:0;border-radius:12px;padding:8px 2px 7px;background:var(--bg);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .2s}
+.dtab i{width:12px;height:12px;border-radius:4px;box-shadow:none;display:block}
+.dtab b{font-size:.8rem;font-weight:700;white-space:nowrap}
+.dtab small{font-size:.72rem;color:var(--muted)}
+.dtab.on{background:var(--ink);color:var(--bg)}
+.dtab.on small{color:var(--bg);opacity:.7}
+.dtab:active{transform:scale(.96)}
+.dbadge{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:700;box-shadow:none;vertical-align:1px}
 .bar{height:8px;border-radius:4px;background:var(--edge);overflow:hidden;margin:-6px 0 16px}
 .bar i{display:block;height:100%;background:var(--l0);border-radius:4px}
 .glist{display:grid;gap:8px}
@@ -194,7 +206,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
       <div class="stack" id="solved"></div>
       <div class="grid" id="grid"></div>
     </div>
-    <div class="lives" id="lives">Erreurs restantes <span class="dots"><i></i><i></i><i></i><i></i></span></div>
+    <div class="lives" id="lives">Erreurs restantes <span class="dots"></span></div>
   </div>
 </div>
 
@@ -212,55 +224,139 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 <script>
 // Chaque grille : 4 groupes du plus facile (niveau 0) au plus dur (niveau 3), avec une anecdote
 const G = (name, words, fact) => ({name, words, fact});
+// Difficulté d'une grille : facile, moyen, difficile ou goat
+const D = (diff, groups) => Object.assign(groups, {diff});
 const GRIDS = [
- [G("Planètes du système solaire",["Mercure","Saturne","Uranus","Neptune"],"Neptune a été découverte par le calcul avant d'être observée : en 1846, le Français Urbain Le Verrier a prédit sa position à partir des perturbations de l'orbite d'Uranus."),
+ D("moyen",[G("Planètes du système solaire",["Mercure","Saturne","Uranus","Neptune"],"Neptune a été découverte par le calcul avant d'être observée : en 1846, le Français Urbain Le Verrier a prédit sa position à partir des perturbations de l'orbite d'Uranus."),
   G("Gares parisiennes",["Austerlitz","Montparnasse","Saint-Lazare","Bercy"],"Claude Monet a peint en 1877 toute une série de tableaux de la gare Saint-Lazare, fasciné par la vapeur des locomotives."),
   G("Films d'Alfred Hitchcock",["Psychose","Vertigo","Les Oiseaux","Rebecca"],"« Vertigo » est sorti en France sous le titre « Sueurs froides »."),
-  G("Batailles de Napoléon",["Iéna","Wagram","Marengo","Eylau"],"Paris est remplie de noms de victoires napoléoniennes : pont d'Iéna, avenue de Wagram, avenue d'Eylau… et gare d'Austerlitz, d'où le piège !")],
- [G("Fleuves français",["Loire","Seine","Garonne","Rhône"],"La Loire est le plus long fleuve de France, avec environ 1 000 km."),
+  G("Batailles de Napoléon",["Iéna","Wagram","Marengo","Eylau"],"Paris est remplie de noms de victoires napoléoniennes : pont d'Iéna, avenue de Wagram, avenue d'Eylau… et gare d'Austerlitz, d'où le piège !")]),
+ D("moyen",[G("Fleuves français",["Loire","Seine","Garonne","Rhône"],"La Loire est le plus long fleuve de France, avec environ 1 000 km."),
   G("Personnages de Molière",["Harpagon","Tartuffe","Alceste","Scapin"],"« Tartuffe » a été interdit pendant cinq ans après sa première représentation en 1664, sous la pression des milieux religieux."),
   G("Mots venus de l'arabe",["Algèbre","Café","Sucre","Zéro"],"« Zéro » et « chiffre » viennent du même mot arabe, ṣifr, qui signifie « vide »."),
-  G("Éléments nommés d'après un pays",["Francium","Germanium","Polonium","Gallium"],"Le gallium a été découvert en 1875 par le Français Lecoq de Boisbaudran, qui l'a nommé d'après la Gaule, Gallia en latin.")],
- [G("Dieux grecs",["Zeus","Apollon","Poséidon","Athéna"],"Selon le mythe, Athéna serait née adulte et tout armée, jaillissant du crâne de Zeus."),
+  G("Éléments nommés d'après un pays",["Francium","Germanium","Polonium","Gallium"],"Le gallium a été découvert en 1875 par le Français Lecoq de Boisbaudran, qui l'a nommé d'après la Gaule, Gallia en latin.")]),
+ D("facile",[G("Dieux grecs",["Zeus","Apollon","Poséidon","Athéna"],"Selon le mythe, Athéna serait née adulte et tout armée, jaillissant du crâne de Zeus."),
   G("Maisons de luxe françaises",["Chanel","Dior","Cartier","Hermès"],"Hermès a été fondé en 1837 comme atelier de harnais et de selles pour chevaux."),
   G("Peintres impressionnistes",["Monet","Degas","Renoir","Pissarro"],"Le mot « impressionnisme » est né d'une moquerie : un critique s'est inspiré du tableau de Monet « Impression, soleil levant » pour se moquer du groupe."),
-  G("Unités nommées d'après un savant",["Newton","Watt","Ampère","Pascal"],"À 19 ans, Blaise Pascal a inventé l'une des premières machines à calculer, la Pascaline.")],
- [G("Pâtes italiennes",["Penne","Farfalle","Linguine","Fusilli"],"« Farfalle » signifie « papillons » en italien."),
+  G("Unités nommées d'après un savant",["Newton","Watt","Ampère","Pascal"],"À 19 ans, Blaise Pascal a inventé l'une des premières machines à calculer, la Pascaline.")]),
+ D("facile",[G("Pâtes italiennes",["Penne","Farfalle","Linguine","Fusilli"],"« Farfalle » signifie « papillons » en italien."),
   G("Capitales africaines",["Dakar","Nairobi","Accra","Bamako"],"Dakar se trouve sur la presqu'île du Cap-Vert, qui abrite le point le plus à l'ouest de l'Afrique continentale."),
   G("Mathématiciens français",["Fermat","Descartes","Galois","Laplace"],"Évariste Galois a posé les bases d'une théorie majeure des mathématiques avant de mourir en duel, à 20 ans, en 1832."),
-  G("Mots français utilisés en anglais",["Rendez-vous","Déjà-vu","Cliché","Entrepreneur"],"L'expression « déjà vu » a été popularisée par le chercheur français Émile Boirac à la fin du XIXe siècle.")],
- [G("Monnaies",["Rouble","Yen","Peso","Dinar"],"« Dinar » vient du latin denarius, le nom d'une pièce de monnaie romaine."),
+  G("Mots français utilisés en anglais",["Rendez-vous","Déjà-vu","Cliché","Entrepreneur"],"L'expression « déjà vu » a été popularisée par le chercheur français Émile Boirac à la fin du XIXe siècle.")]),
+ D("moyen",[G("Monnaies",["Rouble","Yen","Peso","Dinar"],"« Dinar » vient du latin denarius, le nom d'une pièce de monnaie romaine."),
   G("Chevaliers de la Table ronde",["Lancelot","Perceval","Gauvain","Galaad"],"C'est Chrétien de Troyes, auteur champenois du XIIe siècle, qui a introduit le Graal dans la littérature avec « Perceval ou le Conte du Graal »."),
   G("Instruments à cordes",["Violon","Harpe","Luth","Cithare"],"Un luthier était à l'origine un fabricant de luths. Le mot est resté pour tous les instruments à cordes."),
-  G("Constellations",["Orion","Cassiopée","Andromède","Lyre"],"La galaxie d'Andromède, à environ 2,5 millions d'années-lumière, est l'un des objets les plus lointains visibles à l'œil nu.")],
- [G("Fromages français",["Comté","Brie","Cantal","Munster"],"Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans."),
+  G("Constellations",["Orion","Cassiopée","Andromède","Lyre"],"La galaxie d'Andromède, à environ 2,5 millions d'années-lumière, est l'un des objets les plus lointains visibles à l'œil nu.")]),
+ D("facile",[G("Fromages français",["Comté","Brie","Cantal","Munster"],"Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans."),
   G("Philosophes des Lumières",["Voltaire","Rousseau","Diderot","Montesquieu"],"Voltaire est un pseudonyme : il s'appelait François-Marie Arouet."),
   G("Os du corps humain",["Fémur","Tibia","Radius","Humérus"],"Le fémur est l'os le plus long du corps humain."),
-  G("Lunes du système solaire",["Titan","Europe","Io","Callisto"],"Titan, la plus grande lune de Saturne, est la seule lune connue à posséder une atmosphère épaisse.")],
- [G("Prénoms des Beatles",["John","Paul","George","Ringo"],"Ringo Starr est un nom de scène : il s'appelle Richard Starkey."),
+  G("Lunes du système solaire",["Titan","Europe","Io","Callisto"],"Titan, la plus grande lune de Saturne, est la seule lune connue à posséder une atmosphère épaisse.")]),
+ D("difficile",[G("Prénoms des Beatles",["John","Paul","George","Ringo"],"Ringo Starr est un nom de scène : il s'appelle Richard Starkey."),
   G("Films de Luc Besson",["Léon","Nikita","Lucy","Le Grand Bleu"],"« Le Grand Bleu » s'inspire de la rivalité entre les plongeurs en apnée Jacques Mayol et Enzo Maiorca."),
   G("Opéras de Verdi",["Aïda","Nabucco","Otello","Rigoletto"],"« Aïda » a été commandé par l'Égypte et créé au Caire en 1871."),
-  G("Couleurs en héraldique",["Gueules","Azur","Sinople","Sable"],"Sur les blasons, « gueules » désigne le rouge, « sinople » le vert et « sable » le noir.")],
- [G("Dieux égyptiens",["Râ","Anubis","Isis","Osiris"],"Anubis, représenté avec une tête de chacal, était le dieu de l'embaumement et le protecteur des morts."),
+  G("Couleurs en héraldique",["Gueules","Azur","Sinople","Sable"],"Sur les blasons, « gueules » désigne le rouge, « sinople » le vert et « sable » le noir.")]),
+ D("moyen",[G("Dieux égyptiens",["Râ","Anubis","Isis","Osiris"],"Anubis, représenté avec une tête de chacal, était le dieu de l'embaumement et le protecteur des morts."),
   G("Cépages",["Merlot","Syrah","Gamay","Chardonnay"],"Le beaujolais est produit presque exclusivement à partir de gamay."),
   G("Gaz nobles",["Néon","Argon","Krypton","Xénon"],"« Argon » vient du grec argos, « paresseux », parce que ce gaz ne réagit presque avec rien."),
-  G("Palindromes",["Kayak","Radar","Rotor","Ressasser"],"« Ressasser » est souvent cité comme le plus long palindrome courant de la langue française.")],
- [G("Volcans",["Etna","Vésuve","Stromboli","Fuji"],"L'éruption du Vésuve en l'an 79 a enseveli la ville romaine de Pompéi sous les cendres."),
+  G("Palindromes",["Kayak","Radar","Rotor","Ressasser"],"« Ressasser » est souvent cité comme le plus long palindrome courant de la langue française.")]),
+ D("facile",[G("Volcans",["Etna","Vésuve","Stromboli","Fuji"],"L'éruption du Vésuve en l'an 79 a enseveli la ville romaine de Pompéi sous les cendres."),
   G("Îles françaises",["Corse","Ré","Oléron","Belle-Île"],"Oléron est la plus grande île de France métropolitaine après la Corse."),
   G("Déserts",["Sahara","Gobi","Atacama","Kalahari"],"Le plus grand désert du monde est l'Antarctique : un désert se définit par la rareté des précipitations, pas par la chaleur."),
-  G("Détroits",["Gibraltar","Béring","Magellan","Ormuz"],"Le détroit de Béring ne sépare la Russie de l'Alaska que d'environ 80 km.")],
- [G("Présidents de la Ve République",["Pompidou","Giscard","Mitterrand","Chirac"],"Le Centre Pompidou porte le nom du président qui a lancé le projet. Il n'a ouvert qu'en 1977, après sa mort."),
+  G("Détroits",["Gibraltar","Béring","Magellan","Ormuz"],"Le détroit de Béring ne sépare la Russie de l'Alaska que d'environ 80 km.")]),
+ D("difficile",[G("Présidents de la Ve République",["Pompidou","Giscard","Mitterrand","Chirac"],"Le Centre Pompidou porte le nom du président qui a lancé le projet. Il n'a ouvert qu'en 1977, après sa mort."),
   G("Châteaux de la Loire",["Chambord","Chenonceau","Amboise","Blois"],"Léonard de Vinci a passé ses dernières années à Amboise, où il est enterré."),
   G("Explorateurs",["Cartier","Champlain","Cook","Colomb"],"Parti de Saint-Malo, Jacques Cartier a exploré le Saint-Laurent en 1534 et a contribué à répandre le nom « Canada »."),
-  G("Traités historiques",["Versailles","Westphalie","Verdun","Utrecht"],"Le traité de Verdun, en 843, a partagé l'empire de Charlemagne entre ses trois petits-fils.")],
- [G("Les Trois Mousquetaires",["Athos","Porthos","Aramis","d'Artagnan"],"d'Artagnan a vraiment existé : Charles de Batz de Castelmore était officier des mousquetaires sous Louis XIV."),
+  G("Traités historiques",["Versailles","Westphalie","Verdun","Utrecht"],"Le traité de Verdun, en 843, a partagé l'empire de Charlemagne entre ses trois petits-fils.")]),
+ D("facile",[G("Les Trois Mousquetaires",["Athos","Porthos","Aramis","d'Artagnan"],"d'Artagnan a vraiment existé : Charles de Batz de Castelmore était officier des mousquetaires sous Louis XIV."),
   G("Monstres grecs",["Méduse","Hydre","Minotaure","Cerbère"],"Cerbère, le chien à trois têtes, gardait l'entrée des Enfers."),
   G("Personnages de Victor Hugo",["Cosette","Gavroche","Quasimodo","Esmeralda"],"Le succès de « Notre-Dame de Paris » a contribué à relancer l'intérêt pour la restauration de la cathédrale au XIXe siècle."),
-  G("Pierres précieuses",["Émeraude","Rubis","Saphir","Diamant"],"Le rubis et le saphir sont le même minéral, le corindon. Seules leurs impuretés changent la couleur.")],
- [G("Arts martiaux",["Judo","Karaté","Aïkido","Sambo"],"Le sambo a été créé en URSS. Son nom est un acronyme russe qui signifie « autodéfense sans armes »."),
+  G("Pierres précieuses",["Émeraude","Rubis","Saphir","Diamant"],"Le rubis et le saphir sont le même minéral, le corindon. Seules leurs impuretés changent la couleur.")]),
+ D("facile",[G("Arts martiaux",["Judo","Karaté","Aïkido","Sambo"],"Le sambo a été créé en URSS. Son nom est un acronyme russe qui signifie « autodéfense sans armes »."),
   G("Tournois du Grand Chelem",["Roland-Garros","Wimbledon","Flushing Meadows","Melbourne"],"Roland Garros était un aviateur : en 1913, il a été le premier à traverser la Méditerranée en avion."),
   G("Pièces d'échecs",["Fou","Tour","Cavalier","Roi"],"La dame, aujourd'hui la pièce la plus puissante, était à l'origine l'une des plus faibles : elle n'avançait que d'une case en diagonale."),
-  G("Maillots du Tour de France",["Jaune","Vert","Blanc","À pois"],"Le maillot jaune a été choisi en 1919 parce que le journal organisateur, L'Auto, était imprimé sur du papier jaune.")]
+  G("Maillots du Tour de France",["Jaune","Vert","Blanc","À pois"],"Le maillot jaune a été choisi en 1919 parce que le journal organisateur, L'Auto, était imprimé sur du papier jaune.")]),
+
+ D("facile",[G("Races de chiens",["Caniche","Labrador","Dalmatien","Beagle"],"Le dalmatien doit son nom à la Dalmatie, une région côtière de l'actuelle Croatie."),
+  G("Agrumes",["Citron","Pamplemousse","Mandarine","Clémentine"],"La clémentine doit son nom au frère Clément Rodier, qui l'aurait obtenue en Algérie au début du XXe siècle."),
+  G("Instruments à vent",["Flûte","Hautbois","Clarinette","Saxophone"],"Le saxophone, inventé par le Belge Adolphe Sax vers 1840, est en métal mais classé parmi les « bois », car son son est produit par une anche."),
+  G("Couleurs de l'arc-en-ciel",["Indigo","Violet","Orange","Vert"],"C'est Isaac Newton qui a fixé à sept le nombre de couleurs de l'arc-en-ciel, en ajoutant l'indigo, notamment par analogie avec les sept notes de la gamme.")]),
+ D("moyen",[G("Types de nuages",["Cirrus","Cumulus","Stratus","Nimbus"],"Le cumulonimbus, le nuage d'orage, peut s'élever à plus de 10 km d'altitude."),
+  G("Univers de Harry Potter",["Poudlard","Moldu","Quidditch","Détraqueur"],"Le mot « moldu » a été inventé par le traducteur français Jean-François Ménard pour traduire l'anglais « muggle »."),
+  G("Mots latins",["Agenda","Référendum","Alibi","Veto"],"« Alibi » signifie « ailleurs » en latin : avoir un alibi, c'est prouver qu'on était ailleurs."),
+  G("Personnages de Jules Verne",["Nemo","Passepartout","Strogoff","Phileas Fogg"],"Le Nautilus du capitaine Nemo a donné son nom au premier sous-marin nucléaire, l'USS Nautilus, lancé en 1954.")]),
+ D("difficile",[G("Rois de France",["Clovis","Dagobert","Philippe","Henri"],"Dagobert Ier est surtout connu grâce à « Le bon roi Dagobert », une chanson moqueuse écrite plus de mille ans après sa mort."),
+  G("Mots d'origine japonaise",["Tsunami","Karaoké","Emoji","Kamikaze"],"« Emoji » ne vient pas de l'anglais « emotion » : c'est un mot japonais formé de e (image) et moji (caractère)."),
+  G("Anciennes monnaies françaises",["Franc","Louis","Écu","Sou"],"Le franc est né en 1360 pour payer la rançon du roi Jean le Bon, prisonnier des Anglais."),
+  G("Anciens noms de villes",["Byzance","Lutèce","Edo","Nouvelle-Amsterdam"],"Tokyo s'appelait Edo jusqu'en 1868. Son nouveau nom signifie « capitale de l'Est ».")]),
+ D("goat",[G("Métiers de la justice",["Juge","Greffier","Huissier","Notaire"],"Depuis 2022, les huissiers et les commissaires-priseurs judiciaires forment une seule profession : commissaire de justice."),
+  G("Anciennes unités de longueur",["Toise","Pied","Pouce","Lieue"],"La toise mesurait environ 1,95 m. Elle a été remplacée par le mètre à la Révolution."),
+  G("Mots venus de l'aztèque",["Chocolat","Tomate","Coyote","Avocat"],"L'avocat (le fruit) vient du nahuatl ahuacatl, passé par l'espagnol aguacate. Sa ressemblance avec l'avocat du tribunal est une pure coïncidence."),
+  G("Robes de chevaux",["Alezan","Bai","Pie","Isabelle"],"Selon une légende tenace, la robe « isabelle » devrait son nom à une infante Isabelle qui aurait juré de ne pas changer de linge avant la fin d'un siège.")]),
+ D("moyen",[G("Cocktails",["Mojito","Spritz","Margarita","Daiquiri"],"Le daiquiri tient son nom d'une plage et d'une mine de fer de Cuba, près de Santiago."),
+  G("Sauces",["Béarnaise","Pesto","Aïoli","Béchamel"],"La béchamel devrait son nom à Louis de Béchameil, maître d'hôtel de Louis XIV."),
+  G("Danses",["Tango","Salsa","Valse","Flamenco"],"Le tango est né à la fin du XIXe siècle dans les quartiers populaires de Buenos Aires et de Montevideo."),
+  G("Peintres espagnols",["Goya","Vélasquez","Miró","Dalí"],"Salvador Dalí a dessiné le logo des sucettes Chupa Chups en 1969.")]),
+ D("difficile",[G("Entreprises nommées d'après leur fondateur",["Peugeot","Michelin","Renault","Citroën"],"Le Bibendum de Michelin, créé en 1898, est l'une des plus anciennes mascottes publicitaires au monde."),
+  G("Empereurs romains",["Néron","Auguste","Trajan","Hadrien"],"Hadrien a fait construire un mur de 117 km à travers la Grande-Bretagne pour marquer la frontière de l'Empire."),
+  G("Vocabulaire de la pétanque",["Cochonnet","Pointer","Tirer","Carreau"],"À la pétanque, perdre 13 à 0, c'est « être fanny » : le perdant doit traditionnellement embrasser les fesses d'une figurine nommée Fanny."),
+  G("Personnages de Pagnol",["Marius","Fanny","César","Manon"],"« Manon des sources » a d'abord été un film de Pagnol, en 1952, avant de devenir un roman.")]),
+ D("facile",[G("Océans",["Atlantique","Pacifique","Indien","Arctique"],"L'océan Pacifique est plus vaste que l'ensemble des terres émergées réunies."),
+  G("Pâtisseries françaises",["Éclair","Macaron","Mille-feuille","Madeleine"],"La madeleine est devenue le symbole du souvenir grâce à Marcel Proust, dans « Du côté de chez Swann »."),
+  G("Météo",["Grêle","Brouillard","Tonnerre","Verglas"],"Pour estimer la distance d'un orage, compte les secondes entre l'éclair et le tonnerre : 3 secondes correspondent à environ 1 km."),
+  G("Contes de Perrault",["Cendrillon","Barbe-Bleue","Peau d'Âne","Petit Poucet"],"Chez Perrault, la pantoufle de Cendrillon est bien en verre, même si certains ont soutenu qu'il fallait lire « vair », une fourrure.")]),
+ D("goat",[G("Meubles",["Buffet","Bahut","Secrétaire","Chiffonnier"],"Le chiffonnier est un meuble haut et étroit à tiroirs, où l'on rangeait à l'origine le linge et les petits « chiffons »."),
+  G("Vins de Bourgogne",["Chablis","Pommard","Volnay","Meursault"],"Le chablis est produit exclusivement à partir d'un seul cépage : le chardonnay."),
+  G("Empereurs romains",["Tibère","Vespasien","Commode","Domitien"],"Vespasien a taxé l'urine collectée dans les latrines publiques. Voilà pourquoi les urinoirs publics ont été appelés « vespasiennes »."),
+  G("Personnages d'Albert Camus",["Rieux","Clamence","Tarrou","Caligula"],"Albert Camus a reçu le prix Nobel de littérature en 1957, à seulement 44 ans.")]),
+ D("moyen",[G("Compositeurs",["Bach","Mozart","Chopin","Liszt"],"Frédéric Chopin, né en Pologne d'un père français, a passé la seconde moitié de sa vie à Paris."),
+  G("Personnages de Tintin",["Haddock","Tournesol","Castafiore","Rastapopoulos"],"Le capitaine Haddock n'apparaît qu'au neuvième album, « Le Crabe aux pinces d'or », en 1941."),
+  G("Fromages suisses",["Gruyère","Emmental","Raclette","Tête de Moine"],"La tête de moine se déguste en fines rosettes, râpées grâce à un appareil appelé girolle."),
+  G("Pays sans accès à la mer",["Suisse","Autriche","Bolivie","Mongolie"],"La Bolivie a perdu son accès à la mer face au Chili à la fin du XIXe siècle… mais elle possède toujours une marine, qui navigue sur le lac Titicaca.")]),
+ D("difficile",[G("Sommets",["Mont Blanc","Everest","Kilimandjaro","Aconcagua"],"L'Aconcagua, en Argentine, culmine à près de 6 960 m : c'est le plus haut sommet hors d'Asie."),
+  G("Modèles Renault",["Zoé","Twingo","Mégane","Clio"],"La Renault 4, la fameuse « 4L », a été produite à plus de 8 millions d'exemplaires."),
+  G("Types de vers",["Alexandrin","Octosyllabe","Décasyllabe","Hexamètre"],"L'alexandrin, vers de 12 syllabes, doit son nom au « Roman d'Alexandre », un poème du XIIe siècle."),
+  G("Muses grecques",["Uranie","Thalie","Calliope","Euterpe"],"Les neuf Muses sont filles de Zeus et de Mnémosyne, la déesse de la mémoire. Calliope, muse de la poésie épique, était considérée comme la première d'entre elles.")]),
+ D("goat",[G("Types de sièges",["Tabouret","Pouf","Méridienne","Bergère"],"La méridienne tient son nom de la sieste de la mi-journée, qu'on appelait aussi « méridienne »."),
+  G("Termes d'escrime",["Touche","Parade","Riposte","Fente"],"L'escrime fait partie des rares sports présents à tous les Jeux olympiques modernes depuis 1896."),
+  G("Figures de style",["Litote","Oxymore","Anaphore","Euphémisme"],"« Va, je ne te hais point » (Corneille, « Le Cid ») est l'exemple le plus célèbre de litote : Chimène dit moins pour faire entendre plus."),
+  G("Groupes d'animaux",["Meute","Essaim","Harde","Banc"],"En français, on parle d'une meute de loups, d'un essaim d'abeilles, d'une harde de cerfs et d'un banc de poissons.")]),
+ D("facile",[G("Animaux d'Australie",["Kangourou","Koala","Wombat","Ornithorynque"],"L'ornithorynque est un mammifère… qui pond des œufs."),
+  G("Villes italiennes",["Rome","Naples","Turin","Venise"],"Turin a été la première capitale de l'Italie unifiée, de 1861 à 1865."),
+  G("Langues romanes",["Italien","Espagnol","Portugais","Roumain"],"Le roumain est la seule grande langue romane d'Europe de l'Est, héritée de la province romaine de Dacie."),
+  G("Rapaces",["Aigle","Faucon","Vautour","Milan"],"En piqué, le faucon pèlerin peut dépasser 300 km/h : c'est l'animal le plus rapide du monde.")]),
+ D("moyen",[G("Jeux de cartes",["Belote","Tarot","Poker","Bridge"],"Le jeu de tarot compte 78 cartes : les 56 cartes classiques (avec des cavaliers), 21 atouts et l'Excuse."),
+  G("Signes du zodiaque",["Bélier","Balance","Vierge","Verseau"],"Le Soleil traverse aussi une 13e constellation, Ophiuchus (le Serpentaire), absente de l'horoscope."),
+  G("Instruments de mesure",["Baromètre","Thermomètre","Sismographe","Boussole"],"Le baromètre a été inventé en 1643 par l'Italien Evangelista Torricelli."),
+  G("Parties d'un bateau",["Proue","Poupe","Coque","Quille"],"En regardant vers la proue, bâbord est à gauche et tribord à droite.")]),
+ D("difficile",[G("Onomatopées",["Boum","Miaou","Atchoum","Plouf"],"Les onomatopées changent selon les langues : le coq fait « cocorico » en français, mais « cock-a-doodle-doo » en anglais."),
+  G("Personnages d'Astérix",["Obélix","Panoramix","Idéfix","Assurancetourix"],"Idéfix n'apparaît qu'au cinquième album, « Le Tour de Gaule d'Astérix », en 1963."),
+  G("Mots en verlan",["Relou","Chelou","Vénère","Ouf"],"« Verlan » est lui-même du verlan : c'est « l'envers » prononcé à l'envers."),
+  G("Chefs gaulois historiques",["Vercingétorix","Brennus","Ambiorix","Dumnorix"],"Vercingétorix a capitulé devant Jules César à Alésia, en 52 av. J.-C.")]),
+ D("goat",[G("Capitales d'Amérique du Sud",["Quito","Lima","Bogota","Caracas"],"À environ 2 850 m d'altitude, Quito est la capitale officielle la plus haute du monde. La Paz, plus haute, n'est que le siège du gouvernement bolivien."),
+  G("Alphabet radio de l'OTAN",["Alpha","Hotel","Tango","Victor"],"Dans l'alphabet de l'OTAN, « Juliett » s'écrit avec deux T pour que les francophones n'oublient pas de prononcer le T final."),
+  G("Acronymes devenus des mots",["Laser","Radar","Sida","Ovni"],"« Radar » est l'acronyme anglais de radio detection and ranging, « détection et télémétrie par radio »."),
+  G("Poissons",["Bar","Sole","Lieu","Colin"],"Le bar de Méditerranée est souvent appelé « loup » sur la côte.")]),
+ D("moyen",[G("Fruits exotiques",["Mangue","Papaye","Litchi","Goyave"],"Le litchi est originaire du sud de la Chine, où on le cultive depuis plus de 2 000 ans."),
+  G("Épices",["Cannelle","Muscade","Safran","Curcuma"],"Le safran est l'épice la plus chère du monde : il faut entre 150 000 et 200 000 fleurs pour en obtenir 1 kg."),
+  G("Dieux nordiques",["Odin","Thor","Loki","Freyja"],"Le mot anglais « Thursday » (jeudi) signifie « jour de Thor »."),
+  G("Prix Nobel de littérature français",["Camus","Sartre","Gide","Modiano"],"Jean-Paul Sartre a refusé le prix Nobel de littérature en 1964.")]),
+ D("difficile",[G("Présidents américains",["Lincoln","Kennedy","Jefferson","Obama"],"En 1803, Thomas Jefferson a acheté la Louisiane à la France de Napoléon, doublant la superficie des États-Unis."),
+  G("Langages informatiques",["Python","Java","Swift","Ruby"],"Python ne doit rien au serpent : son créateur, Guido van Rossum, l'a nommé d'après les Monty Python."),
+  G("Programmes spatiaux",["Apollo","Gemini","Mercury","Artemis"],"Artemis, le programme de retour sur la Lune, porte le nom de la sœur jumelle d'Apollon."),
+  G("Femmes scientifiques",["Curie","Lovelace","Franklin","Meitner"],"Marie Curie est la seule personne à avoir reçu deux prix Nobel dans deux sciences différentes : physique en 1903 et chimie en 1911.")]),
+ D("goat",[G("Chapeaux",["Canotier","Bob","Béret","Borsalino"],"Le borsalino tient son nom du chapelier italien Giuseppe Borsalino, qui a fondé sa fabrique en 1857."),
+  G("Prix littéraires",["Goncourt","Renaudot","Femina","Interallié"],"Le prix Goncourt n'est doté que de 10 euros : la vraie récompense, ce sont les ventes du livre."),
+  G("Familles de la Renaissance italienne",["Borgia","Sforza","Este","Médicis"],"La famille Borgia a donné deux papes, dont Alexandre VI, père de Lucrèce et de César Borgia."),
+  G("Systèmes Linux",["Ubuntu","Debian","Fedora","Gentoo"],"Debian tire son nom de son créateur, Ian Murdock, et de sa compagne de l'époque, Debra.")]),
+ D("difficile",[G("Villes de Belgique",["Liège","Namur","Gand","Bruges"],"Avec ses nombreux canaux, Bruges est surnommée la « Venise du Nord »."),
+  G("Personnages de Lucky Luke",["Rantanplan","Averell","Jolly Jumper","Ma Dalton"],"En 1983, Lucky Luke a arrêté de fumer : sa cigarette a été remplacée par un brin d'herbe."),
+  G("Chevaux célèbres",["Bucéphale","Pégase","Tornado","Marengo"],"À la mort de Bucéphale, son cheval, Alexandre le Grand a fondé une ville en son honneur : Bucéphalie."),
+  G("Collines de Rome",["Palatin","Capitole","Aventin","Quirinal"],"Les empereurs vivaient sur le Palatin : c'est de là que vient le mot « palais ».")]),
+ D("goat",[G("Oiseaux",["Mésange","Pinson","Loriot","Bouvreuil"],"Le loriot mâle est jaune vif, mais très difficile à voir : il vit caché dans la cime des arbres."),
+  G("Légumes du potager",["Radis","Poireau","Navet","Panais"],"Avant l'arrivée de la pomme de terre, le navet était l'un des légumes de base en Europe."),
+  G("Types de navires",["Corvette","Goélette","Caravelle","Frégate"],"La Chevrolet Corvette, lancée en 1953, doit son nom à la corvette, un navire de guerre rapide."),
+  G("L'argent en argot",["Blé","Pognon","Oseille","Fric"],"L'argot aime comparer l'argent à de la nourriture : blé, oseille, radis… On dit ainsi « ne pas avoir un radis ».")])
+
 ];
 const LEVELS=["Facile","Réflexion","Coriace","Casse-tête"];
 const ICON=["🌱","⚡","🔥","🧠"];
@@ -270,10 +366,17 @@ const dayNum=Math.floor((today-start)/864e5)+1;
 const buzz=p=>{ try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-const dailyIdx=((dayNum-1)%GRIDS.length+GRIDS.length)%GRIDS.length;
+// Difficulté des grilles : nombre d'erreurs autorisées et couleur
+const DIFFS={facile:{name:"Facile",err:4,c:0},moyen:{name:"Moyen",err:4,c:1},difficile:{name:"Difficile",err:3,c:2},goat:{name:"GOAT",err:2,c:3,icon:"🐐"}};
+const DKEYS=Object.keys(DIFFS);
+const idsOf=k=>GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].diff===k);
+const dname=k=>DIFFS[k].name+(DIFFS[k].icon?" "+DIFFS[k].icon:"");
+// La grille du jour n'est jamais une GOAT (au maximum Difficile)
+const DAILY_POOL=GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].diff!=="goat");
+const dailyIdx=DAILY_POOL[((dayNum-1)%DAILY_POOL.length+DAILY_POOL.length)%DAILY_POOL.length];
 function loadRes(){ try{ return JSON.parse(localStorage.getItem("quatuor-res"))||{}; }catch(e){ return {}; } }
 function saveRes(r){ try{ localStorage.setItem("quatuor-res",JSON.stringify(r)); }catch(e){} }
-let grid,gridIdx,practice,words,selected,found,mistakes,history,tried,done,busy,gameId=0;
+let grid,gridIdx,practice,words,selected,found,mistakes,maxErr,history,tried,done,busy,gameId=0,menuTab=null;
 // ---- Animations (transform + opacity uniquement) ----
 const RM=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const baseT=e=>e.classList.contains("tile")&&e.classList.contains("on")?"translateY(3px)":"";
@@ -337,8 +440,11 @@ const groupOf=w=>grid.findIndex(g=>g.words.includes(w));
 function newGame(idx){
   gridIdx=idx; grid=GRIDS[idx]; practice=idx!==dailyIdx; gameId++;
   words=shuffleArr(grid.flatMap(g=>g.words)); selected=new Set(); found=[]; mistakes=0; history=[]; tried=new Set(); done=false; busy=false;
+  maxErr=DIFFS[grid.diff].err;
+  $("lives").querySelector(".dots").innerHTML="<i></i>".repeat(maxErr);
   const d=today.toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
-  $("sub").innerHTML = practice ? `Grille <b>n°${idx+1}</b>` : `Grille du jour · <b>${d}</b>`;
+  const badge=`<span class="dbadge l${DIFFS[grid.diff].c}">${dname(grid.diff)}</span>`;
+  $("sub").innerHTML = (practice ? `Grille <b>n°${idx+1}</b>` : `Grille du jour · <b>${d}</b>`)+badge;
   $("solved").innerHTML=""; $("lives").style.display="flex"; document.querySelector(".dock").style.display="block";
   draw();
 }
@@ -358,8 +464,11 @@ function switchGame(idx){
   };
 }
 function fit(tile){
-  const span=tile.firstChild; let s=17; tile.style.fontSize=s+"px";
-  while(s>10&&(span.scrollWidth>tile.clientWidth-8||span.scrollHeight>tile.clientHeight-8)){ s-=.5; tile.style.fontSize=s+"px"; }
+  const span=tile.firstChild, over=()=>span.scrollWidth>tile.clientWidth-6||span.scrollHeight>tile.clientHeight-6;
+  let s=17; span.classList.remove("hy"); tile.style.fontSize=s+"px";
+  while(s>9.5&&over()){ s-=.5; tile.style.fontSize=s+"px"; }
+  // Mot très long sur petit écran : on le coupe en deux lignes plutôt que de le rendre illisible
+  if(over()){ span.classList.add("hy"); s=14; tile.style.fontSize=s+"px"; while(s>8&&over()){ s-=.5; tile.style.fontSize=s+"px"; } }
 }
 function draw(){
   const g=$("grid"); g.innerHTML="";
@@ -375,7 +484,7 @@ function draw(){
 }
 function updateUi(){
   [...$("lives").querySelectorAll("i")].forEach((d,i)=>{
-    const off=i>=4-mistakes;
+    const off=i>=maxErr-mistakes;
     if(off&&!d.classList.contains("off")) loseDot(d);
     if(!off) d.classList.remove("lose");
     d.classList.toggle("off",off);
@@ -460,7 +569,7 @@ function submit(){
     if(Object.values(c).includes(3)) toast("Presque ! Un seul intrus",true);
     tiles.forEach(t=>{ t.classList.remove("shake","spring"); void t.offsetWidth; t.classList.add("shake"); });
     updateUi();
-    if(mistakes>=4){ busy=true; const id=gameId; setTimeout(()=>{ if(id===gameId) finish(false); },500); }
+    if(mistakes>=maxErr){ busy=true; const id=gameId; setTimeout(()=>{ if(id===gameId) finish(false); },500); }
   }
 }
 
@@ -495,18 +604,28 @@ function statsHtml(){
   return `<div class="stats"><div><b>${s.played||0}</b><small>parties</small></div><div><b>${pct}</b><small>% réussite</small></div>
     <div><b>${alive?(s.streak||0):0}</b><small>série 🔥</small></div><div><b>${s.best||0}</b><small>record</small></div></div>`;
 }
-function openMenu(){
-  const r=loadRes(), done_=Object.keys(r).length;
-  const order=[dailyIdx, ...GRIDS.map((_,i)=>i).filter(i=>i!==dailyIdx)];
-  const items=order.map(i=>{
-    const x=r[i], st = x ? (x.win?"win":"lost") : "";
-    const sub = x ? (x.win ? (x.mistakes? `Réussie · ${x.mistakes} erreur${x.mistakes>1?"s":""}` : "Réussie sans faute") : "Perdue") : "À jouer";
-    return `<button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):i+1}</span>
-      <span class="txt"><b>Grille n°${i+1}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>`;
-  }).join("");
-  $("drawer").innerHTML=`<h2>Grilles</h2><p class="prog">${done_} sur ${GRIDS.length} terminées</p>
-    <div class="bar"><i style="width:${done_/GRIDS.length*100}%"></i></div><div class="glist">${items}</div>`;
+function gridItem(i,r){
+  const x=r[i], st = x ? (x.win?"win":"lost") : "";
+  const sub = x ? (x.win ? (x.mistakes? `Réussie · ${x.mistakes} erreur${x.mistakes>1?"s":""}` : "Réussie sans faute") : "Perdue") : "À jouer";
+  return `<button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):i+1}</span>
+    <span class="txt"><b>Grille n°${i+1}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>`;
+}
+function renderMenu(anim){
+  const r=loadRes(), tab=menuTab||grid.diff, ids=idsOf(tab), done_=ids.filter(i=>r[i]).length, D_=DIFFS[tab];
+  const tabs=DKEYS.map(k=>{ const n=idsOf(k).filter(i=>r[i]).length;
+    return `<button class="dtab${k===tab?" on":""}" data-k="${k}" role="tab" aria-selected="${k===tab}"><i class="l${DIFFS[k].c}"></i><b>${dname(k)}</b><small>${n}/${idsOf(k).length}</small></button>`; }).join("");
+  $("drawer").innerHTML=`<h2>Grilles</h2>
+    <p class="sec">Grille du jour</p><div class="glist">${gridItem(dailyIdx,r)}</div>
+    <p class="sec">Choisis ta difficulté</p><div class="dtabs" role="tablist">${tabs}</div>
+    <div class="dpane"><p class="prog">${done_} sur ${ids.length} terminées · <b>${D_.err} erreurs</b> autorisées</p>
+    <div class="bar"><i style="width:${ids.length?done_/ids.length*100:0}%;background:var(--l${D_.c})"></i></div>
+    <div class="glist">${ids.map(i=>gridItem(i,r)).join("")}</div></div>`;
   $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
+  $("drawer").querySelectorAll(".dtab").forEach(b=>b.onclick=()=>{ if(b.dataset.k===tab) return; buzz(8); menuTab=b.dataset.k; renderMenu(true); });
+  if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
+}
+function openMenu(){
+  menuTab=grid.diff; renderMenu(false);
   $("veil").classList.add("open"); $("drawer").classList.add("open");
 }
 function openSheet(html){ $("sheetBody").innerHTML=html; $("veil").classList.add("open"); $("sheet").classList.add("open"); }
@@ -524,15 +643,17 @@ function openResults(win){
     <h3>Ce que tu as appris aujourd'hui</h3><div class="learned">${learned}</div>`);
   $("share").onclick=share;
   $("next").onclick=()=>{ closeSheet(); const r=loadRes(); let i=gridIdx;
-    for(let k=1;k<=GRIDS.length;k++){ const j=(gridIdx+k)%GRIDS.length; if(!r[j]){ i=j; break; } }
-    if(i===gridIdx) i=(gridIdx+1)%GRIDS.length;
+    const same=idsOf(grid.diff), pos=same.indexOf(gridIdx);
+    for(let k=1;k<=same.length;k++){ const j=same[(pos+k)%same.length]; if(!r[j]){ i=j; break; } }
+    if(i===gridIdx) for(let k=1;k<=GRIDS.length;k++){ const j=(gridIdx+k)%GRIDS.length; if(!r[j]){ i=j; break; } }
+    if(i===gridIdx) i=same[(pos+1)%same.length];
     setTimeout(()=>switchGame(i),250); };
 }
 function openHelp(){
   openSheet(`<h2>Comment jouer</h2>
     <p class="lead">Range les 16 mots en <b>4 groupes de 4</b> qui ont un point commun.</p>
     <div class="rule"><span class="n">1</span><div>Touche 4 mots, puis <b>Valider</b>.</div></div>
-    <div class="rule"><span class="n">2</span><div>Tu as droit à <b>4 erreurs</b>. Gare aux pièges !</div></div>
+    <div class="rule"><span class="n">2</span><div>Tu as droit à <b>4 erreurs</b> (3 en Difficile, 2 en GOAT 🐐). Gare aux pièges !</div></div>
     <div class="rule"><span class="n">3</span><div>Chaque groupe trouvé révèle une <b>anecdote</b>.</div></div>
     <div class="legend"><span class="t">La couleur d'un groupe indique sa difficulté :</span>
       <div class="sw">${LEVELS.map((l,i)=>`<span><i class="l${i}"></i>${l}</span>`).join("")}</div>
@@ -541,7 +662,7 @@ function openHelp(){
   $("okHelp").onclick=closeSheet;
 }
 async function share(){
-  const head=`Quatuor n°${gridIdx+1}`;
+  const head=`Quatuor n°${gridIdx+1} · ${dname(grid.diff)}`;
   const text=`${head}\n${history.map(r=>r.map(i=>ICON[i]).join("")).join("\n")}`;
   if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e.name==="AbortError") return; } }
   try{ await navigator.clipboard.writeText(text); toast("Résultat copié"); }
