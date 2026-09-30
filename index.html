@@ -18,7 +18,7 @@
 <style>
 :root{
   --bg:#EEF0F7; --card:#FFFFFF; --edge:#CDD2E3; --ink:#1B2040; --muted:#6B7190; --sel:#1B2040; --sel-ink:#FFFFFF; --sheet:#FFFFFF;
-  /* 4 niveaux : Échauffement, Réflexion, Coriace, Casse-tête */
+  /* 4 niveaux : Facile, Réflexion, Coriace, Casse-tête */
   --l0:#45D0B0; --l0e:#27A085; --l1:#FFA552; --l1e:#D27B26; --l2:#EF5B7C; --l2e:#BF3A59; --l3:#2E3A87; --l3e:#18204F;
   --font:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
 }
@@ -60,17 +60,17 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .tile span{display:block;max-width:100%}
 .tile.on{background:var(--sel);color:var(--sel-ink);transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
 /* Effet ressort à la sélection : la tuile s'enfonce puis rebondit */
-.tile.spring{animation:sprOff .34s both}
-.tile.on.spring{animation:sprOn .34s both}
-@keyframes sprOn{0%{transform:none}35%{transform:translateY(5px) scale(.9)}70%{transform:translateY(2px) scale(1.04)}100%{transform:translateY(3px)}}
-@keyframes sprOff{0%{transform:translateY(3px)}30%{transform:translateY(4px) scale(.93)}65%{transform:translateY(-2px) scale(1.04)}100%{transform:none}}
-.tile.jump{animation:jump .28s cubic-bezier(.3,.7,.4,1) both;animation-delay:calc(var(--i)*50ms)}
-.tile.shake{animation:shake .42s}
+.tile.spring{animation:sprOff .45s cubic-bezier(.25,.8,.35,1) both}
+.tile.on.spring{animation:sprOn .45s cubic-bezier(.25,.8,.35,1) both}
+@keyframes sprOn{0%{transform:none}40%{transform:translateY(4px) scale(.96)}100%{transform:translateY(3px)}}
+@keyframes sprOff{0%{transform:translateY(3px)}40%{transform:translateY(1px) scale(1.015)}100%{transform:none}}
+.tile.jump{animation:jump .42s ease-in-out both;animation-delay:calc(var(--i)*70ms)}
+.tile.shake{animation:shake .5s ease-in-out}
 .tile::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#E5484D;opacity:0;pointer-events:none}
-.tile.shake::after{animation:flash .45s ease-out}
-@keyframes jump{0%,100%{transform:translateY(3px)}45%{transform:translateY(-14px) scale(1.06)}75%{transform:translateY(5px) scale(1.02,.97)}}
-@keyframes shake{0%,100%{transform:translate(0,3px)}20%{transform:translate(-7px,3px) rotate(-2deg)}40%{transform:translate(7px,3px) rotate(2deg)}60%{transform:translate(-4px,3px) rotate(-1deg)}80%{transform:translate(4px,3px)}}
-@keyframes flash{0%{opacity:0}15%{opacity:.55}100%{opacity:0}}
+.tile.shake::after{animation:flash .6s ease-out}
+@keyframes jump{0%,100%{transform:translateY(3px)}50%{transform:translateY(-8px) scale(1.02)}}
+@keyframes shake{0%,100%{transform:translate(0,3px)}20%{transform:translate(-4px,3px)}40%{transform:translate(4px,3px)}60%{transform:translate(-2.5px,3px)}80%{transform:translate(2px,3px)}}
+@keyframes flash{0%{opacity:0}20%{opacity:.3}100%{opacity:0}}
 /* Tuiles qui volent vers le bandeau, particules, confettis */
 .ghost{position:fixed;margin:0;z-index:15;pointer-events:none;transition:none;animation:none;transform-origin:0 0}
 .spark,.confetti,.fall{position:fixed;display:block;pointer-events:none;z-index:25}
@@ -80,7 +80,7 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 
 /* Groupe trouvé + anecdote */
 .solved{border:0;width:100%;border-radius:14px;padding:12px 14px 11px;text-align:center;cursor:pointer;display:block;font:inherit}
-.solved.pop{animation:land .4s cubic-bezier(.2,1.4,.4,1) both}
+.solved.pop{animation:land .5s cubic-bezier(.25,.8,.35,1) both}
 .solved.pre{opacity:0}
 .solved .lvl{font-size:.78rem;font-weight:650;opacity:.8}
 .solved strong{display:block;font-size:1.02rem;font-weight:800;letter-spacing:-.01em;margin-top:1px}
@@ -89,23 +89,23 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .fact>div{overflow:hidden}
 .fact p{margin:10px 0 2px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.28);font-size:.92rem;font-weight:500;line-height:1.35;text-align:left}
 .solved.open .fact{grid-template-rows:1fr}
-.solved.open .fact p{animation:factIn .4s cubic-bezier(.2,.8,.3,1) both}
-@keyframes factIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.solved.open .fact p{animation:factIn .6s cubic-bezier(.25,.8,.35,1) both}
+@keyframes factIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .solved .more{display:block;font-size:.78rem;font-weight:650;margin-top:5px;opacity:.75}
 .solved.open .more{display:none}
 .l0{background:var(--l0);box-shadow:0 4px 0 var(--l0e);color:#082A22}
 .l1{background:var(--l1);box-shadow:0 4px 0 var(--l1e);color:#3A1E02}
 .l2{background:var(--l2);box-shadow:0 4px 0 var(--l2e);color:#fff}
 .l3{background:var(--l3);box-shadow:0 4px 0 var(--l3e);color:#fff}
-@keyframes land{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes land{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
 
 .lives{display:flex;align-items:center;justify-content:center;gap:10px;margin:22px 0 0;color:var(--muted);font-size:.95rem;font-weight:500}
 .lives .dots{display:flex;gap:6px}
 .lives i{width:14px;height:14px;border-radius:4px;background:var(--ink);display:block;transition:transform .25s, opacity .25s}
 .lives i.off{opacity:.15;transform:scale(.7)}
-.lives i.lose{animation:deflate .5s both}
-@keyframes deflate{0%{transform:none;opacity:1}20%{transform:scale(1.35)}50%{transform:scale(.5,.8);opacity:.6}75%{transform:scale(.8,.62)}100%{transform:scale(.7);opacity:.15}}
-.round.spin svg{animation:spin .45s cubic-bezier(.3,1.3,.5,1)}
+.lives i.lose{animation:deflate .7s ease-in-out both}
+@keyframes deflate{0%{transform:none;opacity:1}30%{transform:scale(1.12)}100%{transform:scale(.7);opacity:.15}}
+.round.spin svg{animation:spin .6s cubic-bezier(.25,.8,.35,1)}
 @keyframes spin{from{transform:rotate(-180deg)}to{transform:none}}
 
 .dock{position:fixed;left:0;right:0;bottom:0;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
@@ -124,20 +124,25 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .veil.open{opacity:1;pointer-events:auto}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--sheet);border-radius:24px 24px 0 0;
   padding:10px 22px calc(24px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;transform:translateY(105%);
-  transition:transform .28s cubic-bezier(.4,0,.6,1);max-height:88vh;overflow:auto;box-shadow:0 60px 0 var(--sheet)}
-.sheet.open{transform:translateY(0);transition:transform .5s cubic-bezier(.3,1.3,.5,1)}
+  transition:transform .35s cubic-bezier(.4,0,.6,1);max-height:88vh;overflow:auto;box-shadow:0 60px 0 var(--sheet)}
+.sheet.open{transform:translateY(0);transition:transform .55s cubic-bezier(.22,1.08,.4,1)}
 .grab{width:40px;height:5px;border-radius:3px;background:var(--edge);margin:0 auto 14px}
 .sheet h2{margin:0 0 6px;font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
 .sheet h3{margin:18px 0 8px;font-size:1.1rem;font-weight:800}
 .sheet p{margin:0 0 10px;color:var(--muted)}
-.rule{display:flex;gap:12px;align-items:flex-start;margin:12px 0}
-.rule .n{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800}
-.levels{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:14px 0 20px}
-.levels span{border-radius:10px;padding:8px 6px;text-align:center;font-size:.88rem;font-weight:650}
+.sheet p.lead{color:var(--ink);font-size:1.05rem;margin:4px 0 12px}
+.rule{display:flex;gap:12px;align-items:center;margin:10px 0}
+.rule .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.85rem;background:var(--bg);color:var(--ink)}
+/* Légende des couleurs : purement informative, rien de cliquable */
+.legend{margin:18px 0 20px;padding:12px 14px;border-radius:14px;border:1.5px dashed var(--edge)}
+.legend .t{display:block;font-size:.85rem;font-weight:650;color:var(--muted);margin-bottom:8px}
+.legend .sw{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;text-align:center;font-size:.8rem;font-weight:650}
+.legend .sw i{display:block;width:18px;height:18px;border-radius:5px;margin:0 auto 4px;box-shadow:none}
+.legend .ax{display:flex;justify-content:space-between;margin-top:6px;font-size:.75rem;color:var(--muted)}
 .recap{display:grid;gap:4px;justify-content:center;margin:14px 0 16px}
 .recap div{display:flex;gap:4px}
-.recap i{width:26px;height:26px;border-radius:7px;display:block;animation:sq .34s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(.35s + var(--k)*45ms)}
-@keyframes sq{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
+.recap i{width:26px;height:26px;border-radius:7px;display:block;animation:sq .45s cubic-bezier(.25,1.2,.4,1) both;animation-delay:calc(.4s + var(--k)*50ms)}
+@keyframes sq{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 .learned{display:grid;gap:8px;margin-bottom:18px}
 .learned div{border-left:5px solid;padding:6px 0 6px 12px;font-size:.93rem;line-height:1.35}
 .learned b{display:block;font-size:.85rem}
@@ -150,8 +155,8 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 /* Tiroir des grilles */
 .drawer{position:fixed;top:0;bottom:0;left:0;z-index:21;width:min(86vw,360px);background:var(--sheet);
   padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));
-  transform:translateX(-102%);transition:transform .26s cubic-bezier(.4,0,.6,1);overflow:auto;border-radius:0 22px 22px 0;box-shadow:-60px 0 0 var(--sheet)}
-.drawer.open{transform:translateX(0);transition:transform .48s cubic-bezier(.3,1.25,.5,1)}
+  transform:translateX(-102%);transition:transform .32s cubic-bezier(.4,0,.6,1);overflow:auto;border-radius:0 22px 22px 0;box-shadow:-60px 0 0 var(--sheet)}
+.drawer.open{transform:translateX(0);transition:transform .5s cubic-bezier(.22,1.06,.4,1)}
 .drawer h2{margin:0;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
 .prog{margin:4px 0 14px;color:var(--muted);font-weight:500}
 .bar{height:8px;border-radius:4px;background:var(--edge);overflow:hidden;margin:-6px 0 16px}
@@ -257,7 +262,7 @@ const GRIDS = [
   G("Pièces d'échecs",["Fou","Tour","Cavalier","Roi"],"La dame, aujourd'hui la pièce la plus puissante, était à l'origine l'une des plus faibles : elle n'avançait que d'une case en diagonale."),
   G("Maillots du Tour de France",["Jaune","Vert","Blanc","À pois"],"Le maillot jaune a été choisi en 1919 parce que le journal organisateur, L'Auto, était imprimé sur du papier jaune.")]
 ];
-const LEVELS=["Échauffement","Réflexion","Coriace","Casse-tête"];
+const LEVELS=["Facile","Réflexion","Coriace","Casse-tête"];
 const ICON=["🌱","⚡","🔥","🧠"];
 const $=id=>document.getElementById(id);
 const start=new Date(2026,9,1), today=new Date(); today.setHours(0,0,0,0);
@@ -285,8 +290,8 @@ function flipLayout(fn,o={}){
     const n=e.getBoundingClientRect(), dx=r.left-n.left, dy=r.top-n.top;
     if(Math.abs(dx)<1&&Math.abs(dy)<1) return;
     const b=baseT(e), from=`translate(${dx}px,${dy}px) ${b}`, to=b||"none";
-    const kf=o.lift?[{transform:from},{transform:`translate(${dx/2}px,${dy/2}px) ${b} scale(.92)`},{transform:to}]:[{transform:from},{transform:to}];
-    e._fa=e.animate(kf,{duration:o.dur||320,delay:(o.stagger||0)*k++,easing:"cubic-bezier(.3,1.15,.5,1)",fill:"backwards"});
+    const kf=o.lift?[{transform:from},{transform:`translate(${dx/2}px,${dy/2}px) ${b} scale(.97)`},{transform:to}]:[{transform:from},{transform:to}];
+    e._fa=e.animate(kf,{duration:o.dur||450,delay:(o.stagger||0)*k++,easing:"cubic-bezier(.25,.8,.3,1)",fill:"backwards"});
     e._fa.onfinish=()=>{ e._fa=null; };
   });
 }
@@ -296,25 +301,25 @@ function spring(t){
 }
 function burst(r,gi){
   if(RM()) return;
-  for(let i=0;i<18;i++){
+  for(let i=0;i<10;i++){
     const p=document.createElement("i"); p.className="spark"; p.style.background=`var(--l${gi})`;
     p.style.left=(r.left+r.width*(.1+.8*Math.random()))+"px"; p.style.top=(r.top+r.height/2)+"px";
     document.body.appendChild(p);
-    const a=Math.random()*Math.PI*2, d=40+Math.random()*60, dx=Math.cos(a)*d, dy=Math.sin(a)*d*.8-20;
-    p.animate([{transform:"scale(1.2)",opacity:1},{transform:`translate(${dx}px,${dy}px) rotate(${a*120}deg) scale(.2)`,opacity:0}],
-      {duration:500+Math.random()*250,easing:"cubic-bezier(.1,.7,.3,1)"}).onfinish=()=>p.remove();
+    const a=Math.random()*Math.PI*2, d=25+Math.random()*30, dx=Math.cos(a)*d, dy=Math.sin(a)*d*.7-12;
+    p.animate([{transform:"scale(.9)",opacity:.9},{transform:`translate(${dx}px,${dy}px) scale(.3)`,opacity:0}],
+      {duration:800+Math.random()*300,easing:"cubic-bezier(.2,.7,.3,1)"}).onfinish=()=>p.remove();
   }
 }
 function confetti(){
   if(RM()) return;
   const H=innerHeight+40;
-  for(let i=0;i<70;i++){
+  for(let i=0;i<50;i++){
     const c=document.createElement("i"); c.className="confetti"; c.style.background=`var(--l${i%4})`;
     c.style.left=(Math.random()*100)+"vw"; c.style.width=(7+Math.random()*5)+"px"; c.style.height=(10+Math.random()*7)+"px";
     document.body.appendChild(c);
-    const dx=(Math.random()-.5)*180, rot=(Math.random()-.5)*900;
+    const dx=(Math.random()-.5)*120, rot=(Math.random()-.5)*540;
     c.animate([{transform:"translate(0,0) rotate(0)",opacity:1},{transform:`translate(${dx}px,${H}px) rotate(${rot}deg)`,opacity:1,offset:.85},{transform:`translate(${dx}px,${H}px) rotate(${rot}deg)`,opacity:0}],
-      {duration:1000+Math.random()*300,delay:Math.random()*250,easing:"cubic-bezier(.3,.3,.6,1)",fill:"backwards"}).onfinish=()=>c.remove();
+      {duration:1700+Math.random()*500,delay:Math.random()*400,easing:"cubic-bezier(.35,.25,.6,1)",fill:"backwards"}).onfinish=()=>c.remove();
   }
 }
 function loseDot(d){
@@ -323,8 +328,8 @@ function loseDot(d){
   const r=d.getBoundingClientRect(), f=document.createElement("i"); f.className="fall";
   Object.assign(f.style,{left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"});
   document.body.appendChild(f);
-  f.animate([{transform:"none",opacity:.9},{transform:"translate(6px,46px) rotate(70deg) scale(.6)",opacity:0}],
-    {duration:600,easing:"cubic-bezier(.5,0,.8,.6)"}).onfinish=()=>f.remove();
+  f.animate([{transform:"none",opacity:.7},{transform:"translate(3px,26px) rotate(30deg) scale(.7)",opacity:0}],
+    {duration:800,easing:"cubic-bezier(.45,0,.55,1)"}).onfinish=()=>f.remove();
 }
 const shuffleArr=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const groupOf=w=>grid.findIndex(g=>g.words.includes(w));
@@ -336,6 +341,21 @@ function newGame(idx){
   $("sub").innerHTML = practice ? `Grille <b>n°${idx+1}</b>` : `Grille du jour · <b>${d}</b>`;
   $("solved").innerHTML=""; $("lives").style.display="flex"; document.querySelector(".dock").style.display="block";
   draw();
+}
+// Passage à une autre grille : l'ancienne glisse vers la gauche, la nouvelle arrive par la droite
+function switchGame(idx){
+  const parts=[$("sub"),document.querySelector(".area")];
+  if(RM()){ scrollTo(0,0); newGame(idx); return; }
+  busy=true; scrollTo({top:0,behavior:"smooth"});
+  const outs=parts.map(e=>e.animate([{transform:"none",opacity:1},{transform:"translateX(-28px)",opacity:0}],{duration:260,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}));
+  outs[1].onfinish=()=>{
+    newGame(idx);
+    parts.forEach((e,i)=>e.animate([{transform:"translateX(28px)",opacity:0},{transform:"none",opacity:1}],{duration:420,delay:i*40,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
+    outs.forEach(a=>a.cancel());
+    [...$("grid").children].forEach((t,i)=>t.animate([{transform:"translateY(10px) scale(.96)",opacity:0},{transform:"none",opacity:1}],
+      {duration:420,delay:80+i*22,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
+    const dk=document.querySelector(".dock"); dk.animate([{opacity:0},{opacity:1}],{duration:400,easing:"ease-out"});
+  };
 }
 function fit(tile){
   const span=tile.firstChild; let s=17; tile.style.fontSize=s+"px";
@@ -412,18 +432,18 @@ function foundGroup(gi,tiles){
     ghosts.forEach(({g,r},i)=>{
       const tx=br.left+i*br.width/4-r.left, ty=br.top-r.top, sx=br.width/4/r.width, sy=br.height/r.height;
       const end=`translate(${tx}px,${ty}px) scale(${sx},${sy})`;
-      g.animate([{transform:"none",easing:"cubic-bezier(.5,0,.3,1)"},{transform:end,opacity:1,offset:.82},{transform:end,opacity:0}],
-        {duration:340,delay:i*30,fill:"both"}).onfinish=()=>g.remove();
+      g.animate([{transform:"none",easing:"cubic-bezier(.45,0,.25,1)"},{transform:end,opacity:1,offset:.8},{transform:end,opacity:0}],
+        {duration:560,delay:i*40,fill:"both"}).onfinish=()=>g.remove();
     });
     setTimeout(()=>{
       if(id!==gameId) return;
       band.classList.remove("pre"); buzz(12);
-      band.animate([{opacity:0,transform:"scale(.97)"},{opacity:1,transform:"scale(1.04)",offset:.45},{opacity:1,transform:"none"}],
-        {duration:320,easing:"ease-out"});
+      band.animate([{opacity:0,transform:"scale(.98)"},{opacity:1,transform:"scale(1.01)",offset:.55},{opacity:1,transform:"none"}],
+        {duration:500,easing:"ease-out"});
       burst(band.getBoundingClientRect(),gi);
-      setTimeout(openFact,260);
-    },310);
-  },rm?0:430);
+      setTimeout(openFact,400);
+    },500);
+  },rm?0:620);
 }
 
 function submit(){
@@ -464,8 +484,8 @@ function finish(win){
       save(s);
     }
   }
-  if(win) setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },420);
-  setTimeout(()=>{ if(id===gameId) openResults(win); },win?(RM()?600:1100):delay+600);
+  if(win) setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650);
+  setTimeout(()=>{ if(id===gameId) openResults(win); },win?(RM()?600:1500):delay+700);
 }
 
 function load(){ try{ return JSON.parse(localStorage.getItem("quatuor"))||{}; }catch(e){ return {}; } }
@@ -486,7 +506,7 @@ function openMenu(){
   }).join("");
   $("drawer").innerHTML=`<h2>Grilles</h2><p class="prog">${done_} sur ${GRIDS.length} terminées</p>
     <div class="bar"><i style="width:${done_/GRIDS.length*100}%"></i></div><div class="glist">${items}</div>`;
-  $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>newGame(+b.dataset.i),150); });
+  $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
   $("veil").classList.add("open"); $("drawer").classList.add("open");
 }
 function openSheet(html){ $("sheetBody").innerHTML=html; $("veil").classList.add("open"); $("sheet").classList.add("open"); }
@@ -506,15 +526,17 @@ function openResults(win){
   $("next").onclick=()=>{ closeSheet(); const r=loadRes(); let i=gridIdx;
     for(let k=1;k<=GRIDS.length;k++){ const j=(gridIdx+k)%GRIDS.length; if(!r[j]){ i=j; break; } }
     if(i===gridIdx) i=(gridIdx+1)%GRIDS.length;
-    setTimeout(()=>newGame(i),200); };
+    setTimeout(()=>switchGame(i),250); };
 }
 function openHelp(){
   openSheet(`<h2>Comment jouer</h2>
-    <div class="rule"><span class="n l0">1</span><div>Trouve les <b>4 groupes de 4 mots</b> qui ont un point commun.</div></div>
-    <div class="rule"><span class="n l1">2</span><div>Sélectionne 4 mots, puis touche <b>Valider</b>. Tu as droit à <b>4 erreurs</b>.</div></div>
-    <div class="rule"><span class="n l2">3</span><div>Méfie-toi des pièges : certains mots vont dans plusieurs catégories.</div></div>
-    <div class="rule"><span class="n l3">4</span><div>Chaque groupe trouvé révèle une <b>anecdote</b>. Touche un groupe pour la rouvrir.</div></div>
-    <div class="levels">${LEVELS.map((l,i)=>`<span class="l${i}">${ICON[i]} ${l}</span>`).join("")}</div>
+    <p class="lead">Range les 16 mots en <b>4 groupes de 4</b> qui ont un point commun.</p>
+    <div class="rule"><span class="n">1</span><div>Touche 4 mots, puis <b>Valider</b>.</div></div>
+    <div class="rule"><span class="n">2</span><div>Tu as droit à <b>4 erreurs</b>. Gare aux pièges !</div></div>
+    <div class="rule"><span class="n">3</span><div>Chaque groupe trouvé révèle une <b>anecdote</b>.</div></div>
+    <div class="legend"><span class="t">La couleur d'un groupe indique sa difficulté :</span>
+      <div class="sw">${LEVELS.map((l,i)=>`<span><i class="l${i}"></i>${l}</span>`).join("")}</div>
+      <div class="ax"><span>plus facile</span><span>plus difficile →</span></div></div>
     <button class="pill main" style="width:100%" id="okHelp">Jouer</button>`);
   $("okHelp").onclick=closeSheet;
 }
@@ -527,14 +549,14 @@ async function share(){
     try{ document.execCommand("copy"); toast("Résultat copié"); }catch(_){ toast("Copie impossible"); } t.remove(); }
 }
 let tt; function toast(m,bounce){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),1500);
-  if(bounce&&!RM()) t.animate([{transform:"translate(-50%,-24px) scale(.9)",opacity:0},{transform:"translate(-50%,6px) scale(1.05)",opacity:1,offset:.5},
-    {transform:"translate(-50%,-2px) scale(.99)",offset:.75},{transform:"translate(-50%,0)",opacity:1}],{duration:460,easing:"ease-out"}); }
+  if(bounce&&!RM()) t.animate([{transform:"translate(-50%,-16px) scale(.97)",opacity:0},{transform:"translate(-50%,3px) scale(1.01)",opacity:1,offset:.6},
+    {transform:"translate(-50%,0)",opacity:1}],{duration:550,easing:"ease-out"}); }
 
 $("submit").onclick=submit;
 $("shuffle").onclick=()=>{
   if(busy||done) return; buzz(10); shuffleArr(words);
   const g=$("grid"), m=new Map([...g.children].map(t=>[t.dataset.w,t]));
-  flipLayout(()=>words.forEach(w=>g.appendChild(m.get(w))),{dur:420,stagger:12,lift:true});
+  flipLayout(()=>words.forEach(w=>g.appendChild(m.get(w))),{dur:560,stagger:15,lift:true});
   const s=$("shuffle"); s.classList.remove("spin"); void s.offsetWidth; s.classList.add("spin");
 };
 $("clear").onclick=()=>{
