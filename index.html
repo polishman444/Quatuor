@@ -88,7 +88,7 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .solved .w{display:block;font-size:.92rem;font-weight:500;margin-top:2px}
 .fact{display:grid;grid-template-rows:0fr}
 .fact>div{overflow:hidden}
-.fact p{margin:10px 0 2px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.28);font-size:.92rem;font-weight:500;line-height:1.35;text-align:left}
+.fact p{position:relative;margin:10px 0 2px;padding:10px 40px 10px 12px;border-radius:10px;background:rgba(255,255,255,.28);font-size:.92rem;font-weight:500;line-height:1.35;text-align:left}
 .solved.open .fact{grid-template-rows:1fr}
 .solved.open .fact p{animation:factIn .6s cubic-bezier(.25,.8,.35,1) both}
 @keyframes factIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
@@ -145,7 +145,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .recap i{width:26px;height:26px;border-radius:7px;display:block;animation:sq .45s cubic-bezier(.25,1.2,.4,1) both;animation-delay:calc(.4s + var(--k)*50ms)}
 @keyframes sq{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 .learned{display:grid;gap:8px;margin-bottom:18px}
-.learned div{border-left:5px solid;padding:6px 0 6px 12px;font-size:.93rem;line-height:1.35}
+.learned div{position:relative;border-left:5px solid;padding:6px 40px 6px 12px;font-size:.93rem;line-height:1.35}
 .learned b{display:block;font-size:.85rem}
 .learned .b0{border-color:var(--l0)} .learned .b1{border-color:var(--l1)} .learned .b2{border-color:var(--l2)} .learned .b3{border-color:var(--l3)}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 20px;text-align:center}
@@ -159,6 +159,31 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
   transform:translateX(-102%);transition:transform .32s cubic-bezier(.4,0,.6,1);overflow:auto;border-radius:0 22px 22px 0;box-shadow:-60px 0 0 var(--sheet)}
 .drawer.open{transform:translateX(0);transition:transform .5s cubic-bezier(.22,1.06,.4,1)}
 .drawer h2{margin:0 0 -4px;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+/* Onglets du tiroir : Grilles / Mon carnet */
+.mtabs{display:grid;grid-template-columns:1fr 1.4fr;gap:4px;padding:4px;border-radius:14px;background:var(--bg);margin-bottom:4px}
+.mtab{border:0;background:transparent;border-radius:11px;padding:9px 4px;font:inherit;font-weight:800;font-size:.95rem;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.mtab.on{background:var(--card);color:var(--ink);box-shadow:0 2px 0 var(--edge)}
+.mtab .cnt{display:inline-block;min-width:22px;padding:1px 7px;margin-left:3px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:.72rem;vertical-align:2px}
+/* Étoile des favoris */
+.star{position:absolute;top:3px;right:3px;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;cursor:pointer;
+  font-size:1.3rem;line-height:1;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.star:focus-visible{outline:3px solid var(--l2);outline-offset:1px}
+.learned .star.on,.fcard .star.on{color:var(--l1e)}
+.star.bounce{animation:starPop .5s cubic-bezier(.25,.8,.35,1)}
+@keyframes starPop{0%{transform:none}35%{transform:scale(1.35) rotate(-10deg)}70%{transform:scale(.94)}100%{transform:none}}
+/* Mon carnet */
+.flist{display:grid;gap:12px;margin-top:14px}
+.fcard{position:relative;background:var(--card);border-radius:14px;box-shadow:0 3px 0 var(--edge);padding:12px 44px 12px 14px;border-left:6px solid var(--l0)}
+.fcard.c1{border-left-color:var(--l1)} .fcard.c2{border-left-color:var(--l2)} .fcard.c3{border-left-color:var(--l3)}
+.fcard b{display:block;font-weight:800;line-height:1.2}
+.fcard small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.fcard p{margin:8px 0 10px;font-size:.93rem;line-height:1.38}
+.fshare{border:0;border-radius:999px;padding:7px 13px;font:inherit;font-size:.85rem;font-weight:700;background:var(--bg);color:var(--ink);cursor:pointer;box-shadow:0 2px 0 var(--edge);display:inline-flex;align-items:center;gap:6px}
+.fshare svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.fshare:active{transform:translateY(2px);box-shadow:none}
+.fshare:disabled{opacity:.5}
+.fempty{text-align:center;padding:36px 12px;color:var(--muted);line-height:1.4}
+.fempty span{display:block;font-size:2.6rem;margin-bottom:8px;color:var(--ink)}
 .prog{margin:4px 0 14px;color:var(--muted);font-weight:500}
 .prog b{color:var(--ink)}
 .drawer .sec{margin:16px 0 8px;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
@@ -290,7 +315,7 @@ const GRIDS = [
   G("Anciens noms de villes",["Byzance","Lutèce","Edo","Nouvelle-Amsterdam"],"Tokyo s'appelait Edo jusqu'en 1868. Son nouveau nom signifie « capitale de l'Est ».")]),
  D("goat",[G("Métiers de la justice",["Juge","Greffier","Huissier","Notaire"],"Depuis 2022, les huissiers et les commissaires-priseurs judiciaires forment une seule profession : commissaire de justice."),
   G("Anciennes unités de longueur",["Toise","Pied","Pouce","Lieue"],"La toise mesurait environ 1,95 m. Elle a été remplacée par le mètre à la Révolution."),
-  G("Mots venus de l'aztèque",["Chocolat","Tomate","Coyote","Avocat"],"L'avocat (le fruit) vient du nahuatl ahuacatl, passé par l'espagnol aguacate. Sa ressemblance avec l'avocat du tribunal est une pure coïncidence."),
+  G("Mots venus de l'aztèque",["Chocolat","Tomate","Coyote","Avocat"],"L'avocat (le fruit) vient du nahuatl ahuacatl, passé par l'espagnol aguacate. Le mot s'est ensuite rapproché de « avocat » (l'homme de loi) par simple ressemblance sonore."),
   G("Robes de chevaux",["Alezan","Bai","Pie","Isabelle"],"Selon une légende tenace, la robe « isabelle » devrait son nom à une infante Isabelle qui aurait juré de ne pas changer de linge avant la fin d'un siège.")]),
  D("moyen",[G("Cocktails",["Mojito","Spritz","Margarita","Daiquiri"],"Le daiquiri tient son nom d'une plage et d'une mine de fer de Cuba, près de Santiago."),
   G("Sauces",["Béarnaise","Pesto","Aïoli","Béchamel"],"La béchamel devrait son nom à Louis de Béchameil, maître d'hôtel de Louis XIV."),
@@ -307,7 +332,7 @@ const GRIDS = [
  D("goat",[G("Meubles",["Buffet","Bahut","Secrétaire","Chiffonnier"],"Le chiffonnier est un meuble haut et étroit à tiroirs, où l'on rangeait à l'origine le linge et les petits « chiffons »."),
   G("Vins de Bourgogne",["Chablis","Pommard","Volnay","Meursault"],"Le chablis est produit exclusivement à partir d'un seul cépage : le chardonnay."),
   G("Empereurs romains",["Tibère","Vespasien","Commode","Domitien"],"Vespasien a taxé l'urine collectée dans les latrines publiques. Voilà pourquoi les urinoirs publics ont été appelés « vespasiennes »."),
-  G("Personnages d'Albert Camus",["Rieux","Clamence","Tarrou","Caligula"],"Albert Camus a reçu le prix Nobel de littérature en 1957, à seulement 44 ans.")]),
+  G("Personnages d'Albert Camus",["Rieux","Clamence","Tarrou","Caligula"],"Albert Camus a reçu le prix Nobel de littérature en 1957, à seulement 43 ans.")]),
  D("moyen",[G("Compositeurs",["Bach","Mozart","Chopin","Liszt"],"Frédéric Chopin, né en Pologne d'un père français, a passé la seconde moitié de sa vie à Paris."),
   G("Personnages de Tintin",["Haddock","Tournesol","Castafiore","Rastapopoulos"],"Le capitaine Haddock n'apparaît qu'au neuvième album, « Le Crabe aux pinces d'or », en 1941."),
   G("Fromages suisses",["Gruyère","Emmental","Raclette","Tête de Moine"],"La tête de moine se déguste en fines rosettes, râpées grâce à un appareil appelé girolle."),
@@ -329,7 +354,7 @@ const GRIDS = [
   G("Instruments de mesure",["Baromètre","Thermomètre","Sismographe","Boussole"],"Le baromètre a été inventé en 1643 par l'Italien Evangelista Torricelli."),
   G("Parties d'un bateau",["Proue","Poupe","Coque","Quille"],"En regardant vers la proue, bâbord est à gauche et tribord à droite.")]),
  D("difficile",[G("Onomatopées",["Boum","Miaou","Atchoum","Plouf"],"Les onomatopées changent selon les langues : le coq fait « cocorico » en français, mais « cock-a-doodle-doo » en anglais."),
-  G("Personnages d'Astérix",["Obélix","Panoramix","Idéfix","Assurancetourix"],"Idéfix n'apparaît qu'au cinquième album, « Le Tour de Gaule d'Astérix », en 1963."),
+  G("Personnages d'Astérix",["Obélix","Panoramix","Idéfix","Assurancetourix"],"Idéfix n'apparaît qu'à la cinquième aventure, « Le Tour de Gaule d'Astérix », parue en 1963."),
   G("Mots en verlan",["Relou","Chelou","Vénère","Ouf"],"« Verlan » est lui-même du verlan : c'est « l'envers » prononcé à l'envers."),
   G("Chefs gaulois historiques",["Vercingétorix","Brennus","Ambiorix","Dumnorix"],"Vercingétorix a capitulé devant Jules César à Alésia, en 52 av. J.-C.")]),
  D("goat",[G("Capitales d'Amérique du Sud",["Quito","Lima","Bogota","Caracas"],"À environ 2 850 m d'altitude, Quito est la capitale officielle la plus haute du monde. La Paz, plus haute, n'est que le siège du gouvernement bolivien."),
@@ -355,9 +380,12 @@ const GRIDS = [
  D("goat",[G("Oiseaux",["Mésange","Pinson","Loriot","Bouvreuil"],"Le loriot mâle est jaune vif, mais très difficile à voir : il vit caché dans la cime des arbres."),
   G("Légumes du potager",["Radis","Poireau","Navet","Panais"],"Avant l'arrivée de la pomme de terre, le navet était l'un des légumes de base en Europe."),
   G("Types de navires",["Corvette","Goélette","Caravelle","Frégate"],"La Chevrolet Corvette, lancée en 1953, doit son nom à la corvette, un navire de guerre rapide."),
-  G("L'argent en argot",["Blé","Pognon","Oseille","Fric"],"L'argot aime comparer l'argent à de la nourriture : blé, oseille, radis… On dit ainsi « ne pas avoir un radis ».")])
+  G("L'argent en argot",["Blé","Pognon","Flouze","Fric"],"L'argot aime comparer l'argent à de la nourriture : on dit « le blé », ou « ne pas avoir un radis ».")])
 
 ];
+// Typographie française : espaces insécables avant : ; ! ? » et après « (pas de ponctuation seule en début de ligne)
+const fr=t=>t.replace(/ ([:;!?»])/g,"\u00A0$1").replace(/« /g,"«\u00A0");
+GRIDS.forEach(gr=>gr.forEach(g=>{ g.fact=fr(g.fact); g.name=fr(g.name); }));
 const LEVELS=["Facile","Réflexion","Coriace","Casse-tête"];
 const ICON=["🌱","⚡","🔥","🧠"];
 const $=id=>document.getElementById(id);
@@ -498,6 +526,90 @@ function toggle(w,b){
   buzz(8); b.classList.toggle("on",selected.has(w)); b.setAttribute("aria-pressed",selected.has(w)); spring(b); updateUi();
 }
 
+// ---- Favoris (« Mon carnet ») ----
+function loadFavs(){ try{ const f=JSON.parse(localStorage.getItem("quatuor-favs")); return Array.isArray(f)?f:[]; }catch(e){ return []; } }
+function saveFavs(f){ try{ localStorage.setItem("quatuor-favs",JSON.stringify(f)); }catch(e){} }
+const favId=(gIdx,gi)=>`${gIdx}:${GRIDS[gIdx][gi].name}`;
+const isFav=id=>loadFavs().some(f=>f.id===id);
+function starHtml(gIdx,gi){
+  const id=favId(gIdx,gi), on=isFav(id);
+  return `<span class="star${on?" on":""}" role="button" tabindex="0" data-id="${esc(id)}" data-g="${gIdx}" data-gi="${gi}" aria-pressed="${on}" aria-label="${on?"Retirer des favoris":"Ajouter aux favoris"}">${on?"★":"☆"}</span>`;
+}
+function toggleFav(st){
+  const gIdx=+st.dataset.g, gi=+st.dataset.gi, id=st.dataset.id, g=GRIDS[gIdx][gi];
+  let f=loadFavs(); const on=!f.some(x=>x.id===id);
+  if(on) f.push({id,grid:gIdx,name:g.name,words:g.words.slice(),fact:g.fact,lvl:gi,at:Date.now()});
+  else f=f.filter(x=>x.id!==id);
+  saveFavs(f); buzz(10);
+  document.querySelectorAll(".star").forEach(s=>{ if(s.dataset.id!==id) return;
+    s.classList.toggle("on",on); s.textContent=on?"★":"☆"; s.setAttribute("aria-pressed",on); s.setAttribute("aria-label",on?"Retirer des favoris":"Ajouter aux favoris");
+    if(!RM()){ s.classList.remove("bounce"); void s.offsetWidth; s.classList.add("bounce"); } });
+  const cnt=document.querySelector(".mtab .cnt"); if(cnt) cnt.textContent=f.length;
+  // Retrait depuis le carnet : la carte s'efface puis la liste se met à jour
+  const card=st.closest(".fcard");
+  if(card&&!on){ const done_=()=>{ if(drawerTab==="favs") renderDrawer(false); };
+    if(RM()) done_(); else card.animate([{opacity:1,transform:"none"},{opacity:0,transform:"scale(.96)"}],{duration:220,easing:"ease-in",fill:"forwards"}).onfinish=done_; }
+}
+// Capture : le clic sur l'étoile ne remonte pas jusqu'au bandeau (qui se replierait)
+document.addEventListener("click",e=>{ const st=e.target.closest&&e.target.closest(".star"); if(!st) return; e.stopPropagation(); e.preventDefault(); toggleFav(st); },true);
+document.addEventListener("keydown",e=>{ const st=e.target.closest&&e.target.closest(".star"); if(!st||(e.key!=="Enter"&&e.key!==" ")) return; e.stopPropagation(); e.preventDefault(); toggleFav(st); },true);
+document.addEventListener("animationend",e=>{ if(e.animationName==="starPop") e.target.classList.remove("bounce"); });
+
+// ---- Image d'une anecdote (canvas 1080×1080) ----
+const SITE=(location.origin+location.pathname).replace(/index\.html$/,"").replace(/^https?:\/\//,"").replace(/\/$/,"");
+function wrapText(x,text,maxW){
+  const lines=[]; let line="";
+  fr(text).split(/ +/).forEach(w=>{ const t=line?line+" "+w:w; if(line&&x.measureText(t).width>maxW){ lines.push(line); line=w; } else line=t; });
+  if(line) lines.push(line); return lines;
+}
+async function factImage(f){
+  try{ await Promise.all(["500","650","800"].map(w=>document.fonts.load(`${w} 40px "Bricolage Grotesque"`))); await document.fonts.ready; }catch(e){}
+  const S=1080, c=document.createElement("canvas"); c.width=c.height=S; const x=c.getContext("2d");
+  const FONT='"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif';
+  const COL=["#45D0B0","#FFA552","#EF5B7C","#2E3A87"], TXT=["#082A22","#3A1E02","#FFFFFF","#FFFFFF"], INK="#1B2040", MUTED="#6B7190";
+  const rr=(X,Y,W,H,R)=>{ x.beginPath(); x.moveTo(X+R,Y); x.arcTo(X+W,Y,X+W,Y+H,R); x.arcTo(X+W,Y+H,X,Y+H,R); x.arcTo(X,Y+H,X,Y,R); x.arcTo(X,Y,X+W,Y,R); x.closePath(); };
+  x.fillStyle="#EEF0F7"; x.fillRect(0,0,S,S); x.textBaseline="top";
+  // Logo : les 4 carrés + « Quatuor »
+  COL.forEach((col,i)=>{ x.fillStyle=col; rr(84+(i%2)*52,78+Math.floor(i/2)*52,44,44,12); x.fill(); });
+  x.fillStyle=INK; x.font=`800 82px ${FONT}`; x.fillText("Quatuor",210,82);
+  // Carte en relief avec la couleur du niveau à gauche
+  const cx=80,cy=240,cw=920,ch=680, px=cx+74, maxW=cw-140;
+  x.fillStyle="#CDD2E3"; rr(cx,cy+14,cw,ch,44); x.fill();
+  x.fillStyle="#FFFFFF"; rr(cx,cy,cw,ch,44); x.fill();
+  x.save(); rr(cx,cy,cw,ch,44); x.clip(); x.fillStyle=COL[f.lvl]; x.fillRect(cx,cy,24,ch); x.restore();
+  // Pastille du niveau
+  x.font=`650 34px ${FONT}`; const lbl=LEVELS[f.lvl], lw=x.measureText(lbl).width+56;
+  x.fillStyle=COL[f.lvl]; rr(px,cy+58,lw,60,30); x.fill(); x.fillStyle=TXT[f.lvl]; x.fillText(lbl,px+28,cy+70);
+  // Nom du groupe + mots
+  let y=cy+150; x.fillStyle=INK; x.font=`800 58px ${FONT}`;
+  wrapText(x,f.name,maxW).slice(0,2).forEach(l=>{ x.fillText(l,px,y); y+=66; });
+  x.fillStyle=MUTED; x.font=`500 34px ${FONT}`;
+  wrapText(x,f.words.join(" · "),maxW).slice(0,2).forEach(l=>{ x.fillText(l,px,y+6); y+=44; });
+  y+=40;
+  // Anecdote : la plus grande taille qui tient dans la carte
+  const avail=cy+ch-56-y; let size=58, lines;
+  for(;size>=30;size-=2){ x.font=`500 ${size}px ${FONT}`; lines=wrapText(x,f.fact,maxW); if(lines.length*size*1.28<=avail) break; }
+  x.fillStyle=INK; lines.forEach(l=>{ x.fillText(l,px,y); y+=size*1.28; });
+  // Adresse du site
+  x.fillStyle=MUTED; x.font=`650 36px ${FONT}`; x.textAlign="center"; x.fillText(SITE,S/2,982);
+  return c;
+}
+async function shareFav(f,btn){
+  if(btn) btn.disabled=true;
+  try{
+    const c=await factImage(f), blob=await new Promise(r=>c.toBlob(r,"image/png"));
+    const file=new File([blob],"quatuor-anecdote.png",{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file]}); return; }catch(e){ if(e.name==="AbortError") return; }
+    }
+    // Sinon : téléchargement de l'image
+    const a=document.createElement("a"), url=URL.createObjectURL(blob);
+    a.href=url; a.download="quatuor-anecdote.png"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),5000); toast("Image enregistrée");
+  }catch(e){ toast("Partage impossible"); }
+  finally{ if(btn) btn.disabled=false; }
+}
+
 function setOpen(d,o){
   if(o) $("solved").querySelectorAll(".solved.open").forEach(x=>{ if(x!==d){ x.classList.remove("open"); x.setAttribute("aria-expanded",false); } });
   d.classList.toggle("open",o); d.setAttribute("aria-expanded",o);
@@ -506,7 +618,7 @@ function addSolved(gi,open,cls){
   const g=grid[gi], d=document.createElement("button");
   d.className="solved l"+gi+(cls?" "+cls:""); d.setAttribute("aria-expanded",false);
   d.innerHTML=`<span class="lvl">${ICON[gi]} ${LEVELS[gi]}</span><strong>${esc(g.name)}</strong><span class="w">${esc(g.words.join(", "))}</span>
-    <span class="more">💡 Voir l'anecdote</span><div class="fact"><div><p>💡 ${esc(g.fact)}</p></div></div>`;
+    <span class="more">💡 Voir l'anecdote</span><div class="fact"><div><p>💡 ${esc(g.fact)}${starHtml(gridIdx,gi)}</p></div></div>`;
   d.onclick=()=>flipLayout(()=>setOpen(d,!d.classList.contains("open")));
   d.addEventListener("animationend",e=>{ if(e.animationName==="land") d.classList.remove("pop"); });
   $("solved").appendChild(d);
@@ -610,22 +722,42 @@ function gridItem(i,r){
   return `<button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):i+1}</span>
     <span class="txt"><b>Grille n°${i+1}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>`;
 }
-function renderMenu(anim){
+let drawerTab="grids";
+const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+function renderDrawer(anim){
+  const n=loadFavs().length;
+  const head=`<div class="mtabs" role="tablist"><button class="mtab${drawerTab==="grids"?" on":""}" data-t="grids" role="tab" aria-selected="${drawerTab==="grids"}">Grilles</button>
+    <button class="mtab${drawerTab==="favs"?" on":""}" data-t="favs" role="tab" aria-selected="${drawerTab==="favs"}">Mon carnet ⭐<span class="cnt">${n}</span></button></div>`;
+  if(drawerTab==="grids") renderMenu(anim,head); else renderFavs(anim,head);
+  $("drawer").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{ if(b.dataset.t===drawerTab) return; buzz(8); drawerTab=b.dataset.t; renderDrawer(true); });
+}
+function renderFavs(anim,head){
+  const f=loadFavs().sort((a,b)=>b.at-a.at);
+  const list=f.length ? `<div class="flist">${f.map((x,k)=>`<div class="fcard c${x.lvl}" data-k="${k}">
+      <b>${esc(x.name)}</b><small>Grille n°${x.grid+1} · ${esc(x.words.join(", "))}</small><p>${esc(fr(x.fact))}</p>
+      <button class="fshare" data-k="${k}">${SHARE_ICON}Partager en image</button>
+      <span class="star on" role="button" tabindex="0" data-id="${esc(x.id)}" data-g="${x.grid}" data-gi="${x.lvl}" aria-pressed="true" aria-label="Retirer des favoris">★</span></div>`).join("")}</div>`
+    : `<div class="fempty"><span>☆</span>Touche l'étoile ☆ sur une anecdote pour la garder ici.</div>`;
+  $("drawer").innerHTML=head+`<div class="dpane">${list}</div>`;
+  $("drawer").querySelectorAll(".fshare").forEach(b=>b.onclick=()=>shareFav(f[+b.dataset.k],b));
+  if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
+}
+function renderMenu(anim,head){
   const r=loadRes(), tab=menuTab||grid.diff, ids=idsOf(tab), done_=ids.filter(i=>r[i]).length, D_=DIFFS[tab];
   const tabs=DKEYS.map(k=>{ const n=idsOf(k).filter(i=>r[i]).length;
     return `<button class="dtab${k===tab?" on":""}" data-k="${k}" role="tab" aria-selected="${k===tab}"><i class="l${DIFFS[k].c}"></i><b>${dname(k)}</b><small>${n}/${idsOf(k).length}</small></button>`; }).join("");
-  $("drawer").innerHTML=`<h2>Grilles</h2>
+  $("drawer").innerHTML=head+`
     <p class="sec">Grille du jour</p><div class="glist">${gridItem(dailyIdx,r)}</div>
     <p class="sec">Choisis ta difficulté</p><div class="dtabs" role="tablist">${tabs}</div>
     <div class="dpane"><p class="prog">${done_} sur ${ids.length} terminées · <b>${D_.err} erreurs</b> autorisées</p>
     <div class="bar"><i style="width:${ids.length?done_/ids.length*100:0}%;background:var(--l${D_.c})"></i></div>
     <div class="glist">${ids.map(i=>gridItem(i,r)).join("")}</div></div>`;
   $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
-  $("drawer").querySelectorAll(".dtab").forEach(b=>b.onclick=()=>{ if(b.dataset.k===tab) return; buzz(8); menuTab=b.dataset.k; renderMenu(true); });
+  $("drawer").querySelectorAll(".dtab").forEach(b=>b.onclick=()=>{ if(b.dataset.k===tab) return; buzz(8); menuTab=b.dataset.k; renderDrawer(true); });
   if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
 function openMenu(){
-  menuTab=grid.diff; renderMenu(false);
+  menuTab=grid.diff; renderDrawer(false);
   $("veil").classList.add("open"); $("drawer").classList.add("open");
 }
 function openSheet(html){ $("sheetBody").innerHTML=html; $("veil").classList.add("open"); $("sheet").classList.add("open"); }
@@ -636,7 +768,7 @@ function openResults(win){
   const title = win ? (mistakes===0?"Sans faute !":"Bien joué !") : "Pas cette fois";
   const text = win ? `Grille résolue avec ${mistakes} erreur${mistakes>1?"s":""}.` : "Tous les groupes sont révélés.";
   let k=0; const recap = history.map(r=>`<div>${r.map(i=>`<i class="l${i}" style="--k:${k++}"></i>`).join("")}</div>`).join("");
-  const learned = grid.map((g,i)=>`<div class="b${i}"><b>${esc(g.name)}</b>${esc(g.fact)}</div>`).join("");
+  const learned = grid.map((g,i)=>`<div class="b${i}"><b>${esc(g.name)}</b>${esc(g.fact)}${starHtml(gridIdx,i)}</div>`).join("");
   openSheet(`<h2>${title}</h2><p>${text}${practice?"":" Nouvelle grille demain."}</p>
     <div class="recap">${recap}</div>${practice?"":statsHtml()}
     <div class="row"><button class="pill main" id="share">Partager</button><button class="pill soft" id="next">Grille suivante</button></div>
