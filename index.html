@@ -142,7 +142,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .dock .end{display:none}
 .dock.over .end{display:block}
 .dock.over .play{display:none}
-.dock .end.pill{font-size:1rem;white-space:nowrap;padding:0 10px}
+.dock .end.pill{font-size:1rem;white-space:nowrap;padding:0 10px;min-width:0;overflow:hidden;text-overflow:ellipsis}
 
 /* Bulle du tutoriel */
 .tuto{position:relative;background:var(--ink);color:var(--bg);border-radius:16px;padding:12px 15px;margin:0 0 16px;
@@ -257,6 +257,33 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .gitem .num{flex:none;width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800;background:var(--card);box-shadow:0 3px 0 var(--edge)}
 .gitem.win .num{background:var(--l0);color:#082A22;box-shadow:0 3px 0 var(--l0e)}
 .gitem.lost .num{background:var(--l2);color:#fff;box-shadow:0 3px 0 var(--l2e)}
+/* Réussie après un nouvel essai : ✓ avec un petit 🔄 */
+.gitem .num{position:relative}
+.gitem.win2 .num{background:var(--l0);color:#082A22;box-shadow:0 3px 0 var(--l0e)}
+.gitem.win2 .num::after{content:"🔄";position:absolute;right:-7px;top:-7px;font-size:.62rem;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:var(--card);box-shadow:0 1px 0 var(--edge)}
+.grow{position:relative}
+.grow.can .gitem{padding-right:104px}
+.gretry{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;border-radius:999px;padding:7px 11px;font:inherit;font-size:.8rem;font-weight:800;
+  background:var(--l2);color:#fff;box-shadow:0 3px 0 var(--l2e);cursor:pointer;white-space:nowrap}
+.gretry:active{transform:translateY(calc(-50% + 2px));box-shadow:0 1px 0 var(--l2e)}
+.grow.can .tag{display:none}
+/* Grille au hasard */
+.rand{background:var(--bg);border-radius:16px;padding:12px}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.rpill{border:0;border-radius:999px;padding:7px 11px 7px 9px;font:inherit;font-size:.82rem;font-weight:700;background:var(--card);color:var(--ink);
+  box-shadow:0 2px 0 var(--edge);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:transform .2s}
+.rpill i{width:11px;height:11px;border-radius:3px;box-shadow:none;display:block}
+.rpill .all{display:grid;grid-template-columns:repeat(2,5px);gap:1px;width:auto;height:auto;background:none}
+.rpill .all b{width:5px;height:5px;border-radius:1.5px;display:block}
+.rpill.on{background:var(--ink);color:var(--bg);box-shadow:0 2px 0 #000}
+.rpill:active{transform:scale(.95)}
+.rgo{width:100%;height:50px;display:flex;align-items:center;justify-content:center;gap:8px}
+.rgo .die{display:inline-block;font-size:1.25rem}
+.pill.full{width:100%;margin-bottom:10px}
+.dock .end.lostonly{display:none}
+.dock.over.lost .lostonly{display:grid}
+.dock .sm{display:none}
+@media (max-width:420px){ .dock.lost .lg{display:none} .dock.lost .sm{display:inline} }
 .gitem .txt{flex:1;min-width:0}
 .gitem b{display:block;font-weight:700}
 .gitem small{color:var(--muted);font-size:.85rem}
@@ -293,8 +320,9 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
   <button class="round play" id="shuffle" aria-label="Mélanger"><svg viewBox="0 0 24 24"><path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.5M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.5M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/></svg></button>
   <button class="pill soft play" id="clear" disabled>Effacer</button>
   <button class="pill main play" id="submit" disabled>Valider</button>
-  <button class="pill main end" id="seeRes">Voir mes résultats</button>
-  <button class="pill soft end" id="nextG">Grille suivante</button>
+  <button class="round end lostonly" id="retryD" aria-label="Retenter"><span style="font-size:1.35rem">🔄</span></button>
+  <button class="pill main end" id="seeRes"><span class="lg">Voir mes résultats</span><span class="sm">Résultats</span></button>
+  <button class="pill soft end" id="nextG"><span class="lg">Grille suivante</span><span class="sm">Suivante</span></button>
 </div></nav>
 
 <div class="veil" id="veil"></div>
@@ -313,6 +341,7 @@ const GRIDS_REMOTE="https://polishman444.github.io/Quatuor/grilles.json";
 const GRIDS_URL=(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())?GRIDS_REMOTE:"grilles.json";
 const GRIDS_LOCAL="grilles.json";   // copie de secours embarquée (mise en cache par le service worker)
 let GRIDS=[];
+let attempt=1, hasard=null;   // n° de l'essai en cours ; difficulté du mode « Grille au hasard » (null hors de ce mode)
 // Grille d'entraînement du premier lancement (hors GRIDS : aucun impact sur stats, résultats ou favoris)
 const TUTO = D("facile",[G("Animaux domestiques",["Chat","Chien","Lapin","Cheval"],"Le lapin n'est pas un rongeur : c'est un lagomorphe, comme le lièvre."),
   G("Pays",["France","Italie","Espagne","Japon"],"Le Japon compte plus de 14 000 îles !"),
@@ -482,8 +511,13 @@ function loseDot(d){
 const shuffleArr=a=>{ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const groupOf=w=>grid.findIndex(g=>g.words.includes(w));
 
-function newGame(idx){
+function newGame(idx,opts={}){
   tuto=idx===-1; gridIdx=idx; grid=tuto?TUTO:GRIDS[idx]; practice=tuto||idx!==dailyIdx; gameId++;
+  hasard=opts.hasard||null;
+  const prev=tuto?null:loadRes()[grid.id];
+  // Grille perdue : pas de nouvelle partie sans passer par retenter() (et donc autoriserNouvelEssai)
+  const lostView=!!(prev&&!prev.win&&opts.essai!==JETON_ESSAI);
+  attempt=opts.essai===JETON_ESSAI&&prev?(prev.tries||1)+1:1;
   words=shuffleArr(grid.flatMap(g=>g.words)); selected=new Set(); found=[]; mistakes=0; history=[]; tried=new Set(); done=false; busy=false;
   maxErr=tuto?Infinity:DIFFS[grid.diff].err;   // tutoriel : erreurs illimitées
   $("lives").querySelector(".dots").innerHTML=tuto?"":"<i></i>".repeat(maxErr);
@@ -494,9 +528,19 @@ function newGame(idx){
     : (practice ? `Grille <b>n°${grid.num}</b>` : `Grille du jour · <b>${d}</b>`)+badge;
   if(tuto) $("skipTuto").onclick=endTuto;
   $("solved").innerHTML=""; $("lives").style.display=tuto?"none":"flex";
-  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over");
+  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost");
   tutoMsg=""; $("tuto").hidden=!tuto; tutoUpdate();
+  if(lostView){ showLostBoard(prev); return; }
   draw();
+  updateNextLabels();
+}
+// Plateau révélé d'une grille perdue : les 4 bandeaux, « Voir mes résultats » et « Retenter »
+function showLostBoard(prev){
+  done=true; lastWin=false; words=[]; mistakes=prev.mistakes||maxErr; history=prev.hist||[]; attempt=prev.tries||1;
+  $("grid").innerHTML=""; [0,1,2,3].forEach(gi=>addSolved(gi,false));
+  $("lives").style.display="none";
+  document.querySelector(".dock").classList.add("over","lost");
+  updateNextLabels();
 }
 // ---- Tutoriel ----
 let tutoMsg="";
@@ -517,13 +561,13 @@ function tutoUpdate(){
 function endTuto(){ ls.set("quatuor-tuto-done","1"); gridsReady.then(ok=>{ if(ok) switchGame(dailyIdx); else { tuto=false; showLoadError(); } }); }
 
 // Passage à une autre grille : l'ancienne glisse vers la gauche, la nouvelle arrive par la droite
-function switchGame(idx){
+function switchGame(idx,opts){
   const parts=[$("sub"),document.querySelector(".area")];
-  if(RM()){ scrollTo(0,0); newGame(idx); return; }
+  if(RM()){ scrollTo(0,0); newGame(idx,opts); return; }
   busy=true; scrollTo({top:0,behavior:"smooth"});
   const outs=parts.map(e=>e.animate([{transform:"none",opacity:1},{transform:"translateX(-28px)",opacity:0}],{duration:260,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}));
   outs[1].onfinish=()=>{
-    newGame(idx);
+    newGame(idx,opts);
     parts.forEach((e,i)=>e.animate([{transform:"translateX(28px)",opacity:0},{transform:"none",opacity:1}],{duration:420,delay:i*40,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     outs.forEach(a=>a.cancel());
     [...$("grid").children].forEach((t,i)=>t.animate([{transform:"translateY(10px) scale(.96)",opacity:0},{transform:"none",opacity:1}],
@@ -759,9 +803,16 @@ function finish(win){
   const hide=()=>{ $("lives").style.display="none"; const dk=document.querySelector(".dock"); dk.classList.add("over");
     if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"}); };
   if(rest.length) flipLayout(hide); else hide();
-  const res=loadRes();
-  if(!res[grid.id]){ res[grid.id]={win, mistakes}; saveRes(res); }
-  if(!practice){
+  // Résultats : on garde le premier essai, le nombre d'essais et le dernier plateau (pour le revoir)
+  const res=loadRes(), prev=res[grid.id];
+  if(!prev) res[grid.id]={win,mistakes,tries:1,first:{win,mistakes},hist:history};
+  else if(attempt>1&&!prev.win){
+    prev.first=prev.first||{win:prev.win,mistakes:prev.mistakes};
+    prev.tries=attempt; prev.win=win; prev.mistakes=mistakes; prev.hist=history;
+  } // (une grille déjà réussie rejouée ne change rien)
+  saveRes(res);
+  document.querySelector(".dock").classList.toggle("lost",!win);
+  if(!practice&&attempt===1){   // stats et série : seul le premier essai de la grille du jour compte
     const s=load();
     if(s.lastPlayed!==dayNum){
       s.played=(s.played||0)+1; s.lastPlayed=dayNum;
@@ -782,10 +833,18 @@ function statsHtml(){
     <div><b>${alive?(s.streak||0):0}</b><small>série 🔥</small></div><div><b>${s.best||0}</b><small>record</small></div></div>`;
 }
 function gridItem(i,r){
-  const x=r[GRIDS[i].id], st = x ? (x.win?"win":"lost") : "";
-  const sub = x ? (x.win ? (x.mistakes? `Réussie · ${x.mistakes} erreur${x.mistakes>1?"s":""}` : "Réussie sans faute") : "Perdue") : "À jouer";
-  return `<button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):GRIDS[i].num}</span>
-    <span class="txt"><b>Grille n°${GRIDS[i].num}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>`;
+  const x=r[GRIDS[i].id], tries=x?(x.tries||1):0, st = x ? (x.win?(tries>1?"win2":"win"):"lost") : "";
+  const sub = !x ? "À jouer"
+    : x.win ? (tries>1 ? `Réussie au ${ordinal(tries)} essai` : x.mistakes? `Réussie · ${x.mistakes} erreur${x.mistakes>1?"s":""}` : "Réussie sans faute")
+    : (tries>1 ? `Perdue · ${tries} essais` : "Perdue");
+  const lost=x&&!x.win;
+  return `<div class="grow${lost?" can":""}"><button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):GRIDS[i].num}</span>
+    <span class="txt"><b>Grille n°${GRIDS[i].num}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>${lost?`<button class="gretry" data-i="${i}">Retenter 🔄</button>`:""}</div>`;
+}
+function randHtml(){
+  return `<p class="sec">Grille au hasard 🎲</p><div class="rand"><div class="rpills" role="radiogroup" aria-label="Difficulté">${RAND_KEYS.map(k=>
+    `<button class="rpill${k===randChoice?" on":""}" data-k="${k}" role="radio" aria-checked="${k===randChoice}">${k==="toutes"?'<i class="all"><b style="background:var(--l0)"></b><b style="background:var(--l1)"></b><b style="background:var(--l2)"></b><b style="background:var(--l3)"></b></i>':`<i class="l${DIFFS[k].c}"></i>`}${randLabel(k)}</button>`).join("")}</div>
+    <button class="pill main rgo" id="randGo">Lancer <span class="die">🎲</span></button></div>`;
 }
 let drawerTab="grids";
 const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
@@ -813,11 +872,16 @@ function renderMenu(anim,head){
     return `<button class="dtab${k===tab?" on":""}" data-k="${k}" role="tab" aria-selected="${k===tab}"><i class="l${DIFFS[k].c}"></i><b>${dname(k)}</b><small>${n}/${idsOf(k).length}</small></button>`; }).join("");
   $("drawer").innerHTML=head+`
     <p class="sec">Grille du jour</p><div class="glist">${gridItem(dailyIdx,r)}</div>
+    ${randHtml()}
     <p class="sec">Choisis ta difficulté</p><div class="dtabs" role="tablist">${tabs}</div>
     <div class="dpane"><p class="prog">${done_} sur ${ids.length} terminées · <b>${D_.err} erreurs</b> autorisées</p>
     <div class="bar"><i style="width:${ids.length?done_/ids.length*100:0}%;background:var(--l${D_.c})"></i></div>
     <div class="glist">${ids.length?ids.map(i=>gridItem(i,r)).join(""):`<p class="gempty">Pas encore de grille ${D_.name.toLowerCase()} disponible.<br>De nouvelles grilles arrivent chaque jour !</p>`}</div></div>`;
   $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
+  $("drawer").querySelectorAll(".gretry").forEach(b=>b.onclick=()=>retenter(+b.dataset.i,{hasard:null}));
+  $("drawer").querySelectorAll(".rpill").forEach(b=>b.onclick=()=>{ randChoice=b.dataset.k; ls.set("quatuor-hasard",randChoice); buzz(8);
+    $("drawer").querySelectorAll(".rpill").forEach(x=>{ const on=x===b; x.classList.toggle("on",on); x.setAttribute("aria-checked",on); }); });
+  $("randGo").onclick=()=>launchRandom(randChoice,$("randGo").querySelector(".die"));
   $("drawer").querySelectorAll(".dtab").forEach(b=>b.onclick=()=>{ if(b.dataset.k===tab) return; buzz(8); menuTab=b.dataset.k; renderDrawer(true); });
   if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
@@ -836,16 +900,84 @@ $("veil").onclick=closeSheet;
 
 function openResults(win){
   const title = win ? (mistakes===0?"Sans faute !":"Bien joué !") : "Pas cette fois";
-  const text = win ? `Grille résolue avec ${mistakes} erreur${mistakes>1?"s":""}.` : "Tous les groupes sont révélés.";
+  const essai = attempt>1 ? ` au ${ordinal(attempt)} essai` : "";
+  const text = win ? `Grille résolue${essai} avec ${mistakes} erreur${mistakes>1?"s":""}.` : `Tous les groupes sont révélés${attempt>1?` (${ordinal(attempt)} essai)`:""}.`;
   let k=0; const recap = history.map(r=>`<div>${r.map(i=>`<i class="l${i}" style="--k:${k++}"></i>`).join("")}</div>`).join("");
   const learned = grid.map((g,i)=>`<div class="b${i}"><b>${esc(g.name)}</b>${esc(g.fact)}${starHtml(gridIdx,i)}</div>`).join("");
   openSheet(`<h2>${title}</h2><p>${text}${practice?"":" Nouvelle grille demain."}</p>
     <div class="recap">${recap}</div>${practice?"":statsHtml()}
-    <div class="row"><button class="pill main" id="share">Partager</button><button class="pill soft" id="next">Grille suivante</button></div>
+    ${win?"":`<button class="pill main full" id="retry">Retenter 🔄</button>`}
+    <div class="row"><button class="pill ${win?"main":"soft"}" id="share">Partager</button><button class="pill soft" id="next">${hasard?"Encore une 🎲":"Grille suivante"}</button></div>
     <h3>Ce que tu as appris aujourd'hui</h3><div class="learned">${learned}</div>`);
   $("share").onclick=share;
-  $("next").onclick=nextGrid;
+  $("next").onclick=nextOrRandom;
+  if(!win) $("retry").onclick=()=>retenter(gridIdx);
 }
+// =====================================================================
+// NOUVEL ESSAI SUR UNE GRILLE PERDUE
+// ⚠️ autoriserNouvelEssai() est le SEUL point d'entrée pour rejouer une grille perdue.
+// Pour l'instant elle autorise toujours. Plus tard (appli iOS), c'est ici qu'on affichera
+// une pub récompensée AdMob : ne renvoyer true que si la pub a été regardée jusqu'au bout,
+// false si le joueur l'a fermée avant ou si elle n'a pas pu se charger.
+// newGame() refuse de relancer une grille perdue sans JETON_ESSAI, que seul retenter() transmet.
+// =====================================================================
+async function autoriserNouvelEssai(idGrille){
+  return true;
+}
+const JETON_ESSAI=Symbol("nouvel essai autorisé");
+let essaiEnCours=false;
+async function retenter(idx,opts={}){
+  const g=GRIDS[idx]; if(!g||essaiEnCours) return;
+  essaiEnCours=true;
+  try{
+    const ok=await autoriserNouvelEssai(g.id);
+    if(!ok){ toast("Nouvel essai non disponible"); return; }
+    closeSheet(); buzz(12);
+    setTimeout(()=>switchGame(idx,{essai:JETON_ESSAI,hasard:opts.hasard!==undefined?opts.hasard:hasard}),200);
+  }finally{ essaiEnCours=false; }
+}
+const ordinal=n=>n===1?"1er":n+"e";
+
+// =====================================================================
+// GRILLE AU HASARD
+// =====================================================================
+const RAND_KEYS=["toutes",...DKEYS];
+const randLabel=k=>k==="toutes"?"Toutes":dname(k);
+let randChoice=ls.get("quatuor-hasard"); if(!RAND_KEYS.includes(randChoice)) randChoice="toutes";
+function pickRandom(diff){
+  const r=loadRes();
+  // Grilles visibles uniquement (jamais une grille future cachée), hors grille du jour
+  const pool=GRIDS.map((_,i)=>i).filter(i=>visible(i)&&i!==dailyIdx&&(diff==="toutes"||GRIDS[i].diff===diff));
+  const fresh=pool.filter(i=>!r[GRIDS[i].id]);
+  const any=a=>a[Math.floor(Math.random()*a.length)];
+  if(fresh.length) return {i:any(fresh),again:false};
+  const others=pool.filter(i=>i!==gridIdx);       // éviter celle qu'on vient de jouer
+  const c=others.length?others:pool;
+  return {i:c.length?any(c):undefined,again:true};
+}
+function launchRandom(diff,die){
+  if(!GRIDS.length) return;
+  const {i,again}=pickRandom(diff);
+  if(i===undefined){ toast(diff==="toutes"?"Aucune grille disponible pour l'instant":`Pas encore de grille ${DIFFS[diff].name} disponible`); return; }
+  buzz(10);
+  const go=()=>{
+    if(again) toast(diff==="toutes"?"Tu as déjà fait toutes les grilles ! En voici une à rejouer.":`Tu as déjà fait toutes les grilles ${DIFFS[diff].name} ! En voici une à rejouer.`);
+    const x=loadRes()[GRIDS[i].id];
+    if(x&&!x.win) retenter(i,{hasard:diff});      // grille perdue : nouvel essai, donc autorisation
+    else { closeSheet(); setTimeout(()=>switchGame(i,{hasard:diff}),200); }
+  };
+  // Petit dé qui roule (< 0,6 s), puis la grille s'ouvre
+  if(die&&!RM()) die.animate([{transform:"none"},{transform:"rotate(200deg) scale(1.25)",offset:.5},{transform:"rotate(360deg)"}],{duration:520,easing:"cubic-bezier(.3,.7,.4,1)"}).onfinish=go;
+  else go();
+}
+// Libellés du bouton « Grille suivante » selon le mode
+function updateNextLabels(){
+  const t=hasard?"Encore une 🎲":"Grille suivante", court=hasard?"Encore 🎲":"Suivante";
+  $("nextG").innerHTML=`<span class="lg">${t}</span><span class="sm">${court}</span>`;
+  const n=$("next"); if(n) n.textContent=t;
+}
+function nextOrRandom(){ if(hasard) launchRandom(hasard); else nextGrid(); }
+
 // Grille suivante : de préférence une grille non jouée de la même difficulté
 function nextGrid(){
   const r=loadRes(), played=j=>!!r[GRIDS[j].id], n=GRIDS.length;
@@ -886,7 +1018,7 @@ function openWelcome(onClose){
   $("goW").onclick=closeSheet;
 }
 async function share(){
-  const head=`Quatuor n°${grid.num} · ${dname(grid.diff)}`;
+  const head=`Quatuor n°${grid.num} · ${dname(grid.diff)}${attempt>1?` · ${ordinal(attempt)} essai`:""}`;
   const text=`${head}\n${history.map(r=>r.map(i=>ICON[i]).join("")).join("\n")}`;
   if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e.name==="AbortError") return; } }
   try{ await navigator.clipboard.writeText(text); toast("Résultat copié"); }
@@ -910,7 +1042,8 @@ $("clear").onclick=()=>{
   updateUi(); if(tuto) flipLayout(tutoUpdate);
 };
 $("seeRes").onclick=()=>{ if(done&&!tuto) openResults(lastWin); };
-$("nextG").onclick=nextGrid;
+$("nextG").onclick=nextOrRandom;
+$("retryD").onclick=()=>{ if(done&&!tuto&&!lastWin) retenter(gridIdx); };
 
 // ---- Panneau du bas : le faire glisser vers le bas pour le fermer ----
 (function(){

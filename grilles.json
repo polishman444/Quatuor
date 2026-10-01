@@ -410,6 +410,172 @@
         { "nom": "Types de navires", "mots": ["Corvette", "Goélette", "Caravelle", "Frégate"], "anecdote": "La Chevrolet Corvette, lancée en 1953, doit son nom à la corvette, un navire de guerre rapide." },
         { "nom": "L'argent en argot", "mots": ["Blé", "Pognon", "Flouze", "Fric"], "anecdote": "L'argot aime comparer l'argent à de la nourriture : on dit « le blé », ou « ne pas avoir un radis »." }
       ]
+    },
+    {
+      "id": "g033",
+      "num": 33,
+      "difficulte": "facile",
+      "jour": "2026-10-27",
+      "groupes": [
+        { "nom": "Sports collectifs", "mots": ["Football", "Rugby", "Handball", "Volley"], "anecdote": "Le volley-ball a été inventé en 1895 aux États-Unis par William Morgan, comme une alternative plus douce au basket." },
+        { "nom": "Mammifères marins", "mots": ["Dauphin", "Baleine", "Phoque", "Morse"], "anecdote": "Le morse se sert de ses longues défenses pour se hisser hors de l'eau sur la glace." },
+        { "nom": "Monuments de Paris", "mots": ["Louvre", "Panthéon", "Invalides", "Sacré-Cœur"], "anecdote": "Les cendres de Napoléon ont été rapportées aux Invalides en 1840, près de vingt ans après sa mort à Sainte-Hélène." },
+        { "nom": "Noms de personnes devenus des mots", "mots": ["Poubelle", "Silhouette", "Diesel", "Braille"], "anecdote": "La poubelle doit son nom au préfet Eugène Poubelle, qui a imposé les boîtes à ordures aux Parisiens en 1884. Et Morse ? C'était le piège : il va avec les mammifères marins !" }
+      ]
+    },
+    {
+      "id": "g034",
+      "num": 34,
+      "difficulte": "moyen",
+      "jour": "2026-10-28",
+      "groupes": [
+        { "nom": "Fêtes du calendrier", "mots": ["Noël", "Pâques", "Toussaint", "Halloween"], "anecdote": "La Toussaint, le 1er novembre, célèbre tous les saints. C'est le 2 novembre qu'on commémore les défunts." },
+        { "nom": "Instruments à percussion", "mots": ["Tambour", "Timbale", "Xylophone", "Triangle"], "anecdote": "« Xylophone » vient du grec xylon, « bois », et phônê, « son » : littéralement, le « son du bois »." },
+        { "nom": "Formes géométriques", "mots": ["Cercle", "Losange", "Trapèze", "Pentagone"], "anecdote": "Le Pentagone, siège du département de la Défense des États-Unis, doit son nom à sa forme à cinq côtés." },
+        { "nom": "Surnoms de pays", "mots": ["Hexagone", "Botte", "Soleil-Levant", "Plat pays"], "anecdote": "La France est surnommée l'Hexagone parce que la forme de son territoire s'inscrit à peu près dans un hexagone." }
+      ]
+    },
+    {
+      "id": "g035",
+      "num": 35,
+      "difficulte": "difficile",
+      "jour": "2026-10-29",
+      "groupes": [
+        { "nom": "Jeux de société", "mots": ["Monopoly", "Scrabble", "Cluedo", "Risk"], "anecdote": "Le Monopoly descend d'un jeu créé en 1904 par l'Américaine Lizzie Magie… pour dénoncer les dangers des monopoles." },
+        { "nom": "Inventions françaises", "mots": ["Stéthoscope", "Montgolfière", "Cinématographe", "Pasteurisation"], "anecdote": "Le stéthoscope a été inventé en 1816 par René Laennec. Au départ, il roulait simplement une feuille de papier en cylindre pour écouter le cœur." },
+        { "nom": "Personnages de l'Iliade", "mots": ["Achille", "Hector", "Pâris", "Patrocle"], "anecdote": "L'Iliade ne raconte que quelques semaines de la dixième année de la guerre de Troie. Le fameux cheval de Troie n'y apparaît même pas." },
+        { "nom": "Tragédies de Racine", "mots": ["Phèdre", "Andromaque", "Bérénice", "Britannicus"], "anecdote": "Après « Phèdre », en 1677, Racine a quasiment cessé d'écrire pour le théâtre pendant douze ans pour devenir historiographe du roi." }
+      ]
+    },
+    {
+      "id": "g036",
+      "num": 36,
+      "difficulte": "facile",
+      "jour": "2026-10-30",
+      "groupes": [
+        { "nom": "Moyens de transport", "mots": ["Train", "Avion", "Métro", "Tramway"], "anecdote": "Le premier métro du monde a ouvert à Londres en 1863." },
+        { "nom": "Insectes", "mots": ["Fourmi", "Abeille", "Coccinelle", "Libellule"], "anecdote": "La coccinelle est l'alliée des jardiniers : une seule peut dévorer des dizaines de pucerons par jour." },
+        { "nom": "Héros de bande dessinée", "mots": ["Spirou", "Gaston", "Titeuf", "Blueberry"], "anecdote": "Spirou a été créé en 1938 comme groom dans un hôtel : c'est pour ça qu'il porte son célèbre uniforme rouge." },
+        { "nom": "Ensembles musicaux", "mots": ["Duo", "Trio", "Quatuor", "Quintette"], "anecdote": "Un quatuor à cordes classique réunit deux violons, un alto et un violoncelle. Oui, comme le nom de ce jeu !" }
+      ]
+    },
+    {
+      "id": "g037",
+      "num": 37,
+      "difficulte": "moyen",
+      "jour": "2026-10-31",
+      "groupes": [
+        { "nom": "Organes du corps", "mots": ["Foie", "Poumon", "Rein", "Rate"], "anecdote": "Le foie peut se régénérer : même après l'ablation d'une grande partie, il retrouve presque sa taille d'origine." },
+        { "nom": "Couleurs des cartes à jouer", "mots": ["Pique", "Trèfle", "Carreau", "Cœur"], "anecdote": "Les couleurs pique, cœur, carreau et trèfle sont une invention française de la fin du XVe siècle." },
+        { "nom": "Grands fleuves du monde", "mots": ["Nil", "Amazone", "Danube", "Mississippi"], "anecdote": "Le Danube traverse ou longe dix pays, un record pour un fleuve." },
+        { "nom": "Termes de golf", "mots": ["Birdie", "Eagle", "Par", "Bogey"], "anecdote": "Au golf, un « albatros » est un trou réussi en trois coups de moins que le par, encore plus rare qu'un eagle." }
+      ]
+    },
+    {
+      "id": "g038",
+      "num": 38,
+      "difficulte": "difficile",
+      "jour": "2026-11-01",
+      "groupes": [
+        { "nom": "Artistes de la Renaissance italienne", "mots": ["Raphaël", "Titien", "Botticelli", "Michel-Ange"], "anecdote": "Michel-Ange a peint le plafond de la chapelle Sixtine en environ quatre ans, de 1508 à 1512." },
+        { "nom": "Écrivains russes", "mots": ["Tolstoï", "Dostoïevski", "Tchekhov", "Pouchkine"], "anecdote": "Pouchkine, le grand poète national russe, est mort en 1837 des suites d'un duel." },
+        { "nom": "Ballets classiques", "mots": ["Giselle", "Coppélia", "Casse-Noisette", "Le Lac des cygnes"], "anecdote": "« Coppélia », créé à Paris en 1870, raconte l'histoire d'un jeune homme amoureux d'une poupée mécanique." },
+        { "nom": "Découpes en cuisine", "mots": ["Julienne", "Brunoise", "Chiffonnade", "Mirepoix"], "anecdote": "La mirepoix tirerait son nom du duc de Lévis-Mirepoix, un aristocrate du XVIIIe siècle." }
+      ]
+    },
+    {
+      "id": "g039",
+      "num": 39,
+      "difficulte": "facile",
+      "jour": "2026-11-02",
+      "groupes": [
+        { "nom": "Animaux de la ferme", "mots": ["Vache", "Cochon", "Mouton", "Chèvre"], "anecdote": "Le cochon ne transpire presque pas : il se roule dans la boue pour se rafraîchir." },
+        { "nom": "Pays nordiques", "mots": ["Norvège", "Suède", "Finlande", "Danemark"], "anecdote": "La Finlande compte environ 188 000 lacs, d'où son surnom de « pays des mille lacs »." },
+        { "nom": "Jeux de récré", "mots": ["Marelle", "Billes", "Chat", "Élastique"], "anecdote": "On joue aux billes depuis l'Antiquité : on en aurait retrouvé dans des tombes de l'Égypte ancienne." },
+        { "nom": "Planètes naines", "mots": ["Pluton", "Cérès", "Éris", "Makémaké"], "anecdote": "Pluton a perdu son statut de planète en 2006 pour devenir une planète naine." }
+      ]
+    },
+    {
+      "id": "g040",
+      "num": 40,
+      "difficulte": "moyen",
+      "jour": "2026-11-03",
+      "groupes": [
+        { "nom": "Bébés animaux", "mots": ["Poussin", "Agneau", "Chaton", "Poulain"], "anecdote": "Le petit du lièvre s'appelle le levraut, et celui du cerf, le faon." },
+        { "nom": "Roches", "mots": ["Granit", "Basalte", "Marbre", "Calcaire"], "anecdote": "Le marbre est un calcaire transformé par la chaleur et la pression au fond de la Terre." },
+        { "nom": "Grands chefs français", "mots": ["Bocuse", "Ducasse", "Robuchon", "Escoffier"], "anecdote": "Paul Bocuse a donné son nom au Bocuse d'Or, l'un des concours de cuisine les plus prestigieux au monde, créé en 1987." },
+        { "nom": "Cris d'animaux", "mots": ["Barrir", "Hennir", "Bêler", "Rugir"], "anecdote": "L'éléphant barrit, le cheval hennit… et la grenouille coasse." }
+      ]
+    },
+    {
+      "id": "g041",
+      "num": 41,
+      "difficulte": "difficile",
+      "jour": "2026-11-04",
+      "groupes": [
+        { "nom": "Capitales européennes", "mots": ["Lisbonne", "Varsovie", "Prague", "Budapest"], "anecdote": "Budapest est née en 1873 de la fusion de trois villes : Buda, Óbuda et Pest." },
+        { "nom": "Pièces de Shakespeare", "mots": ["Hamlet", "Othello", "Macbeth", "Le Roi Lear"], "anecdote": "« Hamlet » est la plus longue pièce de Shakespeare." },
+        { "nom": "Alphabets", "mots": ["Latin", "Cyrillique", "Grec", "Arabe"], "anecdote": "L'alphabet cyrillique doit son nom à saint Cyrille, un missionnaire byzantin du IXe siècle." },
+        { "nom": "Anciennes capitales", "mots": ["Kyoto", "Saint-Pétersbourg", "Rio de Janeiro", "Calcutta"], "anecdote": "Rio de Janeiro a été la capitale du Brésil jusqu'en 1960, date de l'inauguration de Brasília." }
+      ]
+    },
+    {
+      "id": "g042",
+      "num": 42,
+      "difficulte": "moyen",
+      "jour": "2026-11-06",
+      "groupes": [
+        { "nom": "Fruits rouges", "mots": ["Fraise", "Framboise", "Groseille", "Myrtille"], "anecdote": "Au sens botanique, la framboise n'est pas une baie : c'est un ensemble de petits fruits soudés, les drupéoles." },
+        { "nom": "Sports de raquette", "mots": ["Tennis", "Badminton", "Squash", "Padel"], "anecdote": "Lors d'un smash, un volant de badminton peut dépasser 400 km/h : c'est l'objet le plus rapide des sports de raquette." },
+        { "nom": "Mouvements artistiques", "mots": ["Fauvisme", "Cubisme", "Surréalisme", "Dadaïsme"], "anecdote": "Le mot « fauve » vient d'un critique qui, au Salon de 1905, a comparé ces peintres aux couleurs vives à des bêtes sauvages." },
+        { "nom": "Villes de la côte méditerranéenne", "mots": ["Cassis", "Bandol", "Hyères", "Collioure"], "anecdote": "Collioure a inspiré Matisse et Derain à l'été 1905, au moment de la naissance du fauvisme. Et Cassis n'était pas un fruit rouge ici !" }
+      ]
+    },
+    {
+      "id": "g043",
+      "num": 43,
+      "difficulte": "difficile",
+      "jour": "2026-11-07",
+      "groupes": [
+        { "nom": "Termes de rugby", "mots": ["Mêlée", "Essai", "Touche", "Drop"], "anecdote": "L'essai s'appelle ainsi car, à l'origine, il ne rapportait aucun point : il donnait seulement le droit d'« essayer » de transformer." },
+        { "nom": "Vents", "mots": ["Mistral", "Tramontane", "Sirocco", "Foehn"], "anecdote": "Le mistral peut souffler à plus de 100 km/h dans la vallée du Rhône." },
+        { "nom": "Musées parisiens", "mots": ["Orsay", "Orangerie", "Carnavalet", "Rodin"], "anecdote": "Le musée d'Orsay est installé dans une ancienne gare, construite pour l'Exposition universelle de 1900." },
+        { "nom": "Sculpteurs", "mots": ["Claudel", "Giacometti", "Bourdelle", "Maillol"], "anecdote": "En 2010, « L'Homme qui marche I » de Giacometti s'est vendu plus de 100 millions de dollars aux enchères." }
+      ]
+    },
+    {
+      "id": "g044",
+      "num": 44,
+      "difficulte": "facile",
+      "jour": "2026-11-05",
+      "groupes": [
+        { "nom": "Vêtements", "mots": ["Jupe", "Chemise", "Manteau", "Chaussette"], "anecdote": "Le mot « chemise » vient du latin camisia." },
+        { "nom": "Métiers", "mots": ["Boulanger", "Plombier", "Facteur", "Pompier"], "anecdote": "En France, environ quatre pompiers sur cinq sont des volontaires." },
+        { "nom": "Sports d'hiver", "mots": ["Ski", "Luge", "Curling", "Biathlon"], "anecdote": "Le biathlon combine ski de fond et tir à la carabine." },
+        { "nom": "Mots venus de l'anglais", "mots": ["Week-end", "Parking", "Shopping", "Pull"], "anecdote": "« Pull » vient de l'anglais pull-over, « tirer par-dessus ». Et « parking » est un faux ami : en anglais, l'endroit se dit plutôt car park ou parking lot." }
+      ]
+    },
+    {
+      "id": "g045",
+      "num": 45,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Phobies", "mots": ["Arachnophobie", "Claustrophobie", "Agoraphobie", "Acrophobie"], "anecdote": "L'acrophobie est la peur du vide et des hauteurs, à ne pas confondre avec le vertige, qui est une sensation physique." },
+        { "nom": "Préfixes du système métrique", "mots": ["Kilo", "Méga", "Giga", "Nano"], "anecdote": "« Nano » vient du grec nanos, qui signifie « nain »." },
+        { "nom": "Pas de danse classique", "mots": ["Plié", "Entrechat", "Pirouette", "Jeté"], "anecdote": "Le vocabulaire de la danse classique est en français dans le monde entier, héritage de l'Académie royale de danse fondée par Louis XIV en 1661." },
+        { "nom": "Alliages", "mots": ["Bronze", "Laiton", "Acier", "Duralumin"], "anecdote": "Le laiton est un alliage de cuivre et de zinc, alors que le bronze est un alliage de cuivre et d'étain." }
+      ]
+    },
+    {
+      "id": "g046",
+      "num": 46,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Chaînes de montagnes", "mots": ["Andes", "Atlas", "Oural", "Carpates"], "anecdote": "L'Oural sert traditionnellement de frontière entre l'Europe et l'Asie." },
+        { "nom": "Architecture gothique", "mots": ["Ogive", "Arc-boutant", "Gargouille", "Rosace"], "anecdote": "Les gargouilles ne sont pas que décoratives : ce sont des gouttières qui évacuent l'eau de pluie loin des murs." },
+        { "nom": "Maréchaux de Napoléon", "mots": ["Ney", "Murat", "Davout", "Lannes"], "anecdote": "Le maréchal Ney, surnommé « le Brave des braves », a été fusillé en 1815 après le retour des Bourbons." },
+        { "nom": "Pseudonymes d'écrivains", "mots": ["Stendhal", "Céline", "Vercors", "Nerval"], "anecdote": "Stendhal s'appelait en réalité Henri Beyle, et il aurait utilisé plus d'une centaine de pseudonymes." }
+      ]
     }
   ]
 }
