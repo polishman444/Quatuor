@@ -1,10 +1,10 @@
 {
   "version": 1,
   "themes": [
-    { "id": "geographie", "nom": "Géographie", "icone": "🌍", "ordre": 1, "publie": false },
-    { "id": "histoire", "nom": "Histoire", "icone": "🏛️", "ordre": 2, "publie": false },
-    { "id": "animes", "nom": "Animés", "icone": "🎌", "ordre": 3, "publie": false },
-    { "id": "sport", "nom": "Sport", "icone": "⚽", "ordre": 4, "publie": false }
+    { "id": "geographie", "nom": "Géographie", "icone": "🌍", "ordre": 1, "publie": true },
+    { "id": "histoire", "nom": "Histoire", "icone": "🏛️", "ordre": 2, "publie": true },
+    { "id": "animes", "nom": "Animés", "icone": "🎌", "ordre": 3, "publie": true },
+    { "id": "sport", "nom": "Sport", "icone": "⚽", "ordre": 4, "publie": true }
   ],
   "grilles": [
     {
@@ -649,7 +649,7 @@
       "theme": "geographie",
       "titre": "Capitales et compagnie",
       "groupes": [
-        { "nom": "Grandes villes qui n'ont jamais été capitales", "mots": ["Sydney", "Casablanca", "Johannesburg", "Mumbai"], "anecdote": "" },
+        { "nom": "Grandes villes jamais capitales d'un pays", "mots": ["Sydney", "Casablanca", "Johannesburg", "Mumbai"], "anecdote": "" },
         { "nom": "Anciennes capitales", "mots": ["Kyoto", "Saint-Pétersbourg", "Rio de Janeiro", "Istanbul"], "anecdote": "" },
         { "nom": "Capitales construites de toutes pièces", "mots": ["Brasilia", "Canberra", "Islamabad", "Abuja"], "anecdote": "Brasilia a été inaugurée en 1960 pour remplacer Rio de Janeiro comme capitale du Brésil." },
         { "nom": "Capitales sur le Danube", "mots": ["Vienne", "Bratislava", "Budapest", "Belgrade"], "anecdote": "" }
@@ -819,7 +819,7 @@
       "titre": "Dans les coulisses",
       "groupes": [
         { "nom": "Studios d'animation", "mots": ["MAPPA", "Ufotable", "Bones", "Madhouse"], "anecdote": "" },
-        { "nom": "Mangakas", "mots": ["Oda", "Kishimoto", "Toriyama", "Isayama"], "anecdote": "Eiichirō Oda dessine One Piece sans interruption majeure depuis 1997." },
+        { "nom": "Mangakas", "mots": ["Oda", "Kishimoto", "Toriyama", "Isayama"], "anecdote": "Eiichirō Oda dessine One Piece depuis 1997." },
         { "nom": "Personnages aux cheveux blancs", "mots": ["Gojo", "Kakashi", "Killua", "Kaneki"], "anecdote": "" },
         { "nom": "Rivaux du héros", "mots": ["Sasuke", "Vegeta", "Bakugo", "Kaiba"], "anecdote": "" }
       ]
