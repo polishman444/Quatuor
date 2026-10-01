@@ -280,6 +280,10 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .rgo{width:100%;height:50px;display:flex;align-items:center;justify-content:center;gap:8px}
 .rgo .die{display:inline-block;font-size:1.25rem}
 .pill.full{width:100%;margin-bottom:10px}
+.dock .pend{display:none}
+.dock.over.pending .pend{display:block}
+.dock.over.pending .end{display:none}
+.pill.full+.pill.full{margin-top:-2px}
 .dock .end.lostonly{display:none}
 .dock.over.lost .lostonly{display:grid}
 .dock .sm{display:none}
@@ -320,6 +324,8 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
   <button class="round play" id="shuffle" aria-label="Mélanger"><svg viewBox="0 0 24 24"><path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.5M20 7h-3.5c-1.6 0-2.7 1.6-3.6 3.5M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/></svg></button>
   <button class="pill soft play" id="clear" disabled>Effacer</button>
   <button class="pill main play" id="submit" disabled>Valider</button>
+  <button class="pill main pend" id="retryP">Réessayer 🔄</button>
+  <button class="pill soft pend" id="revealP">Voir la solution</button>
   <button class="round end lostonly" id="retryD" aria-label="Retenter"><span style="font-size:1.35rem">🔄</span></button>
   <button class="pill main end" id="seeRes"><span class="lg">Voir mes résultats</span><span class="sm">Résultats</span></button>
   <button class="pill soft end" id="nextG"><span class="lg">Grille suivante</span><span class="sm">Suivante</span></button>
@@ -528,9 +534,9 @@ function newGame(idx,opts={}){
     : (practice ? `Grille <b>n°${grid.num}</b>` : `Grille du jour · <b>${d}</b>`)+badge;
   if(tuto) $("skipTuto").onclick=endTuto;
   $("solved").innerHTML=""; $("lives").style.display=tuto?"none":"flex";
-  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost");
-  tutoMsg=""; $("tuto").hidden=!tuto; tutoUpdate();
-  if(lostView){ showLostBoard(prev); return; }
+  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost","pending");
+  tutoMsg=""; $("tuto").hidden=!tuto||tutoHold; tutoUpdate();
+  if(lostView){ if(prev.vu===false) showPendingBoard(prev); else showLostBoard(prev); return; }
   draw();
   updateNextLabels();
 }
@@ -542,8 +548,66 @@ function showLostBoard(prev){
   document.querySelector(".dock").classList.add("over","lost");
   updateNextLabels();
 }
+// Grille perdue dont la solution n'a pas été vue : groupes trouvés + tuiles restantes, solution cachée
+function showPendingBoard(prev){
+  done=true; lastWin=false; mistakes=prev.mistakes||maxErr; history=prev.hist||[]; attempt=prev.tries||1;
+  found=Array.isArray(prev.found)?prev.found.slice()
+    :[...new Set(history.filter(r=>r.every(x=>x===r[0])).map(r=>r[0]))];   // anciennes données : déduit de l'historique
+  words=shuffleArr(grid.filter((_,gi)=>!found.includes(gi)).flatMap(g=>g.words));
+  found.forEach(gi=>addSolved(gi,false));
+  $("lives").querySelectorAll("i").forEach(d=>d.classList.add("off"));   // déjà perdus : pas d'animation
+  draw();
+  showPending(450);
+}
+// Barre du bas « Réessayer / Voir la solution » et panneau correspondant
+function showPending(delay){
+  const dk=document.querySelector(".dock"); dk.classList.remove("lost"); dk.classList.add("over","pending");
+  if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
+  const id=gameId; setTimeout(()=>{ if(id===gameId) whenSheetFree(openPending); },delay);
+}
+// Si un autre panneau est ouvert (bienvenue…), on attend qu'il soit fermé
+function whenSheetFree(fn){
+  if(!$("sheet").classList.contains("open")){ fn(); return; }
+  const before=onSheetClose, id=gameId;
+  onSheetClose=()=>{ if(before) before(); setTimeout(()=>{ if(id===gameId) fn(); },380); };
+}
+function openPending(){
+  if(!done||lastWin||!document.querySelector(".dock.pending")) return;
+  const n=found.length;
+  // Seules les anecdotes des groupes déjà trouvés apparaissent ; rien sur les groupes manquants
+  const facts=found.map(gi=>`<div class="b${gi}"><b>${esc(grid[gi].name)}</b>${esc(grid[gi].fact)}${starHtml(gridIdx,gi)}</div>`).join("");
+  openSheet(`<h2>Plus d'erreurs disponibles 😬</h2>
+    <p>${n?`Tu as trouvé ${n} ${pl(n,"groupe","groupes")} sur 4.`:"Aucun groupe trouvé cette fois."} Retente ta chance avant de découvrir la solution !</p>
+    <button class="pill main full" id="pRetry">Réessayer 🔄</button>
+    <button class="pill soft full" id="pReveal">Voir la solution</button>
+    ${n?`<h3>${pl(n,"Groupe trouvé","Groupes trouvés")}</h3><div class="learned">${facts}</div>`:""}`);
+  $("pRetry").onclick=()=>retenter(gridIdx);
+  $("pReveal").onclick=revealSolution;
+}
+// « Voir la solution » : on révèle les groupes manquants avec l'animation habituelle, puis les résultats
+function revealSolution(){
+  const dk=document.querySelector(".dock");
+  if(!done||lastWin||!dk.classList.contains("pending")) return;
+  const res=loadRes(), x=res[grid.id]; if(x){ x.vu=true; saveRes(res); }
+  closeSheet(); dk.classList.remove("pending");
+  const id=gameId, rest=[0,1,2,3].filter(gi=>!found.includes(gi)); let delay=300;
+  rest.forEach(gi=>{ setTimeout(()=>{ if(id!==gameId) return;
+    flipLayout(()=>{ addSolved(gi,false,"pop"); words=words.filter(w=>groupOf(w)!==gi);
+      $("grid").querySelectorAll(".tile").forEach(t=>{ if(groupOf(t.dataset.w)===gi) t.remove(); }); }); },delay); delay+=380; });
+  setTimeout(()=>{ if(id!==gameId) return;
+    flipLayout(()=>{ $("lives").style.display="none"; dk.classList.add("over","lost"); });
+    if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
+  },delay);
+  setTimeout(()=>{ if(id===gameId) openResults(false); },delay+600);
+}
+
 // ---- Tutoriel ----
-let tutoMsg="";
+let tutoMsg="", tutoHold=false;   // tutoHold : bulle retenue tant que la pop-up de bienvenue est ouverte
+function releaseTuto(){
+  if(!tutoHold) return; tutoHold=false;
+  if(!tuto) return; $("tuto").hidden=false;
+  if(!RM()) $("tuto").animate([{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
+}
 function tutoUpdate(){
   if(!tuto) return;
   const sel=[...selected], fruits=TUTO[2].words, left=4-found.length;
@@ -551,7 +615,7 @@ function tutoUpdate(){
     : selected.has("Orange")&&sel.some(w=>fruits.includes(w)) ? "Attention aux pièges : certains mots vont dans plusieurs catégories !"
     : found.length===0 ? "Touche 4 mots qui ont un point commun, puis Valider."
     : found.length===1 ? "Bravo ! Chaque groupe révèle une anecdote. Tu peux la mettre en favori avec l'étoile ⭐."
-    : `Continue ! Plus que ${left} groupe${left>1?"s":""} à trouver.`;
+    : `Continue ! Plus que ${left} ${pl(left,"groupe","groupes")} à trouver.`;
   if(msg===tutoMsg) return; tutoMsg=msg;
   const t=$("tutoTxt"); t.textContent=msg;
   const old=$("tuto").querySelector(".go"); if(old) old.remove();
@@ -795,23 +859,16 @@ function finish(win){
   if(tuto){ // fin du tutoriel : pas de résultats ni de stats
     $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoUpdate();
     setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650); return; }
-  const rest=[0,1,2,3].filter(gi=>!found.includes(gi)); let delay=0;
-  rest.forEach(gi=>{ setTimeout(()=>{ if(id!==gameId) return;
-    flipLayout(()=>{ addSolved(gi,false,"pop"); words=words.filter(w=>groupOf(w)!==gi);
-      $("grid").querySelectorAll(".tile").forEach(t=>{ if(groupOf(t.dataset.w)===gi) t.remove(); }); }); },delay); delay+=380; });
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); });
-  const hide=()=>{ $("lives").style.display="none"; const dk=document.querySelector(".dock"); dk.classList.add("over");
-    if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"}); };
-  if(rest.length) flipLayout(hide); else hide();
-  // Résultats : on garde le premier essai, le nombre d'essais et le dernier plateau (pour le revoir)
+  // Résultats enregistrés dès maintenant (même si l'appli est fermée juste après) :
+  // premier essai, nombre d'essais, dernier plateau, groupes trouvés et « solution vue » (vu)
   const res=loadRes(), prev=res[grid.id];
-  if(!prev) res[grid.id]={win,mistakes,tries:1,first:{win,mistakes},hist:history};
+  if(!prev) res[grid.id]={win,mistakes,tries:1,first:{win,mistakes},hist:history,found:found.slice(),vu:win};
   else if(attempt>1&&!prev.win){
     prev.first=prev.first||{win:prev.win,mistakes:prev.mistakes};
-    prev.tries=attempt; prev.win=win; prev.mistakes=mistakes; prev.hist=history;
+    prev.tries=attempt; prev.win=win; prev.mistakes=mistakes; prev.hist=history; prev.found=found.slice(); prev.vu=win;
   } // (une grille déjà réussie rejouée ne change rien)
   saveRes(res);
-  document.querySelector(".dock").classList.toggle("lost",!win);
   if(!practice&&attempt===1){   // stats et série : seul le premier essai de la grille du jour compte
     const s=load();
     if(s.lastPlayed!==dayNum){
@@ -821,21 +878,25 @@ function finish(win){
       save(s);
     }
   }
-  if(win) setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650);
-  setTimeout(()=>{ if(id===gameId) openResults(win); },win?(RM()?600:1500):delay+700);
+  if(!win){ showPending(700); return; }   // défaite : la solution reste cachée, on propose de réessayer
+  const dk=document.querySelector(".dock");
+  $("lives").style.display="none"; dk.classList.add("over"); dk.classList.remove("lost","pending");
+  if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
+  setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650);
+  setTimeout(()=>{ if(id===gameId) openResults(win); },RM()?600:1500);
 }
 
 function load(){ try{ return JSON.parse(localStorage.getItem("quatuor"))||{}; }catch(e){ return {}; } }
 function save(s){ try{ localStorage.setItem("quatuor",JSON.stringify(s)); }catch(e){} }
 function statsHtml(){
   const s=load(), alive=s.lastWin===dayNum||s.lastWin===dayNum-1, pct=s.played?Math.round((s.wins||0)/s.played*100):0;
-  return `<div class="stats"><div><b>${s.played||0}</b><small>parties</small></div><div><b>${pct}</b><small>% réussite</small></div>
+  return `<div class="stats"><div><b>${s.played||0}</b><small>${pl(s.played||0,"partie","parties")}</small></div><div><b>${pct}</b><small>% réussite</small></div>
     <div><b>${alive?(s.streak||0):0}</b><small>série 🔥</small></div><div><b>${s.best||0}</b><small>record</small></div></div>`;
 }
 function gridItem(i,r){
   const x=r[GRIDS[i].id], tries=x?(x.tries||1):0, st = x ? (x.win?(tries>1?"win2":"win"):"lost") : "";
   const sub = !x ? "À jouer"
-    : x.win ? (tries>1 ? `Réussie au ${ordinal(tries)} essai` : x.mistakes? `Réussie · ${x.mistakes} erreur${x.mistakes>1?"s":""}` : "Réussie sans faute")
+    : x.win ? (tries>1 ? `Réussie au ${ordinal(tries)} essai` : x.mistakes? `Réussie · ${x.mistakes} ${pl(x.mistakes,"erreur","erreurs")}` : "Réussie sans faute")
     : (tries>1 ? `Perdue · ${tries} essais` : "Perdue");
   const lost=x&&!x.win;
   return `<div class="grow${lost?" can":""}"><button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):GRIDS[i].num}</span>
@@ -874,7 +935,7 @@ function renderMenu(anim,head){
     <p class="sec">Grille du jour</p><div class="glist">${gridItem(dailyIdx,r)}</div>
     ${randHtml()}
     <p class="sec">Choisis ta difficulté</p><div class="dtabs" role="tablist">${tabs}</div>
-    <div class="dpane"><p class="prog">${done_} sur ${ids.length} terminées · <b>${D_.err} erreurs</b> autorisées</p>
+    <div class="dpane"><p class="prog">${done_} sur ${ids.length} ${pl(done_,"terminée","terminées")} · <b>${D_.err} ${pl(D_.err,"erreur","erreurs")}</b> ${pl(D_.err,"autorisée","autorisées")}</p>
     <div class="bar"><i style="width:${ids.length?done_/ids.length*100:0}%;background:var(--l${D_.c})"></i></div>
     <div class="glist">${ids.length?ids.map(i=>gridItem(i,r)).join(""):`<p class="gempty">Pas encore de grille ${D_.name.toLowerCase()} disponible.<br>De nouvelles grilles arrivent chaque jour !</p>`}</div></div>`;
   $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
@@ -899,9 +960,9 @@ function closeSheet(){ $("veil").classList.remove("open"); $("sheet").classList.
 $("veil").onclick=closeSheet;
 
 function openResults(win){
-  const title = win ? (mistakes===0?"Sans faute !":"Bien joué !") : "Pas cette fois";
-  const essai = attempt>1 ? ` au ${ordinal(attempt)} essai` : "";
-  const text = win ? `Grille résolue${essai} avec ${mistakes} erreur${mistakes>1?"s":""}.` : `Tous les groupes sont révélés${attempt>1?` (${ordinal(attempt)} essai)`:""}.`;
+  // « Sans faute ! » seulement pour une réussite du premier coup sans erreur
+  const title = !win ? "Pas cette fois" : attempt>1 ? `Réussie au ${ordinal(attempt)} essai !` : mistakes===0 ? "Sans faute !" : "Bien joué !";
+  const text = win ? `Grille résolue avec ${mistakes} ${pl(mistakes,"erreur","erreurs")}.` : `Tous les groupes sont révélés${attempt>1?` (${ordinal(attempt)} essai)`:""}.`;
   let k=0; const recap = history.map(r=>`<div>${r.map(i=>`<i class="l${i}" style="--k:${k++}"></i>`).join("")}</div>`).join("");
   const learned = grid.map((g,i)=>`<div class="b${i}"><b>${esc(g.name)}</b>${esc(g.fact)}${starHtml(gridIdx,i)}</div>`).join("");
   openSheet(`<h2>${title}</h2><p>${text}${practice?"":" Nouvelle grille demain."}</p>
@@ -937,6 +998,7 @@ async function retenter(idx,opts={}){
   }finally{ essaiEnCours=false; }
 }
 const ordinal=n=>n===1?"1er":n+"e";
+const pl=(n,un,plusieurs)=>Math.abs(n)>=2?plusieurs:un;   // accord : 0 et 1 au singulier
 
 // =====================================================================
 // GRILLE AU HASARD
@@ -1044,6 +1106,8 @@ $("clear").onclick=()=>{
 $("seeRes").onclick=()=>{ if(done&&!tuto) openResults(lastWin); };
 $("nextG").onclick=nextOrRandom;
 $("retryD").onclick=()=>{ if(done&&!tuto&&!lastWin) retenter(gridIdx); };
+$("retryP").onclick=()=>{ if(done&&!tuto&&!lastWin) retenter(gridIdx); };
+$("revealP").onclick=revealSolution;
 
 // ---- Panneau du bas : le faire glisser vers le bas pour le fermer ----
 (function(){
@@ -1108,9 +1172,10 @@ function boot(){
   });
 }
 const firstRun=!ls.get("quatuor-tuto-done");
-if(firstRun){ ls.set("quatuor-tuto-done","1"); newGame(-1); } else showSkeleton();
+const showWelcome=!ls.get("quatuor-hide-welcome");
+if(firstRun){ ls.set("quatuor-tuto-done","1"); tutoHold=showWelcome; newGame(-1); } else showSkeleton();
 boot();
-if(!ls.get("quatuor-hide-welcome")) setTimeout(()=>openWelcome(),300);
+if(showWelcome) setTimeout(()=>openWelcome(releaseTuto),300);
 if("serviceWorker" in navigator){ addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
 </script>
 </body>
