@@ -1,0 +1,383 @@
+{
+  "version": 1,
+  "grilles": [
+    {
+      "id": "g001",
+      "num": 1,
+      "difficulte": "moyen",
+      "jour": "2026-10-01",
+      "groupes": [
+        { "nom": "Planètes du système solaire", "mots": ["Mercure", "Saturne", "Uranus", "Neptune"], "anecdote": "Neptune a été découverte par le calcul avant d'être observée : en 1846, le Français Urbain Le Verrier a prédit sa position à partir des perturbations de l'orbite d'Uranus." },
+        { "nom": "Gares parisiennes", "mots": ["Austerlitz", "Montparnasse", "Saint-Lazare", "Bercy"], "anecdote": "Claude Monet a peint en 1877 toute une série de tableaux de la gare Saint-Lazare, fasciné par la vapeur des locomotives." },
+        { "nom": "Films d'Alfred Hitchcock", "mots": ["Psychose", "Vertigo", "Les Oiseaux", "Rebecca"], "anecdote": "« Vertigo » est sorti en France sous le titre « Sueurs froides »." },
+        { "nom": "Batailles de Napoléon", "mots": ["Iéna", "Wagram", "Marengo", "Eylau"], "anecdote": "Paris est remplie de noms de victoires napoléoniennes : pont d'Iéna, avenue de Wagram, avenue d'Eylau… et gare d'Austerlitz, d'où le piège !" }
+      ]
+    },
+    {
+      "id": "g002",
+      "num": 2,
+      "difficulte": "moyen",
+      "jour": "2026-10-02",
+      "groupes": [
+        { "nom": "Fleuves français", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "La Loire est le plus long fleuve de France, avec environ 1 000 km." },
+        { "nom": "Personnages de Molière", "mots": ["Harpagon", "Tartuffe", "Alceste", "Scapin"], "anecdote": "« Tartuffe » a été interdit pendant cinq ans après sa première représentation en 1664, sous la pression des milieux religieux." },
+        { "nom": "Mots venus de l'arabe", "mots": ["Algèbre", "Café", "Sucre", "Zéro"], "anecdote": "« Zéro » et « chiffre » viennent du même mot arabe, ṣifr, qui signifie « vide »." },
+        { "nom": "Éléments nommés d'après un pays", "mots": ["Francium", "Germanium", "Polonium", "Gallium"], "anecdote": "Le gallium a été découvert en 1875 par le Français Lecoq de Boisbaudran, qui l'a nommé d'après la Gaule, Gallia en latin." }
+      ]
+    },
+    {
+      "id": "g003",
+      "num": 3,
+      "difficulte": "facile",
+      "jour": "2026-10-03",
+      "groupes": [
+        { "nom": "Dieux grecs", "mots": ["Zeus", "Apollon", "Poséidon", "Athéna"], "anecdote": "Selon le mythe, Athéna serait née adulte et tout armée, jaillissant du crâne de Zeus." },
+        { "nom": "Maisons de luxe françaises", "mots": ["Chanel", "Dior", "Cartier", "Hermès"], "anecdote": "Hermès a été fondé en 1837 comme atelier de harnais et de selles pour chevaux." },
+        { "nom": "Peintres impressionnistes", "mots": ["Monet", "Degas", "Renoir", "Pissarro"], "anecdote": "Le mot « impressionnisme » est né d'une moquerie : un critique s'est inspiré du tableau de Monet « Impression, soleil levant » pour se moquer du groupe." },
+        { "nom": "Unités nommées d'après un savant", "mots": ["Newton", "Watt", "Ampère", "Pascal"], "anecdote": "À 19 ans, Blaise Pascal a inventé l'une des premières machines à calculer, la Pascaline." }
+      ]
+    },
+    {
+      "id": "g004",
+      "num": 4,
+      "difficulte": "facile",
+      "jour": "2026-10-04",
+      "groupes": [
+        { "nom": "Pâtes italiennes", "mots": ["Penne", "Farfalle", "Linguine", "Fusilli"], "anecdote": "« Farfalle » signifie « papillons » en italien." },
+        { "nom": "Capitales africaines", "mots": ["Dakar", "Nairobi", "Accra", "Bamako"], "anecdote": "Dakar se trouve sur la presqu'île du Cap-Vert, qui abrite le point le plus à l'ouest de l'Afrique continentale." },
+        { "nom": "Mathématiciens français", "mots": ["Fermat", "Descartes", "Galois", "Laplace"], "anecdote": "Évariste Galois a posé les bases d'une théorie majeure des mathématiques avant de mourir en duel, à 20 ans, en 1832." },
+        { "nom": "Mots français utilisés en anglais", "mots": ["Rendez-vous", "Déjà-vu", "Cliché", "Entrepreneur"], "anecdote": "L'expression « déjà vu » a été popularisée par le chercheur français Émile Boirac à la fin du XIXe siècle." }
+      ]
+    },
+    {
+      "id": "g005",
+      "num": 5,
+      "difficulte": "moyen",
+      "jour": "2026-10-05",
+      "groupes": [
+        { "nom": "Monnaies", "mots": ["Rouble", "Yen", "Peso", "Dinar"], "anecdote": "« Dinar » vient du latin denarius, le nom d'une pièce de monnaie romaine." },
+        { "nom": "Chevaliers de la Table ronde", "mots": ["Lancelot", "Perceval", "Gauvain", "Galaad"], "anecdote": "C'est Chrétien de Troyes, auteur champenois du XIIe siècle, qui a introduit le Graal dans la littérature avec « Perceval ou le Conte du Graal »." },
+        { "nom": "Instruments à cordes", "mots": ["Violon", "Harpe", "Luth", "Cithare"], "anecdote": "Un luthier était à l'origine un fabricant de luths. Le mot est resté pour tous les instruments à cordes." },
+        { "nom": "Constellations", "mots": ["Orion", "Cassiopée", "Andromède", "Lyre"], "anecdote": "La galaxie d'Andromède, à environ 2,5 millions d'années-lumière, est l'un des objets les plus lointains visibles à l'œil nu." }
+      ]
+    },
+    {
+      "id": "g006",
+      "num": 6,
+      "difficulte": "facile",
+      "jour": "2026-10-06",
+      "groupes": [
+        { "nom": "Fromages français", "mots": ["Comté", "Brie", "Cantal", "Munster"], "anecdote": "Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans." },
+        { "nom": "Philosophes des Lumières", "mots": ["Voltaire", "Rousseau", "Diderot", "Montesquieu"], "anecdote": "Voltaire est un pseudonyme : il s'appelait François-Marie Arouet." },
+        { "nom": "Os du corps humain", "mots": ["Fémur", "Tibia", "Radius", "Humérus"], "anecdote": "Le fémur est l'os le plus long du corps humain." },
+        { "nom": "Lunes du système solaire", "mots": ["Titan", "Europe", "Io", "Callisto"], "anecdote": "Titan, la plus grande lune de Saturne, est la seule lune connue à posséder une atmosphère épaisse." }
+      ]
+    },
+    {
+      "id": "g007",
+      "num": 7,
+      "difficulte": "difficile",
+      "jour": "2026-10-07",
+      "groupes": [
+        { "nom": "Prénoms des Beatles", "mots": ["John", "Paul", "George", "Ringo"], "anecdote": "Ringo Starr est un nom de scène : il s'appelle Richard Starkey." },
+        { "nom": "Films de Luc Besson", "mots": ["Léon", "Nikita", "Lucy", "Le Grand Bleu"], "anecdote": "« Le Grand Bleu » s'inspire de la rivalité entre les plongeurs en apnée Jacques Mayol et Enzo Maiorca." },
+        { "nom": "Opéras de Verdi", "mots": ["Aïda", "Nabucco", "Otello", "Rigoletto"], "anecdote": "« Aïda » a été commandé par l'Égypte et créé au Caire en 1871." },
+        { "nom": "Couleurs en héraldique", "mots": ["Gueules", "Azur", "Sinople", "Sable"], "anecdote": "Sur les blasons, « gueules » désigne le rouge, « sinople » le vert et « sable » le noir." }
+      ]
+    },
+    {
+      "id": "g008",
+      "num": 8,
+      "difficulte": "moyen",
+      "jour": "2026-10-08",
+      "groupes": [
+        { "nom": "Dieux égyptiens", "mots": ["Râ", "Anubis", "Isis", "Osiris"], "anecdote": "Anubis, représenté avec une tête de chacal, était le dieu de l'embaumement et le protecteur des morts." },
+        { "nom": "Cépages", "mots": ["Merlot", "Syrah", "Gamay", "Chardonnay"], "anecdote": "Le beaujolais est produit presque exclusivement à partir de gamay." },
+        { "nom": "Gaz nobles", "mots": ["Néon", "Argon", "Krypton", "Xénon"], "anecdote": "« Argon » vient du grec argos, « paresseux », parce que ce gaz ne réagit presque avec rien." },
+        { "nom": "Palindromes", "mots": ["Kayak", "Radar", "Rotor", "Ressasser"], "anecdote": "« Ressasser » est souvent cité comme le plus long palindrome courant de la langue française." }
+      ]
+    },
+    {
+      "id": "g009",
+      "num": 9,
+      "difficulte": "facile",
+      "jour": "2026-10-09",
+      "groupes": [
+        { "nom": "Volcans", "mots": ["Etna", "Vésuve", "Stromboli", "Fuji"], "anecdote": "L'éruption du Vésuve en l'an 79 a enseveli la ville romaine de Pompéi sous les cendres." },
+        { "nom": "Îles françaises", "mots": ["Corse", "Ré", "Oléron", "Belle-Île"], "anecdote": "Oléron est la plus grande île de France métropolitaine après la Corse." },
+        { "nom": "Déserts", "mots": ["Sahara", "Gobi", "Atacama", "Kalahari"], "anecdote": "Le plus grand désert du monde est l'Antarctique : un désert se définit par la rareté des précipitations, pas par la chaleur." },
+        { "nom": "Détroits", "mots": ["Gibraltar", "Béring", "Magellan", "Ormuz"], "anecdote": "Le détroit de Béring ne sépare la Russie de l'Alaska que d'environ 80 km." }
+      ]
+    },
+    {
+      "id": "g010",
+      "num": 10,
+      "difficulte": "difficile",
+      "jour": "2026-10-10",
+      "groupes": [
+        { "nom": "Présidents de la Ve République", "mots": ["Pompidou", "Giscard", "Mitterrand", "Chirac"], "anecdote": "Le Centre Pompidou porte le nom du président qui a lancé le projet. Il n'a ouvert qu'en 1977, après sa mort." },
+        { "nom": "Châteaux de la Loire", "mots": ["Chambord", "Chenonceau", "Amboise", "Blois"], "anecdote": "Léonard de Vinci a passé ses dernières années à Amboise, où il est enterré." },
+        { "nom": "Explorateurs", "mots": ["Cartier", "Champlain", "Cook", "Colomb"], "anecdote": "Parti de Saint-Malo, Jacques Cartier a exploré le Saint-Laurent en 1534 et a contribué à répandre le nom « Canada »." },
+        { "nom": "Traités historiques", "mots": ["Versailles", "Westphalie", "Verdun", "Utrecht"], "anecdote": "Le traité de Verdun, en 843, a partagé l'empire de Charlemagne entre ses trois petits-fils." }
+      ]
+    },
+    {
+      "id": "g011",
+      "num": 11,
+      "difficulte": "facile",
+      "jour": "2026-10-11",
+      "groupes": [
+        { "nom": "Les Trois Mousquetaires", "mots": ["Athos", "Porthos", "Aramis", "d'Artagnan"], "anecdote": "d'Artagnan a vraiment existé : Charles de Batz de Castelmore était officier des mousquetaires sous Louis XIV." },
+        { "nom": "Monstres grecs", "mots": ["Méduse", "Hydre", "Minotaure", "Cerbère"], "anecdote": "Cerbère, le chien à trois têtes, gardait l'entrée des Enfers." },
+        { "nom": "Personnages de Victor Hugo", "mots": ["Cosette", "Gavroche", "Quasimodo", "Esmeralda"], "anecdote": "Le succès de « Notre-Dame de Paris » a contribué à relancer l'intérêt pour la restauration de la cathédrale au XIXe siècle." },
+        { "nom": "Pierres précieuses", "mots": ["Émeraude", "Rubis", "Saphir", "Diamant"], "anecdote": "Le rubis et le saphir sont le même minéral, le corindon. Seules leurs impuretés changent la couleur." }
+      ]
+    },
+    {
+      "id": "g012",
+      "num": 12,
+      "difficulte": "facile",
+      "jour": "2026-10-12",
+      "groupes": [
+        { "nom": "Arts martiaux", "mots": ["Judo", "Karaté", "Aïkido", "Sambo"], "anecdote": "Le sambo a été créé en URSS. Son nom est un acronyme russe qui signifie « autodéfense sans armes »." },
+        { "nom": "Tournois du Grand Chelem", "mots": ["Roland-Garros", "Wimbledon", "Flushing Meadows", "Melbourne"], "anecdote": "Roland Garros était un aviateur : en 1913, il a été le premier à traverser la Méditerranée en avion." },
+        { "nom": "Pièces d'échecs", "mots": ["Fou", "Tour", "Cavalier", "Roi"], "anecdote": "La dame, aujourd'hui la pièce la plus puissante, était à l'origine l'une des plus faibles : elle n'avançait que d'une case en diagonale." },
+        { "nom": "Maillots du Tour de France", "mots": ["Jaune", "Vert", "Blanc", "À pois"], "anecdote": "Le maillot jaune a été choisi en 1919 parce que le journal organisateur, L'Auto, était imprimé sur du papier jaune." }
+      ]
+    },
+    {
+      "id": "g013",
+      "num": 13,
+      "difficulte": "facile",
+      "jour": "2026-10-13",
+      "groupes": [
+        { "nom": "Races de chiens", "mots": ["Caniche", "Labrador", "Dalmatien", "Beagle"], "anecdote": "Le dalmatien doit son nom à la Dalmatie, une région côtière de l'actuelle Croatie." },
+        { "nom": "Agrumes", "mots": ["Citron", "Pamplemousse", "Mandarine", "Clémentine"], "anecdote": "La clémentine doit son nom au frère Clément Rodier, qui l'aurait obtenue en Algérie au début du XXe siècle." },
+        { "nom": "Instruments à vent", "mots": ["Flûte", "Hautbois", "Clarinette", "Saxophone"], "anecdote": "Le saxophone, inventé par le Belge Adolphe Sax vers 1840, est en métal mais classé parmi les « bois », car son son est produit par une anche." },
+        { "nom": "Couleurs de l'arc-en-ciel", "mots": ["Indigo", "Violet", "Orange", "Vert"], "anecdote": "C'est Isaac Newton qui a fixé à sept le nombre de couleurs de l'arc-en-ciel, en ajoutant l'indigo, notamment par analogie avec les sept notes de la gamme." }
+      ]
+    },
+    {
+      "id": "g014",
+      "num": 14,
+      "difficulte": "moyen",
+      "jour": "2026-10-14",
+      "groupes": [
+        { "nom": "Types de nuages", "mots": ["Cirrus", "Cumulus", "Stratus", "Nimbus"], "anecdote": "Le cumulonimbus, le nuage d'orage, peut s'élever à plus de 10 km d'altitude." },
+        { "nom": "Univers de Harry Potter", "mots": ["Poudlard", "Moldu", "Quidditch", "Détraqueur"], "anecdote": "Le mot « moldu » a été inventé par le traducteur français Jean-François Ménard pour traduire l'anglais « muggle »." },
+        { "nom": "Mots latins", "mots": ["Agenda", "Référendum", "Alibi", "Veto"], "anecdote": "« Alibi » signifie « ailleurs » en latin : avoir un alibi, c'est prouver qu'on était ailleurs." },
+        { "nom": "Personnages de Jules Verne", "mots": ["Nemo", "Passepartout", "Strogoff", "Phileas Fogg"], "anecdote": "Le Nautilus du capitaine Nemo a donné son nom au premier sous-marin nucléaire, l'USS Nautilus, lancé en 1954." }
+      ]
+    },
+    {
+      "id": "g015",
+      "num": 15,
+      "difficulte": "difficile",
+      "jour": "2026-10-15",
+      "groupes": [
+        { "nom": "Rois de France", "mots": ["Clovis", "Dagobert", "Philippe", "Henri"], "anecdote": "Dagobert Ier est surtout connu grâce à « Le bon roi Dagobert », une chanson moqueuse écrite plus de mille ans après sa mort." },
+        { "nom": "Mots d'origine japonaise", "mots": ["Tsunami", "Karaoké", "Emoji", "Kamikaze"], "anecdote": "« Emoji » ne vient pas de l'anglais « emotion » : c'est un mot japonais formé de e (image) et moji (caractère)." },
+        { "nom": "Anciennes monnaies françaises", "mots": ["Franc", "Louis", "Écu", "Sou"], "anecdote": "Le franc est né en 1360 pour payer la rançon du roi Jean le Bon, prisonnier des Anglais." },
+        { "nom": "Anciens noms de villes", "mots": ["Byzance", "Lutèce", "Edo", "Nouvelle-Amsterdam"], "anecdote": "Tokyo s'appelait Edo jusqu'en 1868. Son nouveau nom signifie « capitale de l'Est »." }
+      ]
+    },
+    {
+      "id": "g016",
+      "num": 16,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Métiers de la justice", "mots": ["Juge", "Greffier", "Huissier", "Notaire"], "anecdote": "Depuis 2022, les huissiers et les commissaires-priseurs judiciaires forment une seule profession : commissaire de justice." },
+        { "nom": "Anciennes unités de longueur", "mots": ["Toise", "Pied", "Pouce", "Lieue"], "anecdote": "La toise mesurait environ 1,95 m. Elle a été remplacée par le mètre à la Révolution." },
+        { "nom": "Mots venus de l'aztèque", "mots": ["Chocolat", "Tomate", "Coyote", "Avocat"], "anecdote": "L'avocat (le fruit) vient du nahuatl ahuacatl, passé par l'espagnol aguacate. Le mot s'est ensuite rapproché de « avocat » (l'homme de loi) par simple ressemblance sonore." },
+        { "nom": "Robes de chevaux", "mots": ["Alezan", "Bai", "Pie", "Isabelle"], "anecdote": "Selon une légende tenace, la robe « isabelle » devrait son nom à une infante Isabelle qui aurait juré de ne pas changer de linge avant la fin d'un siège." }
+      ]
+    },
+    {
+      "id": "g017",
+      "num": 17,
+      "difficulte": "moyen",
+      "jour": "2026-10-16",
+      "groupes": [
+        { "nom": "Cocktails", "mots": ["Mojito", "Spritz", "Margarita", "Daiquiri"], "anecdote": "Le daiquiri tient son nom d'une plage et d'une mine de fer de Cuba, près de Santiago." },
+        { "nom": "Sauces", "mots": ["Béarnaise", "Pesto", "Aïoli", "Béchamel"], "anecdote": "La béchamel devrait son nom à Louis de Béchameil, maître d'hôtel de Louis XIV." },
+        { "nom": "Danses", "mots": ["Tango", "Salsa", "Valse", "Flamenco"], "anecdote": "Le tango est né à la fin du XIXe siècle dans les quartiers populaires de Buenos Aires et de Montevideo." },
+        { "nom": "Peintres espagnols", "mots": ["Goya", "Vélasquez", "Miró", "Dalí"], "anecdote": "Salvador Dalí a dessiné le logo des sucettes Chupa Chups en 1969." }
+      ]
+    },
+    {
+      "id": "g018",
+      "num": 18,
+      "difficulte": "difficile",
+      "jour": "2026-10-17",
+      "groupes": [
+        { "nom": "Entreprises nommées d'après leur fondateur", "mots": ["Peugeot", "Michelin", "Renault", "Citroën"], "anecdote": "Le Bibendum de Michelin, créé en 1898, est l'une des plus anciennes mascottes publicitaires au monde." },
+        { "nom": "Empereurs romains", "mots": ["Néron", "Auguste", "Trajan", "Hadrien"], "anecdote": "Hadrien a fait construire un mur de 117 km à travers la Grande-Bretagne pour marquer la frontière de l'Empire." },
+        { "nom": "Vocabulaire de la pétanque", "mots": ["Cochonnet", "Pointer", "Tirer", "Carreau"], "anecdote": "À la pétanque, perdre 13 à 0, c'est « être fanny » : le perdant doit traditionnellement embrasser les fesses d'une figurine nommée Fanny." },
+        { "nom": "Personnages de Pagnol", "mots": ["Marius", "Fanny", "César", "Manon"], "anecdote": "« Manon des sources » a d'abord été un film de Pagnol, en 1952, avant de devenir un roman." }
+      ]
+    },
+    {
+      "id": "g019",
+      "num": 19,
+      "difficulte": "facile",
+      "jour": "2026-10-18",
+      "groupes": [
+        { "nom": "Océans", "mots": ["Atlantique", "Pacifique", "Indien", "Arctique"], "anecdote": "L'océan Pacifique est plus vaste que l'ensemble des terres émergées réunies." },
+        { "nom": "Pâtisseries françaises", "mots": ["Éclair", "Macaron", "Mille-feuille", "Madeleine"], "anecdote": "La madeleine est devenue le symbole du souvenir grâce à Marcel Proust, dans « Du côté de chez Swann »." },
+        { "nom": "Météo", "mots": ["Grêle", "Brouillard", "Tonnerre", "Verglas"], "anecdote": "Pour estimer la distance d'un orage, compte les secondes entre l'éclair et le tonnerre : 3 secondes correspondent à environ 1 km." },
+        { "nom": "Contes de Perrault", "mots": ["Cendrillon", "Barbe-Bleue", "Peau d'Âne", "Petit Poucet"], "anecdote": "Chez Perrault, la pantoufle de Cendrillon est bien en verre, même si certains ont soutenu qu'il fallait lire « vair », une fourrure." }
+      ]
+    },
+    {
+      "id": "g020",
+      "num": 20,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Meubles", "mots": ["Buffet", "Bahut", "Secrétaire", "Chiffonnier"], "anecdote": "Le chiffonnier est un meuble haut et étroit à tiroirs, où l'on rangeait à l'origine le linge et les petits « chiffons »." },
+        { "nom": "Vins de Bourgogne", "mots": ["Chablis", "Pommard", "Volnay", "Meursault"], "anecdote": "Le chablis est produit exclusivement à partir d'un seul cépage : le chardonnay." },
+        { "nom": "Empereurs romains", "mots": ["Tibère", "Vespasien", "Commode", "Domitien"], "anecdote": "Vespasien a taxé l'urine collectée dans les latrines publiques. Voilà pourquoi les urinoirs publics ont été appelés « vespasiennes »." },
+        { "nom": "Personnages d'Albert Camus", "mots": ["Rieux", "Clamence", "Tarrou", "Caligula"], "anecdote": "Albert Camus a reçu le prix Nobel de littérature en 1957, à seulement 43 ans." }
+      ]
+    },
+    {
+      "id": "g021",
+      "num": 21,
+      "difficulte": "moyen",
+      "jour": "2026-10-19",
+      "groupes": [
+        { "nom": "Compositeurs", "mots": ["Bach", "Mozart", "Chopin", "Liszt"], "anecdote": "Frédéric Chopin, né en Pologne d'un père français, a passé la seconde moitié de sa vie à Paris." },
+        { "nom": "Personnages de Tintin", "mots": ["Haddock", "Tournesol", "Castafiore", "Rastapopoulos"], "anecdote": "Le capitaine Haddock n'apparaît qu'au neuvième album, « Le Crabe aux pinces d'or », en 1941." },
+        { "nom": "Fromages suisses", "mots": ["Gruyère", "Emmental", "Raclette", "Tête de Moine"], "anecdote": "La tête de moine se déguste en fines rosettes, râpées grâce à un appareil appelé girolle." },
+        { "nom": "Pays sans accès à la mer", "mots": ["Suisse", "Autriche", "Bolivie", "Mongolie"], "anecdote": "La Bolivie a perdu son accès à la mer face au Chili à la fin du XIXe siècle… mais elle possède toujours une marine, qui navigue sur le lac Titicaca." }
+      ]
+    },
+    {
+      "id": "g022",
+      "num": 22,
+      "difficulte": "difficile",
+      "jour": "2026-10-20",
+      "groupes": [
+        { "nom": "Sommets", "mots": ["Mont Blanc", "Everest", "Kilimandjaro", "Aconcagua"], "anecdote": "L'Aconcagua, en Argentine, culmine à près de 6 960 m : c'est le plus haut sommet hors d'Asie." },
+        { "nom": "Modèles Renault", "mots": ["Zoé", "Twingo", "Mégane", "Clio"], "anecdote": "La Renault 4, la fameuse « 4L », a été produite à plus de 8 millions d'exemplaires." },
+        { "nom": "Types de vers", "mots": ["Alexandrin", "Octosyllabe", "Décasyllabe", "Hexamètre"], "anecdote": "L'alexandrin, vers de 12 syllabes, doit son nom au « Roman d'Alexandre », un poème du XIIe siècle." },
+        { "nom": "Muses grecques", "mots": ["Uranie", "Thalie", "Calliope", "Euterpe"], "anecdote": "Les neuf Muses sont filles de Zeus et de Mnémosyne, la déesse de la mémoire. Calliope, muse de la poésie épique, était considérée comme la première d'entre elles." }
+      ]
+    },
+    {
+      "id": "g023",
+      "num": 23,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Types de sièges", "mots": ["Tabouret", "Pouf", "Méridienne", "Bergère"], "anecdote": "La méridienne tient son nom de la sieste de la mi-journée, qu'on appelait aussi « méridienne »." },
+        { "nom": "Termes d'escrime", "mots": ["Touche", "Parade", "Riposte", "Fente"], "anecdote": "L'escrime fait partie des rares sports présents à tous les Jeux olympiques modernes depuis 1896." },
+        { "nom": "Figures de style", "mots": ["Litote", "Oxymore", "Anaphore", "Euphémisme"], "anecdote": "« Va, je ne te hais point » (Corneille, « Le Cid ») est l'exemple le plus célèbre de litote : Chimène dit moins pour faire entendre plus." },
+        { "nom": "Groupes d'animaux", "mots": ["Meute", "Essaim", "Harde", "Banc"], "anecdote": "En français, on parle d'une meute de loups, d'un essaim d'abeilles, d'une harde de cerfs et d'un banc de poissons." }
+      ]
+    },
+    {
+      "id": "g024",
+      "num": 24,
+      "difficulte": "facile",
+      "jour": "2026-10-21",
+      "groupes": [
+        { "nom": "Animaux d'Australie", "mots": ["Kangourou", "Koala", "Wombat", "Ornithorynque"], "anecdote": "L'ornithorynque est un mammifère… qui pond des œufs." },
+        { "nom": "Villes italiennes", "mots": ["Rome", "Naples", "Turin", "Venise"], "anecdote": "Turin a été la première capitale de l'Italie unifiée, de 1861 à 1865." },
+        { "nom": "Langues romanes", "mots": ["Italien", "Espagnol", "Portugais", "Roumain"], "anecdote": "Le roumain est la seule grande langue romane d'Europe de l'Est, héritée de la province romaine de Dacie." },
+        { "nom": "Rapaces", "mots": ["Aigle", "Faucon", "Vautour", "Milan"], "anecdote": "En piqué, le faucon pèlerin peut dépasser 300 km/h : c'est l'animal le plus rapide du monde." }
+      ]
+    },
+    {
+      "id": "g025",
+      "num": 25,
+      "difficulte": "moyen",
+      "jour": "2026-10-22",
+      "groupes": [
+        { "nom": "Jeux de cartes", "mots": ["Belote", "Tarot", "Poker", "Bridge"], "anecdote": "Le jeu de tarot compte 78 cartes : les 56 cartes classiques (avec des cavaliers), 21 atouts et l'Excuse." },
+        { "nom": "Signes du zodiaque", "mots": ["Bélier", "Balance", "Vierge", "Verseau"], "anecdote": "Le Soleil traverse aussi une 13e constellation, Ophiuchus (le Serpentaire), absente de l'horoscope." },
+        { "nom": "Instruments de mesure", "mots": ["Baromètre", "Thermomètre", "Sismographe", "Boussole"], "anecdote": "Le baromètre a été inventé en 1643 par l'Italien Evangelista Torricelli." },
+        { "nom": "Parties d'un bateau", "mots": ["Proue", "Poupe", "Coque", "Quille"], "anecdote": "En regardant vers la proue, bâbord est à gauche et tribord à droite." }
+      ]
+    },
+    {
+      "id": "g026",
+      "num": 26,
+      "difficulte": "difficile",
+      "jour": "2026-10-23",
+      "groupes": [
+        { "nom": "Onomatopées", "mots": ["Boum", "Miaou", "Atchoum", "Plouf"], "anecdote": "Les onomatopées changent selon les langues : le coq fait « cocorico » en français, mais « cock-a-doodle-doo » en anglais." },
+        { "nom": "Personnages d'Astérix", "mots": ["Obélix", "Panoramix", "Idéfix", "Assurancetourix"], "anecdote": "Idéfix n'apparaît qu'à la cinquième aventure, « Le Tour de Gaule d'Astérix », parue en 1963." },
+        { "nom": "Mots en verlan", "mots": ["Relou", "Chelou", "Vénère", "Ouf"], "anecdote": "« Verlan » est lui-même du verlan : c'est « l'envers » prononcé à l'envers." },
+        { "nom": "Chefs gaulois historiques", "mots": ["Vercingétorix", "Brennus", "Ambiorix", "Dumnorix"], "anecdote": "Vercingétorix a capitulé devant Jules César à Alésia, en 52 av. J.-C." }
+      ]
+    },
+    {
+      "id": "g027",
+      "num": 27,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Capitales d'Amérique du Sud", "mots": ["Quito", "Lima", "Bogota", "Caracas"], "anecdote": "À environ 2 850 m d'altitude, Quito est la capitale officielle la plus haute du monde. La Paz, plus haute, n'est que le siège du gouvernement bolivien." },
+        { "nom": "Alphabet radio de l'OTAN", "mots": ["Alpha", "Hotel", "Tango", "Victor"], "anecdote": "Dans l'alphabet de l'OTAN, « Juliett » s'écrit avec deux T pour que les francophones n'oublient pas de prononcer le T final." },
+        { "nom": "Acronymes devenus des mots", "mots": ["Laser", "Radar", "Sida", "Ovni"], "anecdote": "« Radar » est l'acronyme anglais de radio detection and ranging, « détection et télémétrie par radio »." },
+        { "nom": "Poissons", "mots": ["Bar", "Sole", "Lieu", "Colin"], "anecdote": "Le bar de Méditerranée est souvent appelé « loup » sur la côte." }
+      ]
+    },
+    {
+      "id": "g028",
+      "num": 28,
+      "difficulte": "moyen",
+      "jour": "2026-10-24",
+      "groupes": [
+        { "nom": "Fruits exotiques", "mots": ["Mangue", "Papaye", "Litchi", "Goyave"], "anecdote": "Le litchi est originaire du sud de la Chine, où on le cultive depuis plus de 2 000 ans." },
+        { "nom": "Épices", "mots": ["Cannelle", "Muscade", "Safran", "Curcuma"], "anecdote": "Le safran est l'épice la plus chère du monde : il faut entre 150 000 et 200 000 fleurs pour en obtenir 1 kg." },
+        { "nom": "Dieux nordiques", "mots": ["Odin", "Thor", "Loki", "Freyja"], "anecdote": "Le mot anglais « Thursday » (jeudi) signifie « jour de Thor »." },
+        { "nom": "Prix Nobel de littérature français", "mots": ["Camus", "Sartre", "Gide", "Modiano"], "anecdote": "Jean-Paul Sartre a refusé le prix Nobel de littérature en 1964." }
+      ]
+    },
+    {
+      "id": "g029",
+      "num": 29,
+      "difficulte": "difficile",
+      "jour": "2026-10-25",
+      "groupes": [
+        { "nom": "Présidents américains", "mots": ["Lincoln", "Kennedy", "Jefferson", "Obama"], "anecdote": "En 1803, Thomas Jefferson a acheté la Louisiane à la France de Napoléon, doublant la superficie des États-Unis." },
+        { "nom": "Langages informatiques", "mots": ["Python", "Java", "Swift", "Ruby"], "anecdote": "Python ne doit rien au serpent : son créateur, Guido van Rossum, l'a nommé d'après les Monty Python." },
+        { "nom": "Programmes spatiaux", "mots": ["Apollo", "Gemini", "Mercury", "Artemis"], "anecdote": "Artemis, le programme de retour sur la Lune, porte le nom de la sœur jumelle d'Apollon." },
+        { "nom": "Femmes scientifiques", "mots": ["Curie", "Lovelace", "Franklin", "Meitner"], "anecdote": "Marie Curie est la seule personne à avoir reçu deux prix Nobel dans deux sciences différentes : physique en 1903 et chimie en 1911." }
+      ]
+    },
+    {
+      "id": "g030",
+      "num": 30,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Chapeaux", "mots": ["Canotier", "Bob", "Béret", "Borsalino"], "anecdote": "Le borsalino tient son nom du chapelier italien Giuseppe Borsalino, qui a fondé sa fabrique en 1857." },
+        { "nom": "Prix littéraires", "mots": ["Goncourt", "Renaudot", "Femina", "Interallié"], "anecdote": "Le prix Goncourt n'est doté que de 10 euros : la vraie récompense, ce sont les ventes du livre." },
+        { "nom": "Familles de la Renaissance italienne", "mots": ["Borgia", "Sforza", "Este", "Médicis"], "anecdote": "La famille Borgia a donné deux papes, dont Alexandre VI, père de Lucrèce et de César Borgia." },
+        { "nom": "Systèmes Linux", "mots": ["Ubuntu", "Debian", "Fedora", "Gentoo"], "anecdote": "Debian tire son nom de son créateur, Ian Murdock, et de sa compagne de l'époque, Debra." }
+      ]
+    },
+    {
+      "id": "g031",
+      "num": 31,
+      "difficulte": "difficile",
+      "jour": "2026-10-26",
+      "groupes": [
+        { "nom": "Villes de Belgique", "mots": ["Liège", "Namur", "Gand", "Bruges"], "anecdote": "Avec ses nombreux canaux, Bruges est surnommée la « Venise du Nord »." },
+        { "nom": "Personnages de Lucky Luke", "mots": ["Rantanplan", "Averell", "Jolly Jumper", "Ma Dalton"], "anecdote": "En 1983, Lucky Luke a arrêté de fumer : sa cigarette a été remplacée par un brin d'herbe." },
+        { "nom": "Chevaux célèbres", "mots": ["Bucéphale", "Pégase", "Tornado", "Marengo"], "anecdote": "À la mort de Bucéphale, son cheval, Alexandre le Grand a fondé une ville en son honneur : Bucéphalie." },
+        { "nom": "Collines de Rome", "mots": ["Palatin", "Capitole", "Aventin", "Quirinal"], "anecdote": "Les empereurs vivaient sur le Palatin : c'est de là que vient le mot « palais »." }
+      ]
+    },
+    {
+      "id": "g032",
+      "num": 32,
+      "difficulte": "goat",
+      "groupes": [
+        { "nom": "Oiseaux", "mots": ["Mésange", "Pinson", "Loriot", "Bouvreuil"], "anecdote": "Le loriot mâle est jaune vif, mais très difficile à voir : il vit caché dans la cime des arbres." },
+        { "nom": "Légumes du potager", "mots": ["Radis", "Poireau", "Navet", "Panais"], "anecdote": "Avant l'arrivée de la pomme de terre, le navet était l'un des légumes de base en Europe." },
+        { "nom": "Types de navires", "mots": ["Corvette", "Goélette", "Caravelle", "Frégate"], "anecdote": "La Chevrolet Corvette, lancée en 1953, doit son nom à la corvette, un navire de guerre rapide." },
+        { "nom": "L'argent en argot", "mots": ["Blé", "Pognon", "Flouze", "Fric"], "anecdote": "L'argot aime comparer l'argent à de la nourriture : on dit « le blé », ou « ne pas avoir un radis »." }
+      ]
+    }
+  ]
+}
