@@ -12,9 +12,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Quatuor">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,800&display=swap" rel="stylesheet">
+<!-- Police hébergée localement (RGPD : aucun appel à un service tiers) -->
+<link rel="preload" href="fonts/BricolageGrotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/bricolage.css">
 <style>
 :root{
   --bg:#EEF0F7; --card:#FFFFFF; --edge:#CDD2E3; --ink:#1B2040; --muted:#6B7190; --sel:#1B2040; --sel-ink:#FFFFFF; --sheet:#FFFFFF;
@@ -61,6 +61,10 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .tile span{display:block;max-width:100%}
 .tile.sk{cursor:default;animation:skp 1.1s ease-in-out infinite alternate;animation-delay:calc(var(--i)*45ms)}
 @keyframes skp{from{opacity:.45}to{opacity:1}}
+.legal{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 6px;margin:22px 0 4px;font-size:.8rem;color:var(--muted)}
+.legal a{color:inherit;text-decoration:none;padding:6px 2px}
+.legal a:active{color:var(--ink)}
+.legal span{padding:6px 0}
 .gempty{margin:6px 0;padding:18px 12px;text-align:center;color:var(--muted);border:1.5px dashed var(--edge);border-radius:14px;font-size:.92rem}
 .loaderr{grid-column:1/-1;text-align:center;padding:28px 12px;color:var(--muted)}
 .loaderr .pill{flex:none;width:auto;padding:0 28px;margin-top:8px}
@@ -907,6 +911,19 @@ function randHtml(){
     `<button class="rpill${k===randChoice?" on":""}" data-k="${k}" role="radio" aria-checked="${k===randChoice}">${k==="toutes"?'<i class="all"><b style="background:var(--l0)"></b><b style="background:var(--l1)"></b><b style="background:var(--l2)"></b><b style="background:var(--l3)"></b></i>':`<i class="l${DIFFS[k].c}"></i>`}${randLabel(k)}</button>`).join("")}</div>
     <button class="pill main rgo" id="randGo">Lancer <span class="die">🎲</span></button></div>`;
 }
+// ---- Pages légales ----
+const SITE_URL="https://polishman444.github.io/Quatuor/";   // adresse du site (pour l'appli native)
+const legalHtml=()=>`<nav class="legal" aria-label="Informations légales"><a href="mentions-legales.html" data-legal>Mentions légales</a><span>·</span><a href="confidentialite.html" data-legal>Confidentialité</a><span>·</span><a href="cgu.html" data-legal>CGU</a></nav>`;
+// Point d'entrée unique pour ouvrir une page légale.
+// PWA : la page s'ouvre normalement (nouvel onglet, ou même fenêtre si c'est impossible).
+// Appli native (Capacitor) : navigateur intégré via @capacitor/browser, avec l'adresse complète du site.
+function ouvrirPageLegale(url){
+  const cap=window.Capacitor, browser=cap&&cap.isNativePlatform&&cap.isNativePlatform()&&cap.Plugins&&cap.Plugins.Browser;
+  if(browser){ browser.open({url:new URL(url,SITE_URL).href}); return; }
+  const w=window.open(url,"_blank");   // (avec "noopener", window.open renvoie toujours null : on détache à la main)
+  if(w) w.opener=null; else location.href=url;
+}
+document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest("a[data-legal]"); if(!a) return; e.preventDefault(); ouvrirPageLegale(a.getAttribute("href")); });
 let drawerTab="grids";
 const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
 function renderDrawer(anim){
@@ -914,6 +931,7 @@ function renderDrawer(anim){
   const head=`<div class="mtabs" role="tablist"><button class="mtab${drawerTab==="grids"?" on":""}" data-t="grids" role="tab" aria-selected="${drawerTab==="grids"}">Grilles</button>
     <button class="mtab${drawerTab==="favs"?" on":""}" data-t="favs" role="tab" aria-selected="${drawerTab==="favs"}">Mon carnet ⭐<span class="cnt">${n}</span></button></div>`;
   if(drawerTab==="grids") renderMenu(anim,head); else renderFavs(anim,head);
+  $("drawer").insertAdjacentHTML("beforeend",legalHtml());
   $("drawer").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{ if(b.dataset.t===drawerTab) return; buzz(8); drawerTab=b.dataset.t; renderDrawer(true); });
 }
 function renderFavs(anim,head){
@@ -1058,7 +1076,7 @@ function openHelp(){
     <div class="legend"><span class="t">La couleur d'un groupe indique sa difficulté :</span>
       <div class="sw">${LEVELS.map((l,i)=>`<span><i class="l${i}"></i>${l}</span>`).join("")}</div>
       <div class="ax"><span>plus facile</span><span>plus difficile →</span></div></div>
-    <button class="pill main" style="width:100%" id="okHelp">Jouer</button>`);
+    <button class="pill main" style="width:100%" id="okHelp">Jouer</button>${legalHtml()}`);
   $("okHelp").onclick=closeSheet;
 }
 function openWelcome(onClose){
