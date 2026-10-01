@@ -57,7 +57,7 @@ Les thèmes sont déclarés dans la liste `"themes"`, en haut de `grilles.json` 
 | `ordre` | Position de la carte dans l'écran Thèmes (1, 2, 3…). |
 | `publie` | `false` : le thème n'est visible **qu'en local** (`localhost`), pour le tester. `true` : il apparaît chez tous les joueurs. Tant qu'aucun thème n'est publié, le sélecteur « Grille du jour \| Thèmes » reste masqué. |
 
-Une grille de thème se remplit comme les autres, avec en plus `"theme": "<id du thème>"`, et **sans** `jour` ni `toujours_visible` (une grille de thème n'est jamais grille du jour et ne compte pas dans la série). Les grilles du jeu quotidien ont `"theme": "quotidien"` (valeur par défaut si le champ est absent).
+Une grille de thème se remplit comme les autres, avec en plus `"theme": "<id du thème>"` et un `"titre"` (affiché dans l'écran du thème à la place de « Grille n »), **sans** `jour` ni `toujours_visible`. Dans une grille de thème, un groupe peut ne pas avoir d'anecdote : mets alors `"anecdote": ""` (le bandeau n'affichera pas « Voir l'anecdote ») (une grille de thème n'est jamais grille du jour et ne compte pas dans la série). Les grilles du jeu quotidien ont `"theme": "quotidien"` (valeur par défaut si le champ est absent).
 
 Dans un thème, les grilles sont classées par difficulté (`facile` → `goat`). La difficulté peut aussi s'écrire en chiffre (1 = facile, 2 = moyen, 3 = difficile, 4 = goat), mais **le texte reste recommandé** : les anciennes versions de l'appli ne comprennent que le texte.
 

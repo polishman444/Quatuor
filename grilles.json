@@ -604,51 +604,263 @@
       ]
     },
     {
-      "id": "g047",
-      "num": 47,
+      "id": "g051",
+      "num": 51,
+      "difficulte": "facile",
+      "theme": "geographie",
+      "titre": "France et voisins",
+      "groupes": [
+        { "nom": "Fleuves de France", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "" },
+        { "nom": "Capitales européennes", "mots": ["Madrid", "Lisbonne", "Berlin", "Vienne"], "anecdote": "La Vienne est aussi une rivière française, affluent de la Loire." },
+        { "nom": "Massifs montagneux français", "mots": ["Alpes", "Pyrénées", "Vosges", "Jura"], "anecdote": "" },
+        { "nom": "Îles françaises", "mots": ["Corse", "Ré", "Oléron", "Belle-Île"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g052",
+      "num": 52,
+      "difficulte": "facile",
+      "theme": "geographie",
+      "titre": "Le tour du monde",
+      "groupes": [
+        { "nom": "Pays d'Amérique du Sud", "mots": ["Pérou", "Chili", "Colombie", "Bolivie"], "anecdote": "" },
+        { "nom": "Déserts", "mots": ["Sahara", "Gobi", "Atacama", "Kalahari"], "anecdote": "L'Atacama, au Chili, est le désert non polaire le plus aride du monde." },
+        { "nom": "Océans", "mots": ["Pacifique", "Atlantique", "Indien", "Arctique"], "anecdote": "" },
+        { "nom": "Sommets célèbres", "mots": ["Everest", "Kilimandjaro", "Mont Blanc", "Aconcagua"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g053",
+      "num": 53,
+      "difficulte": "facile",
+      "theme": "geographie",
+      "titre": "Une capitale par continent",
+      "groupes": [
+        { "nom": "Capitales d'Afrique", "mots": ["Dakar", "Nairobi", "Rabat", "Accra"], "anecdote": "" },
+        { "nom": "Capitales d'Asie", "mots": ["Tokyo", "Séoul", "Bangkok", "Hanoï"], "anecdote": "" },
+        { "nom": "Capitales d'Amérique", "mots": ["Ottawa", "Lima", "Bogota", "Mexico"], "anecdote": "Ottawa a été choisie comme capitale du Canada par la reine Victoria en 1857." },
+        { "nom": "Capitales d'Europe", "mots": ["Oslo", "Athènes", "Varsovie", "Dublin"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g054",
+      "num": 54,
       "difficulte": "moyen",
       "theme": "geographie",
+      "titre": "Capitales et compagnie",
       "groupes": [
-        { "nom": "Lacs", "mots": ["Titicaca", "Baïkal", "Victoria", "Tanganyika"], "anecdote": "Le lac Baïkal, en Sibérie, contient à lui seul environ 20 % de l'eau douce liquide de surface de la planète." },
-        { "nom": "Îles de l'océan Indien", "mots": ["Madagascar", "Maurice", "Mayotte", "Zanzibar"], "anecdote": "Le dodo, un gros oiseau incapable de voler, ne vivait qu'à l'île Maurice. Il a disparu à la fin du XVIIe siècle." },
-        { "nom": "Fleuves d'Afrique", "mots": ["Niger", "Congo", "Zambèze", "Limpopo"], "anecdote": "Le Congo est le fleuve le plus profond du monde : il dépasse 220 m de profondeur par endroits." },
-        { "nom": "Capitales d'Océanie", "mots": ["Canberra", "Wellington", "Suva", "Apia"], "anecdote": "Canberra a été construite spécialement pour devenir la capitale de l'Australie, afin de départager Sydney et Melbourne." }
+        { "nom": "Grandes villes qui n'ont jamais été capitales", "mots": ["Sydney", "Casablanca", "Johannesburg", "Mumbai"], "anecdote": "" },
+        { "nom": "Anciennes capitales", "mots": ["Kyoto", "Saint-Pétersbourg", "Rio de Janeiro", "Istanbul"], "anecdote": "" },
+        { "nom": "Capitales construites de toutes pièces", "mots": ["Brasilia", "Canberra", "Islamabad", "Abuja"], "anecdote": "Brasilia a été inaugurée en 1960 pour remplacer Rio de Janeiro comme capitale du Brésil." },
+        { "nom": "Capitales sur le Danube", "mots": ["Vienne", "Bratislava", "Budapest", "Belgrade"], "anecdote": "" }
       ]
     },
     {
-      "id": "g048",
-      "num": 48,
+      "id": "g055",
+      "num": 55,
+      "difficulte": "moyen",
+      "theme": "geographie",
+      "titre": "Coins du globe",
+      "groupes": [
+        { "nom": "Pays sans accès à la mer", "mots": ["Suisse", "Bolivie", "Mongolie", "Tchad"], "anecdote": "" },
+        { "nom": "Pays insulaires", "mots": ["Islande", "Madagascar", "Sri Lanka", "Cuba"], "anecdote": "" },
+        { "nom": "Pays traversés par l'équateur", "mots": ["Équateur", "Kenya", "Gabon", "Indonésie"], "anecdote": "L'Équateur doit son nom à la ligne imaginaire qui le traverse." },
+        { "nom": "Pays traversés par les Andes", "mots": ["Chili", "Argentine", "Pérou", "Venezuela"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g056",
+      "num": 56,
+      "difficulte": "moyen",
+      "theme": "geographie",
+      "titre": "Made in USA",
+      "groupes": [
+        { "nom": "États au nom d'origine espagnole", "mots": ["Floride", "Nevada", "Colorado", "Montana"], "anecdote": "" },
+        { "nom": "Villes américaines au nom français", "mots": ["Détroit", "Saint-Louis", "Bâton-Rouge", "Des Moines"], "anecdote": "" },
+        { "nom": "États nommés d'après une personne", "mots": ["Géorgie", "Virginie", "Washington", "Louisiane"], "anecdote": "La Louisiane a été nommée en l'honneur de Louis XIV." },
+        { "nom": "Grands Lacs", "mots": ["Michigan", "Érié", "Huron", "Ontario"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g057",
+      "num": 57,
+      "difficulte": "difficile",
+      "theme": "geographie",
+      "titre": "Frontières et micro-États",
+      "groupes": [
+        { "nom": "Pays frontaliers de la France (outre-mer compris)", "mots": ["Brésil", "Suriname", "Pays-Bas", "Andorre"], "anecdote": "La plus longue frontière terrestre de la France est celle avec le Brésil, via la Guyane." },
+        { "nom": "Les 4 plus petits pays du monde", "mots": ["Vatican", "Monaco", "Nauru", "Tuvalu"], "anecdote": "" },
+        { "nom": "Pays dont la capitale porte le même nom", "mots": ["Djibouti", "Koweït", "Luxembourg", "Panama"], "anecdote": "" },
+        { "nom": "Pays traversés par le Danube", "mots": ["Slovaquie", "Hongrie", "Serbie", "Roumanie"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g058",
+      "num": 58,
+      "difficulte": "difficile",
+      "theme": "geographie",
+      "titre": "Au fil de l'eau",
+      "groupes": [
+        { "nom": "Fleuves qui se jettent dans la Méditerranée", "mots": ["Nil", "Rhône", "Èbre", "Pô"], "anecdote": "" },
+        { "nom": "Fleuves d'Afrique australe", "mots": ["Zambèze", "Orange", "Limpopo", "Okavango"], "anecdote": "" },
+        { "nom": "Fleuves qui ont donné leur nom à un pays", "mots": ["Niger", "Congo", "Paraguay", "Jourdain"], "anecdote": "Le Paraguay et l'Uruguay tirent tous deux leur nom d'un fleuve." },
+        { "nom": "Fleuves de Russie", "mots": ["Volga", "Ob", "Ienisseï", "Léna"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g059",
+      "num": 59,
+      "difficulte": "difficile",
+      "theme": "geographie",
+      "titre": "Archipels",
+      "groupes": [
+        { "nom": "Îles grecques", "mots": ["Crète", "Rhodes", "Corfou", "Lesbos"], "anecdote": "" },
+        { "nom": "Îles qui sont des pays", "mots": ["Malte", "Chypre", "Islande", "Jamaïque"], "anecdote": "" },
+        { "nom": "Îles anglo-normandes", "mots": ["Jersey", "Guernesey", "Aurigny", "Sercq"], "anecdote": "" },
+        { "nom": "Îles du royaume de Danemark", "mots": ["Groenland", "Féroé", "Bornholm", "Seeland"], "anecdote": "Le Groenland, plus grande île du monde, fait partie du royaume de Danemark." }
+      ]
+    },
+    {
+      "id": "g060",
+      "num": 60,
+      "difficulte": "goat",
+      "theme": "geographie",
+      "titre": "Géo d'expert",
+      "groupes": [
+        { "nom": "Exclaves", "mots": ["Kaliningrad", "Ceuta", "Melilla", "Llívia"], "anecdote": "Llívia est une ville espagnole entièrement entourée par le territoire français." },
+        { "nom": "Capitales les plus hautes du monde", "mots": ["La Paz", "Quito", "Bogota", "Thimphou"], "anecdote": "" },
+        { "nom": "Anciens noms de pays", "mots": ["Ceylan", "Siam", "Dahomey", "Zaïre"], "anecdote": "" },
+        { "nom": "Pays sans armée", "mots": ["Costa Rica", "Islande", "Liechtenstein", "Andorre"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g061",
+      "num": 61,
       "difficulte": "facile",
-      "theme": "histoire",
+      "theme": "animes",
+      "titre": "Les incontournables",
       "groupes": [
-        { "nom": "Pharaons", "mots": ["Ramsès", "Toutânkhamon", "Khéops", "Akhenaton"], "anecdote": "Le tombeau de Toutânkhamon a été découvert presque intact en 1922 par l'archéologue britannique Howard Carter." },
-        { "nom": "Château fort", "mots": ["Donjon", "Créneau", "Pont-levis", "Douves"], "anecdote": "Les douves n'étaient pas toujours remplies d'eau : beaucoup de châteaux étaient entourés de fossés secs." },
-        { "nom": "Révolution française", "mots": ["Bastille", "Robespierre", "Danton", "Marat"], "anecdote": "Le 14 juillet 1789, la Bastille ne comptait plus que sept prisonniers." },
-        { "nom": "Rois de France", "mots": ["Charlemagne", "Clovis", "Saint Louis", "François Ier"], "anecdote": "François Ier a fait venir Léonard de Vinci en France en 1516. Le peintre a passé ses dernières années près d'Amboise." }
+        { "nom": "Naruto", "mots": ["Sasuke", "Kakashi", "Sakura", "Itachi"], "anecdote": "" },
+        { "nom": "One Piece", "mots": ["Luffy", "Zoro", "Nami", "Sanji"], "anecdote": "" },
+        { "nom": "Dragon Ball", "mots": ["Goku", "Vegeta", "Piccolo", "Krilin"], "anecdote": "" },
+        { "nom": "Pokémon", "mots": ["Sacha", "Ondine", "Pierre", "Jessie"], "anecdote": "Dans la VF de Pokémon, Misty est devenue Ondine et Brock est devenu Pierre." }
       ]
     },
     {
-      "id": "g049",
-      "num": 49,
+      "id": "g062",
+      "num": 62,
+      "difficulte": "facile",
+      "theme": "animes",
+      "titre": "Classiques de l'animation",
+      "groupes": [
+        { "nom": "Animés de sport", "mots": ["Haikyu", "Olive et Tom", "Kuroko's Basket", "Blue Lock"], "anecdote": "" },
+        { "nom": "Films Ghibli", "mots": ["Totoro", "Ponyo", "Chihiro", "Mononoké"], "anecdote": "Totoro est devenu la mascotte et le logo du studio Ghibli." },
+        { "nom": "Shōnen de combat", "mots": ["Naruto", "Bleach", "Jujutsu Kaisen", "Demon Slayer"], "anecdote": "" },
+        { "nom": "Isekai", "mots": ["Re:Zero", "Konosuba", "Overlord", "Mushoku Tensei"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g063",
+      "num": 63,
+      "difficulte": "facile",
+      "theme": "animes",
+      "titre": "Dragon Ball",
+      "groupes": [
+        { "nom": "Saiyans", "mots": ["Goku", "Vegeta", "Gohan", "Broly"], "anecdote": "" },
+        { "nom": "Attaques", "mots": ["Kamehameha", "Genkidama", "Kaioken", "Final Flash"], "anecdote": "" },
+        { "nom": "Méchants", "mots": ["Freezer", "Cell", "Boo", "Zamasu"], "anecdote": "En VO, Freezer s'appelle Frieza, un jeu de mots sur « freezer » (congélateur)." },
+        { "nom": "Maîtres et mentors", "mots": ["Tortue Géniale", "Kaïo", "Whis", "Piccolo"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g064",
+      "num": 64,
       "difficulte": "moyen",
       "theme": "animes",
+      "titre": "Naruto",
       "groupes": [
-        { "nom": "Personnages de Dragon Ball", "mots": ["Goku", "Vegeta", "Piccolo", "Krilin"], "anecdote": "Dans la version originale japonaise, Krilin s'appelle Kuririn." },
-        { "nom": "Personnages de One Piece", "mots": ["Luffy", "Zoro", "Nami", "Sanji"], "anecdote": "One Piece, créé par Eiichirō Oda en 1997, est le manga le plus vendu de l'histoire." },
-        { "nom": "Personnages de Naruto", "mots": ["Naruto", "Sasuke", "Sakura", "Kakashi"], "anecdote": "Le naruto est aussi une garniture de ramen en forme de spirale… et les ramen sont le plat préféré du héros." },
-        { "nom": "Films du studio Ghibli", "mots": ["Totoro", "Ponyo", "Chihiro", "Mononoké"], "anecdote": "« Le Voyage de Chihiro » a remporté l'Oscar du meilleur film d'animation en 2003." }
+        { "nom": "Membres de l'Akatsuki", "mots": ["Itachi", "Kisame", "Deidara", "Pain"], "anecdote": "" },
+        { "nom": "Hokage", "mots": ["Hashirama", "Tobirama", "Hiruzen", "Minato"], "anecdote": "Minato, le père de Naruto, était le Quatrième Hokage." },
+        { "nom": "Équipe 7", "mots": ["Naruto", "Sasuke", "Sakura", "Kakashi"], "anecdote": "" },
+        { "nom": "Techniques", "mots": ["Rasengan", "Chidori", "Amaterasu", "Susanoo"], "anecdote": "" }
       ]
     },
     {
-      "id": "g050",
-      "num": 50,
-      "difficulte": "facile",
-      "theme": "sport",
+      "id": "g065",
+      "num": 65,
+      "difficulte": "moyen",
+      "theme": "animes",
+      "titre": "One Piece",
       "groupes": [
-        { "nom": "Épreuves d'athlétisme", "mots": ["Marathon", "Javelot", "Haies", "Perche"], "anecdote": "La distance du marathon, 42,195 km, a été fixée aux Jeux de Londres en 1908, puis officialisée en 1921." },
-        { "nom": "Champions de tennis", "mots": ["Nadal", "Federer", "Djokovic", "Murray"], "anecdote": "Rafael Nadal a remporté Roland-Garros 14 fois, un record absolu en Grand Chelem." },
-        { "nom": "Stades mythiques", "mots": ["Wembley", "Maracanã", "Camp Nou", "Vélodrome"], "anecdote": "En 1950, le Maracanã de Rio a accueilli près de 200 000 spectateurs pour le match décisif de la Coupe du monde." },
-        { "nom": "Champions de Formule 1", "mots": ["Senna", "Prost", "Schumacher", "Hamilton"], "anecdote": "Michael Schumacher et Lewis Hamilton partagent le record de sept titres de champion du monde de Formule 1." }
+        { "nom": "Équipage du Chapeau de paille", "mots": ["Luffy", "Zoro", "Usopp", "Chopper"], "anecdote": "" },
+        { "nom": "Empereurs (Yonkō)", "mots": ["Shanks", "Barbe Blanche", "Big Mom", "Kaido"], "anecdote": "Luffy devient lui-même l'un des Empereurs après l'arc Wano." },
+        { "nom": "Amiraux de la Marine", "mots": ["Akainu", "Kizaru", "Aokiji", "Fujitora"], "anecdote": "" },
+        { "nom": "Fruits du démon", "mots": ["Gomu Gomu", "Mera Mera", "Hito Hito", "Yami Yami"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g066",
+      "num": 66,
+      "difficulte": "moyen",
+      "theme": "animes",
+      "titre": "Kuroko's Basket",
+      "groupes": [
+        { "nom": "Génération des Miracles", "mots": ["Kise", "Midorima", "Aomine", "Murasakibara"], "anecdote": "" },
+        { "nom": "Joueurs de Seirin", "mots": ["Kagami", "Kuroko", "Izuki", "Kiyoshi"], "anecdote": "Kuroko est surnommé le « sixième joueur fantôme » de la Génération des Miracles." },
+        { "nom": "Capitaines", "mots": ["Akashi", "Hyuga", "Kasamatsu", "Imayoshi"], "anecdote": "" },
+        { "nom": "Techniques", "mots": ["Misdirection", "Ignite Pass", "Emperor Eye", "Meteor Jam"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g067",
+      "num": 67,
+      "difficulte": "difficile",
+      "theme": "animes",
+      "titre": "Dans les coulisses",
+      "groupes": [
+        { "nom": "Studios d'animation", "mots": ["MAPPA", "Ufotable", "Bones", "Madhouse"], "anecdote": "" },
+        { "nom": "Mangakas", "mots": ["Oda", "Kishimoto", "Toriyama", "Isayama"], "anecdote": "Eiichirō Oda dessine One Piece sans interruption majeure depuis 1997." },
+        { "nom": "Personnages aux cheveux blancs", "mots": ["Gojo", "Kakashi", "Killua", "Kaneki"], "anecdote": "" },
+        { "nom": "Rivaux du héros", "mots": ["Sasuke", "Vegeta", "Bakugo", "Kaiba"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g068",
+      "num": 68,
+      "difficulte": "difficile",
+      "theme": "animes",
+      "titre": "Démons et fléaux",
+      "groupes": [
+        { "nom": "Piliers (Demon Slayer)", "mots": ["Rengoku", "Giyu", "Shinobu", "Tengen"], "anecdote": "" },
+        { "nom": "Lunes supérieures (Demon Slayer)", "mots": ["Akaza", "Doma", "Kokushibo", "Gyutaro"], "anecdote": "Kokushibo, la Lune supérieure 1, était autrefois un pourfendeur de démons." },
+        { "nom": "Exorcistes de Jujutsu Kaisen", "mots": ["Yuji", "Megumi", "Nobara", "Gojo"], "anecdote": "" },
+        { "nom": "Fléaux de Jujutsu Kaisen", "mots": ["Mahito", "Jogo", "Hanami", "Dagon"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g069",
+      "num": 69,
+      "difficulte": "difficile",
+      "theme": "animes",
+      "titre": "Systèmes de pouvoir",
+      "groupes": [
+        { "nom": "Types de Nen (Hunter x Hunter)", "mots": ["Renforcement", "Émission", "Manipulation", "Matérialisation"], "anecdote": "Il existe six types de Nen dans Hunter x Hunter." },
+        { "nom": "Souffles (Demon Slayer)", "mots": ["Flamme", "Insecte", "Brume", "Son"], "anecdote": "" },
+        { "nom": "Natures de chakra (Naruto)", "mots": ["Feu", "Vent", "Foudre", "Eau"], "anecdote": "" },
+        { "nom": "Alters (My Hero Academia)", "mots": ["One For All", "Explosion", "Gravité zéro", "Effacement"], "anecdote": "" }
+      ]
+    },
+    {
+      "id": "g070",
+      "num": 70,
+      "difficulte": "goat",
+      "theme": "animes",
+      "titre": "Vrais connaisseurs",
+      "groupes": [
+        { "nom": "Porteurs du « D. » (One Piece)", "mots": ["Teach", "Roger", "Garp", "Law"], "anecdote": "" },
+        { "nom": "Saiyans au nom de légume", "mots": ["Raditz", "Nappa", "Broly", "Kakarot"], "anecdote": "Les noms des Saiyans viennent de légumes : Kakarot = carrot, Raditz = radish." },
+        { "nom": "Death Note", "mots": ["Ryuk", "Rem", "Near", "Mello"], "anecdote": "" },
+        { "nom": "Homonculus (Fullmetal Alchemist)", "mots": ["Envy", "Greed", "Lust", "Gluttony"], "anecdote": "" }
       ]
     }
   ]

@@ -67,7 +67,9 @@ data.grilles.forEach((g, n) => {
   if (!DIFFICULTES.includes(diffDe(g.difficulte))) err(ou, `« difficulte » doit valoir ${DIFFICULTES.join(", ")} (ou 1 à 4)`);
 
   const theme = g.theme === undefined ? "quotidien" : g.theme;
+  if (g.titre !== undefined && (typeof g.titre !== "string" || !g.titre.trim())) err(ou, "« titre » doit être un texte non vide");
   if (theme !== "quotidien") {
+    if (g.titre === undefined) avertissements.push(`${ou} : grille de thème sans « titre » (« Grille n » sera affiché)`);
     if (!themes.has(theme)) err(ou, `thème « ${theme} » absent de la liste « themes »`);
     else themes.get(theme).grilles.push(diffDe(g.difficulte));
     if (g.jour !== undefined && g.jour !== null) err(ou, "une grille de thème ne peut pas avoir de « jour » (elle n'est jamais grille du jour)");
@@ -95,7 +97,9 @@ data.grilles.forEach((g, n) => {
   g.groupes.forEach((gr, k) => {
     const o = `${ou}, groupe ${k + 1}`;
     if (!gr || typeof gr.nom !== "string" || !gr.nom.trim()) err(o, "« nom » manquant");
-    if (!gr || typeof gr.anecdote !== "string" || !gr.anecdote.trim()) err(o, "« anecdote » manquante");
+    // Grille de thème : l'anecdote peut être vide ("") sur certains groupes ; jeu quotidien : une anecdote par groupe
+    if (!gr || typeof gr.anecdote !== "string") err(o, "« anecdote » manquante (mettre \"\" si le groupe n'en a pas)");
+    else if (!gr.anecdote.trim() && theme === "quotidien") err(o, "« anecdote » vide (obligatoire pour le jeu quotidien)");
     if (!gr || !Array.isArray(gr.mots) || gr.mots.length !== 4) return err(o, "il faut exactement 4 mots");
     gr.mots.forEach(m => {
       if (typeof m !== "string" || !m.trim()) err(o, "mot vide");
