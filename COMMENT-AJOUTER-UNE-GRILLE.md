@@ -30,13 +30,14 @@ Ouvre `grilles.json` et ajoute un bloc à la **fin** de la liste `"grilles"` (n'
 | `num` | Numéro affiché au joueur (« Grille n°33 »). Unique. |
 | `difficulte` | `facile`, `moyen`, `difficile` ou `goat`. Erreurs autorisées : 4, 4, 3 et 2. |
 | `jour` | *Optionnel.* Date `AAAA-MM-JJ` à laquelle ce sera la **grille du jour**. Une seule grille par jour, et jamais une grille `goat`. Sans `jour`, la grille est jouable tout de suite depuis le tiroir. |
+| `toujours_visible` | *Optionnel* (`true` ou `false`). Si `true`, la grille apparaît dans le tiroir même si son `jour` est dans le futur. **Ne le mets pas sur les nouvelles grilles du calendrier** : sans ce champ, une grille datée reste **secrète** jusqu'à son jour (pas de spoiler). Il sert uniquement aux 32 grilles d'origine, déjà connues des joueurs. |
 | `groupes` | Exactement **4 groupes de 4 mots**, du plus facile au plus dur (l'ordre donne les couleurs : menthe, abricot, framboise, bleu nuit). Les **16 mots doivent être tous différents**. |
 
 Conseils :
 - Un **piège** (un mot qui semble aller dans deux groupes) rend la grille plus intéressante, mais il ne doit y avoir **qu'une seule solution**.
 - Vérifie l'anecdote : elle doit être **vraie**.
 - Pas besoin d'espaces insécables avant `:` `!` `?` `»` : l'appli les ajoute toute seule.
-- Une grille datée dans le futur reste **cachée** dans le tiroir jusqu'à son jour.
+- Une grille datée dans le futur reste **cachée** dans le tiroir jusqu'à son jour, sauf si elle a `"toujours_visible": true` (à éviter pour les nouvelles grilles).
 
 ## 3. Vérifier
 

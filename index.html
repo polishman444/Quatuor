@@ -335,8 +335,8 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 // Difficulté des grilles : nombre d'erreurs autorisées et couleur
 const DIFFS={facile:{name:"Facile",err:4,c:0},moyen:{name:"Moyen",err:4,c:1},difficile:{name:"Difficile",err:3,c:2},goat:{name:"GOAT",err:2,c:3,icon:"🐐"}};
 const DKEYS=Object.keys(DIFFS);
-// Une grille datée dans le futur reste cachée (pas de spoiler)
-const visible=i=>!GRIDS[i].jour||GRIDS[i].jour<=todayStr;
+// Une grille datée dans le futur reste cachée (pas de spoiler), sauf si elle est « toujours_visible »
+const visible=i=>GRIDS[i].always||!GRIDS[i].jour||GRIDS[i].jour<=todayStr;
 const idsOf=k=>GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].diff===k&&visible(i));
 const dname=k=>DIFFS[k].name+(DIFFS[k].icon?" "+DIFFS[k].icon:"");
 // ---- Grille du jour : celle dont « jour » = date locale ; sinon une grille de secours, la même pour tous ----
@@ -362,6 +362,7 @@ function checkGrid(x,ids){
   if(!Number.isInteger(x.num)) return "num invalide";
   if(!DIFFS[x.difficulte]) return "difficulté inconnue";
   if(x.jour!=null&&!/^\d{4}-\d{2}-\d{2}$/.test(x.jour)) return "jour invalide";
+  if(x.toujours_visible!=null&&typeof x.toujours_visible!=="boolean") return "toujours_visible doit valoir true ou false";
   if(!Array.isArray(x.groupes)||x.groupes.length!==4) return "il faut 4 groupes";
   for(const g of x.groupes)
     if(!g||typeof g.nom!=="string"||typeof g.anecdote!=="string"||!Array.isArray(g.mots)||g.mots.length!==4||g.mots.some(m=>typeof m!=="string"||!m.trim())) return "groupe invalide";
@@ -375,7 +376,7 @@ function parseGrids(data){
     const why=checkGrid(x,ids);
     if(why){ console.warn(`Quatuor : grille ${(x&&x.id)||"n°"+(n+1)} ignorée (${why})`); return; }
     ids.add(x.id);
-    out.push(Object.assign(x.groupes.map(g=>G(fr(g.nom),g.mots.slice(),fr(g.anecdote))),{id:x.id,num:x.num,diff:x.difficulte,jour:x.jour||null}));
+    out.push(Object.assign(x.groupes.map(g=>G(fr(g.nom),g.mots.slice(),fr(g.anecdote))),{id:x.id,num:x.num,diff:x.difficulte,jour:x.jour||null,always:x.toujours_visible===true}));
   });
   return out;
 }

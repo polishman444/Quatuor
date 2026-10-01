@@ -26,6 +26,7 @@ if (!data || !Array.isArray(data.grilles)) {
 if (!Number.isInteger(data.version)) err("racine", "« version » doit être un nombre entier");
 
 const ids = new Map(), nums = new Map(), jours = new Map();
+let secretes = 0;
 const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const dateValide = s => {
   if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
@@ -47,12 +48,16 @@ data.grilles.forEach((g, n) => {
 
   if (!DIFFICULTES.includes(g.difficulte)) err(ou, `« difficulte » doit valoir ${DIFFICULTES.join(", ")}`);
 
+  if (g.toujours_visible !== undefined && typeof g.toujours_visible !== "boolean")
+    err(ou, "« toujours_visible » doit valoir true ou false");
+
   if (g.jour !== undefined && g.jour !== null) {
     if (!dateValide(g.jour)) err(ou, `« jour » invalide (${g.jour}), format attendu AAAA-MM-JJ`);
     else {
       if (g.difficulte === "goat") err(ou, "une grille GOAT ne peut pas être grille du jour (retire « jour »)");
       if (jours.has(g.jour)) err(ou, `deux grilles le même jour (${g.jour}) : déjà ${jours.get(g.jour)}`);
       else jours.set(g.jour, g.id);
+      if (g.toujours_visible !== true) secretes++;
     }
   }
 
@@ -89,7 +94,7 @@ for (let k = 0; k < 30; k++) {
 
 const parDiff = DIFFICULTES.map(d => `${d} ${data.grilles.filter(g => g && g.difficulte === d).length}`).join(", ");
 console.log(`Fichier : ${path.relative(process.cwd(), fichier) || fichier}`);
-console.log(`${data.grilles.length} grilles (${parDiff}), ${jours.size} planifiées.`);
+console.log(`${data.grilles.length} grilles (${parDiff}), ${jours.size} planifiées, dont ${secretes} secrète(s) jusqu'à leur jour.`);
 if (avertissements.length) { console.log(`\n⚠ ${avertissements.length} avertissement(s) :`); avertissements.forEach(a => console.log("  - " + a)); }
 console.log(trous.length
   ? `\n📅 ${trous.length} jour(s) sans grille planifiée dans les 30 prochains jours (une grille de secours sera choisie) :\n  ${trous.join(", ")}`
