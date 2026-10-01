@@ -42,6 +42,25 @@ Conseils :
   - **grille libre** : pas de `jour` (ou `toujours_visible`). Jouable tout de suite, et utilisée comme « Grille bonus » les jours sans grille planifiée.
 - Pour planifier, utilise toujours des **grilles inédites** : jamais une grille déjà visible dans le tiroir.
 
+## Ajouter une grille de thème (mode « Thèmes »)
+
+Les thèmes sont déclarés dans la liste `"themes"`, en haut de `grilles.json` :
+
+```json
+{ "id": "geographie", "nom": "Géographie", "icone": "🌍", "ordre": 1, "publie": false }
+```
+
+| Champ | Ce qu'il faut mettre |
+|---|---|
+| `id` | Identifiant du thème, sans espace ni accent. `quotidien` est réservé au jeu quotidien. |
+| `nom`, `icone` | Nom et emoji affichés sur la carte du thème. |
+| `ordre` | Position de la carte dans l'écran Thèmes (1, 2, 3…). |
+| `publie` | `false` : le thème n'est visible **qu'en local** (`localhost`), pour le tester. `true` : il apparaît chez tous les joueurs. Tant qu'aucun thème n'est publié, le sélecteur « Grille du jour \| Thèmes » reste masqué. |
+
+Une grille de thème se remplit comme les autres, avec en plus `"theme": "<id du thème>"`, et **sans** `jour` ni `toujours_visible` (une grille de thème n'est jamais grille du jour et ne compte pas dans la série). Les grilles du jeu quotidien ont `"theme": "quotidien"` (valeur par défaut si le champ est absent).
+
+Dans un thème, les grilles sont classées par difficulté (`facile` → `goat`). La difficulté peut aussi s'écrire en chiffre (1 = facile, 2 = moyen, 3 = difficile, 4 = goat), mais **le texte reste recommandé** : les anciennes versions de l'appli ne comprennent que le texte.
+
 ## 3. Vérifier
 
 Dans un terminal, à la racine du dépôt :
@@ -52,7 +71,8 @@ node outils/verifier-grilles.js
 
 - `✓ grilles.json est valide.` : tout est bon.
 - `✗ … erreur(s)` : corrige chaque ligne indiquée, puis relance.
-- Le script liste aussi les **jours des 30 prochains jours sans grille inédite planifiée**. Ces jours-là, l'appli propose une « Grille bonus » choisie parmi les grilles libres non GOAT (de préférence une que le joueur n'a pas encore faite). Pense à planifier ces jours.
+- Le script affiche chaque thème avec son statut (**publié** / **non publié**) et son nombre de grilles.
+- Il liste aussi les **jours des 30 prochains jours sans grille inédite planifiée**. Ces jours-là, l'appli propose une « Grille bonus » choisie parmi les grilles libres non GOAT (de préférence une que le joueur n'a pas encore faite). Pense à planifier ces jours.
 
 Si une grille invalide est quand même publiée, l'appli l'ignore simplement (sans planter), et elle n'apparaîtra pas.
 

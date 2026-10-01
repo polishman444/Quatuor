@@ -7,6 +7,8 @@ const path = require("path");
 
 const fichier = process.argv[2] || path.join(__dirname, "..", "grilles.json");
 const DIFFICULTES = ["facile", "moyen", "difficile", "goat"];
+// La difficulté s'écrit en texte (recommandé) ou en chiffre : 1 = facile, 2 = moyen, 3 = difficile, 4 = goat
+const diffDe = v => typeof v === "number" ? DIFFICULTES[v - 1] : v;
 const erreurs = [];
 const avertissements = [];
 const err = (ou, msg) => erreurs.push(`${ou} : ${msg}`);
@@ -24,6 +26,21 @@ if (!data || !Array.isArray(data.grilles)) {
   process.exit(1);
 }
 if (!Number.isInteger(data.version)) err("racine", "« version » doit être un nombre entier");
+
+// Thèmes (mode « Thèmes ») : « quotidien » est réservé aux grilles du jeu quotidien
+const themes = new Map();
+if (data.themes !== undefined && !Array.isArray(data.themes)) err("racine", "« themes » doit être une liste");
+(Array.isArray(data.themes) ? data.themes : []).forEach((t, n) => {
+  const ou = `thème ${t && t.id ? t.id : "n°" + (n + 1)}`;
+  if (!t || typeof t.id !== "string" || !t.id.trim()) return err(ou, "« id » manquant");
+  if (t.id === "quotidien") return err(ou, "« quotidien » est réservé aux grilles du jeu quotidien");
+  if (themes.has(t.id)) return err(ou, "« id » de thème en double");
+  if (typeof t.nom !== "string" || !t.nom.trim()) err(ou, "« nom » manquant");
+  if (typeof t.icone !== "string" || !t.icone.trim()) err(ou, "« icone » manquante");
+  if (t.ordre !== undefined && !Number.isFinite(t.ordre)) err(ou, "« ordre » doit être un nombre");
+  if (typeof t.publie !== "boolean") err(ou, "« publie » doit valoir true ou false");
+  themes.set(t.id, { ...t, grilles: [] });
+});
 
 const ids = new Map(), nums = new Map(), jours = new Map(), inedites = new Map();
 let secretes = 0;
@@ -47,7 +64,15 @@ data.grilles.forEach((g, n) => {
   else if (nums.has(g.num)) err(ou, `« num » ${g.num} déjà utilisé par ${nums.get(g.num)}`);
   else nums.set(g.num, g.id);
 
-  if (!DIFFICULTES.includes(g.difficulte)) err(ou, `« difficulte » doit valoir ${DIFFICULTES.join(", ")}`);
+  if (!DIFFICULTES.includes(diffDe(g.difficulte))) err(ou, `« difficulte » doit valoir ${DIFFICULTES.join(", ")} (ou 1 à 4)`);
+
+  const theme = g.theme === undefined ? "quotidien" : g.theme;
+  if (theme !== "quotidien") {
+    if (!themes.has(theme)) err(ou, `thème « ${theme} » absent de la liste « themes »`);
+    else themes.get(theme).grilles.push(diffDe(g.difficulte));
+    if (g.jour !== undefined && g.jour !== null) err(ou, "une grille de thème ne peut pas avoir de « jour » (elle n'est jamais grille du jour)");
+    if (g.toujours_visible !== undefined) err(ou, "une grille de thème n'utilise pas « toujours_visible »");
+  }
 
   if (g.toujours_visible !== undefined && typeof g.toujours_visible !== "boolean")
     err(ou, "« toujours_visible » doit valoir true ou false");
@@ -55,7 +80,7 @@ data.grilles.forEach((g, n) => {
   if (g.jour !== undefined && g.jour !== null) {
     if (!dateValide(g.jour)) err(ou, `« jour » invalide (${g.jour}), format attendu AAAA-MM-JJ`);
     else {
-      if (g.difficulte === "goat") err(ou, "une grille GOAT ne peut pas être grille du jour (retire « jour »)");
+      if (diffDe(g.difficulte) === "goat") err(ou, "une grille GOAT ne peut pas être grille du jour (retire « jour »)");
       if (jours.has(g.jour)) err(ou, `deux grilles le même jour (${g.jour}) : déjà ${jours.get(g.jour)}`);
       else jours.set(g.jour, g.id);
       if (g.toujours_visible !== true) { secretes++; inedites.set(g.jour, g.id); }
@@ -95,9 +120,18 @@ for (let k = 0; k < 30; k++) {
   if (!inedites.has(iso(d))) trous.push(iso(d));
 }
 
-const parDiff = DIFFICULTES.map(d => `${d} ${data.grilles.filter(g => g && g.difficulte === d).length}`).join(", ");
+const quotidien = data.grilles.filter(g => g && (g.theme === undefined || g.theme === "quotidien"));
+const parDiff = DIFFICULTES.map(d => `${d} ${quotidien.filter(g => diffDe(g.difficulte) === d).length}`).join(", ");
 console.log(`Fichier : ${path.relative(process.cwd(), fichier) || fichier}`);
-console.log(`${data.grilles.length} grilles (${parDiff}), ${jours.size} planifiées, dont ${secretes} secrète(s) jusqu'à leur jour.`);
+console.log(`${quotidien.length} grilles du jeu quotidien (${parDiff}), ${jours.size} planifiées, dont ${secretes} secrète(s) jusqu'à leur jour.`);
+if (themes.size) {
+  console.log(`\n🗂  ${themes.size} thème(s) :`);
+  [...themes.values()].sort((a, b) => (a.ordre ?? 99) - (b.ordre ?? 99)).forEach(t => {
+    const n = t.grilles.length, det = DIFFICULTES.map(d => t.grilles.filter(x => x === d).length).map((c, k) => c ? `${c} ${DIFFICULTES[k]}` : "").filter(Boolean).join(", ");
+    console.log(`  ${t.icone} ${t.nom.padEnd(12)} ${t.publie ? "✅ publié     " : "⏸  non publié "} ${n} grille${n > 1 ? "s" : ""}${det ? ` (${det})` : ""}`);
+    if (t.publie && !n) avertissements.push(`thème ${t.id} : publié mais sans aucune grille`);
+  });
+}
 if (avertissements.length) { console.log(`\n⚠ ${avertissements.length} avertissement(s) :`); avertissements.forEach(a => console.log("  - " + a)); }
 console.log(trous.length
   ? `\n📅 ${trous.length} jour(s) sans grille inédite planifiée dans les 30 prochains jours (une « Grille bonus » sera proposée) :\n  ${trous.join(", ")}`

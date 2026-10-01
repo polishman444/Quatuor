@@ -51,6 +51,32 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .ibtn svg{width:24px;height:24px;stroke:var(--ink);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ibtn:active{background:var(--edge)}
 .sub{margin:4px 2px 14px;color:var(--muted);font-weight:500}
+/* Sélecteur « Grille du jour | Thèmes » */
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:2px 0 10px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--edge)}
+.modes[hidden]{display:none}
+.modes button{border:0;background:transparent;border-radius:11px;padding:9px 6px;font:inherit;font-weight:800;font-size:.95rem;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.modes button.on{background:var(--ink);color:var(--bg)}
+.vthemes .sub,.vthemes .area,.vthemes .dock{display:none!important}
+/* Écran Thèmes */
+.themes{padding-bottom:20px}
+.themes[hidden]{display:none}
+.thtitle{margin:6px 0 2px;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
+.thsub{margin:0 0 16px;color:var(--muted)}
+.thgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.thcard{position:relative;border:0;border-radius:18px;background:var(--card);box-shadow:0 4px 0 var(--edge);padding:16px 14px 14px;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.thcard:active{transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.thcard .ic{display:block;font-size:2.1rem;line-height:1;margin-bottom:10px}
+.thcard b{display:block;font-size:1.08rem;font-weight:800}
+.thcard small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.thcard .bar,.thdetail .bar{margin:10px 0 0;height:7px}
+.draft{position:absolute;top:10px;right:10px;font-size:.66rem;font-weight:800;padding:3px 7px;border-radius:999px;background:var(--l1);color:#3A1E02}
+.thback{border:0;background:none;font:inherit;font-weight:700;color:var(--muted);padding:6px 0;margin-bottom:6px;cursor:pointer}
+.thhead{display:flex;align-items:center;gap:12px}
+.thhead .ic{font-size:2.4rem;line-height:1}
+.thhead h2{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:-.02em}
+.thhead p{margin:2px 0 0;color:var(--muted)}
+.thdetail .bar{margin:12px 0 16px}
+.gitem .dbadge{margin:0 0 0 6px;font-size:.7rem;padding:2px 7px;vertical-align:2px}
 .sub b{color:var(--ink);font-weight:650}
 
 .stack{display:grid;gap:10px}
@@ -329,6 +355,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
       <button class="ibtn" id="statsBtn" aria-label="Statistiques"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg></button>
     </div>
   </header>
+  <div class="modes" id="modes" role="tablist" hidden><button data-m="jour" role="tab" class="on">Grille du jour</button><button data-m="themes" role="tab">Thèmes</button></div>
   <div class="sub" id="sub"></div>
   <div class="area">
     <div class="tuto" id="tuto" hidden><span id="tutoTxt"></span></div>
@@ -339,6 +366,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
     </div>
     <div class="lives" id="lives">Erreurs restantes <span class="dots"></span></div>
   </div>
+  <section class="themes" id="themesView" hidden aria-label="Thèmes"></section>
 </div>
 
 <nav class="dock"><div class="dock-in">
@@ -395,14 +423,15 @@ const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&qu
 const DIFFS={facile:{name:"Facile",err:4,c:0},moyen:{name:"Moyen",err:4,c:1},difficile:{name:"Difficile",err:3,c:2},goat:{name:"GOAT",err:2,c:3,icon:"🐐"}};
 const DKEYS=Object.keys(DIFFS);
 // Une grille datée dans le futur reste cachée (pas de spoiler), sauf si elle est « toujours_visible »
-const visible=i=>GRIDS[i].always||!GRIDS[i].jour||GRIDS[i].jour<=todayStr;
+// (les grilles de thème n'apparaissent jamais dans le tiroir, le mode hasard ni « Grille suivante »)
+const visible=i=>GRIDS[i].theme==="quotidien"&&(GRIDS[i].always||!GRIDS[i].jour||GRIDS[i].jour<=todayStr);
 const idsOf=k=>GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].diff===k&&visible(i));
 const dname=k=>DIFFS[k].name+(DIFFS[k].icon?" "+DIFFS[k].icon:"");
 // ---- Grille du jour : celle dont « jour » = date locale ; sinon une grille de secours, la même pour tous ----
 let dailyIdx=-1, dailyBonus=false;   // dailyBonus : aucune grille planifiée aujourd'hui -> « Grille bonus »
 const hashStr=s=>{ let h=2166136261; for(const c of s){ h^=c.codePointAt(0); h=Math.imul(h,16777619); } return h>>>0; };
 function pickDaily(){
-  const idx=GRIDS.map((_,i)=>i), notGoat=i=>GRIDS[i].diff!=="goat";
+  const idx=GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].theme==="quotidien"), notGoat=i=>GRIDS[i].diff!=="goat";
   // Grille du jour : grille du calendrier (jamais une grille « toujours_visible », qu'on pourrait jouer à l'avance)
   const planned=idx.find(i=>GRIDS[i].jour===todayStr&&notGoat(i)&&!GRIDS[i].always);
   if(planned!==undefined){ dailyBonus=false; return planned; }
@@ -423,11 +452,14 @@ function pickDaily(){
 }
 
 // ---- Lecture et validation de grilles.json ----
+// Difficulté en texte (« moyen ») ou en chiffre (1 = facile … 4 = goat)
+const diffKey=v=>typeof v==="number"?DKEYS[v-1]:v;
 function checkGrid(x,ids){
   if(!x||typeof x.id!=="string"||!x.id) return "id manquant";
   if(ids.has(x.id)) return "id en double";
   if(!Number.isInteger(x.num)) return "num invalide";
-  if(!DIFFS[x.difficulte]) return "difficulté inconnue";
+  if(!DIFFS[diffKey(x.difficulte)]) return "difficulté inconnue";
+  if(x.theme!=null&&(typeof x.theme!=="string"||!x.theme)) return "thème invalide";
   if(x.jour!=null&&!/^\d{4}-\d{2}-\d{2}$/.test(x.jour)) return "jour invalide";
   if(x.toujours_visible!=null&&typeof x.toujours_visible!=="boolean") return "toujours_visible doit valoir true ou false";
   if(!Array.isArray(x.groupes)||x.groupes.length!==4) return "il faut 4 groupes";
@@ -443,8 +475,12 @@ function parseGrids(data){
     const why=checkGrid(x,ids);
     if(why){ console.warn(`Quatuor : grille ${(x&&x.id)||"n°"+(n+1)} ignorée (${why})`); return; }
     ids.add(x.id);
-    out.push(Object.assign(x.groupes.map(g=>G(fr(g.nom),g.mots.slice(),fr(g.anecdote))),{id:x.id,num:x.num,diff:x.difficulte,jour:x.jour||null,always:x.toujours_visible===true}));
+    out.push(Object.assign(x.groupes.map(g=>G(fr(g.nom),g.mots.slice(),fr(g.anecdote))),
+      {id:x.id,num:x.num,diff:diffKey(x.difficulte),jour:x.jour||null,always:x.toujours_visible===true,theme:x.theme||"quotidien"}));
   });
+  // Liste des thèmes (mode « Thèmes ») ; un thème inconnu ou mal formé est ignoré
+  out.themes=(Array.isArray(data.themes)?data.themes:[]).filter(t=>t&&typeof t.id==="string"&&t.id!=="quotidien"&&typeof t.nom==="string")
+    .map(t=>({id:t.id,nom:t.nom,icone:t.icone||"🗂️",ordre:Number.isFinite(t.ordre)?t.ordre:99,publie:t.publie===true}));
   return out;
 }
 function readGrids(text,src){
@@ -564,11 +600,13 @@ function newGame(idx,opts={}){
   const badge=`<span class="dbadge l${DIFFS[grid.diff].c}">${dname(grid.diff)}</span>`;
   $("sub").classList.toggle("tsub",tuto);
   $("sub").innerHTML = tuto ? `<span>Grille d'<b>entraînement</b></span><button class="skip" id="skipTuto">Passer le tutoriel</button>`
-    : (practice ? `Grille <b>n°${grid.num}</b>` : `${dailyBonus?"Grille bonus":"Grille du jour"} · <b>${d}</b>`)+badge;
+    : (isTheme() ? `${themeOf(grid.theme).icone} ${esc(themeOf(grid.theme).nom)} · <b>Grille ${themeGrids(grid.theme).indexOf(idx)+1}</b>`
+      : practice ? `Grille <b>n°${grid.num}</b>` : `${dailyBonus?"Grille bonus":"Grille du jour"} · <b>${d}</b>`)+badge;
   if(tuto) $("skipTuto").onclick=endTuto;
   $("solved").innerHTML=""; $("lives").style.display=tuto?"none":"flex";
   const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost","pending");
   tutoMsg=""; $("tuto").hidden=!tuto||tutoHold; tutoUpdate();
+  setView("jeu");
   if(lostView){ if(prev.vu===false) showPendingBoard(prev); else showLostBoard(prev); return; }
   draw();
   updateNextLabels();
@@ -980,14 +1018,14 @@ function statsHtml(){
   return `<div class="stats"><div><b>${s.played||0}</b><small>${pl(s.played||0,"partie","parties")}</small></div><div><b>${pct}</b><small>% réussite</small></div>
     <div><b>${alive?(s.streak||0):0}</b><small>série 🔥</small></div><div><b>${s.best||0}</b><small>record</small></div></div>`;
 }
-function gridItem(i,r){
+function gridItem(i,r,label,n){
   const x=r[GRIDS[i].id], tries=x?(x.tries||1):0, st = x ? (x.win?(tries>1?"win2":"win"):"lost") : "";
   const sub = !x ? "À jouer"
     : x.win ? (tries>1 ? `Réussie au ${ordinal(tries)} essai` : x.mistakes? `Réussie · ${x.mistakes} ${pl(x.mistakes,"erreur","erreurs")}` : x.hints ? "Réussie" : "Réussie sans faute")+(x.hints?` · 💡${x.hints}`:"")
     : (tries>1 ? `Perdue · ${tries} essais` : "Perdue");
   const lost=x&&!x.win;
-  return `<div class="grow${lost?" can":""}"><button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):GRIDS[i].num}</span>
-    <span class="txt"><b>Grille n°${GRIDS[i].num}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>${lost?`<button class="gretry" data-i="${i}">Retenter 🔄</button>`:""}</div>`;
+  return `<div class="grow${lost?" can":""}"><button class="gitem ${st}${i===gridIdx?" cur":""}" data-i="${i}"><span class="num">${x?(x.win?"✓":"✗"):(n??GRIDS[i].num)}</span>
+    <span class="txt"><b>${label?`${label}<span class="dbadge l${DIFFS[GRIDS[i].diff].c}">${dname(GRIDS[i].diff)}</span>`:`Grille n°${GRIDS[i].num}`}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>${lost?`<button class="gretry" data-i="${i}">Retenter 🔄</button>`:""}</div>`;
 }
 function randHtml(){
   return `<p class="sec">Grille au hasard 🎲</p><div class="rand"><div class="rpills" role="radiogroup" aria-label="Difficulté">${RAND_KEYS.map(k=>
@@ -1087,7 +1125,7 @@ function openResults(win){
   openSheet(`<h2>${title}</h2><p>${text}${practice?"":" Nouvelle grille demain."}</p>${practice?"":cdHtml()}
     <div class="recap">${recap}</div>${practice?"":statsHtml()}
     ${win?"":`<button class="pill main full" id="retry">Retenter 🔄</button>`}
-    <div class="row"><button class="pill ${win?"main":"soft"}" id="share">Partager</button><button class="pill soft" id="next">${hasard?"Encore une 🎲":"Grille suivante"}</button></div>
+    <div class="row"><button class="pill ${win?"main":"soft"}" id="share">Partager</button><button class="pill soft" id="next">${nextLabel()}</button></div>
     <h3>Ce que tu as appris aujourd'hui</h3><div class="learned">${learned}</div>`);
   $("share").onclick=share;
   $("next").onclick=nextOrRandom;
@@ -1152,12 +1190,77 @@ function launchRandom(diff,die){
   else go();
 }
 // Libellés du bouton « Grille suivante » selon le mode
+const nextLabel=()=>hasard?"Encore une 🎲":isTheme()?"Suivante":"Grille suivante";
 function updateNextLabels(){
-  const t=hasard?"Encore une 🎲":"Grille suivante", court=hasard?"Encore 🎲":"Suivante";
+  const t=nextLabel(), court=hasard?"Encore 🎲":"Suivante";
   $("nextG").innerHTML=`<span class="lg">${t}</span><span class="sm">${court}</span>`;
   const n=$("next"); if(n) n.textContent=t;
 }
-function nextOrRandom(){ if(hasard) launchRandom(hasard); else nextGrid(); }
+function nextOrRandom(){ if(hasard) launchRandom(hasard); else if(isTheme()) nextInTheme(); else nextGrid(); }
+
+// =====================================================================
+// MODE « THÈMES » : grilles regroupées par sujet, à faire à son rythme
+// (jamais grille du jour, ne comptent pas dans les stats ni la série)
+// Un thème « publie: false » n'apparaît qu'en local (localhost) pour le tester, jamais dans l'appli native.
+// =====================================================================
+let THEMES=[], view="jeu", themeOpen=null;
+const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+const IS_LOCAL=!IS_NATIVE&&["localhost","127.0.0.1","[::1]"].includes(location.hostname);
+const themeOf=id=>THEMES.find(t=>t.id===id)||{id,nom:id,icone:"🗂️",publie:false};
+const themesVisibles=()=>THEMES.filter(t=>t.publie||IS_LOCAL).sort((a,b)=>a.ordre-b.ordre);
+const isTheme=()=>!!(grid&&!tuto&&grid.theme&&grid.theme!=="quotidien");
+// Grilles d'un thème, triées par difficulté puis par numéro
+const themeGrids=id=>GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].theme===id)
+  .sort((a,b)=>DKEYS.indexOf(GRIDS[a].diff)-DKEYS.indexOf(GRIDS[b].diff)||GRIDS[a].num-GRIDS[b].num);
+const themeProgress=(id,r)=>{ const ids=themeGrids(id); return {n:ids.length,d:ids.filter(i=>r[GRIDS[i].id]).length}; };
+const progTxt=(d,n)=>`${d}/${n} ${pl(n,"grille","grilles")} ${pl(d,"terminée","terminées")}`;
+function updateModes(){
+  const m=$("modes"); m.hidden=tuto||!GRIDS.length||!themesVisibles().length;   // aucun thème publié : sélecteur masqué
+  const cur=view==="themes"||isTheme()?"themes":"jour";
+  m.querySelectorAll("button").forEach(b=>{ const on=b.dataset.m===cur; b.classList.toggle("on",on); b.setAttribute("aria-selected",on); });
+}
+function setView(v){
+  view=v; document.body.classList.toggle("vthemes",v==="themes"); $("themesView").hidden=v!=="themes"; updateModes();
+}
+function openThemes(id){
+  themeOpen=id||null; if(themeOpen) ls.set("quatuor-theme",themeOpen);
+  closeSheet(); setView("themes"); renderThemes(); scrollTo(0,0);
+}
+function renderThemes(){
+  const r=loadRes(), el=$("themesView"), list=themesVisibles(), t=themeOpen&&list.find(x=>x.id===themeOpen);
+  if(!t){
+    themeOpen=null;
+    el.innerHTML=`<h2 class="thtitle">Thèmes</h2><p class="thsub">Des grilles par sujet, à faire à ton rythme.</p>
+      <div class="thgrid">${list.map(x=>{ const {n,d}=themeProgress(x.id,r);
+        return `<button class="thcard" data-t="${esc(x.id)}">${x.publie?"":'<span class="draft">Non publié</span>'}<span class="ic">${x.icone}</span><b>${esc(x.nom)}</b><small>${progTxt(d,n)}</small>
+          <div class="bar"><i style="width:${n?d/n*100:0}%"></i></div></button>`; }).join("")}</div>`;
+    el.querySelectorAll(".thcard").forEach(b=>b.onclick=()=>{ buzz(8); openThemes(b.dataset.t); });
+  } else {
+    const ids=themeGrids(t.id), {n,d}=themeProgress(t.id,r);
+    el.innerHTML=`<div class="thdetail"><button class="thback">‹ Thèmes</button>
+      <div class="thhead"><span class="ic">${t.icone}</span><div><h2>${esc(t.nom)}</h2><p>${progTxt(d,n)}${t.publie?"":" · non publié"}</p></div></div>
+      <div class="bar"><i style="width:${n?d/n*100:0}%"></i></div>
+      <div class="glist">${ids.length?ids.map((i,k)=>gridItem(i,r,`Grille ${k+1}`,k+1)).join(""):`<p class="gempty">Pas encore de grille dans ce thème.</p>`}</div></div>`;
+    el.querySelector(".thback").onclick=()=>openThemes(null);
+    el.querySelectorAll(".gitem").forEach(b=>b.onclick=()=>switchGame(+b.dataset.i));
+    el.querySelectorAll(".gretry").forEach(b=>b.onclick=()=>retenter(+b.dataset.i,{hasard:null}));
+  }
+  if(!RM()) el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:300,easing:"cubic-bezier(.2,.8,.3,1)"});
+}
+// « Suivante » : prochaine grille non terminée du même thème ; sinon retour au thème
+function nextInTheme(){
+  const id=grid.theme, ids=themeGrids(id), r=loadRes(), pos=ids.indexOf(gridIdx);
+  const i=ids.slice(pos+1).concat(ids.slice(0,pos)).find(j=>!r[GRIDS[j].id]);
+  closeSheet();
+  if(i===undefined){ toast(`Thème ${themeOf(id).nom} terminé ! 🎉`); setTimeout(()=>openThemes(id),250); return; }
+  setTimeout(()=>switchGame(i),250);
+}
+$("modes").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-m]"); if(!b||busy&&view==="jeu") return; buzz(8);
+  if(b.dataset.m==="themes"){ if(view!=="themes") openThemes(isTheme()?grid.theme:null); else openThemes(null); }
+  else if(view==="themes"&&!isTheme()&&gridIdx===dailyIdx) setView("jeu");
+  else if(gridIdx!==dailyIdx||view==="themes") switchGame(dailyIdx);
+});
 
 // Grille suivante : de préférence une grille non jouée de la même difficulté
 function nextGrid(){
@@ -1285,7 +1388,7 @@ let gridsReady;
 function boot(){
   gridsReady=loadGrids().then(g=>{
     if(!g){ if(!tuto) showLoadError(); return false; }
-    GRIDS=g; dailyIdx=pickDaily();
+    GRIDS=g; THEMES=g.themes||[]; dailyIdx=pickDaily();
     if(!tuto){   // le tutoriel n'a pas besoin des grilles : on ne l'interrompt pas
       newGame(dailyIdx);
       if(!RM()) [...$("grid").children].forEach((t,i)=>t.animate([{opacity:0,transform:"scale(.96)"},{opacity:1,transform:"none"}],
