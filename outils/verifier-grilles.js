@@ -25,8 +25,9 @@ if (!data || !Array.isArray(data.grilles)) {
 }
 if (!Number.isInteger(data.version)) err("racine", "« version » doit être un nombre entier");
 
-const ids = new Map(), nums = new Map(), jours = new Map();
+const ids = new Map(), nums = new Map(), jours = new Map(), inedites = new Map();
 let secretes = 0;
+const aujourdhui = new Date(); aujourdhui.setHours(0, 0, 0, 0);
 const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 const dateValide = s => {
   if (typeof s !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
@@ -57,7 +58,10 @@ data.grilles.forEach((g, n) => {
       if (g.difficulte === "goat") err(ou, "une grille GOAT ne peut pas être grille du jour (retire « jour »)");
       if (jours.has(g.jour)) err(ou, `deux grilles le même jour (${g.jour}) : déjà ${jours.get(g.jour)}`);
       else jours.set(g.jour, g.id);
-      if (g.toujours_visible !== true) secretes++;
+      if (g.toujours_visible !== true) { secretes++; inedites.set(g.jour, g.id); }
+      // Une grille libre (toujours visible) ne peut pas être une future grille du jour : on pourrait la jouer à l'avance
+      else if (g.jour >= iso(aujourdhui))
+        err(ou, `grille « toujours_visible » planifiée aujourd'hui ou plus tard (${g.jour}) : retire « jour » ou « toujours_visible »`);
     }
   }
 
@@ -84,12 +88,11 @@ data.grilles.forEach((g, n) => {
   });
 });
 
-// Calendrier : jours sans grille planifiée dans les 30 prochains jours
-const aujourdhui = new Date(); aujourdhui.setHours(0, 0, 0, 0);
+// Calendrier : jours sans grille inédite planifiée dans les 30 prochains jours
 const trous = [];
 for (let k = 0; k < 30; k++) {
   const d = new Date(aujourdhui); d.setDate(d.getDate() + k);
-  if (!jours.has(iso(d))) trous.push(iso(d));
+  if (!inedites.has(iso(d))) trous.push(iso(d));
 }
 
 const parDiff = DIFFICULTES.map(d => `${d} ${data.grilles.filter(g => g && g.difficulte === d).length}`).join(", ");
@@ -97,8 +100,8 @@ console.log(`Fichier : ${path.relative(process.cwd(), fichier) || fichier}`);
 console.log(`${data.grilles.length} grilles (${parDiff}), ${jours.size} planifiées, dont ${secretes} secrète(s) jusqu'à leur jour.`);
 if (avertissements.length) { console.log(`\n⚠ ${avertissements.length} avertissement(s) :`); avertissements.forEach(a => console.log("  - " + a)); }
 console.log(trous.length
-  ? `\n📅 ${trous.length} jour(s) sans grille planifiée dans les 30 prochains jours (une grille de secours sera choisie) :\n  ${trous.join(", ")}`
-  : "\n📅 Les 30 prochains jours ont tous une grille planifiée.");
+  ? `\n📅 ${trous.length} jour(s) sans grille inédite planifiée dans les 30 prochains jours (une « Grille bonus » sera proposée) :\n  ${trous.join(", ")}`
+  : "\n📅 Les 30 prochains jours ont tous une grille inédite planifiée.");
 if (erreurs.length) {
   console.log(`\n✗ ${erreurs.length} erreur(s) :`);
   erreurs.forEach(e => console.log("  - " + e));

@@ -6,7 +6,6 @@
       "num": 1,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-01",
       "groupes": [
         { "nom": "Planètes du système solaire", "mots": ["Mercure", "Saturne", "Uranus", "Neptune"], "anecdote": "Neptune a été découverte par le calcul avant d'être observée : en 1846, le Français Urbain Le Verrier a prédit sa position à partir des perturbations de l'orbite d'Uranus." },
         { "nom": "Gares parisiennes", "mots": ["Austerlitz", "Montparnasse", "Saint-Lazare", "Bercy"], "anecdote": "Claude Monet a peint en 1877 toute une série de tableaux de la gare Saint-Lazare, fasciné par la vapeur des locomotives." },
@@ -19,7 +18,6 @@
       "num": 2,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-02",
       "groupes": [
         { "nom": "Fleuves français", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "La Loire est le plus long fleuve de France, avec environ 1 000 km." },
         { "nom": "Personnages de Molière", "mots": ["Harpagon", "Tartuffe", "Alceste", "Scapin"], "anecdote": "« Tartuffe » a été interdit pendant cinq ans après sa première représentation en 1664, sous la pression des milieux religieux." },
@@ -32,7 +30,6 @@
       "num": 3,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-03",
       "groupes": [
         { "nom": "Dieux grecs", "mots": ["Zeus", "Apollon", "Poséidon", "Athéna"], "anecdote": "Selon le mythe, Athéna serait née adulte et tout armée, jaillissant du crâne de Zeus." },
         { "nom": "Maisons de luxe françaises", "mots": ["Chanel", "Dior", "Cartier", "Hermès"], "anecdote": "Hermès a été fondé en 1837 comme atelier de harnais et de selles pour chevaux." },
@@ -45,7 +42,6 @@
       "num": 4,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-04",
       "groupes": [
         { "nom": "Pâtes italiennes", "mots": ["Penne", "Farfalle", "Linguine", "Fusilli"], "anecdote": "« Farfalle » signifie « papillons » en italien." },
         { "nom": "Capitales africaines", "mots": ["Dakar", "Nairobi", "Accra", "Bamako"], "anecdote": "Dakar se trouve sur la presqu'île du Cap-Vert, qui abrite le point le plus à l'ouest de l'Afrique continentale." },
@@ -58,7 +54,6 @@
       "num": 5,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-05",
       "groupes": [
         { "nom": "Monnaies", "mots": ["Rouble", "Yen", "Peso", "Dinar"], "anecdote": "« Dinar » vient du latin denarius, le nom d'une pièce de monnaie romaine." },
         { "nom": "Chevaliers de la Table ronde", "mots": ["Lancelot", "Perceval", "Gauvain", "Galaad"], "anecdote": "C'est Chrétien de Troyes, auteur champenois du XIIe siècle, qui a introduit le Graal dans la littérature avec « Perceval ou le Conte du Graal »." },
@@ -71,7 +66,6 @@
       "num": 6,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-06",
       "groupes": [
         { "nom": "Fromages français", "mots": ["Comté", "Brie", "Cantal", "Munster"], "anecdote": "Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans." },
         { "nom": "Philosophes des Lumières", "mots": ["Voltaire", "Rousseau", "Diderot", "Montesquieu"], "anecdote": "Voltaire est un pseudonyme : il s'appelait François-Marie Arouet." },
@@ -84,7 +78,6 @@
       "num": 7,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-07",
       "groupes": [
         { "nom": "Prénoms des Beatles", "mots": ["John", "Paul", "George", "Ringo"], "anecdote": "Ringo Starr est un nom de scène : il s'appelle Richard Starkey." },
         { "nom": "Films de Luc Besson", "mots": ["Léon", "Nikita", "Lucy", "Le Grand Bleu"], "anecdote": "« Le Grand Bleu » s'inspire de la rivalité entre les plongeurs en apnée Jacques Mayol et Enzo Maiorca." },
@@ -97,7 +90,6 @@
       "num": 8,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-08",
       "groupes": [
         { "nom": "Dieux égyptiens", "mots": ["Râ", "Anubis", "Isis", "Osiris"], "anecdote": "Anubis, représenté avec une tête de chacal, était le dieu de l'embaumement et le protecteur des morts." },
         { "nom": "Cépages", "mots": ["Merlot", "Syrah", "Gamay", "Chardonnay"], "anecdote": "Le beaujolais est produit presque exclusivement à partir de gamay." },
@@ -110,7 +102,6 @@
       "num": 9,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-09",
       "groupes": [
         { "nom": "Volcans", "mots": ["Etna", "Vésuve", "Stromboli", "Fuji"], "anecdote": "L'éruption du Vésuve en l'an 79 a enseveli la ville romaine de Pompéi sous les cendres." },
         { "nom": "Îles françaises", "mots": ["Corse", "Ré", "Oléron", "Belle-Île"], "anecdote": "Oléron est la plus grande île de France métropolitaine après la Corse." },
@@ -123,7 +114,6 @@
       "num": 10,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-10",
       "groupes": [
         { "nom": "Présidents de la Ve République", "mots": ["Pompidou", "Giscard", "Mitterrand", "Chirac"], "anecdote": "Le Centre Pompidou porte le nom du président qui a lancé le projet. Il n'a ouvert qu'en 1977, après sa mort." },
         { "nom": "Châteaux de la Loire", "mots": ["Chambord", "Chenonceau", "Amboise", "Blois"], "anecdote": "Léonard de Vinci a passé ses dernières années à Amboise, où il est enterré." },
@@ -136,7 +126,6 @@
       "num": 11,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-11",
       "groupes": [
         { "nom": "Les Trois Mousquetaires", "mots": ["Athos", "Porthos", "Aramis", "d'Artagnan"], "anecdote": "d'Artagnan a vraiment existé : Charles de Batz de Castelmore était officier des mousquetaires sous Louis XIV." },
         { "nom": "Monstres grecs", "mots": ["Méduse", "Hydre", "Minotaure", "Cerbère"], "anecdote": "Cerbère, le chien à trois têtes, gardait l'entrée des Enfers." },
@@ -149,7 +138,6 @@
       "num": 12,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-12",
       "groupes": [
         { "nom": "Arts martiaux", "mots": ["Judo", "Karaté", "Aïkido", "Sambo"], "anecdote": "Le sambo a été créé en URSS. Son nom est un acronyme russe qui signifie « autodéfense sans armes »." },
         { "nom": "Tournois du Grand Chelem", "mots": ["Roland-Garros", "Wimbledon", "Flushing Meadows", "Melbourne"], "anecdote": "Roland Garros était un aviateur : en 1913, il a été le premier à traverser la Méditerranée en avion." },
@@ -162,7 +150,6 @@
       "num": 13,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-13",
       "groupes": [
         { "nom": "Races de chiens", "mots": ["Caniche", "Labrador", "Dalmatien", "Beagle"], "anecdote": "Le dalmatien doit son nom à la Dalmatie, une région côtière de l'actuelle Croatie." },
         { "nom": "Agrumes", "mots": ["Citron", "Pamplemousse", "Mandarine", "Clémentine"], "anecdote": "La clémentine doit son nom au frère Clément Rodier, qui l'aurait obtenue en Algérie au début du XXe siècle." },
@@ -175,7 +162,6 @@
       "num": 14,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-14",
       "groupes": [
         { "nom": "Types de nuages", "mots": ["Cirrus", "Cumulus", "Stratus", "Nimbus"], "anecdote": "Le cumulonimbus, le nuage d'orage, peut s'élever à plus de 10 km d'altitude." },
         { "nom": "Univers de Harry Potter", "mots": ["Poudlard", "Moldu", "Quidditch", "Détraqueur"], "anecdote": "Le mot « moldu » a été inventé par le traducteur français Jean-François Ménard pour traduire l'anglais « muggle »." },
@@ -188,7 +174,6 @@
       "num": 15,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-15",
       "groupes": [
         { "nom": "Rois de France", "mots": ["Clovis", "Dagobert", "Philippe", "Henri"], "anecdote": "Dagobert Ier est surtout connu grâce à « Le bon roi Dagobert », une chanson moqueuse écrite plus de mille ans après sa mort." },
         { "nom": "Mots d'origine japonaise", "mots": ["Tsunami", "Karaoké", "Emoji", "Kamikaze"], "anecdote": "« Emoji » ne vient pas de l'anglais « emotion » : c'est un mot japonais formé de e (image) et moji (caractère)." },
@@ -213,7 +198,6 @@
       "num": 17,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-16",
       "groupes": [
         { "nom": "Cocktails", "mots": ["Mojito", "Spritz", "Margarita", "Daiquiri"], "anecdote": "Le daiquiri tient son nom d'une plage et d'une mine de fer de Cuba, près de Santiago." },
         { "nom": "Sauces", "mots": ["Béarnaise", "Pesto", "Aïoli", "Béchamel"], "anecdote": "La béchamel devrait son nom à Louis de Béchameil, maître d'hôtel de Louis XIV." },
@@ -226,7 +210,6 @@
       "num": 18,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-17",
       "groupes": [
         { "nom": "Entreprises nommées d'après leur fondateur", "mots": ["Peugeot", "Michelin", "Renault", "Citroën"], "anecdote": "Le Bibendum de Michelin, créé en 1898, est l'une des plus anciennes mascottes publicitaires au monde." },
         { "nom": "Empereurs romains", "mots": ["Néron", "Auguste", "Trajan", "Hadrien"], "anecdote": "Hadrien a fait construire un mur de 117 km à travers la Grande-Bretagne pour marquer la frontière de l'Empire." },
@@ -239,7 +222,6 @@
       "num": 19,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-18",
       "groupes": [
         { "nom": "Océans", "mots": ["Atlantique", "Pacifique", "Indien", "Arctique"], "anecdote": "L'océan Pacifique est plus vaste que l'ensemble des terres émergées réunies." },
         { "nom": "Pâtisseries françaises", "mots": ["Éclair", "Macaron", "Mille-feuille", "Madeleine"], "anecdote": "La madeleine est devenue le symbole du souvenir grâce à Marcel Proust, dans « Du côté de chez Swann »." },
@@ -264,7 +246,6 @@
       "num": 21,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-19",
       "groupes": [
         { "nom": "Compositeurs", "mots": ["Bach", "Mozart", "Chopin", "Liszt"], "anecdote": "Frédéric Chopin, né en Pologne d'un père français, a passé la seconde moitié de sa vie à Paris." },
         { "nom": "Personnages de Tintin", "mots": ["Haddock", "Tournesol", "Castafiore", "Rastapopoulos"], "anecdote": "Le capitaine Haddock n'apparaît qu'au neuvième album, « Le Crabe aux pinces d'or », en 1941." },
@@ -277,7 +258,6 @@
       "num": 22,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-20",
       "groupes": [
         { "nom": "Sommets", "mots": ["Mont Blanc", "Everest", "Kilimandjaro", "Aconcagua"], "anecdote": "L'Aconcagua, en Argentine, culmine à près de 6 960 m : c'est le plus haut sommet hors d'Asie." },
         { "nom": "Modèles Renault", "mots": ["Zoé", "Twingo", "Mégane", "Clio"], "anecdote": "La Renault 4, la fameuse « 4L », a été produite à plus de 8 millions d'exemplaires." },
@@ -302,7 +282,6 @@
       "num": 24,
       "difficulte": "facile",
       "toujours_visible": true,
-      "jour": "2026-10-21",
       "groupes": [
         { "nom": "Animaux d'Australie", "mots": ["Kangourou", "Koala", "Wombat", "Ornithorynque"], "anecdote": "L'ornithorynque est un mammifère… qui pond des œufs." },
         { "nom": "Villes italiennes", "mots": ["Rome", "Naples", "Turin", "Venise"], "anecdote": "Turin a été la première capitale de l'Italie unifiée, de 1861 à 1865." },
@@ -315,7 +294,6 @@
       "num": 25,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-22",
       "groupes": [
         { "nom": "Jeux de cartes", "mots": ["Belote", "Tarot", "Poker", "Bridge"], "anecdote": "Le jeu de tarot compte 78 cartes : les 56 cartes classiques (avec des cavaliers), 21 atouts et l'Excuse." },
         { "nom": "Signes du zodiaque", "mots": ["Bélier", "Balance", "Vierge", "Verseau"], "anecdote": "Le Soleil traverse aussi une 13e constellation, Ophiuchus (le Serpentaire), absente de l'horoscope." },
@@ -328,7 +306,6 @@
       "num": 26,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-23",
       "groupes": [
         { "nom": "Onomatopées", "mots": ["Boum", "Miaou", "Atchoum", "Plouf"], "anecdote": "Les onomatopées changent selon les langues : le coq fait « cocorico » en français, mais « cock-a-doodle-doo » en anglais." },
         { "nom": "Personnages d'Astérix", "mots": ["Obélix", "Panoramix", "Idéfix", "Assurancetourix"], "anecdote": "Idéfix n'apparaît qu'à la cinquième aventure, « Le Tour de Gaule d'Astérix », parue en 1963." },
@@ -353,7 +330,6 @@
       "num": 28,
       "difficulte": "moyen",
       "toujours_visible": true,
-      "jour": "2026-10-24",
       "groupes": [
         { "nom": "Fruits exotiques", "mots": ["Mangue", "Papaye", "Litchi", "Goyave"], "anecdote": "Le litchi est originaire du sud de la Chine, où on le cultive depuis plus de 2 000 ans." },
         { "nom": "Épices", "mots": ["Cannelle", "Muscade", "Safran", "Curcuma"], "anecdote": "Le safran est l'épice la plus chère du monde : il faut entre 150 000 et 200 000 fleurs pour en obtenir 1 kg." },
@@ -366,7 +342,6 @@
       "num": 29,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-25",
       "groupes": [
         { "nom": "Présidents américains", "mots": ["Lincoln", "Kennedy", "Jefferson", "Obama"], "anecdote": "En 1803, Thomas Jefferson a acheté la Louisiane à la France de Napoléon, doublant la superficie des États-Unis." },
         { "nom": "Langages informatiques", "mots": ["Python", "Java", "Swift", "Ruby"], "anecdote": "Python ne doit rien au serpent : son créateur, Guido van Rossum, l'a nommé d'après les Monty Python." },
@@ -391,7 +366,6 @@
       "num": 31,
       "difficulte": "difficile",
       "toujours_visible": true,
-      "jour": "2026-10-26",
       "groupes": [
         { "nom": "Villes de Belgique", "mots": ["Liège", "Namur", "Gand", "Bruges"], "anecdote": "Avec ses nombreux canaux, Bruges est surnommée la « Venise du Nord »." },
         { "nom": "Personnages de Lucky Luke", "mots": ["Rantanplan", "Averell", "Jolly Jumper", "Ma Dalton"], "anecdote": "En 1983, Lucky Luke a arrêté de fumer : sa cigarette a été remplacée par un brin d'herbe." },
@@ -415,7 +389,7 @@
       "id": "g033",
       "num": 33,
       "difficulte": "facile",
-      "jour": "2026-10-27",
+      "jour": "2026-10-01",
       "groupes": [
         { "nom": "Sports collectifs", "mots": ["Football", "Rugby", "Handball", "Volley"], "anecdote": "Le volley-ball a été inventé en 1895 aux États-Unis par William Morgan, comme une alternative plus douce au basket." },
         { "nom": "Mammifères marins", "mots": ["Dauphin", "Baleine", "Phoque", "Morse"], "anecdote": "Le morse se sert de ses longues défenses pour se hisser hors de l'eau sur la glace." },
@@ -427,7 +401,7 @@
       "id": "g034",
       "num": 34,
       "difficulte": "moyen",
-      "jour": "2026-10-28",
+      "jour": "2026-10-02",
       "groupes": [
         { "nom": "Fêtes du calendrier", "mots": ["Noël", "Pâques", "Toussaint", "Halloween"], "anecdote": "La Toussaint, le 1er novembre, célèbre tous les saints. C'est le 2 novembre qu'on commémore les défunts." },
         { "nom": "Instruments à percussion", "mots": ["Tambour", "Timbale", "Xylophone", "Triangle"], "anecdote": "« Xylophone » vient du grec xylon, « bois », et phônê, « son » : littéralement, le « son du bois »." },
@@ -439,7 +413,7 @@
       "id": "g035",
       "num": 35,
       "difficulte": "difficile",
-      "jour": "2026-10-29",
+      "jour": "2026-10-03",
       "groupes": [
         { "nom": "Jeux de société", "mots": ["Monopoly", "Scrabble", "Cluedo", "Risk"], "anecdote": "Le Monopoly descend d'un jeu créé en 1904 par l'Américaine Lizzie Magie… pour dénoncer les dangers des monopoles." },
         { "nom": "Inventions françaises", "mots": ["Stéthoscope", "Montgolfière", "Cinématographe", "Pasteurisation"], "anecdote": "Le stéthoscope a été inventé en 1816 par René Laennec. Au départ, il roulait simplement une feuille de papier en cylindre pour écouter le cœur." },
@@ -451,7 +425,7 @@
       "id": "g036",
       "num": 36,
       "difficulte": "facile",
-      "jour": "2026-10-30",
+      "jour": "2026-10-04",
       "groupes": [
         { "nom": "Moyens de transport", "mots": ["Train", "Avion", "Métro", "Tramway"], "anecdote": "Le premier métro du monde a ouvert à Londres en 1863." },
         { "nom": "Insectes", "mots": ["Fourmi", "Abeille", "Coccinelle", "Libellule"], "anecdote": "La coccinelle est l'alliée des jardiniers : une seule peut dévorer des dizaines de pucerons par jour." },
@@ -463,7 +437,7 @@
       "id": "g037",
       "num": 37,
       "difficulte": "moyen",
-      "jour": "2026-10-31",
+      "jour": "2026-10-05",
       "groupes": [
         { "nom": "Organes du corps", "mots": ["Foie", "Poumon", "Rein", "Rate"], "anecdote": "Le foie peut se régénérer : même après l'ablation d'une grande partie, il retrouve presque sa taille d'origine." },
         { "nom": "Couleurs des cartes à jouer", "mots": ["Pique", "Trèfle", "Carreau", "Cœur"], "anecdote": "Les couleurs pique, cœur, carreau et trèfle sont une invention française de la fin du XVe siècle." },
@@ -475,7 +449,7 @@
       "id": "g038",
       "num": 38,
       "difficulte": "difficile",
-      "jour": "2026-11-01",
+      "jour": "2026-10-06",
       "groupes": [
         { "nom": "Artistes de la Renaissance italienne", "mots": ["Raphaël", "Titien", "Botticelli", "Michel-Ange"], "anecdote": "Michel-Ange a peint le plafond de la chapelle Sixtine en environ quatre ans, de 1508 à 1512." },
         { "nom": "Écrivains russes", "mots": ["Tolstoï", "Dostoïevski", "Tchekhov", "Pouchkine"], "anecdote": "Pouchkine, le grand poète national russe, est mort en 1837 des suites d'un duel." },
@@ -487,7 +461,7 @@
       "id": "g039",
       "num": 39,
       "difficulte": "facile",
-      "jour": "2026-11-02",
+      "jour": "2026-10-07",
       "groupes": [
         { "nom": "Animaux de la ferme", "mots": ["Vache", "Cochon", "Mouton", "Chèvre"], "anecdote": "Le cochon ne transpire presque pas : il se roule dans la boue pour se rafraîchir." },
         { "nom": "Pays nordiques", "mots": ["Norvège", "Suède", "Finlande", "Danemark"], "anecdote": "La Finlande compte environ 188 000 lacs, d'où son surnom de « pays des mille lacs »." },
@@ -499,7 +473,7 @@
       "id": "g040",
       "num": 40,
       "difficulte": "moyen",
-      "jour": "2026-11-03",
+      "jour": "2026-10-08",
       "groupes": [
         { "nom": "Bébés animaux", "mots": ["Poussin", "Agneau", "Chaton", "Poulain"], "anecdote": "Le petit du lièvre s'appelle le levraut, et celui du cerf, le faon." },
         { "nom": "Roches", "mots": ["Granit", "Basalte", "Marbre", "Calcaire"], "anecdote": "Le marbre est un calcaire transformé par la chaleur et la pression au fond de la Terre." },
@@ -511,7 +485,7 @@
       "id": "g041",
       "num": 41,
       "difficulte": "difficile",
-      "jour": "2026-11-04",
+      "jour": "2026-10-09",
       "groupes": [
         { "nom": "Capitales européennes", "mots": ["Lisbonne", "Varsovie", "Prague", "Budapest"], "anecdote": "Budapest est née en 1873 de la fusion de trois villes : Buda, Óbuda et Pest." },
         { "nom": "Pièces de Shakespeare", "mots": ["Hamlet", "Othello", "Macbeth", "Le Roi Lear"], "anecdote": "« Hamlet » est la plus longue pièce de Shakespeare." },
@@ -523,7 +497,7 @@
       "id": "g042",
       "num": 42,
       "difficulte": "moyen",
-      "jour": "2026-11-06",
+      "jour": "2026-10-11",
       "groupes": [
         { "nom": "Fruits rouges", "mots": ["Fraise", "Framboise", "Groseille", "Myrtille"], "anecdote": "Au sens botanique, la framboise n'est pas une baie : c'est un ensemble de petits fruits soudés, les drupéoles." },
         { "nom": "Sports de raquette", "mots": ["Tennis", "Badminton", "Squash", "Padel"], "anecdote": "Lors d'un smash, un volant de badminton peut dépasser 400 km/h : c'est l'objet le plus rapide des sports de raquette." },
@@ -535,7 +509,7 @@
       "id": "g043",
       "num": 43,
       "difficulte": "difficile",
-      "jour": "2026-11-07",
+      "jour": "2026-10-12",
       "groupes": [
         { "nom": "Termes de rugby", "mots": ["Mêlée", "Essai", "Touche", "Drop"], "anecdote": "L'essai s'appelle ainsi car, à l'origine, il ne rapportait aucun point : il donnait seulement le droit d'« essayer » de transformer." },
         { "nom": "Vents", "mots": ["Mistral", "Tramontane", "Sirocco", "Foehn"], "anecdote": "Le mistral peut souffler à plus de 100 km/h dans la vallée du Rhône." },
@@ -547,7 +521,7 @@
       "id": "g044",
       "num": 44,
       "difficulte": "facile",
-      "jour": "2026-11-05",
+      "jour": "2026-10-10",
       "groupes": [
         { "nom": "Vêtements", "mots": ["Jupe", "Chemise", "Manteau", "Chaussette"], "anecdote": "Le mot « chemise » vient du latin camisia." },
         { "nom": "Métiers", "mots": ["Boulanger", "Plombier", "Facteur", "Pompier"], "anecdote": "En France, environ quatre pompiers sur cinq sont des volontaires." },
