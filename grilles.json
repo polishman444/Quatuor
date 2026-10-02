@@ -27,7 +27,7 @@
       "theme": "quotidien",
       "toujours_visible": true,
       "groupes": [
-        { "nom": "Fleuves français", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "La Loire est le plus long fleuve de France, avec environ 1 000 km." },
+        { "nom": "Fleuves français", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "La Loire est le plus long fleuve de France, avec environ 1 000 km." },
         { "nom": "Personnages de Molière", "mots": ["Harpagon", "Tartuffe", "Alceste", "Scapin"], "anecdote": "« Tartuffe » a été interdit pendant cinq ans après sa première représentation en 1664, sous la pression des milieux religieux." },
         { "nom": "Mots venus de l'arabe", "mots": ["Algèbre", "Café", "Sucre", "Zéro"], "anecdote": "« Zéro » et « chiffre » viennent du même mot arabe, ṣifr, qui signifie « vide »." },
         { "nom": "Éléments nommés d'après un pays", "mots": ["Francium", "Germanium", "Polonium", "Gallium"], "anecdote": "Le gallium a été découvert en 1875 par le Français Lecoq de Boisbaudran, qui l'a nommé d'après la Gaule, Gallia en latin." }
@@ -79,7 +79,7 @@
       "theme": "quotidien",
       "toujours_visible": true,
       "groupes": [
-        { "nom": "Fromages français", "mots": ["Comté", "Brie", "Cantal", "Munster"], "anecdote": "Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans." },
+        { "nom": "Fromages français", "mots": ["Comté", "Brie", "Cantal", "Munster"], "anecdote": "Le cantal serait l'un des plus vieux fromages de France : Pline l'Ancien en parlait déjà il y a près de 2 000 ans." },
         { "nom": "Philosophes des Lumières", "mots": ["Voltaire", "Rousseau", "Diderot", "Montesquieu"], "anecdote": "Voltaire est un pseudonyme : il s'appelait François-Marie Arouet." },
         { "nom": "Os du corps humain", "mots": ["Fémur", "Tibia", "Radius", "Humérus"], "anecdote": "Le fémur est l'os le plus long du corps humain." },
         { "nom": "Lunes du système solaire", "mots": ["Titan", "Europe", "Io", "Callisto"], "anecdote": "Titan, la plus grande lune de Saturne, est la seule lune connue à posséder une atmosphère épaisse." }
@@ -287,7 +287,7 @@
       "theme": "quotidien",
       "toujours_visible": true,
       "groupes": [
-        { "nom": "Sommets", "mots": ["Mont Blanc", "Everest", "Kilimandjaro", "Aconcagua"], "anecdote": "L'Aconcagua, en Argentine, culmine à près de 6 960 m : c'est le plus haut sommet hors d'Asie." },
+        { "nom": "Sommets", "mots": ["Mont Blanc", "Everest", "Kilimandjaro", "Aconcagua"], "anecdote": "L'Aconcagua, en Argentine, culmine à près de 6 960 m : c'est le plus haut sommet hors d'Asie." },
         { "nom": "Modèles Renault", "mots": ["Zoé", "Twingo", "Mégane", "Clio"], "anecdote": "La Renault 4, la fameuse « 4L », a été produite à plus de 8 millions d'exemplaires." },
         { "nom": "Types de vers", "mots": ["Alexandrin", "Octosyllabe", "Décasyllabe", "Hexamètre"], "anecdote": "L'alexandrin, vers de 12 syllabes, doit son nom au « Roman d'Alexandre », un poème du XIIe siècle." },
         { "nom": "Muses grecques", "mots": ["Uranie", "Thalie", "Calliope", "Euterpe"], "anecdote": "Les neuf Muses sont filles de Zeus et de Mnémosyne, la déesse de la mémoire. Calliope, muse de la poésie épique, était considérée comme la première d'entre elles." }
@@ -352,7 +352,7 @@
       "theme": "quotidien",
       "toujours_visible": true,
       "groupes": [
-        { "nom": "Capitales d'Amérique du Sud", "mots": ["Quito", "Lima", "Bogota", "Caracas"], "anecdote": "À environ 2 850 m d'altitude, Quito est la capitale officielle la plus haute du monde. La Paz, plus haute, n'est que le siège du gouvernement bolivien." },
+        { "nom": "Capitales d'Amérique du Sud", "mots": ["Quito", "Lima", "Bogota", "Caracas"], "anecdote": "À environ 2 850 m d'altitude, Quito est la capitale officielle la plus haute du monde. La Paz, plus haute, n'est que le siège du gouvernement bolivien." },
         { "nom": "Alphabet radio de l'OTAN", "mots": ["Alpha", "Hotel", "Tango", "Victor"], "anecdote": "Dans l'alphabet de l'OTAN, « Juliett » s'écrit avec deux T pour que les francophones n'oublient pas de prononcer le T final." },
         { "nom": "Acronymes devenus des mots", "mots": ["Laser", "Radar", "Sida", "Ovni"], "anecdote": "« Radar » est l'acronyme anglais de radio detection and ranging, « détection et télémétrie par radio »." },
         { "nom": "Poissons", "mots": ["Bar", "Sole", "Lieu", "Colin"], "anecdote": "Le bar de Méditerranée est souvent appelé « loup » sur la côte." }
@@ -365,8 +365,8 @@
       "theme": "quotidien",
       "toujours_visible": true,
       "groupes": [
-        { "nom": "Fruits exotiques", "mots": ["Mangue", "Papaye", "Litchi", "Goyave"], "anecdote": "Le litchi est originaire du sud de la Chine, où on le cultive depuis plus de 2 000 ans." },
-        { "nom": "Épices", "mots": ["Cannelle", "Muscade", "Safran", "Curcuma"], "anecdote": "Le safran est l'épice la plus chère du monde : il faut entre 150 000 et 200 000 fleurs pour en obtenir 1 kg." },
+        { "nom": "Fruits exotiques", "mots": ["Mangue", "Papaye", "Litchi", "Goyave"], "anecdote": "Le litchi est originaire du sud de la Chine, où on le cultive depuis plus de 2 000 ans." },
+        { "nom": "Épices", "mots": ["Cannelle", "Muscade", "Safran", "Curcuma"], "anecdote": "Le safran est l'épice la plus chère du monde : il faut entre 150 000 et 200 000 fleurs pour en obtenir 1 kg." },
         { "nom": "Dieux nordiques", "mots": ["Odin", "Thor", "Loki", "Freyja"], "anecdote": "Le mot anglais « Thursday » (jeudi) signifie « jour de Thor »." },
         { "nom": "Prix Nobel de littérature français", "mots": ["Camus", "Sartre", "Gide", "Modiano"], "anecdote": "Jean-Paul Sartre a refusé le prix Nobel de littérature en 1964." }
       ]
@@ -509,7 +509,7 @@
       "jour": "2026-10-07",
       "groupes": [
         { "nom": "Animaux de la ferme", "mots": ["Vache", "Cochon", "Mouton", "Chèvre"], "anecdote": "Le cochon ne transpire presque pas : il se roule dans la boue pour se rafraîchir." },
-        { "nom": "Pays nordiques", "mots": ["Norvège", "Suède", "Finlande", "Danemark"], "anecdote": "La Finlande compte environ 188 000 lacs, d'où son surnom de « pays des mille lacs »." },
+        { "nom": "Pays nordiques", "mots": ["Norvège", "Suède", "Finlande", "Danemark"], "anecdote": "La Finlande compte environ 188 000 lacs, d'où son surnom de « pays des mille lacs »." },
         { "nom": "Jeux de récré", "mots": ["Marelle", "Billes", "Chat", "Élastique"], "anecdote": "On joue aux billes depuis l'Antiquité : on en aurait retrouvé dans des tombes de l'Égypte ancienne." },
         { "nom": "Planètes naines", "mots": ["Pluton", "Cérès", "Éris", "Makémaké"], "anecdote": "Pluton a perdu son statut de planète en 2006 pour devenir une planète naine." }
       ]
@@ -610,10 +610,10 @@
       "theme": "geographie",
       "titre": "France et voisins",
       "groupes": [
-        { "nom": "Fleuves de France", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "" },
-        { "nom": "Capitales européennes", "mots": ["Madrid", "Lisbonne", "Berlin", "Vienne"], "anecdote": "La Vienne est aussi une rivière française, affluent de la Loire." },
-        { "nom": "Massifs montagneux français", "mots": ["Alpes", "Pyrénées", "Vosges", "Jura"], "anecdote": "" },
-        { "nom": "Îles françaises", "mots": ["Corse", "Ré", "Oléron", "Belle-Île"], "anecdote": "" }
+        { "nom": "Fleuves de France", "mots": ["Loire", "Seine", "Garonne", "Rhône"], "anecdote": "La Loire est le plus long fleuve entièrement français, avec environ 1 000 km." },
+        { "nom": "Capitales européennes", "mots": ["Madrid", "Lisbonne", "Berlin", "Vienne"], "anecdote": "Piège : la Vienne est aussi une rivière française, affluent de la Loire." },
+        { "nom": "Massifs montagneux français", "mots": ["Alpes", "Pyrénées", "Vosges", "Jura"], "anecdote": "Le Jura a donné son nom à une période géologique : le Jurassique." },
+        { "nom": "Îles françaises", "mots": ["Corse", "Ré", "Oléron", "Belle-Île"], "anecdote": "La Corse est la plus grande île de France métropolitaine." }
       ]
     },
     {
@@ -623,10 +623,10 @@
       "theme": "geographie",
       "titre": "Le tour du monde",
       "groupes": [
-        { "nom": "Pays d'Amérique du Sud", "mots": ["Pérou", "Chili", "Colombie", "Bolivie"], "anecdote": "" },
-        { "nom": "Déserts", "mots": ["Sahara", "Gobi", "Atacama", "Kalahari"], "anecdote": "L'Atacama, au Chili, est le désert non polaire le plus aride du monde." },
-        { "nom": "Océans", "mots": ["Pacifique", "Atlantique", "Indien", "Arctique"], "anecdote": "" },
-        { "nom": "Sommets célèbres", "mots": ["Everest", "Kilimandjaro", "Mont Blanc", "Aconcagua"], "anecdote": "" }
+        { "nom": "Pays d'Amérique du Sud", "mots": ["Pérou", "Chili", "Colombie", "Bolivie"], "anecdote": "La Bolivie a deux capitales : Sucre (constitutionnelle) et La Paz (siège du gouvernement)." },
+        { "nom": "Déserts", "mots": ["Sahara", "Gobi", "Atacama", "Kalahari"], "anecdote": "L'Atacama est le désert non polaire le plus aride du monde." },
+        { "nom": "Océans", "mots": ["Pacifique", "Atlantique", "Indien", "Arctique"], "anecdote": "Le Pacifique couvre à lui seul environ un tiers de la surface de la Terre." },
+        { "nom": "Sommets célèbres", "mots": ["Everest", "Kilimandjaro", "Mont Blanc", "Aconcagua"], "anecdote": "L'Aconcagua (6 961 m) est le plus haut sommet des Amériques." }
       ]
     },
     {
@@ -636,10 +636,10 @@
       "theme": "geographie",
       "titre": "Une capitale par continent",
       "groupes": [
-        { "nom": "Capitales d'Afrique", "mots": ["Dakar", "Nairobi", "Rabat", "Accra"], "anecdote": "" },
-        { "nom": "Capitales d'Asie", "mots": ["Tokyo", "Séoul", "Bangkok", "Hanoï"], "anecdote": "" },
+        { "nom": "Capitales d'Afrique", "mots": ["Dakar", "Nairobi", "Rabat", "Accra"], "anecdote": "Dakar est la capitale la plus à l'ouest de l'Afrique continentale." },
+        { "nom": "Capitales d'Asie", "mots": ["Tokyo", "Séoul", "Bangkok", "Hanoï"], "anecdote": "Le nom « Séoul » signifie simplement « la capitale » en coréen." },
         { "nom": "Capitales d'Amérique", "mots": ["Ottawa", "Lima", "Bogota", "Mexico"], "anecdote": "Ottawa a été choisie comme capitale du Canada par la reine Victoria en 1857." },
-        { "nom": "Capitales d'Europe", "mots": ["Oslo", "Athènes", "Varsovie", "Dublin"], "anecdote": "" }
+        { "nom": "Capitales d'Europe", "mots": ["Oslo", "Athènes", "Varsovie", "Dublin"], "anecdote": "Oslo s'est appelée Christiania de 1624 à 1925." }
       ]
     },
     {
@@ -649,10 +649,10 @@
       "theme": "geographie",
       "titre": "Capitales et compagnie",
       "groupes": [
-        { "nom": "Grandes villes jamais capitales d'un pays", "mots": ["Sydney", "Casablanca", "Johannesburg", "Mumbai"], "anecdote": "" },
-        { "nom": "Anciennes capitales", "mots": ["Kyoto", "Saint-Pétersbourg", "Rio de Janeiro", "Istanbul"], "anecdote": "" },
-        { "nom": "Capitales construites de toutes pièces", "mots": ["Brasilia", "Canberra", "Islamabad", "Abuja"], "anecdote": "Brasilia a été inaugurée en 1960 pour remplacer Rio de Janeiro comme capitale du Brésil." },
-        { "nom": "Capitales sur le Danube", "mots": ["Vienne", "Bratislava", "Budapest", "Belgrade"], "anecdote": "" }
+        { "nom": "Grandes villes jamais capitales d'un pays", "mots": ["Sydney", "Casablanca", "Johannesburg", "Mumbai"], "anecdote": "Canberra a été créée pour mettre fin à la rivalité entre Sydney et Melbourne." },
+        { "nom": "Anciennes capitales", "mots": ["Kyoto", "Saint-Pétersbourg", "Rio de Janeiro", "Istanbul"], "anecdote": "Kyoto a été la capitale impériale du Japon pendant plus de mille ans." },
+        { "nom": "Capitales construites de toutes pièces", "mots": ["Brasilia", "Canberra", "Islamabad", "Abuja"], "anecdote": "Brasilia a été inaugurée en 1960 pour remplacer Rio de Janeiro." },
+        { "nom": "Capitales sur le Danube", "mots": ["Vienne", "Bratislava", "Budapest", "Belgrade"], "anecdote": "Le Danube traverse quatre capitales, un record mondial pour un fleuve." }
       ]
     },
     {
@@ -660,12 +660,12 @@
       "num": 55,
       "difficulte": "moyen",
       "theme": "geographie",
-      "titre": "Coins du globe",
+      "titre": "Pays par position",
       "groupes": [
-        { "nom": "Pays sans accès à la mer", "mots": ["Suisse", "Bolivie", "Mongolie", "Tchad"], "anecdote": "" },
-        { "nom": "Pays insulaires", "mots": ["Islande", "Madagascar", "Sri Lanka", "Cuba"], "anecdote": "" },
+        { "nom": "Pays sans accès à la mer", "mots": ["Suisse", "Bolivie", "Mongolie", "Tchad"], "anecdote": "Bien que sans accès à la mer, la Bolivie a toujours une marine, qui navigue sur le lac Titicaca." },
+        { "nom": "Pays insulaires", "mots": ["Islande", "Madagascar", "Sri Lanka", "Cuba"], "anecdote": "Madagascar est la quatrième plus grande île du monde." },
         { "nom": "Pays traversés par l'équateur", "mots": ["Équateur", "Kenya", "Gabon", "Indonésie"], "anecdote": "L'Équateur doit son nom à la ligne imaginaire qui le traverse." },
-        { "nom": "Pays traversés par les Andes", "mots": ["Chili", "Argentine", "Pérou", "Venezuela"], "anecdote": "" }
+        { "nom": "Pays traversés par les Andes", "mots": ["Chili", "Argentine", "Pérou", "Venezuela"], "anecdote": "Les Andes forment la plus longue chaîne de montagnes continentale du monde, environ 7 000 km." }
       ]
     },
     {
@@ -675,10 +675,10 @@
       "theme": "geographie",
       "titre": "Made in USA",
       "groupes": [
-        { "nom": "États au nom d'origine espagnole", "mots": ["Floride", "Nevada", "Colorado", "Montana"], "anecdote": "" },
-        { "nom": "Villes américaines au nom français", "mots": ["Détroit", "Saint-Louis", "Bâton-Rouge", "Des Moines"], "anecdote": "" },
+        { "nom": "États au nom d'origine espagnole", "mots": ["Floride", "Nevada", "Colorado", "Montana"], "anecdote": "« Nevada » signifie « enneigée » en espagnol." },
+        { "nom": "Villes américaines au nom français", "mots": ["Détroit", "Saint-Louis", "Bâton-Rouge", "Des Moines"], "anecdote": "Détroit vient du mot français « détroit » : la ville est sur le passage entre deux lacs." },
         { "nom": "États nommés d'après une personne", "mots": ["Géorgie", "Virginie", "Washington", "Louisiane"], "anecdote": "La Louisiane a été nommée en l'honneur de Louis XIV." },
-        { "nom": "Grands Lacs", "mots": ["Michigan", "Érié", "Huron", "Ontario"], "anecdote": "" }
+        { "nom": "Grands Lacs", "mots": ["Michigan", "Érié", "Huron", "Ontario"], "anecdote": "Le lac Supérieur, absent de la grille, est le plus grand des Grands Lacs." }
       ]
     },
     {
@@ -689,9 +689,9 @@
       "titre": "Frontières et micro-États",
       "groupes": [
         { "nom": "Pays frontaliers de la France (outre-mer compris)", "mots": ["Brésil", "Suriname", "Pays-Bas", "Andorre"], "anecdote": "La plus longue frontière terrestre de la France est celle avec le Brésil, via la Guyane." },
-        { "nom": "Les 4 plus petits pays du monde", "mots": ["Vatican", "Monaco", "Nauru", "Tuvalu"], "anecdote": "" },
-        { "nom": "Pays dont la capitale porte le même nom", "mots": ["Djibouti", "Koweït", "Luxembourg", "Panama"], "anecdote": "" },
-        { "nom": "Pays traversés par le Danube", "mots": ["Slovaquie", "Hongrie", "Serbie", "Roumanie"], "anecdote": "" }
+        { "nom": "Les 4 plus petits pays du monde", "mots": ["Vatican", "Monaco", "Nauru", "Tuvalu"], "anecdote": "Le Vatican fait moins d'un demi-kilomètre carré." },
+        { "nom": "Pays dont la capitale porte le même nom", "mots": ["Djibouti", "Koweït", "Luxembourg", "Panama"], "anecdote": "Piège : Monaco et le Vatican ont aussi une capitale du même nom, mais ils vont dans les plus petits pays." },
+        { "nom": "Pays traversés par le Danube", "mots": ["Slovaquie", "Hongrie", "Serbie", "Roumanie"], "anecdote": "Le Danube traverse ou longe dix pays, un record mondial." }
       ]
     },
     {
@@ -699,12 +699,12 @@
       "num": 58,
       "difficulte": "difficile",
       "theme": "geographie",
-      "titre": "Au fil de l'eau",
+      "titre": "Fleuves du monde",
       "groupes": [
-        { "nom": "Fleuves qui se jettent dans la Méditerranée", "mots": ["Nil", "Rhône", "Èbre", "Pô"], "anecdote": "" },
-        { "nom": "Fleuves d'Afrique australe", "mots": ["Zambèze", "Orange", "Limpopo", "Okavango"], "anecdote": "" },
-        { "nom": "Fleuves qui ont donné leur nom à un pays", "mots": ["Niger", "Congo", "Paraguay", "Jourdain"], "anecdote": "Le Paraguay et l'Uruguay tirent tous deux leur nom d'un fleuve." },
-        { "nom": "Fleuves de Russie", "mots": ["Volga", "Ob", "Ienisseï", "Léna"], "anecdote": "" }
+        { "nom": "Fleuves qui se jettent dans la Méditerranée", "mots": ["Nil", "Rhône", "Èbre", "Pô"], "anecdote": "Long d'environ 6 650 km, le Nil est souvent considéré comme le plus long fleuve du monde." },
+        { "nom": "Fleuves d'Afrique australe", "mots": ["Zambèze", "Orange", "Limpopo", "Okavango"], "anecdote": "L'Okavango ne se jette dans aucune mer : il se perd dans un immense delta au Botswana." },
+        { "nom": "Fleuves qui ont donné leur nom à un pays", "mots": ["Niger", "Congo", "Paraguay", "Jourdain"], "anecdote": "La Jordanie doit son nom au Jourdain." },
+        { "nom": "Fleuves de Russie", "mots": ["Volga", "Ob", "Ienisseï", "Léna"], "anecdote": "La Volga est le plus long fleuve d'Europe." }
       ]
     },
     {
@@ -712,11 +712,11 @@
       "num": 59,
       "difficulte": "difficile",
       "theme": "geographie",
-      "titre": "Archipels",
+      "titre": "Tour des îles",
       "groupes": [
-        { "nom": "Îles grecques", "mots": ["Crète", "Rhodes", "Corfou", "Lesbos"], "anecdote": "" },
-        { "nom": "Îles qui sont des pays", "mots": ["Malte", "Chypre", "Islande", "Jamaïque"], "anecdote": "" },
-        { "nom": "Îles anglo-normandes", "mots": ["Jersey", "Guernesey", "Aurigny", "Sercq"], "anecdote": "" },
+        { "nom": "Îles grecques", "mots": ["Crète", "Rhodes", "Corfou", "Lesbos"], "anecdote": "La Crète est la plus grande île grecque." },
+        { "nom": "Îles qui sont des pays", "mots": ["Malte", "Chypre", "Islande", "Jamaïque"], "anecdote": "Malte est le plus petit pays de l'Union européenne." },
+        { "nom": "Îles anglo-normandes", "mots": ["Jersey", "Guernesey", "Aurigny", "Sercq"], "anecdote": "Ces îles ne font pas partie du Royaume-Uni : elles dépendent directement de la Couronne britannique." },
         { "nom": "Îles du royaume de Danemark", "mots": ["Groenland", "Féroé", "Bornholm", "Seeland"], "anecdote": "Le Groenland, plus grande île du monde, fait partie du royaume de Danemark." }
       ]
     },
@@ -728,9 +728,9 @@
       "titre": "Géo d'expert",
       "groupes": [
         { "nom": "Exclaves", "mots": ["Kaliningrad", "Ceuta", "Melilla", "Llívia"], "anecdote": "Llívia est une ville espagnole entièrement entourée par le territoire français." },
-        { "nom": "Capitales les plus hautes du monde", "mots": ["La Paz", "Quito", "Bogota", "Thimphou"], "anecdote": "" },
-        { "nom": "Anciens noms de pays", "mots": ["Ceylan", "Siam", "Dahomey", "Zaïre"], "anecdote": "" },
-        { "nom": "Pays sans armée", "mots": ["Costa Rica", "Islande", "Liechtenstein", "Andorre"], "anecdote": "" }
+        { "nom": "Capitales les plus hautes du monde", "mots": ["La Paz", "Quito", "Bogota", "Thimphou"], "anecdote": "À environ 3 600 m, La Paz est le siège de gouvernement le plus haut du monde." },
+        { "nom": "Anciens noms de pays", "mots": ["Ceylan", "Siam", "Dahomey", "Zaïre"], "anecdote": "Le Siam a pris le nom de Thaïlande en 1939." },
+        { "nom": "Pays sans armée", "mots": ["Costa Rica", "Islande", "Liechtenstein", "Andorre"], "anecdote": "Le Costa Rica a aboli son armée en 1948." }
       ]
     },
     {
@@ -740,10 +740,10 @@
       "theme": "animes",
       "titre": "Les incontournables",
       "groupes": [
-        { "nom": "Naruto", "mots": ["Sasuke", "Kakashi", "Sakura", "Itachi"], "anecdote": "" },
-        { "nom": "One Piece", "mots": ["Luffy", "Zoro", "Nami", "Sanji"], "anecdote": "" },
-        { "nom": "Dragon Ball", "mots": ["Goku", "Vegeta", "Piccolo", "Krilin"], "anecdote": "" },
-        { "nom": "Pokémon", "mots": ["Sacha", "Ondine", "Pierre", "Jessie"], "anecdote": "Dans la VF de Pokémon, Misty est devenue Ondine et Brock est devenu Pierre." }
+        { "nom": "Naruto", "mots": ["Sasuke", "Kakashi", "Sakura", "Itachi"], "anecdote": "Itachi est le grand frère de Sasuke." },
+        { "nom": "One Piece", "mots": ["Luffy", "Zoro", "Nami", "Sanji"], "anecdote": "Zoro rêve de devenir le meilleur épéiste du monde." },
+        { "nom": "Dragon Ball", "mots": ["Goku", "Vegeta", "Piccolo", "Krilin"], "anecdote": "Krilin est le meilleur ami de Goku depuis leur entraînement chez Tortue Géniale." },
+        { "nom": "Pokémon", "mots": ["Sacha", "Ondine", "Pierre", "Jessie"], "anecdote": "Dans la VF, Misty est devenue Ondine et Brock est devenu Pierre." }
       ]
     },
     {
@@ -753,10 +753,10 @@
       "theme": "animes",
       "titre": "Classiques de l'animation",
       "groupes": [
-        { "nom": "Animés de sport", "mots": ["Haikyu", "Olive et Tom", "Kuroko's Basket", "Blue Lock"], "anecdote": "" },
-        { "nom": "Films Ghibli", "mots": ["Totoro", "Ponyo", "Chihiro", "Mononoké"], "anecdote": "Totoro est devenu la mascotte et le logo du studio Ghibli." },
-        { "nom": "Shōnen de combat", "mots": ["Naruto", "Bleach", "Jujutsu Kaisen", "Demon Slayer"], "anecdote": "" },
-        { "nom": "Isekai", "mots": ["Re:Zero", "Konosuba", "Overlord", "Mushoku Tensei"], "anecdote": "" }
+        { "nom": "Animés de sport", "mots": ["Haikyu", "Olive et Tom", "Kuroko's Basket", "Blue Lock"], "anecdote": "Olive et Tom (Captain Tsubasa) a inspiré de nombreux footballeurs professionnels." },
+        { "nom": "Films Ghibli", "mots": ["Totoro", "Ponyo", "Chihiro", "Mononoké"], "anecdote": "Le Voyage de Chihiro a remporté l'Oscar du meilleur film d'animation en 2003." },
+        { "nom": "Shōnen de combat", "mots": ["Naruto", "Bleach", "Jujutsu Kaisen", "Demon Slayer"], "anecdote": "Le film Demon Slayer : Le Train de l'infini est devenu le plus gros succès de l'histoire du box-office japonais." },
+        { "nom": "Isekai", "mots": ["Re:Zero", "Konosuba", "Overlord", "Mushoku Tensei"], "anecdote": "« Isekai » signifie « autre monde » en japonais." }
       ]
     },
     {
@@ -766,10 +766,10 @@
       "theme": "animes",
       "titre": "Dragon Ball",
       "groupes": [
-        { "nom": "Saiyans", "mots": ["Goku", "Vegeta", "Gohan", "Broly"], "anecdote": "" },
-        { "nom": "Attaques", "mots": ["Kamehameha", "Genkidama", "Kaioken", "Final Flash"], "anecdote": "" },
+        { "nom": "Saiyans", "mots": ["Goku", "Vegeta", "Gohan", "Broly"], "anecdote": "Broly est surnommé le « Super Saiyan légendaire »." },
+        { "nom": "Attaques", "mots": ["Kamehameha", "Genkidama", "Kaioken", "Final Flash"], "anecdote": "La Genkidama rassemble l'énergie de tous les êtres vivants alentour." },
         { "nom": "Méchants", "mots": ["Freezer", "Cell", "Boo", "Zamasu"], "anecdote": "En VO, Freezer s'appelle Frieza, un jeu de mots sur « freezer » (congélateur)." },
-        { "nom": "Maîtres et mentors", "mots": ["Tortue Géniale", "Kaïo", "Whis", "Piccolo"], "anecdote": "" }
+        { "nom": "Maîtres et mentors", "mots": ["Tortue Géniale", "Kaïo", "Whis", "Piccolo"], "anecdote": "Piccolo a été l'ennemi de Goku avant de devenir le mentor de Gohan." }
       ]
     },
     {
@@ -779,10 +779,10 @@
       "theme": "animes",
       "titre": "Naruto",
       "groupes": [
-        { "nom": "Membres de l'Akatsuki", "mots": ["Itachi", "Kisame", "Deidara", "Pain"], "anecdote": "" },
+        { "nom": "Membres de l'Akatsuki", "mots": ["Itachi", "Kisame", "Deidara", "Pain"], "anecdote": "Pain est en réalité contrôlé à distance par Nagato." },
         { "nom": "Hokage", "mots": ["Hashirama", "Tobirama", "Hiruzen", "Minato"], "anecdote": "Minato, le père de Naruto, était le Quatrième Hokage." },
-        { "nom": "Équipe 7", "mots": ["Naruto", "Sasuke", "Sakura", "Kakashi"], "anecdote": "" },
-        { "nom": "Techniques", "mots": ["Rasengan", "Chidori", "Amaterasu", "Susanoo"], "anecdote": "" }
+        { "nom": "Équipe 7", "mots": ["Naruto", "Sasuke", "Sakura", "Kakashi"], "anecdote": "Piège : Kakashi et Naruto deviennent eux aussi Hokage (6e et 7e)." },
+        { "nom": "Techniques", "mots": ["Rasengan", "Chidori", "Amaterasu", "Susanoo"], "anecdote": "Le Rasengan a été inventé par Minato." }
       ]
     },
     {
@@ -792,10 +792,10 @@
       "theme": "animes",
       "titre": "One Piece",
       "groupes": [
-        { "nom": "Équipage du Chapeau de paille", "mots": ["Luffy", "Zoro", "Usopp", "Chopper"], "anecdote": "" },
+        { "nom": "Équipage du Chapeau de paille", "mots": ["Luffy", "Zoro", "Usopp", "Chopper"], "anecdote": "Chopper a mangé le fruit Hito Hito, qui lui donne une forme humaine." },
         { "nom": "Empereurs (Yonkō)", "mots": ["Shanks", "Barbe Blanche", "Big Mom", "Kaido"], "anecdote": "Luffy devient lui-même l'un des Empereurs après l'arc Wano." },
-        { "nom": "Amiraux de la Marine", "mots": ["Akainu", "Kizaru", "Aokiji", "Fujitora"], "anecdote": "" },
-        { "nom": "Fruits du démon", "mots": ["Gomu Gomu", "Mera Mera", "Hito Hito", "Yami Yami"], "anecdote": "" }
+        { "nom": "Amiraux de la Marine", "mots": ["Akainu", "Kizaru", "Aokiji", "Fujitora"], "anecdote": "Aokiji, Kizaru et Akainu sont inspirés de trois acteurs japonais." },
+        { "nom": "Fruits du démon", "mots": ["Gomu Gomu", "Mera Mera", "Hito Hito", "Yami Yami"], "anecdote": "Le Mera Mera était le fruit d'Ace." }
       ]
     },
     {
@@ -805,10 +805,10 @@
       "theme": "animes",
       "titre": "Kuroko's Basket",
       "groupes": [
-        { "nom": "Génération des Miracles", "mots": ["Kise", "Midorima", "Aomine", "Murasakibara"], "anecdote": "" },
-        { "nom": "Joueurs de Seirin", "mots": ["Kagami", "Kuroko", "Izuki", "Kiyoshi"], "anecdote": "Kuroko est surnommé le « sixième joueur fantôme » de la Génération des Miracles." },
-        { "nom": "Capitaines", "mots": ["Akashi", "Hyuga", "Kasamatsu", "Imayoshi"], "anecdote": "" },
-        { "nom": "Techniques", "mots": ["Misdirection", "Ignite Pass", "Emperor Eye", "Meteor Jam"], "anecdote": "" }
+        { "nom": "Génération des Miracles", "mots": ["Kise", "Midorima", "Aomine", "Murasakibara"], "anecdote": "Kuroko est surnommé le « sixième joueur fantôme » de la Génération des Miracles." },
+        { "nom": "Joueurs de Seirin", "mots": ["Kagami", "Kuroko", "Izuki", "Kiyoshi"], "anecdote": "Kiyoshi est l'un des fondateurs de l'équipe de basket de Seirin." },
+        { "nom": "Capitaines", "mots": ["Akashi", "Hyuga", "Kasamatsu", "Imayoshi"], "anecdote": "Akashi était déjà le capitaine de la Génération des Miracles au collège Teikō." },
+        { "nom": "Techniques", "mots": ["Misdirection", "Ignite Pass", "Emperor Eye", "Meteor Jam"], "anecdote": "La Misdirection de Kuroko s'inspire des techniques des prestidigitateurs." }
       ]
     },
     {
@@ -816,12 +816,12 @@
       "num": 67,
       "difficulte": "difficile",
       "theme": "animes",
-      "titre": "Dans les coulisses",
+      "titre": "Culture manga",
       "groupes": [
-        { "nom": "Studios d'animation", "mots": ["MAPPA", "Ufotable", "Bones", "Madhouse"], "anecdote": "" },
-        { "nom": "Mangakas", "mots": ["Oda", "Kishimoto", "Toriyama", "Isayama"], "anecdote": "Eiichirō Oda dessine One Piece depuis 1997." },
-        { "nom": "Personnages aux cheveux blancs", "mots": ["Gojo", "Kakashi", "Killua", "Kaneki"], "anecdote": "" },
-        { "nom": "Rivaux du héros", "mots": ["Sasuke", "Vegeta", "Bakugo", "Kaiba"], "anecdote": "" }
+        { "nom": "Studios d'animation", "mots": ["MAPPA", "Ufotable", "Bones", "Madhouse"], "anecdote": "MAPPA a produit Jujutsu Kaisen et la saison finale de L'Attaque des Titans." },
+        { "nom": "Mangakas", "mots": ["Oda", "Kishimoto", "Toriyama", "Isayama"], "anecdote": "Akira Toriyama a aussi dessiné les personnages de la saga Dragon Quest." },
+        { "nom": "Personnages aux cheveux blancs", "mots": ["Gojo", "Kakashi", "Killua", "Kaneki"], "anecdote": "Les cheveux de Kaneki deviennent blancs après sa captivité." },
+        { "nom": "Rivaux du héros", "mots": ["Sasuke", "Vegeta", "Bakugo", "Kaiba"], "anecdote": "Bakugo est l'ami d'enfance et le rival de Deku." }
       ]
     },
     {
@@ -831,10 +831,10 @@
       "theme": "animes",
       "titre": "Démons et fléaux",
       "groupes": [
-        { "nom": "Piliers (Demon Slayer)", "mots": ["Rengoku", "Giyu", "Shinobu", "Tengen"], "anecdote": "" },
+        { "nom": "Piliers (Demon Slayer)", "mots": ["Rengoku", "Giyu", "Shinobu", "Tengen"], "anecdote": "Rengoku est le Pilier de la Flamme." },
         { "nom": "Lunes supérieures (Demon Slayer)", "mots": ["Akaza", "Doma", "Kokushibo", "Gyutaro"], "anecdote": "Kokushibo, la Lune supérieure 1, était autrefois un pourfendeur de démons." },
-        { "nom": "Exorcistes de Jujutsu Kaisen", "mots": ["Yuji", "Megumi", "Nobara", "Gojo"], "anecdote": "" },
-        { "nom": "Fléaux de Jujutsu Kaisen", "mots": ["Mahito", "Jogo", "Hanami", "Dagon"], "anecdote": "" }
+        { "nom": "Exorcistes de Jujutsu Kaisen", "mots": ["Yuji", "Megumi", "Nobara", "Gojo"], "anecdote": "Piège : Tengen est aussi le nom d'un personnage de Jujutsu Kaisen." },
+        { "nom": "Fléaux de Jujutsu Kaisen", "mots": ["Mahito", "Jogo", "Hanami", "Dagon"], "anecdote": "Mahito peut modifier la forme de l'âme de ses victimes." }
       ]
     },
     {
@@ -844,10 +844,10 @@
       "theme": "animes",
       "titre": "Systèmes de pouvoir",
       "groupes": [
-        { "nom": "Types de Nen (Hunter x Hunter)", "mots": ["Renforcement", "Émission", "Manipulation", "Matérialisation"], "anecdote": "Il existe six types de Nen dans Hunter x Hunter." },
-        { "nom": "Souffles (Demon Slayer)", "mots": ["Flamme", "Insecte", "Brume", "Son"], "anecdote": "" },
-        { "nom": "Natures de chakra (Naruto)", "mots": ["Feu", "Vent", "Foudre", "Eau"], "anecdote": "" },
-        { "nom": "Alters (My Hero Academia)", "mots": ["One For All", "Explosion", "Gravité zéro", "Effacement"], "anecdote": "" }
+        { "nom": "Types de Nen (Hunter x Hunter)", "mots": ["Renforcement", "Émission", "Manipulation", "Matérialisation"], "anecdote": "Il existe six types de Nen ; Gon est un Renforceur." },
+        { "nom": "Souffles (Demon Slayer)", "mots": ["Flamme", "Insecte", "Brume", "Son"], "anecdote": "Le Souffle du Son est celui de Tengen Uzui." },
+        { "nom": "Natures de chakra (Naruto)", "mots": ["Feu", "Vent", "Foudre", "Eau"], "anecdote": "Piège : la Foudre et l'Eau existent aussi comme Souffles dans Demon Slayer." },
+        { "nom": "Alters (My Hero Academia)", "mots": ["One For All", "Explosion", "Gravité zéro", "Effacement"], "anecdote": "L'Effacement est l'Alter d'Aizawa, alias Eraser Head." }
       ]
     },
     {
@@ -855,12 +855,12 @@
       "num": 70,
       "difficulte": "goat",
       "theme": "animes",
-      "titre": "Vrais connaisseurs",
+      "titre": "Pour les experts",
       "groupes": [
-        { "nom": "Porteurs du « D. » (One Piece)", "mots": ["Teach", "Roger", "Garp", "Law"], "anecdote": "" },
+        { "nom": "Porteurs du « D. » (One Piece)", "mots": ["Teach", "Roger", "Garp", "Law"], "anecdote": "Le nom complet de Law est Trafalgar D. Water Law." },
         { "nom": "Saiyans au nom de légume", "mots": ["Raditz", "Nappa", "Broly", "Kakarot"], "anecdote": "Les noms des Saiyans viennent de légumes : Kakarot = carrot, Raditz = radish." },
-        { "nom": "Death Note", "mots": ["Ryuk", "Rem", "Near", "Mello"], "anecdote": "" },
-        { "nom": "Homonculus (Fullmetal Alchemist)", "mots": ["Envy", "Greed", "Lust", "Gluttony"], "anecdote": "" }
+        { "nom": "Death Note", "mots": ["Ryuk", "Rem", "Near", "Mello"], "anecdote": "Near et Mello sont les successeurs de L." },
+        { "nom": "Homonculus (Fullmetal Alchemist)", "mots": ["Envy", "Greed", "Lust", "Gluttony"], "anecdote": "Chaque Homonculus porte le nom d'un des sept péchés capitaux." }
       ]
     }
   ]
