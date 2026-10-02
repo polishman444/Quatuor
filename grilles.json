@@ -1142,7 +1142,7 @@
       "theme": "quotidien",
       "groupes": [
         { "nom": "Pièces d'échecs", "mots": ["Fou", "Tour", "Cavalier", "Pion"], "anecdote": "En anglais, le fou s'appelle « bishop », c'est-à-dire l'évêque." },
-        { "nom": "Cartes à jouer", "mots": ["Valet", "As", "Joker", "Roi"], "anecdote": "Piège : le roi est aussi une pièce d'échecs, et le valet un domestique." },
+        { "nom": "Cartes à jouer", "mots": ["Valet", "As", "Joker", "Atout"], "anecdote": "Piège : le valet était aussi un domestique, mais ici c'est la carte." },
         { "nom": "Oiseaux marins", "mots": ["Mouette", "Goéland", "Pétrel", "Cormoran"], "anecdote": "Piège : le fou de Bassan est aussi un oiseau marin." },
         { "nom": "Domestiques d'autrefois", "mots": ["Majordome", "Cocher", "Gouvernante", "Intendant"], "anecdote": "Le cocher conduisait les voitures tirées par des chevaux." }
       ]
@@ -1202,7 +1202,7 @@
       "theme": "quotidien",
       "groupes": [
         { "nom": "Agrumes", "mots": ["Bergamote", "Cédrat", "Kumquat", "Yuzu"], "anecdote": "La bergamote parfume le thé Earl Grey." },
-        { "nom": "Nuances de rouge", "mots": ["Vermillon", "Carmin", "Cinabre", "Garance"], "anecdote": "La garance est une plante dont la racine teignait les pantalons rouges des soldats français jusqu'en 1915." },
+        { "nom": "Nuances de rouge", "mots": ["Vermillon", "Carmin", "Cinabre", "Garance"], "anecdote": "La garance a donné son nom au rouge des pantalons des soldats français, portés jusqu'en 1915." },
         { "nom": "Villes du Vaucluse", "mots": ["Orange", "Avignon", "Carpentras", "Apt"], "anecdote": "Piège : Orange n'est pas un agrume ici, mais une ville célèbre pour son théâtre antique." },
         { "nom": "Melons", "mots": ["Charentais", "Galia", "Cavaillon", "Canari"], "anecdote": "Cavaillon, dans le Vaucluse, est surnommée la capitale du melon." }
       ]
@@ -1226,7 +1226,7 @@
       "theme": "quotidien",
       "groupes": [
         { "nom": "Pâtisseries", "mots": ["Religieuse", "Paris-Brest", "Saint-Honoré", "Opéra"], "anecdote": "Le paris-brest a été créé en 1910 en hommage à la course cycliste Paris-Brest-Paris, d'où sa forme de roue." },
-        { "nom": "Classiques cyclistes", "mots": ["Paris-Roubaix", "Paris-Nice", "Milan-San Remo", "Flèche wallonne"], "anecdote": "Avec près de 300 km, Milan-San Remo est la plus longue classique du calendrier." },
+        { "nom": "Classiques cyclistes", "mots": ["Paris-Roubaix", "Liège-Bastogne-Liège", "Milan-San Remo", "Flèche wallonne"], "anecdote": "Avec près de 300 km, Milan-San Remo est la plus longue classique du calendrier." },
         { "nom": "Ordres religieux", "mots": ["Chartreux", "Trappistes", "Bénédictins", "Franciscains"], "anecdote": "Les moines chartreux fabriquent la liqueur appelée chartreuse." },
         { "nom": "Races de chats", "mots": ["Persan", "Siamois", "Sacré de Birmanie", "Korat"], "anecdote": "Piège : le chartreux est aussi une race de chat, au pelage gris-bleu." }
       ]
