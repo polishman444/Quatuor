@@ -1122,6 +1122,150 @@
         { "nom": "Épreuves du décathlon", "mots": ["Perche", "Javelot", "Disque", "Poids"], "anecdote": "Le décathlon comprend dix épreuves réparties sur deux jours." },
         { "nom": "Termes d'échecs", "mots": ["Roque", "Pat", "Gambit", "Zugzwang"], "anecdote": "Le zugzwang est une position où n'importe quel coup affaiblit le joueur qui doit jouer." }
       ]
+    },
+    {
+      "id": "g091",
+      "num": 91,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Planètes", "mots": ["Vénus", "Jupiter", "Saturne", "Mercure"], "anecdote": "Vénus est la planète la plus chaude du système solaire, plus encore que Mercure." },
+        { "nom": "Dieux romains", "mots": ["Junon", "Vulcain", "Minerve", "Bacchus"], "anecdote": "Vulcain, dieu du feu et de la forge, a donné son nom aux volcans." },
+        { "nom": "Barres chocolatées", "mots": ["Mars", "Twix", "Bounty", "Lion"], "anecdote": "Piège : Mars est aussi une planète et un dieu, et le Lion un signe du zodiaque." },
+        { "nom": "Signes du zodiaque", "mots": ["Bélier", "Taureau", "Scorpion", "Capricorne"], "anecdote": "Les signes du zodiaque correspondent aux constellations que le Soleil semble traverser au cours de l'année." }
+      ]
+    },
+    {
+      "id": "g092",
+      "num": 92,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Pièces d'échecs", "mots": ["Fou", "Tour", "Cavalier", "Pion"], "anecdote": "En anglais, le fou s'appelle « bishop », c'est-à-dire l'évêque." },
+        { "nom": "Cartes à jouer", "mots": ["Valet", "As", "Joker", "Roi"], "anecdote": "Piège : le roi est aussi une pièce d'échecs, et le valet un domestique." },
+        { "nom": "Oiseaux marins", "mots": ["Mouette", "Goéland", "Pétrel", "Cormoran"], "anecdote": "Piège : le fou de Bassan est aussi un oiseau marin." },
+        { "nom": "Domestiques d'autrefois", "mots": ["Majordome", "Cocher", "Gouvernante", "Intendant"], "anecdote": "Le cocher conduisait les voitures tirées par des chevaux." }
+      ]
+    },
+    {
+      "id": "g093",
+      "num": 93,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Alcools nommés d'après un lieu", "mots": ["Cognac", "Xérès", "Porto", "Armagnac"], "anecdote": "Le xérès tire son nom de la ville andalouse de Jerez." },
+        { "nom": "Couleurs", "mots": ["Turquoise", "Fuchsia", "Bordeaux", "Ocre"], "anecdote": "Le fuchsia doit son nom à une fleur, elle-même nommée d'après le botaniste Leonhart Fuchs." },
+        { "nom": "Batailles", "mots": ["Magenta", "Solferino", "Marignan", "Alésia"], "anecdote": "Piège : le magenta et le solférino sont des couleurs nommées d'après ces deux batailles de 1859." },
+        { "nom": "Villes italiennes", "mots": ["Sienne", "Parme", "Vérone", "Pise"], "anecdote": "Piège : le parme et la terre de Sienne sont aussi des couleurs." }
+      ]
+    },
+    {
+      "id": "g094",
+      "num": 94,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Animaux emblèmes de pays", "mots": ["Coq", "Ours", "Aigle", "Kangourou"], "anecdote": "Le coq est lié à la France par un jeu de mots latin : « gallus » veut dire à la fois coq et Gaulois." },
+        { "nom": "Fruits", "mots": ["Kiwi", "Mangue", "Datte", "Grenade"], "anecdote": "Piège : Grenade est aussi une ville d'Espagne, et la grenade explosive tire son nom du fruit." },
+        { "nom": "Villes espagnoles", "mots": ["Séville", "Tolède", "Cadix", "Salamanque"], "anecdote": "L'Alhambra se trouve à Grenade, pas à Séville." },
+        { "nom": "Armes", "mots": ["Mortier", "Obusier", "Bazooka", "Mousquet"], "anecdote": "Le bazooka doit son nom à un instrument de musique comique américain." }
+      ]
+    },
+    {
+      "id": "g095",
+      "num": 95,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Animaux", "mots": ["Python", "Souris", "Puce", "Mygale"], "anecdote": "Certaines mygales peuvent vivre plus de 20 ans." },
+        { "nom": "Informatique", "mots": ["Bug", "Pixel", "Octet", "Clavier"], "anecdote": "Le mot « bug » est associé à un vrai insecte retrouvé coincé dans un ordinateur en 1947." },
+        { "nom": "Instruments de musique", "mots": ["Orgue", "Harpe", "Piano", "Clavecin"], "anecdote": "Piège : le clavier est aussi un instrument, mais ici c'est celui de l'ordinateur." },
+        { "nom": "Synonymes de tristesse", "mots": ["Spleen", "Blues", "Mélancolie", "Cafard"], "anecdote": "Le « spleen » a été popularisé en France par Baudelaire." }
+      ]
+    },
+    {
+      "id": "g096",
+      "num": 96,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Héros de la guerre de Troie", "mots": ["Ulysse", "Achille", "Ajax", "Patrocle"], "anecdote": "Ulysse a mis dix ans à rentrer chez lui après la guerre de Troie." },
+        { "nom": "Détectives de fiction", "mots": ["Hercule", "Sherlock", "Maigret", "Columbo"], "anecdote": "Piège : Hercule Poirot porte le prénom d'un héros grec, qui fut aussi un Argonaute." },
+        { "nom": "Argonautes", "mots": ["Jason", "Orphée", "Castor", "Pollux"], "anecdote": "Castor et Pollux ont donné leur nom aux deux étoiles les plus brillantes de la constellation des Gémeaux." },
+        { "nom": "Animaux de nos campagnes", "mots": ["Loutre", "Blaireau", "Hérisson", "Ragondin"], "anecdote": "Le ragondin, originaire d'Amérique du Sud, a été introduit en Europe pour sa fourrure." }
+      ]
+    },
+    {
+      "id": "g097",
+      "num": 97,
+      "difficulte": "goat",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Agrumes", "mots": ["Bergamote", "Cédrat", "Kumquat", "Yuzu"], "anecdote": "La bergamote parfume le thé Earl Grey." },
+        { "nom": "Nuances de rouge", "mots": ["Vermillon", "Carmin", "Cinabre", "Garance"], "anecdote": "La garance est une plante dont la racine teignait les pantalons rouges des soldats français jusqu'en 1915." },
+        { "nom": "Villes du Vaucluse", "mots": ["Orange", "Avignon", "Carpentras", "Apt"], "anecdote": "Piège : Orange n'est pas un agrume ici, mais une ville célèbre pour son théâtre antique." },
+        { "nom": "Melons", "mots": ["Charentais", "Galia", "Cavaillon", "Canari"], "anecdote": "Cavaillon, dans le Vaucluse, est surnommée la capitale du melon." }
+      ]
+    },
+    {
+      "id": "g098",
+      "num": 98,
+      "difficulte": "goat",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Mots tirés du nom d'un peuple", "mots": ["Cravate", "Esclave", "Bougre", "Vandale"], "anecdote": "La cravate vient des cavaliers croates, dont le foulard a séduit la cour de Louis XIV." },
+        { "nom": "Langues régionales", "mots": ["Basque", "Breton", "Occitan", "Picard"], "anecdote": "Le picard est parlé dans les Hauts-de-France ; le ch'ti en est une variante." },
+        { "nom": "Tissus nommés d'après un lieu", "mots": ["Denim", "Mousseline", "Tulle", "Cachemire"], "anecdote": "Le denim tient son nom de la « serge de Nîmes »." },
+        { "nom": "Danses", "mots": ["Polka", "Mazurka", "Polonaise", "Gavotte"], "anecdote": "Piège : la gavotte et la mazurka doivent aussi leur nom à des peuples (les Gavots et les habitants de la Mazurie)." }
+      ]
+    },
+    {
+      "id": "g099",
+      "num": 99,
+      "difficulte": "goat",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Pâtisseries", "mots": ["Religieuse", "Paris-Brest", "Saint-Honoré", "Opéra"], "anecdote": "Le paris-brest a été créé en 1910 en hommage à la course cycliste Paris-Brest-Paris, d'où sa forme de roue." },
+        { "nom": "Classiques cyclistes", "mots": ["Paris-Roubaix", "Paris-Nice", "Milan-San Remo", "Flèche wallonne"], "anecdote": "Avec près de 300 km, Milan-San Remo est la plus longue classique du calendrier." },
+        { "nom": "Ordres religieux", "mots": ["Chartreux", "Trappistes", "Bénédictins", "Franciscains"], "anecdote": "Les moines chartreux fabriquent la liqueur appelée chartreuse." },
+        { "nom": "Races de chats", "mots": ["Persan", "Siamois", "Sacré de Birmanie", "Korat"], "anecdote": "Piège : le chartreux est aussi une race de chat, au pelage gris-bleu." }
+      ]
+    },
+    {
+      "id": "g100",
+      "num": 100,
+      "difficulte": "goat",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Unités nommées d'après un savant", "mots": ["Hertz", "Joule", "Kelvin", "Becquerel"], "anecdote": "Le becquerel rend hommage à Henri Becquerel, qui a découvert la radioactivité en 1896." },
+        { "nom": "Marques automobiles", "mots": ["Tesla", "Lotus", "Alpine", "Bugatti"], "anecdote": "Piège : le tesla est aussi une unité, nommée comme la marque d'après l'inventeur Nikola Tesla." },
+        { "nom": "Félins", "mots": ["Ocelot", "Serval", "Caracal", "Jaguar"], "anecdote": "Le caracal se reconnaît aux longues touffes de poils noirs au bout de ses oreilles." },
+        { "nom": "Marques de sport", "mots": ["Puma", "Kappa", "Umbro", "Lotto"], "anecdote": "Puma a été fondée par Rudolf Dassler, le frère du fondateur d'Adidas." }
+      ]
+    },
+    {
+      "id": "g101",
+      "num": 101,
+      "difficulte": "goat",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Romans de Zola", "mots": ["Nana", "Germinal", "L'Assommoir", "La Bête humaine"], "anecdote": "Les 20 romans des Rougon-Macquart suivent une famille sous le Second Empire." },
+        { "nom": "Mois du calendrier républicain", "mots": ["Brumaire", "Floréal", "Ventôse", "Thermidor"], "anecdote": "Piège : Germinal est aussi un mois du calendrier républicain, au printemps." },
+        { "nom": "Argot", "mots": ["Pote", "Mec", "Bagnole", "Thune"], "anecdote": "« Thune » désignait à l'origine une pièce de cinq francs." },
+        { "nom": "Personnages de Balzac", "mots": ["Rastignac", "Goriot", "Vautrin", "Rubempré"], "anecdote": "Rastignac est devenu un nom commun pour désigner un jeune ambitieux." }
+      ]
+    },
+    {
+      "id": "g102",
+      "num": 102,
+      "difficulte": "goat",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Os du corps humain", "mots": ["Marteau", "Enclume", "Étrier", "Atlas"], "anecdote": "Le marteau, l'enclume et l'étrier sont dans l'oreille ; l'étrier est le plus petit os du corps." },
+        { "nom": "Outils du forgeron", "mots": ["Tenaille", "Soufflet", "Masse", "Poinçon"], "anecdote": "Le soufflet sert à attiser le feu de la forge." },
+        { "nom": "Équitation", "mots": ["Selle", "Mors", "Bride", "Cravache"], "anecdote": "Le mors se place dans la bouche du cheval et permet de le diriger." },
+        { "nom": "Instruments de navigation et de géographie", "mots": ["Mappemonde", "Globe", "Boussole", "Sextant"], "anecdote": "Le sextant permet de calculer sa position grâce à la hauteur des astres." }
+      ]
     }
   ]
 }
