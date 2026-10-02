@@ -191,6 +191,27 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .dock.over .play{display:none}
 .dock .end.pill{font-size:1rem;white-space:nowrap;padding:0 10px;min-width:0;overflow:hidden;text-overflow:ellipsis}
 
+/* Encart « Grille du jour terminée » (à la place du dock, au lancement) */
+.homebox{display:none;max-width:480px;margin:0 auto;background:var(--card);border-radius:22px;padding:14px 14px 10px;box-shadow:0 4px 0 var(--edge)}
+.dock.home .dock-in{display:none}
+.dock.home .homebox{display:block}
+body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
+.homebox .hbt{margin:0;text-align:center;font-weight:800;font-size:1.05rem}
+.homebox .hbt span{color:var(--l0e)}
+.homebox .cd{margin:2px 0 12px;font-size:.92rem;color:var(--muted)}
+.homebox .cd b{color:var(--ink)}
+.homebox .pill{display:block;width:100%;height:50px;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 10px;min-width:0}
+.homebox .pill.soft{background:var(--bg)}
+.hbrow{display:flex;gap:8px;margin-top:8px}
+.hbrow .pill{flex:1}
+.homebox .pill:first-of-type{margin-top:0}
+.hbres{display:block;margin:10px auto 2px;border:0;background:none;font:inherit;font-size:.9rem;font-weight:650;color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 8px}
+/* libellés selon la largeur (deux boutons côte à côte) */
+.dock .homebox .sm,.dock .homebox .xs{display:none}
+@media (max-width:440px){ .dock .homebox .hbrow .pill:not(:only-child) .lg{display:none} .dock .homebox .hbrow .pill:not(:only-child) .sm{display:inline} }
+@media (max-width:360px){ .dock .homebox .hbrow .pill:not(:only-child) .sm{display:none} .dock .homebox .hbrow .pill:not(:only-child) .xs{display:inline} .homebox{padding:12px 10px 8px} .homebox .pill{font-size:.92rem;padding:0 4px} .hbrow{gap:6px} }
+.gitem .date{font-weight:700}
+
 /* Bulle du tutoriel */
 .tuto{position:relative;background:var(--ink);color:var(--bg);border-radius:16px;padding:12px 15px;margin:0 0 16px;
   font-weight:650;font-size:.98rem;line-height:1.32;box-shadow:0 4px 0 rgba(0,0,0,.35)}
@@ -381,7 +402,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
   <button class="round end lostonly" id="retryD" aria-label="Retenter"><span style="font-size:1.35rem">🔄</span></button>
   <button class="pill main end" id="seeRes"><span class="lg">Voir mes résultats</span><span class="sm">Résultats</span></button>
   <button class="pill soft end" id="nextG"><span class="lg">Grille suivante</span><span class="sm">Suivante</span></button>
-</div></nav>
+</div><div class="homebox" id="homeBox" role="region" aria-label="Grille du jour terminée"></div></nav>
 
 <div class="veil" id="veil"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></div>
@@ -593,25 +614,41 @@ function newGame(idx,opts={}){
   hasard=opts.hasard||null;
   hints=0; hintCat=-1; hintWord=null; $("hintBar").hidden=true;
   const prev=tuto?null:loadRes()[grid.id];
+  // Partie en cours sauvegardée (reprise exacte) ; une nouvelle tentative déjà autorisée se reprend sans redemander
+  const sv=tuto?null:repriseValide(grid,prev);
   // Grille perdue : pas de nouvelle partie sans passer par retenter() (et donc autoriserNouvelEssai)
-  const lostView=!!(prev&&!prev.win&&opts.essai!==JETON_ESSAI);
-  attempt=opts.essai===JETON_ESSAI&&prev?(prev.tries||1)+1:1;
+  const lostView=!!(prev&&!prev.win&&opts.essai!==JETON_ESSAI&&!sv);
+  attempt=sv?sv.attempt:opts.essai===JETON_ESSAI&&prev?(prev.tries||1)+1:1;
   words=shuffleArr(grid.flatMap(g=>g.words)); selected=new Set(); found=[]; mistakes=0; history=[]; tried=new Set(); done=false; busy=false;
   maxErr=tuto?Infinity:DIFFS[grid.diff].err;   // tutoriel : erreurs illimitées
   $("lives").querySelector(".dots").innerHTML=tuto?"":"<i></i>".repeat(maxErr);
   const d=today.toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
+  const arch=!tuto&&practice&&isArchive(idx);   // grille du calendrier d'un jour passé
   const badge=`<span class="dbadge l${DIFFS[grid.diff].c}">${dname(grid.diff)}</span>`;
   $("sub").classList.toggle("tsub",tuto);
   $("sub").innerHTML = tuto ? `<span>Grille d'<b>entraînement</b></span><button class="skip" id="skipTuto">Passer le tutoriel</button>`
     : (isTheme() ? `${themeOf(grid.theme).icone} ${esc(themeOf(grid.theme).nom)} · <b>${esc(themeLabel(idx))}</b>`
+      : arch ? `Grille du <b>${dateLongue(grid.jour)}</b>`
       : practice ? `Grille <b>n°${grid.num}</b>` : `${dailyBonus?"Grille bonus":"Grille du jour"} · <b>${d}</b>`)+badge;
   if(tuto) $("skipTuto").onclick=endTuto;
   $("solved").innerHTML=""; $("lives").style.display=tuto?"none":"flex";
-  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost","pending");
+  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost","pending","home"); document.body.classList.remove("home");
   tutoMsg=""; $("tuto").hidden=!tuto||tutoHold; tutoUpdate();
   setView("jeu");
-  if(lostView){ if(prev.vu===false) showPendingBoard(prev); else showLostBoard(prev); return; }
+  if(sv){ restaurerPartie(sv); hasard=opts.hasard||sv.hasard||null; }
+  // Lancement avec la grille du jour déjà terminée : plateau terminé + encart (pas l'écran de résultats)
+  else if(opts.accueil&&prev&&prev.win){ showWonBoard(prev); showHome(); return; }
+  if(lostView){ if(prev.vu===false) showPendingBoard(prev); else { showLostBoard(prev); if(opts.accueil) showHome(); } return; }
   draw();
+  if(sv&&hintCat>=0) renderHint();
+  updateNextLabels();
+}
+// Plateau d'une grille réussie : les 4 bandeaux (catégories, mots, anecdotes)
+function showWonBoard(prev){
+  hints=prev.hints||0; done=true; lastWin=true; words=[]; found=[0,1,2,3]; mistakes=prev.mistakes||0; history=prev.hist||[]; attempt=prev.tries||1;
+  $("grid").innerHTML=""; [0,1,2,3].forEach(gi=>addSolved(gi,false));
+  $("lives").style.display="none";
+  document.querySelector(".dock").classList.add("over");
   updateNextLabels();
 }
 // Plateau révélé d'une grille perdue : les 4 bandeaux, « Voir mes résultats » et « Retenter »
@@ -653,6 +690,7 @@ function donnerIndice(jeton){
     const c=grid[hintCat].words.filter(w=>words.includes(w));
     hintWord=c.find(w=>!selected.has(w))||c[0]||null;
   }
+  sauverPartie();
   flipLayout(renderHint);
   if(!RM()) $("hintBar").animate([{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
@@ -726,6 +764,123 @@ function revealSolution(){
   setTimeout(()=>{ if(id===gameId) openResults(false); },delay+600);
 }
 
+// =====================================================================
+// PARTIES EN COURS : sauvegarde automatique après chaque action, par identifiant de grille
+// quatuor-encours = { idGrille: { words (ordre), found, mistakes, hints, hintCat, hintWord, history, tried, attempt, hasard, at } }
+// Supprimée quand la grille est terminée (finish).
+// =====================================================================
+function loadEncours(){ try{ const e=JSON.parse(ls.get("quatuor-encours")||"{}"); return e&&typeof e==="object"?e:{}; }catch(e){ return {}; } }
+function saveEncours(e){ ls.set("quatuor-encours",JSON.stringify(e)); }
+function sauverPartie(){
+  if(tuto||done||!grid||gridIdx<0) return;
+  const e=loadEncours();
+  if(!history.length&&!hints) delete e[grid.id];   // rien de fait : pas de partie « en cours »
+  else e[grid.id]={words:words.slice(),found:found.slice(),mistakes,hints,hintCat,hintWord,history:history.map(r=>r.slice()),tried:[...tried],attempt,hasard,at:Date.now()};
+  // on garde les 20 plus récentes
+  Object.keys(e).sort((a,b)=>e[b].at-e[a].at).slice(20).forEach(k=>delete e[k]);
+  saveEncours(e);
+}
+function oublierPartie(id){ const e=loadEncours(); if(e[id]){ delete e[id]; saveEncours(e); } }
+// Sauvegarde utilisable pour cette grille ? (grille modifiée depuis, essai différent… : on l'oublie)
+function repriseValide(g,prev){
+  const sv=loadEncours()[g.id]; if(!sv) return null;
+  const ok=(()=>{ try{
+    const essai=prev?(prev.win?1:(prev.tries||1)+1):1;
+    if(sv.attempt!==essai) return false;
+    if(!Array.isArray(sv.found)||new Set(sv.found).size!==sv.found.length||sv.found.some(gi=>![0,1,2,3].includes(gi))) return false;
+    const reste=g.filter((_,gi)=>!sv.found.includes(gi)).flatMap(x=>x.words);
+    if(!Array.isArray(sv.words)||sv.words.length!==reste.length||!reste.every(w=>sv.words.includes(w))) return false;
+    if(!Number.isInteger(sv.mistakes)||sv.mistakes<0||sv.mistakes>=DIFFS[g.diff].err) return false;
+    if(!Number.isInteger(sv.hints)||sv.hints<0||sv.hints>MAX_HINTS||!Array.isArray(sv.history)||!Array.isArray(sv.tried)) return false;
+    return sv.found.length<4;
+  }catch(e){ return false; } })();
+  if(!ok){ oublierPartie(g.id); return null; }
+  return sv;
+}
+function restaurerPartie(sv){
+  words=sv.words.slice(); found=sv.found.slice(); mistakes=sv.mistakes; hints=sv.hints;
+  hintCat=Number.isInteger(sv.hintCat)&&sv.hintCat>=0&&sv.hintCat<4?sv.hintCat:-1;
+  hintWord=typeof sv.hintWord==="string"&&words.includes(sv.hintWord)?sv.hintWord:null;
+  history=sv.history.map(r=>r.slice()); tried=new Set(sv.tried);
+  found.forEach(gi=>addSolved(gi,false));
+  // vies déjà perdues : pas d'animation
+  $("lives").querySelectorAll("i").forEach((d,i)=>d.classList.toggle("off",i>=maxErr-mistakes));
+}
+// Dernière partie quittée en cours (hors grille du jour), encore jouable
+function partieAReprendre(){
+  const e=loadEncours();
+  const id=Object.keys(e).sort((a,b)=>e[b].at-e[a].at)[0]; if(!id) return null;
+  const i=GRIDS.findIndex(g=>g.id===id);
+  if(i<0||i===dailyIdx) return null;
+  const g=GRIDS[i];
+  if(g.theme==="quotidien"?!visible(i):!themesVisibles().some(t=>t.id===g.theme)) return null;
+  return repriseValide(g,loadRes()[id])?i:null;
+}
+
+// =====================================================================
+// GRILLES DES JOURS PRÉCÉDENTS (grilles du calendrier des 7 derniers jours)
+// Elles se jouent normalement (résultat enregistré), mais ne comptent ni pour la série
+// ni pour le % de réussite : ce ne sont pas des grilles du jour (practice = true).
+// =====================================================================
+// ⚠️ peutJouerArchive() est le SEUL point d'entrée pour ouvrir une grille des jours précédents
+// (section « Grilles des jours précédents » du tiroir, bouton « Grille d'hier » / « Grilles manquées »).
+// Pour l'instant tout est gratuit : elle renvoie toujours true.
+// Plus tard, l'accès aux grilles de plus de 1 jour (avant-hier et avant) pourra être réservé au premium :
+// renvoyer false dans ce cas si le joueur n'est pas premium. (Ces grilles restent aussi visibles
+// dans les listes par difficulté du tiroir : il faudra alors les y masquer également.)
+function peutJouerArchive(idGrille){
+  return true;
+}
+const ARCHIVE_JOURS=7;
+const dayStr=n=>{ const d=new Date(today); d.setDate(d.getDate()-n); return isoDay(d); };   // il y a n jours
+const jourDate=s=>{ const [a,m,j]=s.split("-").map(Number); return new Date(a,m-1,j); };
+const dateLongue=s=>jourDate(s).toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
+function dateCourte(s){
+  if(s===dayStr(1)) return "Hier";
+  const t=jourDate(s).toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"short"});
+  return t.charAt(0).toUpperCase()+t.slice(1);
+}
+const estCalendrier=i=>GRIDS[i].theme==="quotidien"&&GRIDS[i].jour&&!GRIDS[i].always&&GRIDS[i].diff!=="goat";
+const isArchive=i=>i>=0&&estCalendrier(i)&&GRIDS[i].jour<todayStr;
+// Grilles du calendrier des 7 derniers jours, de la plus récente à la plus ancienne
+function archiveGrids(){
+  const out=[];
+  for(let n=1;n<=ARCHIVE_JOURS;n++){ const j=dayStr(n), i=GRIDS.findIndex((g,k)=>estCalendrier(k)&&g.jour===j); if(i>=0) out.push(i); }
+  return out;
+}
+function ouvrirArchive(i,opts={}){
+  if(!peutJouerArchive(GRIDS[i].id)){ toast("Grille non disponible"); return; }
+  if(opts.essai) retenter(i,{hasard:null}); else ouvrirGrille(i);
+}
+
+// =====================================================================
+// ACCUEIL : grille du jour déjà terminée au lancement (ou au retour après minuit)
+// Plateau terminé + encart « Grille du jour terminée ✓ » à la place du dock
+// =====================================================================
+function showHome(){
+  const dk=document.querySelector(".dock"), r=loadRes();
+  const manq=archiveGrids().filter(i=>!r[GRIDS[i].id]), hier=manq.length===1&&GRIDS[manq[0]].jour===dayStr(1);
+  const rep=partieAReprendre(), repLbl=rep==null?"":GRIDS[rep].theme!=="quotidien"?`« ${esc(themeLabel(rep))} »`:`la grille n°${GRIDS[rep].num}`;
+  const nM=manq.length;
+  const lab=(lg,sm,xs)=>`<span class="lg">${lg}</span><span class="sm">${sm}</span><span class="xs">${xs}</span>`;
+  const archBtn=!nM?"":`<button class="pill soft" id="hbArch">${hier?lab("📅 Grille d'hier","📅 Grille d'hier","📅 Hier")
+    :lab(`📅 ${pl(nM,"Grille manquée","Grilles manquées")} (${nM})`,`📅 ${pl(nM,"Manquée","Manquées")} (${nM})`,`📅 ${pl(nM,"Manquée","Manquées")} (${nM})`)}</button>`;
+  $("homeBox").innerHTML=`<p class="hbt">${dailyBonus?"Grille bonus":"Grille du jour"} terminée <span>✓</span></p>${cdHtml()}
+    ${rep!=null?`<button class="pill main" id="hbRep">▶️ Reprendre ${repLbl}</button>`:""}
+    <div class="hbrow">${archBtn}<button class="pill ${rep!=null||nM?"soft":"main"}" id="hbRand">${lab("🎲 Grille au hasard","🎲 Au hasard","🎲 Hasard")}</button></div>
+    <button class="hbres" id="hbRes">Voir mes résultats</button>`;
+  dk.classList.remove("over","lost","pending"); dk.classList.add("home"); document.body.classList.add("home");
+  document.body.style.setProperty("--homeH",(dk.offsetHeight+24)+"px");
+  if(rep!=null) $("hbRep").onclick=()=>{ buzz(10); const sv=loadEncours()[GRIDS[rep].id]; switchGame(rep,{hasard:sv&&sv.hasard||null}); };
+  if(nM) $("hbArch").onclick=()=>{ buzz(10); if(hier) ouvrirArchive(manq[0]); else openMenu("arch"); };
+  $("hbRand").onclick=()=>launchRandom(randChoice);
+  $("hbRes").onclick=()=>{ if(done&&!tuto) openResults(lastWin); };
+}
+// Retour dans l'appli après minuit : on recharge pour la nouvelle grille du jour (la partie en cours est sauvegardée)
+function verifierNouveauJour(){ if(document.visibilityState!=="hidden"&&isoDay(new Date())!==todayStr) location.reload(); }
+document.addEventListener("visibilitychange",verifierNouveauJour);
+addEventListener("pageshow",e=>{ if(e.persisted) verifierNouveauJour(); });
+
 // ---- Tutoriel ----
 let tutoMsg="", tutoHold=false;   // tutoHold : bulle retenue tant que la pop-up de bienvenue est ouverte
 function releaseTuto(){
@@ -769,7 +924,7 @@ function showSkeleton(){
   busy=true; done=false; selected=new Set(); tuto=false; $("tuto").hidden=true;
   $("sub").classList.remove("tsub"); $("sub").textContent="Chargement des grilles…";
   $("solved").innerHTML=""; $("lives").style.display="none";
-  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over");
+  const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","home"); document.body.classList.remove("home");
   $("submit").disabled=$("clear").disabled=$("hintBtn").disabled=true; $("hintBar").hidden=true;
   $("grid").innerHTML=Array.from({length:16},(_,i)=>`<div class="tile sk" style="--i:${i}" aria-hidden="true"></div>`).join("");
 }
@@ -943,7 +1098,7 @@ function foundGroup(gi,tiles){
       if(hintCat>=0) renderHint();   // l'indice portait peut-être sur ce groupe
       band=addSolved(gi,false,rm?"":"pre");
       busy=false; updateUi();
-      if(found.length===4) finish(true); else tutoUpdate();
+      if(found.length===4) finish(true); else { sauverPartie(); tutoUpdate(); }
     });
     const openFact=()=>{ if(id===gameId&&band.isConnected&&grid[gi].fact) flipLayout(()=>setOpen(band,true)); };
     if(rm){ openFact(); return; }
@@ -980,6 +1135,7 @@ function submit(){
     tiles.forEach(t=>{ t.classList.remove("shake","spring"); void t.offsetWidth; t.classList.add("shake"); });
     updateUi();
     if(mistakes>=maxErr){ busy=true; const id=gameId; setTimeout(()=>{ if(id===gameId) finish(false); },500); }
+    else sauverPartie();
   }
 }
 
@@ -989,6 +1145,7 @@ function finish(win){
     $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoUpdate();
     setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650); return; }
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); });
+  oublierPartie(grid.id);   // grille terminée : plus de partie en cours à reprendre
   // Résultats enregistrés dès maintenant (même si l'appli est fermée juste après) :
   // premier essai, nombre d'essais, dernier plateau, groupes trouvés et « solution vue » (vu)
   const res=loadRes(), prev=res[grid.id];
@@ -998,7 +1155,9 @@ function finish(win){
     prev.tries=attempt; prev.win=win; prev.mistakes=mistakes; prev.hist=history; prev.found=found.slice(); prev.vu=win; prev.hints=hints;
   } // (une grille déjà réussie rejouée ne change rien)
   saveRes(res);
-  if(!practice&&attempt===1){   // stats et série : seul le premier essai de la grille du jour compte
+  // Stats et série : seul le premier essai de la grille du jour compte
+  // (grilles des jours précédents, thèmes, hasard… sont « practice » : jamais de stats ni de série)
+  if(!practice&&attempt===1){
     const s=load();
     if(s.lastPlayed!==dayNum){
       s.played=(s.played||0)+1; s.lastPlayed=dayNum;
@@ -1087,11 +1246,12 @@ function renderFavs(anim,head){
   if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
 function renderMenu(anim,head){
-  const r=loadRes(), tab=menuTab||grid.diff, ids=idsOf(tab), done_=ids.filter(i=>r[GRIDS[i].id]).length, D_=DIFFS[tab];
+  const arch=archiveGrids(), r=loadRes(), tab=menuTab||grid.diff, ids=idsOf(tab), done_=ids.filter(i=>r[GRIDS[i].id]).length, D_=DIFFS[tab];
   const tabs=DKEYS.map(k=>{ const n=idsOf(k).filter(i=>r[GRIDS[i].id]).length;
     return `<button class="dtab${k===tab?" on":""}" data-k="${k}" role="tab" aria-selected="${k===tab}"><i class="l${DIFFS[k].c}"></i><b>${dname(k)}</b><small>${n}/${idsOf(k).length}</small></button>`; }).join("");
   $("drawer").innerHTML=head+`
     <p class="sec">${dailyBonus?"Grille bonus":"Grille du jour"}</p><div class="glist">${gridItem(dailyIdx,r)}</div>${r[GRIDS[dailyIdx].id]?`<div class="cdline">${cdHtml()}</div>`:""}
+    ${arch.length?`<p class="sec" id="archSec">Grilles des jours précédents</p><div class="glist arch">${arch.map(i=>gridItem(i,r,`<span class="date">${dateCourte(GRIDS[i].jour)}</span>`)).join("")}</div>`:""}
     ${randHtml()}
     <p class="sec">Choisis ta difficulté</p><div class="dtabs" role="tablist">${tabs}</div>
     <div class="dpane"><p class="prog">${done_} sur ${ids.length} ${pl(done_,"terminée","terminées")} · <b>${D_.err} ${pl(D_.err,"erreur","erreurs")}</b> ${pl(D_.err,"autorisée","autorisées")}</p>
@@ -1099,16 +1259,20 @@ function renderMenu(anim,head){
     <div class="glist">${ids.length?ids.map(i=>gridItem(i,r)).join(""):`<p class="gempty">Pas encore de grille ${D_.name.toLowerCase()} disponible.<br>De nouvelles grilles arrivent chaque jour !</p>`}</div></div>`;
   $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
   $("drawer").querySelectorAll(".gretry").forEach(b=>b.onclick=()=>retenter(+b.dataset.i,{hasard:null}));
+  // Grilles des jours précédents : toujours via peutJouerArchive()
+  $("drawer").querySelectorAll(".arch .gitem").forEach(b=>b.onclick=()=>{ if(!peutJouerArchive(GRIDS[+b.dataset.i].id)){ toast("Grille non disponible"); return; } closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
+  $("drawer").querySelectorAll(".arch .gretry").forEach(b=>b.onclick=()=>ouvrirArchive(+b.dataset.i,{essai:true}));
   $("drawer").querySelectorAll(".rpill").forEach(b=>b.onclick=()=>{ randChoice=b.dataset.k; ls.set("quatuor-hasard",randChoice); buzz(8);
     $("drawer").querySelectorAll(".rpill").forEach(x=>{ const on=x===b; x.classList.toggle("on",on); x.setAttribute("aria-checked",on); }); });
   $("randGo").onclick=()=>launchRandom(randChoice,$("randGo").querySelector(".die"));
   $("drawer").querySelectorAll(".dtab").forEach(b=>b.onclick=()=>{ if(b.dataset.k===tab) return; buzz(8); menuTab=b.dataset.k; renderDrawer(true); });
   if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
-function openMenu(){
+function openMenu(section){
   if(!GRIDS.length){ toast("Chargement des grilles…"); return; }
-  menuTab=grid.diff; renderDrawer(false);
+  menuTab=grid.diff; if(section) drawerTab="grids"; renderDrawer(false);
   $("veil").classList.add("open"); $("drawer").classList.add("open"); document.documentElement.classList.add("lock");
+  if(section==="arch"&&$("archSec")) requestAnimationFrame(()=>{ $("drawer").scrollTop=Math.max(0,$("archSec").offsetTop-12); });
 }
 let onSheetClose=null;
 function openSheet(html,onClose){ $("sheetBody").innerHTML=html; $("sheet").scrollTop=0; onSheetClose=onClose||null;
@@ -1346,7 +1510,7 @@ let tt; function toast(m,bounce){ const t=$("toast"); t.textContent=m; t.classLi
 
 $("submit").onclick=submit;
 $("shuffle").onclick=()=>{
-  if(busy||done) return; buzz(10); shuffleArr(words);
+  if(busy||done) return; buzz(10); shuffleArr(words); sauverPartie();
   const g=$("grid"), m=new Map([...g.children].map(t=>[t.dataset.w,t]));
   flipLayout(()=>words.forEach(w=>g.appendChild(m.get(w))),{dur:560,stagger:15,lift:true});
   const s=$("shuffle"); s.classList.remove("spin"); void s.offsetWidth; s.classList.add("spin");
@@ -1406,7 +1570,7 @@ $("revealP").onclick=revealSolution;
 // Pas de zoom au double-tap
 document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});
 $("helpBtn").onclick=openHelp;
-$("menuBtn").onclick=openMenu;
+$("menuBtn").onclick=()=>openMenu();
 $("statsBtn").onclick=()=>{ openSheet(`<h2>Statistiques</h2><p>Grilles du jour uniquement.</p>${statsHtml()}<button class="pill main" style="width:100%" id="okS">Fermer</button>`); $("okS").onclick=closeSheet; };
 let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>document.querySelectorAll(".tile").forEach(fit),150); });
 
@@ -1419,7 +1583,7 @@ function boot(){
     if(!g){ if(!tuto) showLoadError(); return false; }
     GRIDS=g; THEMES=g.themes||[]; dailyIdx=pickDaily();
     if(!tuto){   // le tutoriel n'a pas besoin des grilles : on ne l'interrompt pas
-      newGame(dailyIdx);
+      newGame(dailyIdx,{accueil:true});
       if(!RM()) [...$("grid").children].forEach((t,i)=>t.animate([{opacity:0,transform:"scale(.96)"},{opacity:1,transform:"none"}],
         {duration:380,delay:i*18,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     }
