@@ -862,6 +862,266 @@
         { "nom": "Death Note", "mots": ["Ryuk", "Rem", "Near", "Mello"], "anecdote": "Near et Mello sont les successeurs de L." },
         { "nom": "Homonculus (Fullmetal Alchemist)", "mots": ["Envy", "Greed", "Lust", "Gluttony"], "anecdote": "Chaque Homonculus porte le nom d'un des sept péchés capitaux." }
       ]
+    },
+    {
+      "id": "g071",
+      "num": 71,
+      "difficulte": "facile",
+      "theme": "histoire",
+      "titre": "Rois et empereurs",
+      "groupes": [
+        { "nom": "Rois de France", "mots": ["Louis XIV", "François Ier", "Henri IV", "Philippe le Bel"], "anecdote": "Louis XIV a régné 72 ans, le plus long règne de l'histoire de France." },
+        { "nom": "Empereurs romains", "mots": ["Auguste", "Néron", "Caligula", "Trajan"], "anecdote": "Auguste a donné son nom au mois d'août." },
+        { "nom": "Pharaons", "mots": ["Ramsès II", "Toutânkhamon", "Khéops", "Akhenaton"], "anecdote": "Toutânkhamon est célèbre pour son tombeau, découvert presque intact en 1922." },
+        { "nom": "Présidents de la Ve République", "mots": ["De Gaulle", "Pompidou", "Mitterrand", "Chirac"], "anecdote": "De Gaulle a été le premier président de la Ve République, en 1959." }
+      ]
+    },
+    {
+      "id": "g072",
+      "num": 72,
+      "difficulte": "facile",
+      "theme": "histoire",
+      "titre": "Champs de bataille",
+      "groupes": [
+        { "nom": "Batailles de la Première Guerre mondiale", "mots": ["Verdun", "La Somme", "La Marne", "Chemin des Dames"], "anecdote": "La bataille de Verdun (1916) a duré environ 300 jours." },
+        { "nom": "Batailles de la Seconde Guerre mondiale", "mots": ["Stalingrad", "Midway", "El Alamein", "Pearl Harbor"], "anecdote": "Midway (1942) marque le tournant de la guerre du Pacifique." },
+        { "nom": "Batailles napoléoniennes", "mots": ["Austerlitz", "Waterloo", "Iéna", "Wagram"], "anecdote": "Austerlitz est surnommée la « bataille des Trois Empereurs »." },
+        { "nom": "Guerre de Cent Ans", "mots": ["Azincourt", "Crécy", "Orléans", "Castillon"], "anecdote": "Jeanne d'Arc a levé le siège d'Orléans en 1429." }
+      ]
+    },
+    {
+      "id": "g073",
+      "num": 73,
+      "difficulte": "facile",
+      "theme": "histoire",
+      "titre": "Grands noms",
+      "groupes": [
+        { "nom": "Scientifiques", "mots": ["Newton", "Einstein", "Marie Curie", "Galilée"], "anecdote": "Marie Curie est la seule personne à avoir reçu un prix Nobel dans deux sciences différentes." },
+        { "nom": "Explorateurs", "mots": ["Christophe Colomb", "Magellan", "Vasco de Gama", "Marco Polo"], "anecdote": "L'expédition de Magellan a fait le premier tour du monde, mais lui est mort en route, aux Philippines." },
+        { "nom": "Révolutionnaires français", "mots": ["Robespierre", "Danton", "Marat", "Saint-Just"], "anecdote": "Marat a été assassiné dans sa baignoire par Charlotte Corday en 1793." },
+        { "nom": "Peintres de la Renaissance", "mots": ["Léonard de Vinci", "Michel-Ange", "Raphaël", "Botticelli"], "anecdote": "Piège : Léonard de Vinci était aussi ingénieur et scientifique." }
+      ]
+    },
+    {
+      "id": "g074",
+      "num": 74,
+      "difficulte": "moyen",
+      "theme": "histoire",
+      "titre": "Le XXe siècle",
+      "groupes": [
+        { "nom": "Dirigeants soviétiques", "mots": ["Lénine", "Staline", "Khrouchtchev", "Brejnev"], "anecdote": "Lénine a dirigé la révolution d'Octobre 1917." },
+        { "nom": "Présidents américains", "mots": ["Roosevelt", "Kennedy", "Nixon", "Reagan"], "anecdote": "Franklin Roosevelt est le seul président américain élu quatre fois." },
+        { "nom": "Dirigeants de l'Axe", "mots": ["Hitler", "Mussolini", "Hirohito", "Tojo"], "anecdote": "Hirohito est resté empereur du Japon jusqu'à sa mort en 1989." },
+        { "nom": "Premiers ministres britanniques", "mots": ["Churchill", "Thatcher", "Attlee", "Blair"], "anecdote": "Margaret Thatcher a été la première femme Première ministre du Royaume-Uni." }
+      ]
+    },
+    {
+      "id": "g075",
+      "num": 75,
+      "difficulte": "moyen",
+      "theme": "histoire",
+      "titre": "Antiquité",
+      "groupes": [
+        { "nom": "Dieux grecs", "mots": ["Zeus", "Athéna", "Poséidon", "Arès"], "anecdote": "Selon la légende, Athéna a donné son nom à la ville d'Athènes." },
+        { "nom": "Dieux romains", "mots": ["Jupiter", "Minerve", "Neptune", "Mars"], "anecdote": "Les Romains ont repris la plupart des dieux grecs en leur donnant un autre nom." },
+        { "nom": "Merveilles du monde antique", "mots": ["Phare d'Alexandrie", "Colosse de Rhodes", "Jardins de Babylone", "Pyramide de Khéops"], "anecdote": "La pyramide de Khéops est la seule des Sept Merveilles encore debout." },
+        { "nom": "Philosophes grecs", "mots": ["Socrate", "Platon", "Aristote", "Diogène"], "anecdote": "Selon la légende, Diogène vivait dans un tonneau." }
+      ]
+    },
+    {
+      "id": "g076",
+      "num": 76,
+      "difficulte": "moyen",
+      "theme": "histoire",
+      "titre": "Lieux d'histoire",
+      "groupes": [
+        { "nom": "Villes qui ont donné leur nom à un traité", "mots": ["Versailles", "Maastricht", "Utrecht", "Rome"], "anecdote": "Le traité de Rome (1957) a créé la Communauté économique européenne." },
+        { "nom": "Plages du Débarquement", "mots": ["Omaha", "Utah", "Juno", "Sword"], "anecdote": "Omaha Beach a été la plage la plus meurtrière du 6 juin 1944." },
+        { "nom": "Conférences alliées de la Seconde Guerre mondiale", "mots": ["Yalta", "Potsdam", "Téhéran", "Casablanca"], "anecdote": "À Yalta, en 1945, Roosevelt, Churchill et Staline ont préparé l'après-guerre." },
+        { "nom": "Villes détruites pendant la Seconde Guerre mondiale", "mots": ["Hiroshima", "Nagasaki", "Dresde", "Coventry"], "anecdote": "Hiroshima a été la première ville frappée par une bombe atomique, le 6 août 1945." }
+      ]
+    },
+    {
+      "id": "g077",
+      "num": 77,
+      "difficulte": "difficile",
+      "theme": "histoire",
+      "titre": "Surnoms historiques",
+      "groupes": [
+        { "nom": "Surnoms de rois de France", "mots": ["Le Roi-Soleil", "Le Bien-Aimé", "Le Vert-Galant", "Le Bel"], "anecdote": "Henri IV était surnommé le Vert-Galant pour ses nombreuses conquêtes amoureuses." },
+        { "nom": "Surnoms de Napoléon Ier", "mots": ["Le Petit Caporal", "Le Petit Tondu", "L'Ogre corse", "Boney"], "anecdote": "« Le Petit Caporal » viendrait de ses soldats, admiratifs de son courage à la bataille de Lodi." },
+        { "nom": "Surnoms de femmes célèbres", "mots": ["La Pucelle", "La Dame de fer", "L'Autrichienne", "La Reine vierge"], "anecdote": "Le surnom de « Dame de fer » a été donné à Thatcher par un journal soviétique en 1976." },
+        { "nom": "Surnoms de chefs politiques et militaires", "mots": ["Le Tigre", "Le Renard du désert", "Le Libérateur", "Le Grand Charles"], "anecdote": "Rommel a gagné le surnom de « Renard du désert » en Afrique du Nord." }
+      ]
+    },
+    {
+      "id": "g078",
+      "num": 78,
+      "difficulte": "difficile",
+      "theme": "histoire",
+      "titre": "Dynasties et civilisations",
+      "groupes": [
+        { "nom": "Dynasties chinoises", "mots": ["Han", "Ming", "Qing", "Tang"], "anecdote": "Les Han ont donné leur nom à l'ethnie majoritaire en Chine." },
+        { "nom": "Dynasties de rois de France", "mots": ["Mérovingiens", "Carolingiens", "Valois", "Bourbons"], "anecdote": "Clovis, le plus célèbre des Mérovingiens, s'est fait baptiser à Reims." },
+        { "nom": "Civilisations précolombiennes", "mots": ["Aztèques", "Incas", "Mayas", "Olmèques"], "anecdote": "Les Aztèques ont fondé Tenochtitlan, à l'emplacement de l'actuelle Mexico." },
+        { "nom": "Peuples de l'Antiquité orientale", "mots": ["Perses", "Assyriens", "Hittites", "Babyloniens"], "anecdote": "Les Hittites comptent parmi les premiers peuples à avoir travaillé le fer." }
+      ]
+    },
+    {
+      "id": "g079",
+      "num": 79,
+      "difficulte": "difficile",
+      "theme": "histoire",
+      "titre": "Fins tragiques",
+      "groupes": [
+        { "nom": "Assassinés", "mots": ["Jules César", "Henri IV", "Kennedy", "Trotski"], "anecdote": "Piège : Trotski est mort en exil, mais il a été assassiné au Mexique en 1940." },
+        { "nom": "Guillotinés", "mots": ["Louis XVI", "Marie-Antoinette", "Robespierre", "Danton"], "anecdote": "Robespierre, qui avait envoyé Danton à la guillotine, y est passé à son tour en 1794." },
+        { "nom": "Souverains français morts en exil", "mots": ["Napoléon", "Charles X", "Louis-Philippe", "Napoléon III"], "anecdote": "Napoléon III est mort en exil en Angleterre en 1873." },
+        { "nom": "Morts au combat", "mots": ["Nelson", "Turenne", "Richard Cœur de Lion", "Gustave Adolphe"], "anecdote": "Nelson a été tué à Trafalgar en 1805, le jour de sa victoire." }
+      ]
+    },
+    {
+      "id": "g080",
+      "num": 80,
+      "difficulte": "goat",
+      "theme": "histoire",
+      "titre": "Pour historiens",
+      "groupes": [
+        { "nom": "Traités", "mots": ["Westphalie", "Tordesillas", "Brest-Litovsk", "Nankin"], "anecdote": "Le traité de Tordesillas (1494) partageait le Nouveau Monde entre l'Espagne et le Portugal." },
+        { "nom": "Batailles navales", "mots": ["Lépante", "Trafalgar", "Salamine", "Tsushima"], "anecdote": "À Salamine, en 480 av. J.-C., la flotte grecque a battu les Perses." },
+        { "nom": "Textes fondateurs", "mots": ["Magna Carta", "Édit de Nantes", "Bill of Rights", "Code civil"], "anecdote": "L'Édit de Nantes (1598) accordait des droits aux protestants ; il a été révoqué en 1685." },
+        { "nom": "Révoltes en France", "mots": ["Jacquerie", "Fronde", "Chouannerie", "Camisards"], "anecdote": "La Fronde a éclaté pendant l'enfance de Louis XIV, qui s'est ensuite méfié de Paris." }
+      ]
+    },
+    {
+      "id": "g081",
+      "num": 81,
+      "difficulte": "facile",
+      "theme": "sport",
+      "titre": "Les stars",
+      "groupes": [
+        { "nom": "Footballeurs", "mots": ["Mbappé", "Messi", "Ronaldo", "Zidane"], "anecdote": "Zidane a marqué deux buts de la tête en finale de la Coupe du monde 1998." },
+        { "nom": "Basketteurs", "mots": ["LeBron James", "Jordan", "Wembanyama", "Curry"], "anecdote": "Wembanyama a été le premier choix de la draft NBA 2023." },
+        { "nom": "Joueurs de tennis", "mots": ["Federer", "Nadal", "Djokovic", "Alcaraz"], "anecdote": "Nadal a remporté Roland-Garros 14 fois." },
+        { "nom": "Pilotes de F1", "mots": ["Hamilton", "Verstappen", "Schumacher", "Senna"], "anecdote": "Schumacher et Hamilton partagent le record de 7 titres de champion du monde." }
+      ]
+    },
+    {
+      "id": "g082",
+      "num": 82,
+      "difficulte": "facile",
+      "theme": "sport",
+      "titre": "Le vocabulaire du sport",
+      "groupes": [
+        { "nom": "Tennis", "mots": ["Ace", "Lob", "Smash", "Revers"], "anecdote": "Un ace est un service que l'adversaire ne touche même pas." },
+        { "nom": "Football", "mots": ["Penalty", "Corner", "Hors-jeu", "Tacle"], "anecdote": "La règle du hors-jeu existe depuis les premières règles du football, au XIXe siècle." },
+        { "nom": "Basket", "mots": ["Dunk", "Rebond", "Lancer franc", "Panier"], "anecdote": "Le dunk a été interdit en championnat universitaire américain de 1967 à 1976." },
+        { "nom": "Rugby", "mots": ["Essai", "Mêlée", "Drop", "Transformation"], "anecdote": "Au rugby à XV, un essai vaut 5 points." }
+      ]
+    },
+    {
+      "id": "g083",
+      "num": 83,
+      "difficulte": "facile",
+      "theme": "sport",
+      "titre": "Grands rendez-vous",
+      "groupes": [
+        { "nom": "Tournois du Grand Chelem", "mots": ["Roland-Garros", "Wimbledon", "US Open", "Open d'Australie"], "anecdote": "Roland-Garros est le seul tournoi du Grand Chelem joué sur terre battue." },
+        { "nom": "Courses cyclistes", "mots": ["Tour de France", "Giro", "Vuelta", "Paris-Roubaix"], "anecdote": "Paris-Roubaix est surnommée « l'Enfer du Nord » à cause de ses pavés." },
+        { "nom": "Compétitions de football", "mots": ["Ligue des champions", "Coupe du monde", "Euro", "Copa América"], "anecdote": "La Copa América est le plus ancien tournoi continental de sélections encore disputé." },
+        { "nom": "Courses automobiles", "mots": ["24 Heures du Mans", "Dakar", "Grand Prix de Monaco", "Indy 500"], "anecdote": "Le Dakar se court en Arabie saoudite depuis 2020." }
+      ]
+    },
+    {
+      "id": "g084",
+      "num": 84,
+      "difficulte": "moyen",
+      "theme": "sport",
+      "titre": "Surnoms d'équipes",
+      "groupes": [
+        { "nom": "Équipes nationales", "mots": ["Les Bleus", "Les All Blacks", "La Seleção", "Les Diables rouges"], "anecdote": "Piège : les Diables rouges, c'est la Belgique, mais aussi le surnom de Manchester United." },
+        { "nom": "Clubs français", "mots": ["Les Dogues", "Les Sang et Or", "Les Verts", "Les Canaris"], "anecdote": "Lens doit son surnom « Sang et Or » aux couleurs de son maillot." },
+        { "nom": "Franchises NBA", "mots": ["Lakers", "Celtics", "Bulls", "Warriors"], "anecdote": "Les Lakers viennent de Minneapolis, dans le Minnesota, « l'État aux 10 000 lacs », d'où leur nom." },
+        { "nom": "Surnoms de clubs européens", "mots": ["Les Merengues", "La Vieille Dame", "Les Reds", "Les Gunners"], "anecdote": "La Juventus est surnommée « la Vieille Dame » (la Vecchia Signora)." }
+      ]
+    },
+    {
+      "id": "g085",
+      "num": 85,
+      "difficulte": "moyen",
+      "theme": "sport",
+      "titre": "Légendes",
+      "groupes": [
+        { "nom": "Ballons d'or", "mots": ["Platini", "Benzema", "Cruyff", "Modrić"], "anecdote": "Platini a remporté trois Ballons d'or d'affilée, de 1983 à 1985." },
+        { "nom": "Sprinteurs", "mots": ["Usain Bolt", "Carl Lewis", "Florence Griffith-Joyner", "Marie-José Pérec"], "anecdote": "Le record du monde du 100 m de Bolt (9 s 58) date de 2009." },
+        { "nom": "Nageurs", "mots": ["Phelps", "Manaudou", "Marchand", "Ledecky"], "anecdote": "Léon Marchand a remporté quatre titres olympiques individuels à Paris 2024." },
+        { "nom": "Boxeurs", "mots": ["Ali", "Tyson", "Mayweather", "Pacquiao"], "anecdote": "Muhammad Ali s'appelait Cassius Clay avant 1964." }
+      ]
+    },
+    {
+      "id": "g086",
+      "num": 86,
+      "difficulte": "moyen",
+      "theme": "sport",
+      "titre": "Sports de combat",
+      "groupes": [
+        { "nom": "Arts martiaux japonais", "mots": ["Judo", "Karaté", "Aïkido", "Kendo"], "anecdote": "Le judo a été créé par Jigoro Kano en 1882." },
+        { "nom": "Soumissions de grappling", "mots": ["Triangle", "Kimura", "Guillotine", "Omoplata"], "anecdote": "La Kimura porte le nom du judoka Masahiko Kimura, qui l'a utilisée contre Hélio Gracie en 1951." },
+        { "nom": "Combattants de MMA", "mots": ["McGregor", "Khabib", "Ciryl Gane", "Jon Jones"], "anecdote": "Khabib a pris sa retraite invaincu, avec 29 victoires." },
+        { "nom": "Coups de boxe", "mots": ["Uppercut", "Crochet", "Jab", "Direct"], "anecdote": "L'uppercut est un coup porté de bas en haut, vers le menton." }
+      ]
+    },
+    {
+      "id": "g087",
+      "num": 87,
+      "difficulte": "difficile",
+      "theme": "sport",
+      "titre": "Jeux olympiques",
+      "groupes": [
+        { "nom": "Villes hôtes des JO d'été", "mots": ["Sydney", "Atlanta", "Barcelone", "Séoul"], "anecdote": "Aux JO de Barcelone 1992, la « Dream Team » américaine a marqué l'histoire du basket." },
+        { "nom": "Villes hôtes des JO d'hiver", "mots": ["Albertville", "Grenoble", "Chamonix", "Sotchi"], "anecdote": "Chamonix a accueilli les tout premiers Jeux d'hiver, en 1924." },
+        { "nom": "Sports disparus des JO", "mots": ["Tir à la corde", "Polo", "Cricket", "Croquet"], "anecdote": "Le cricket, disputé aux JO de 1900, fera son retour en 2028 à Los Angeles." },
+        { "nom": "Sports entrés aux JO depuis 2020", "mots": ["Breaking", "Skateboard", "Surf", "Escalade"], "anecdote": "Le breaking a fait ses débuts olympiques à Paris 2024." }
+      ]
+    },
+    {
+      "id": "g088",
+      "num": 88,
+      "difficulte": "difficile",
+      "theme": "sport",
+      "titre": "Lieux mythiques",
+      "groupes": [
+        { "nom": "Stades de football", "mots": ["Maracanã", "Camp Nou", "Bernabéu", "Anfield"], "anecdote": "Le Maracanã a accueilli le match décisif de la Coupe du monde 1950 et la finale de 2014." },
+        { "nom": "Circuits de F1", "mots": ["Monza", "Spa-Francorchamps", "Silverstone", "Suzuka"], "anecdote": "Monza est surnommée « le Temple de la vitesse »." },
+        { "nom": "Courts de tennis", "mots": ["Philippe-Chatrier", "Suzanne-Lenglen", "Arthur-Ashe", "Rod Laver Arena"], "anecdote": "Le court Philippe-Chatrier porte le nom d'un ancien président de la Fédération française de tennis." },
+        { "nom": "Stades de rugby", "mots": ["Twickenham", "Murrayfield", "Ellis Park", "Eden Park"], "anecdote": "L'Eden Park a accueilli les finales de Coupe du monde 1987 et 2011, gagnées par les All Blacks." }
+      ]
+    },
+    {
+      "id": "g089",
+      "num": 89,
+      "difficulte": "difficile",
+      "theme": "sport",
+      "titre": "Tour de France",
+      "groupes": [
+        { "nom": "Vainqueurs français du Tour", "mots": ["Hinault", "Anquetil", "Fignon", "Bobet"], "anecdote": "Bernard Hinault est le dernier Français vainqueur du Tour, en 1985." },
+        { "nom": "Cols et montées mythiques", "mots": ["Tourmalet", "Galibier", "Alpe d'Huez", "Mont Ventoux"], "anecdote": "Le Tourmalet est le col le plus souvent franchi de l'histoire du Tour." },
+        { "nom": "Maillots distinctifs", "mots": ["Jaune", "Vert", "À pois", "Blanc"], "anecdote": "Le maillot à pois récompense le meilleur grimpeur." },
+        { "nom": "Vainqueurs étrangers récents", "mots": ["Pogačar", "Vingegaard", "Froome", "Bernal"], "anecdote": "Pogačar a gagné son premier Tour en 2020, à 21 ans." }
+      ]
+    },
+    {
+      "id": "g090",
+      "num": 90,
+      "difficulte": "goat",
+      "theme": "sport",
+      "titre": "Pour les puristes",
+      "groupes": [
+        { "nom": "Surnoms de légendes", "mots": ["Le Kaiser", "La Pulga", "Le Cannibale", "Le Professeur"], "anecdote": "Eddy Merckx était surnommé « le Cannibale » parce qu'il voulait tout gagner." },
+        { "nom": "Sélectionneurs champions du monde", "mots": ["Deschamps", "Del Bosque", "Löw", "Scaloni"], "anecdote": "Deschamps fait partie des rares champions du monde à la fois comme joueur et comme sélectionneur." },
+        { "nom": "Épreuves du décathlon", "mots": ["Perche", "Javelot", "Disque", "Poids"], "anecdote": "Le décathlon comprend dix épreuves réparties sur deux jours." },
+        { "nom": "Termes d'échecs", "mots": ["Roque", "Pat", "Gambit", "Zugzwang"], "anecdote": "Le zugzwang est une position où n'importe quel coup affaiblit le joueur qui doit jouer." }
+      ]
     }
   ]
 }

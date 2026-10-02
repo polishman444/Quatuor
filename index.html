@@ -229,6 +229,7 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .wchk{display:flex;align-items:center;gap:10px;padding:8px 2px 12px;font-weight:650;color:var(--muted);cursor:pointer}
 .wchk input{width:22px;height:22px;margin:0;accent-color:var(--ink)}
 .sheet h2{margin:0 0 6px;font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+.fini{text-align:center}.fini .big{font-size:2.6rem;line-height:1;margin:4px 0 10px}.fini p{margin:0 0 18px}
 .sheet h3{margin:18px 0 8px;font-size:1.1rem;font-weight:800}
 .sheet p{margin:0 0 10px;color:var(--muted)}
 .sheet p.lead{color:var(--ink);font-size:1.05rem;margin:4px 0 12px}
@@ -1166,27 +1167,55 @@ const pl=(n,un,plusieurs)=>Math.abs(n)>=2?plusieurs:un;   // accord : 0 et 1 au 
 const RAND_KEYS=["toutes",...DKEYS];
 const randLabel=k=>k==="toutes"?"Toutes":dname(k);
 let randChoice=ls.get("quatuor-hasard"); if(!RAND_KEYS.includes(randChoice)) randChoice="toutes";
-function pickRandom(diff){
-  const r=loadRes();
-  // Grilles visibles uniquement (jamais une grille future cachée), hors grille du jour
-  const pool=GRIDS.map((_,i)=>i).filter(i=>visible(i)&&i!==dailyIdx&&(diff==="toutes"||GRIDS[i].diff===diff));
-  const fresh=pool.filter(i=>!r[GRIDS[i].id]);
-  const any=a=>a[Math.floor(Math.random()*a.length)];
-  if(fresh.length) return {i:any(fresh),again:false};
-  const others=pool.filter(i=>i!==gridIdx);       // éviter celle qu'on vient de jouer
-  const c=others.length?others:pool;
-  return {i:c.length?any(c):undefined,again:true};
+// =====================================================================
+// PROCHAINE GRILLE (« Suivante », « Grille suivante », « Encore une 🎲 ») : jamais une grille déjà terminée
+// Toute la logique est ici, pour pouvoir la brancher plus tard sur des comptes en ligne :
+//   portee    : { theme:"histoire" } | { niveau:"moyen" | "toutes", repli:true }
+//               (repli : niveau épuisé -> grilles restantes des autres niveaux)
+//   courante  : index de la grille en cours (toujours exclue)
+//   resultats : { idGrille: { win, … } }, aujourd'hui quatuor-res ; demain, ceux du compte
+//   aleatoire : tirage au sort (mode hasard, hors grille du jour) au lieu de l'ordre de la liste
+// Renvoie { idx } ou, s'il ne reste rien, { fini:true, perdues:[idx…], faites:[idx…] }.
+// Grilles exclues : terminées (gagnées ou perdues), en cours, et grilles du calendrier pas encore sorties.
+// =====================================================================
+function choisirProchaineGrille({portee,courante=-1,resultats={},aleatoire=false}){
+  const fait=i=>!!resultats[GRIDS[i].id];
+  // dans l'ordre de la liste, à partir de la grille en cours
+  const tourne=l=>{ const p=l.indexOf(courante); return (p<0?l:l.slice(p+1).concat(l.slice(0,p))).filter(i=>i!==courante); };
+  const base=portee.theme ? themeGrids(portee.theme)
+    : GRIDS.map((_,i)=>i).filter(i=>visible(i)&&!(aleatoire&&i===dailyIdx));
+  const niv=portee.niveau&&portee.niveau!=="toutes" ? base.filter(i=>GRIDS[i].diff===portee.niveau) : base;
+  let champ=niv, libres=tourne(niv).filter(i=>!fait(i));
+  if(!libres.length&&portee.repli){ champ=base; libres=tourne(base).filter(i=>!fait(i)); }
+  if(libres.length) return {idx:aleatoire?libres[Math.floor(Math.random()*libres.length)]:libres[0]};
+  const faites=champ.filter(fait);
+  return {fini:true, perdues:faites.filter(i=>!resultats[GRIDS[i].id].win), faites};
+}
+// Ouvre une grille : une grille perdue passe toujours par retenter() (autorisation de nouvel essai)
+function ouvrirGrille(i,opts={}){
+  const x=loadRes()[GRIDS[i].id];
+  if(x&&!x.win) retenter(i,opts);
+  else { closeSheet(); setTimeout(()=>switchGame(i,opts),250); }
+}
+// Tout est fait dans la portée : « Retenter mes grilles perdues » / « Rejouer au hasard »
+function openTermine(choix,opts,quoi){
+  const {perdues,faites}=choix, any=a=>a[Math.floor(Math.random()*a.length)];
+  $("drawer").classList.remove("open");
+  openSheet(`<div class="fini"><div class="big">🎉</div><h2>${perdues.length?"Tu as tout terminé !":"Tu as tout réussi !"}</h2>
+    <p>Tu as fait ${faites.length===1?`la seule grille ${quoi.replace(/^disponibles$/,"disponible")}`:`les ${faites.length} grilles ${quoi}`}.</p>
+    ${perdues.length?`<button class="pill main full" id="finPerdues">Retenter mes grilles perdues (${perdues.length})</button>`:""}
+    <button class="pill ${perdues.length?"soft":"main"} full" id="finHasard">Rejouer au hasard 🎲</button></div>`);
+  if(perdues.length) $("finPerdues").onclick=()=>ouvrirGrille(opts.hasard?any(perdues):perdues[0],opts);
+  $("finHasard").onclick=()=>{ const autres=faites.filter(i=>i!==gridIdx); ouvrirGrille(any(autres.length?autres:faites),opts); };
 }
 function launchRandom(diff,die){
   if(!GRIDS.length) return;
-  const {i,again}=pickRandom(diff);
-  if(i===undefined){ toast(diff==="toutes"?"Aucune grille disponible pour l'instant":`Pas encore de grille ${DIFFS[diff].name} disponible`); return; }
+  const choix=choisirProchaineGrille({portee:{niveau:diff},courante:gridIdx,resultats:loadRes(),aleatoire:true});
+  if(choix.fini&&!choix.faites.length){ toast(diff==="toutes"?"Aucune grille disponible pour l'instant":`Pas encore de grille ${DIFFS[diff].name} disponible`); return; }
   buzz(10);
   const go=()=>{
-    if(again) toast(diff==="toutes"?"Tu as déjà fait toutes les grilles ! En voici une à rejouer.":`Tu as déjà fait toutes les grilles ${DIFFS[diff].name} ! En voici une à rejouer.`);
-    const x=loadRes()[GRIDS[i].id];
-    if(x&&!x.win) retenter(i,{hasard:diff});      // grille perdue : nouvel essai, donc autorisation
-    else { closeSheet(); setTimeout(()=>switchGame(i,{hasard:diff}),200); }
+    if(choix.fini) openTermine(choix,{hasard:diff},diff==="toutes"?"disponibles":`de niveau ${dname(diff)}`);
+    else ouvrirGrille(choix.idx,{hasard:diff});
   };
   // Petit dé qui roule (< 0,6 s), puis la grille s'ouvre
   if(die&&!RM()) die.animate([{transform:"none"},{transform:"rotate(200deg) scale(1.25)",offset:.5},{transform:"rotate(360deg)"}],{duration:520,easing:"cubic-bezier(.3,.7,.4,1)"}).onfinish=go;
@@ -1251,13 +1280,11 @@ function renderThemes(){
   }
   if(!RM()) el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:300,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
-// « Suivante » : prochaine grille non terminée du même thème ; sinon retour au thème
+// « Suivante » : prochaine grille non terminée du même thème
 function nextInTheme(){
-  const id=grid.theme, ids=themeGrids(id), r=loadRes(), pos=ids.indexOf(gridIdx);
-  const i=ids.slice(pos+1).concat(ids.slice(0,pos)).find(j=>!r[GRIDS[j].id]);
-  closeSheet();
-  if(i===undefined){ toast(`Thème ${themeOf(id).nom} terminé ! 🎉`); setTimeout(()=>openThemes(id),250); return; }
-  setTimeout(()=>switchGame(i),250);
+  const id=grid.theme, choix=choisirProchaineGrille({portee:{theme:id},courante:gridIdx,resultats:loadRes()});
+  if(choix.fini) openTermine(choix,{},`du thème ${themeOf(id).icone} ${esc(themeOf(id).nom)}`);
+  else ouvrirGrille(choix.idx);
 }
 $("modes").addEventListener("click",e=>{
   const b=e.target.closest("button[data-m]"); if(!b||busy&&view==="jeu") return; buzz(8);
@@ -1266,14 +1293,12 @@ $("modes").addEventListener("click",e=>{
   else if(gridIdx!==dailyIdx||view==="themes") switchGame(dailyIdx);
 });
 
-// Grille suivante : de préférence une grille non jouée de la même difficulté
+// Grille suivante : une grille non terminée de la même difficulté, sinon d'une autre difficulté
 function nextGrid(){
-  const r=loadRes(), played=j=>!!r[GRIDS[j].id], n=GRIDS.length;
-  const after=l=>l.slice().sort((a,b)=>(a-gridIdx+n)%n-(b-gridIdx+n)%n);   // dans l'ordre, à partir de la grille actuelle
-  const vis=after(GRIDS.map((_,j)=>j).filter(j=>visible(j)&&j!==gridIdx)), same=vis.filter(j=>GRIDS[j].diff===grid.diff);
-  const i=same.find(j=>!played(j)) ?? vis.find(j=>!played(j)) ?? same[0] ?? vis[0];
-  if(i===undefined){ toast("Pas d'autre grille pour l'instant"); return; }
-  closeSheet(); setTimeout(()=>switchGame(i),250);
+  const choix=choisirProchaineGrille({portee:{niveau:grid.diff,repli:true},courante:gridIdx,resultats:loadRes()});
+  if(choix.fini&&!choix.faites.length){ toast("Pas d'autre grille pour l'instant"); return; }
+  if(choix.fini) openTermine(choix,{},"disponibles");
+  else ouvrirGrille(choix.idx);
 }
 function openHelp(){
   openSheet(`<h2>Comment jouer</h2>
