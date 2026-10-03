@@ -139,6 +139,8 @@ body:not([data-view="jeu"]) .sub,body:not([data-view="jeu"]) .area,body:not([dat
 
 .stack{display:grid;gap:10px}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+/* Grille : chaque doigt sélectionne sa case (multi-touch) ; pas de zoom, de défilement ni de loupe sur la grille */
+#grid,#grid .tile{touch-action:none;-webkit-touch-callout:none}
 .tile{position:relative;border:0;border-radius:14px;background:var(--card);box-shadow:0 4px 0 var(--edge);aspect-ratio:1/1;padding:4px;cursor:pointer;
   display:grid;place-items:center;text-align:center;font-weight:650;line-height:1.08;word-break:keep-all;overflow:hidden;
   transition:transform .12s ease, box-shadow .12s ease, background .12s, color .12s}
@@ -539,7 +541,10 @@ const todayStr=isoDay(today);   // date locale du joueur, ex. 2026-10-01
 const dayNum=Math.floor((today-start)/864e5)+1;
 // Vibrations : PWA -> navigator.vibrate(p) ; appli iOS -> retour haptique (impact léger, ou « SUCCESS » / « ERROR »)
 const Haptics=plugin("Haptics");
+// Plusieurs retours légers en moins de 60 ms (doigts posés ensemble) : un seul
+let dernierBuzz=0;
 const buzz=(p,type)=>{ try{
+  if(!type){ const t=performance.now(); if(t-dernierBuzz<60) return; dernierBuzz=t; }
   if(Haptics){ (type?Haptics.notification({type}):Haptics.impact({style:"LIGHT"})).catch(()=>{}); return; }
   navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1064,7 +1069,9 @@ function draw(){
   words.forEach(w=>{
     const b=document.createElement("button");
     b.className="tile"+(selected.has(w)?" on":""); b.innerHTML="<span></span>"; b.firstChild.textContent=w;
-    b.setAttribute("aria-pressed",selected.has(w)); b.dataset.w=w; b.onclick=()=>toggle(w,b);
+    b.setAttribute("aria-pressed",selected.has(w)); b.dataset.w=w;
+    // Clavier (Entrée, Espace) uniquement : le doigt et la souris passent par pointerdown
+    b.onclick=e=>{ if(e.pointerType!==undefined?e.pointerType==="":performance.now()-dernierContact>1000) toggle(w,b); };
     if(w===hintWord) b.classList.add("hintw");
     b.addEventListener("animationend",e=>{ if(e.animationName.startsWith("spr")) b.classList.remove("spring"); else if(e.animationName==="shake") b.classList.remove("shake"); });
     g.appendChild(b);
@@ -1083,9 +1090,9 @@ function updateUi(){
   updateHintUi();
   $("clear").disabled=selected.size===0||done||busy;
 }
-function toggle(w,b){
+function toggle(w,b,multi){
   if(done||busy) return;
-  if(selected.has(w)) selected.delete(w); else { if(selected.size>=4){ buzz(15); return; } selected.add(w); }
+  if(selected.has(w)) selected.delete(w); else { if(selected.size>=4){ if(!multi) buzz(15); return; } selected.add(w); }   // 5e contact : ignoré
   buzz(8); b.classList.toggle("on",selected.has(w)); b.setAttribute("aria-pressed",selected.has(w)); spring(b); updateUi();
   if(tuto) flipLayout(tutoUpdate);
 }
@@ -1100,6 +1107,24 @@ function starHtml(gIdx,gi){
   const id=favId(gIdx,gi), on=isFav(id);
   return `<span class="star${on?" on":""}" role="button" tabindex="0" data-id="${esc(id)}" data-g="${gIdx}" data-gi="${gi}" aria-pressed="${on}" aria-label="${on?"Retirer des favoris":"Ajouter aux favoris"}">${on?"★":"☆"}</span>`;
 }
+// ---- Sélection multi-touch ----
+// Chaque contact (pointerId) est traité indépendamment, dès l'appui : 2 ou 3 doigts posés ensemble
+// sélectionnent chacun leur case, comme des appuis successifs. Aucun verrou global ; 4 mots au maximum.
+const contacts=new Map();
+let dernierContact=-1e9;   // le « click » qui suit un appui ne doit pas re-basculer la case
+$("grid").addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button!==0) return;
+  const b=e.target.closest(".tile"); if(!b||!b.dataset.w) return;
+  if(e.pointerType!=="mouse") e.preventDefault();
+  const t=performance.now(); contacts.forEach((t0,id)=>{ if(t-t0>5000) contacts.delete(id); });   // contact perdu : oublié
+  contacts.set(e.pointerId,t); dernierContact=t;
+  // plusieurs doigts en même temps : pas de retour « grille pleine » pour les contacts en trop
+  toggle(b.dataset.w,b,contacts.size>1);
+});
+const finContact=e=>contacts.delete(e.pointerId);
+["pointerup","pointercancel"].forEach(t=>addEventListener(t,finContact,true));
+// Safari iOS : pas de zoom à deux doigts sur la grille
+document.addEventListener("gesturestart",e=>{ if(e.target.closest&&e.target.closest("#grid")) e.preventDefault(); },{passive:false});
 function toggleFav(st){
   if(st.dataset.tuto){ // tutoriel : démonstration, rien n'est enregistré
     const on=!st.classList.contains("on"); st.classList.toggle("on",on); st.textContent=on?"★":"☆"; st.setAttribute("aria-pressed",on); buzz(10);
