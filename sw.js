@@ -1,5 +1,5 @@
 // Service worker Quatuor : rend le jeu utilisable hors ligne
-const CACHE = "quatuor-v23";
+const CACHE = "quatuor-v24";
 const ASSETS = ["./", "./index.html", "./grilles.json", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png",
   "./fonts/bricolage.css", "./fonts/BricolageGrotesque-latin.woff2", "./fonts/BricolageGrotesque-latin-ext.woff2",
   "./mentions-legales.html", "./confidentialite.html", "./cgu.html"];

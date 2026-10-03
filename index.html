@@ -310,12 +310,23 @@ body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
 @media (max-width:360px){ .dock .homebox .hbrow .pill:not(:only-child) .sm{display:none} .dock .homebox .hbrow .pill:not(:only-child) .xs{display:inline} .homebox{padding:12px 10px 8px} .homebox .pill{font-size:.92rem;padding:0 4px} .hbrow{gap:6px} }
 .gitem .date{font-weight:700}
 
-/* Bulle du tutoriel */
-.tuto{position:relative;background:var(--ink);color:var(--bg);border-radius:16px;padding:12px 15px;margin:0 0 16px;
-  font-weight:650;font-size:.98rem;line-height:1.32;box-shadow:0 4px 0 rgba(0,0,0,.35)}
-.tuto::after{content:"";position:absolute;left:50%;bottom:-7px;width:16px;height:16px;margin-left:-8px;background:var(--ink);transform:rotate(45deg);border-radius:3px}
-.tuto .go{display:block;width:100%;margin-top:11px;height:48px;border-radius:24px;border:0;background:var(--bg);color:var(--ink);font:inherit;font-weight:800;font-size:1.02rem;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3)}
-.tuto .go:active{transform:translateY(2px);box-shadow:none}
+/* Prise en main : projecteur (fond assombri + cible mise en valeur) et bulles avec flèche */
+#spot{position:fixed;inset:0;z-index:40;pointer-events:none}
+#spot[hidden]{display:none}
+.spot-trou{position:fixed;border-radius:18px;box-shadow:0 0 0 200vmax rgba(10,12,28,.62);pointer-events:none;transition:left .3s,top .3s,width .3s,height .3s}
+.spot-b{position:fixed;pointer-events:auto}
+#spot.ctx .spot-trou,#spot.ctx .spot-b{display:none}
+.bulle{position:fixed;left:16px;top:16px;pointer-events:auto;width:max-content;max-width:min(340px,calc(100vw - 24px));display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;
+  background:var(--ink);color:var(--bg);border-radius:16px;padding:11px 14px;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.bulle p{flex:1 1 170px;margin:0;font-weight:700;font-size:.98rem;line-height:1.3}
+.bulle-act{display:flex;align-items:center;gap:12px;margin-left:auto}
+.bulle-act[hidden]{display:none}
+.bulle .skipb{border:0;background:none;color:inherit;opacity:.7;font:inherit;font-size:.85rem;font-weight:650;text-decoration:underline;text-underline-offset:3px;padding:6px 0;cursor:pointer}
+.bulle .okb{border:0;border-radius:999px;background:var(--bg);color:var(--ink);font:inherit;font-weight:800;font-size:.95rem;padding:8px 16px;cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.bulle .fl{position:absolute;width:14px;height:14px;background:var(--ink);transform:rotate(45deg);border-radius:3px}
+.bulle .fl[hidden]{display:none}
+.cible{animation:cible 1.3s ease-in-out infinite;outline:3px solid transparent;outline-offset:3px;border-radius:14px}
+@keyframes cible{50%{outline-color:var(--l1)}}
 .sub.tsub{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .skip{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.88rem;font-weight:650;text-decoration:underline;text-underline-offset:3px;padding:8px 0 8px 8px;cursor:pointer}
 
@@ -481,7 +492,6 @@ body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
   <div class="modes" id="modes" role="tablist"><button data-m="jour" role="tab" class="on"><span class="lg">Grille du jour</span><span class="sm">Du jour</span></button><button data-m="bonus" role="tab">Bonus</button><button data-m="hasard" role="tab">Hasard 🎲</button></div>
   <div class="sub" id="sub"></div>
   <div class="area">
-    <div class="tuto" id="tuto" hidden><span id="tutoTxt"></span></div>
     <div class="hintbar" id="hintBar" hidden></div>
     <div class="stack">
       <div class="stack" id="solved"></div>
@@ -514,6 +524,8 @@ body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
   <button data-tab="moi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>Moi</button>
 </div></nav>
 <div class="toast" id="toast"></div>
+<div id="spot" hidden><div class="spot-trou"></div><div class="spot-b"></div><div class="spot-b"></div><div class="spot-b"></div><div class="spot-b"></div>
+  <div class="bulle" role="dialog" aria-live="polite"><p></p><div class="bulle-act"></div><i class="fl" aria-hidden="true"></i></div></div>
 
 <script>
 // Chaque grille : 4 groupes du plus facile (niveau 0) au plus dur (niveau 3), avec une anecdote
@@ -535,10 +547,11 @@ let attempt=1, hasard=null;
 let hints=0, hintCat=-1, hintWord=null;   // indices utilisés, catégorie et mot de l'indice
 const MAX_HINTS=2;   // n° de l'essai en cours ; difficulté du mode « Grille au hasard » (null hors de ce mode)
 // Grille d'entraînement du premier lancement (hors GRIDS : aucun impact sur stats, résultats ou favoris)
-const TUTO = D("facile",[G("Animaux domestiques",["Chat","Chien","Lapin","Cheval"],"Le lapin n'est pas un rongeur : c'est un lagomorphe, comme le lièvre."),
-  G("Pays",["France","Italie","Espagne","Japon"],"Le Japon compte plus de 14 000 îles !"),
-  G("Fruits",["Pomme","Banane","Fraise","Poire"],"Pour un botaniste, la banane est une baie… mais pas la fraise !"),
-  G("Couleurs",["Rouge","Bleu","Vert","Orange"],"En français, « orange » a d'abord désigné le fruit. La couleur a pris son nom bien plus tard.")]);
+// Grille d'entraînement du tutoriel, très facile (hors GRIDS : aucun impact sur stats, série, résultats, favoris ni anti-répétition)
+const TUTO = D("facile",[G("Fruits",["Pomme","Banane","Fraise","Cerise"],"Pour un botaniste, la banane est une baie… mais pas la fraise !"),
+  G("Animaux de la ferme",["Vache","Cochon","Mouton","Poule"],"Le cochon ne transpire presque pas : il se roule dans la boue pour se rafraîchir."),
+  G("Couleurs",["Rouge","Bleu","Vert","Jaune"],"Dans la Rome antique, le bleu était mal aimé : c'était la couleur des barbares."),
+  G("Pays",["France","Italie","Japon","Brésil"],"Le Japon compte plus de 14 000 îles !")]);
 // Typographie française : espaces insécables avant : ; ! ? » et après « (pas de ponctuation seule en début de ligne)
 const fr=t=>t.replace(/ ([:;!?»])/g,"\u00A0$1").replace(/« /g,"«\u00A0");
 TUTO.forEach(g=>{ g.fact=fr(g.fact); g.name=fr(g.name); });
@@ -832,20 +845,20 @@ function newGame(idx,opts={}){
   const lostView=!!(prev&&!prev.win&&opts.essai!==JETON_ESSAI&&!sv);
   attempt=sv?sv.attempt:opts.essai===JETON_ESSAI&&prev?(prev.tries||1)+1:1;
   words=shuffleArr(grid.flatMap(g=>g.words)); selected=new Set(); found=[]; mistakes=0; history=[]; tried=new Set(); done=false; busy=false;
-  maxErr=tuto?Infinity:DIFFS[grid.diff].err;   // tutoriel : erreurs illimitées
-  $("lives").querySelector(".dots").innerHTML=tuto?"":"<i></i>".repeat(maxErr);
+  maxErr=tuto?4:DIFFS[grid.diff].err;   // tutoriel : 4 erreurs affichées, mais impossible de perdre
+  $("lives").querySelector(".dots").innerHTML="<i></i>".repeat(maxErr);
   const d=today.toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
   const arch=!tuto&&practice&&isArchive(idx);   // grille du calendrier d'un jour passé
   const badge=`<span class="dbadge l${DIFFS[grid.diff].c}">${dname(grid.diff)}</span>`;
   $("sub").classList.toggle("tsub",tuto);
-  $("sub").innerHTML = tuto ? `<span>Grille d'<b>entraînement</b></span><button class="skip" id="skipTuto">Passer le tutoriel</button>`
+  $("sub").innerHTML = tuto ? `<span>Grille d'<b>entraînement</b></span>`
     : (isTheme() ? `${themeOf(grid.theme).icone} ${esc(themeOf(grid.theme).nom)} · <b>${esc(themeLabel(idx))}</b>`
       : arch ? `Grille du <b>${dateLongue(grid.jour)}</b>`
       : practice ? `Grille <b>n°${grid.num}</b>` : `${dailyBonus?"Grille bonus":"Grille du jour"} · <b>${d}</b>`)+badge;
-  if(tuto) $("skipTuto").onclick=endTuto;
-  $("solved").innerHTML=""; $("lives").style.display=tuto?"none":"flex";
+  $("solved").innerHTML=""; $("lives").style.display="flex";
   const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost","pending","home"); document.body.classList.remove("home");
-  tutoMsg=""; $("tuto").hidden=!tuto||tutoHold; tutoUpdate();
+  if(!tuto&&tutoEtape){ tutoEtape=0; BULLE.fermer(); }
+  clearTimeout(minuteurIndice);
   document.body.classList.toggle("notabs",tuto);
   setView("jeu");
   if(sv){ restaurerPartie(sv); hasard=opts.hasard||sv.hasard||null; }
@@ -855,6 +868,7 @@ function newGame(idx,opts={}){
   draw();
   if(sv&&hintCat>=0) renderHint();
   updateNextLabels();
+  lancerMinuteurIndice();
 }
 // Plateau d'une grille réussie : les 4 bandeaux (catégories, mots, anecdotes)
 function showWonBoard(prev){
@@ -875,7 +889,8 @@ function showLostBoard(prev){
 // =====================================================================
 // INDICES 💡 (2 au maximum par grille)
 // ⚠️ autoriserIndice() est le SEUL point d'entrée pour obtenir un indice.
-// Pour l'instant elle autorise toujours. Plus tard (appli iOS), c'est ici qu'on affichera
+// Pour l'instant elle autorise toujours (idGrille vaut "tuto" pour la grille d'entraînement : jamais de pub).
+// Plus tard (appli iOS), c'est ici qu'on affichera
 // une pub récompensée AdMob : ne renvoyer true que si la pub a été regardée jusqu'au bout,
 // false si le joueur l'a fermée avant ou si elle n'a pas pu se charger.
 // donnerIndice() refuse d'agir sans JETON_INDICE, que seul demanderIndice() transmet.
@@ -886,10 +901,10 @@ async function autoriserIndice(idGrille){
 const JETON_INDICE=Symbol("indice autorisé");
 let indiceEnCours=false;
 async function demanderIndice(){
-  if(tuto||done||busy||hints>=MAX_HINTS||indiceEnCours||!grid||gridIdx<0) return;
+  if((tuto&&tutoEtape!==4)||done||busy||hints>=MAX_HINTS||indiceEnCours||!grid||(!tuto&&gridIdx<0)) return;
   indiceEnCours=true; const id=gameId;
   try{
-    const ok=await autoriserIndice(grid.id);
+    const ok=await autoriserIndice(tuto?"tuto":grid.id);
     if(!ok){ toast("Indice non disponible"); return; }
     if(id===gameId&&!done) donnerIndice(JETON_INDICE);
   }finally{ indiceEnCours=false; updateHintUi(); }
@@ -905,6 +920,7 @@ function donnerIndice(jeton){
   }
   sauverPartie();
   flipLayout(renderHint);
+  tutoEvent("indice");
   if(!RM()) $("hintBar").animate([{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
 function renderHint(){
@@ -919,8 +935,8 @@ function updateHintUi(){
   const b=$("hintBtn"); if(!b) return;
   const left=MAX_HINTS-hints;
   b.querySelector(".hcount").textContent=left;
-  b.style.display=tuto?"none":"";
-  b.disabled=tuto||done||busy||left<=0||!grid;
+  b.style.display="";
+  b.disabled=(tuto&&tutoEtape!==4)||done||busy||left<=0||!grid;
   b.setAttribute("aria-label",`Indice (${left} ${pl(left,"restant","restants")})`);
 }
 
@@ -1096,28 +1112,151 @@ function verifierNouveauJour(){ if(document.visibilityState!=="hidden"&&isoDay(n
 document.addEventListener("visibilitychange",verifierNouveauJour);
 addEventListener("pageshow",e=>{ if(e.persisted) verifierNouveauJour(); });
 
-// ---- Tutoriel ----
-let tutoMsg="", tutoHold=false;   // tutoHold : bulle retenue tant que la pop-up de bienvenue est ouverte
-function releaseTuto(){
-  if(!tutoHold) return; tutoHold=false;
-  if(!tuto) return; $("tuto").hidden=false;
-  if(!RM()) $("tuto").animate([{opacity:0,transform:"translateY(-6px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
-}
-function tutoUpdate(){
+// =====================================================================
+// PRISE EN MAIN
+// A. Tutoriel guidé (premier lancement, ou « Revoir le tuto ») sur la grille d'entraînement TUTO :
+//    projecteur (fond assombri, cible mise en valeur, bulle avec flèche) ; l'étape suivante n'arrive
+//    qu'après l'action demandée. 1 trouver un groupe, 2 faire une erreur (3 « Pas grave… »),
+//    4 utiliser un indice, 5 finir la grille, 6 « C'est parti pour la grille du jour ! ».
+// B. Bulles contextuelles : chacune une seule fois (clé quatuor-bulle-<nom>), jamais deux en même temps,
+//    jamais pendant le tutoriel ni par-dessus une pop-up.
+// =====================================================================
+const BULLE=(()=>{
+  const box=$("spot"), trou=box.querySelector(".spot-trou"), bl=[...box.querySelectorAll(".spot-b")];
+  const bu=box.querySelector(".bulle"), txt=bu.querySelector("p"), act=bu.querySelector(".bulle-act"), fl=bu.querySelector(".fl");
+  let cfg=null, raf=0, dernier="";
+  const poser=(e,l,t,w,h)=>Object.assign(e.style,{left:l+"px",top:t+"px",width:Math.max(0,w)+"px",height:Math.max(0,h)+"px"});
+  function placer(){
+    const W=innerWidth, H=innerHeight, tabs=$("tabs");
+    const haut=(parseFloat(getComputedStyle(document.documentElement).paddingTop)||0)+8;
+    const bas=getComputedStyle(tabs).display!=="none"?tabs.getBoundingClientRect().top:H;
+    const rs=(cfg.cibles||[]).map(q=>document.querySelector(q)).filter(e=>e&&e.getClientRects().length).map(e=>e.getBoundingClientRect()).filter(r=>r.width&&r.height);
+    const pad=6, u=rs.length?{l:Math.min(...rs.map(r=>r.left))-pad,t:Math.min(...rs.map(r=>r.top))-pad,r:Math.max(...rs.map(r=>r.right))+pad,b:Math.max(...rs.map(r=>r.bottom))+pad}:null;
+    const bw=bu.offsetWidth, bh=bu.offsetHeight, cle=JSON.stringify([u,W,H,bw,bh]);
+    if(cle===dernier) return; dernier=cle;
+    if(cfg.mode==="spot"){   // trou dans le voile + 4 zones qui bloquent les appuis hors de la cible
+      const z=u||{l:W/2,t:H/2,r:W/2,b:H/2};
+      poser(trou,z.l,z.t,z.r-z.l,z.b-z.t);
+      poser(bl[0],0,0,W,z.t); poser(bl[1],0,z.b,W,H-z.b); poser(bl[2],0,z.t,z.l,z.b-z.t); poser(bl[3],z.r,z.t,W-z.r,z.b-z.t);
+    }
+    let x=(W-bw)/2, y=Math.max(haut,(Math.min(H,bas)-bh)/2);
+    fl.hidden=!u;
+    if(u){
+      const cx=(u.l+u.r)/2; x=Math.min(Math.max(cx-bw/2,12),W-bw-12);
+      let dessous=false;
+      if(u.t-bh-12>=haut) y=u.t-bh-12;                              // au-dessus de la cible
+      else if(u.b+12+bh<=bas-8){ y=u.b+12; dessous=true; }          // en dessous (jamais sous la barre d'onglets)
+      else { y=haut; fl.hidden=true; }                               // pas de place : en haut de l'écran
+      fl.style.left=Math.min(Math.max(cx-x-7,16),bw-30)+"px";
+      fl.style.top=dessous?"-6px":"auto"; fl.style.bottom=dessous?"auto":"-6px";
+    }
+    bu.style.left=x+"px"; bu.style.top=y+"px";
+  }
+  function boucle(){ if(!cfg) return; placer(); raf=requestAnimationFrame(boucle); }
+  return {
+    // c = { mode:"spot"|"ctx", txt, cibles:[sélecteurs], bouton, ok, passer, onClose }
+    ouvrir(c){
+      if(cfg) this.fermer(true);
+      cfg=c; dernier=""; box.className=c.mode; box.hidden=false; txt.textContent=c.txt;
+      act.innerHTML=(c.passer?'<button class="skipb">Passer</button>':"")+(c.bouton?`<button class="okb">${c.bouton}</button>`:"");
+      act.hidden=!act.innerHTML;
+      const sk=act.querySelector(".skipb"), ok=act.querySelector(".okb");
+      if(sk) sk.onclick=()=>{ buzz(8); c.passer(); };
+      if(ok) ok.onclick=()=>{ buzz(8); c.ok(); };
+      if(c.mode==="ctx") (c.cibles||[]).forEach(q=>{ const e=document.querySelector(q); if(e) e.classList.add("cible"); });
+      cancelAnimationFrame(raf); boucle();
+      if(!RM()) bu.animate([{opacity:0,transform:"translateY(6px) scale(.97)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
+    },
+    fermer(silence){
+      if(!cfg) return; const c=cfg; cfg=null; cancelAnimationFrame(raf); box.hidden=true;
+      document.querySelectorAll(".cible").forEach(e=>e.classList.remove("cible"));
+      if(!silence&&c.onClose) c.onClose();
+    },
+    get ouverte(){ return cfg; }
+  };
+})();
+// Bulle contextuelle : un appui ailleurs la ferme (l'appui agit normalement)
+addEventListener("pointerdown",e=>{ const c=BULLE.ouverte; if(c&&c.mode==="ctx"&&!(e.target.closest&&e.target.closest(".bulle"))) BULLE.fermer(); },true);
+
+// ---- A. Tutoriel guidé ----
+let tutoEtape=0;
+const TUTO_ETAPES={
+  1:{txt:"Trouve 4 mots qui vont ensemble, puis touche Valider.",cibles:["#grid","#submit"]},
+  2:{txt:"Maintenant, fais exprès une erreur avec 4 mots qui ne vont pas ensemble.",cibles:["#grid","#submit"]},
+  3:{txt:"Pas grave, tu as droit à 4 erreurs.",cibles:["#lives"],bouton:"Suite ›"},
+  4:{txt:"Bloqué ? Touche 💡 pour obtenir un indice.",cibles:["#hintBtn"]},
+  5:{txt:"Bien vu ! Termine la grille.",cibles:["#grid","#submit"]},
+  6:{txt:"C'est parti pour la grille du jour !",cibles:[],bouton:"Jouer la grille du jour"}
+};
+function tutoAller(n){
   if(!tuto) return;
-  const sel=[...selected], fruits=TUTO[2].words, left=4-found.length;
-  const msg = done ? "Tu es prêt ! Place à la grille du jour."
-    : selected.has("Orange")&&sel.some(w=>fruits.includes(w)) ? "Attention aux pièges : certains mots vont dans plusieurs catégories !"
-    : found.length===0 ? "Touche 4 mots qui ont un point commun, puis Valider."
-    : found.length===1 ? "Bravo ! Chaque groupe révèle une anecdote. Tu peux la mettre en favori avec l'étoile ⭐."
-    : `Continue ! Plus que ${left} ${pl(left,"groupe","groupes")} à trouver.`;
-  if(msg===tutoMsg) return; tutoMsg=msg;
-  const t=$("tutoTxt"); t.textContent=msg;
-  const old=$("tuto").querySelector(".go"); if(old) old.remove();
-  if(done){ const b=document.createElement("button"); b.className="go"; b.textContent="Jouer la grille du jour"; b.onclick=endTuto; $("tuto").appendChild(b); }
-  if(!RM()) $("tuto").animate([{opacity:.4,transform:"translateY(4px)"},{opacity:1,transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.8,.3,1)"});
+  tutoEtape=n; const E=TUTO_ETAPES[n]; updateHintUi();
+  BULLE.ouvrir({mode:"spot",txt:fr(E.txt),cibles:E.cibles,bouton:E.bouton,
+    ok:n===3?()=>tutoAller(hints<MAX_HINTS&&!done?4:5):n===6?endTuto:null,
+    passer:n<6?endTuto:null});
 }
-function endTuto(){ ls.set("quatuor-tuto-done","1"); gridsReady.then(ok=>{ if(ok) switchGame(dailyIdx); else { tuto=false; showLoadError(); } }); }
+// Actions du joueur pendant le tutoriel
+function tutoEvent(ev){
+  if(!tuto||!tutoEtape) return;
+  const id=gameId, plusTard=(f,d)=>setTimeout(()=>{ if(id===gameId&&tuto) f(); },d);
+  if(ev==="fin"){ BULLE.fermer(); tutoEtape=6; plusTard(()=>tutoAller(6),1400); }
+  else if(ev==="groupe"&&tutoEtape===1){ BULLE.fermer(); plusTard(()=>{ if(!done) tutoAller(2); },1500); }   // le temps de lire l'anecdote
+  else if(ev==="erreur"&&tutoEtape===2) plusTard(()=>{ if(!done) tutoAller(3); },450);
+  else if(ev==="indice"&&tutoEtape===4){ BULLE.fermer(); tutoEtape=5; plusTard(()=>{ if(!done) tutoAller(5); },700); }
+}
+function lancerTuto(){ newGame(-1); scrollTo(0,0); const id=gameId; setTimeout(()=>{ if(id===gameId&&tuto) tutoAller(1); },450); }
+function endTuto(){
+  BULLE.fermer(); tutoEtape=0; ls.set("quatuor-tuto-done","1");
+  gridsReady.then(ok=>{ if(ok) switchGame(dailyIdx); else { tuto=false; showLoadError(); } });
+}
+
+// ---- B. Bulles contextuelles ----
+const BULLES={
+  bonus:{cible:'#modes [data-m="bonus"]',txt:"D'autres grilles t'attendent ici, rangées par niveau !",ok:()=>ongletDe(view)==="jouer"},
+  indice:{cible:"#hintBtn",txt:"Bloqué ? Touche 💡 pour obtenir un indice.",ok:()=>view==="jeu"&&!done&&!$("hintBtn").disabled},
+  themes:{cible:'.tabs [data-tab="themes"]',txt:"Envie d'un sujet précis ? Essaie les Thèmes !",ok:()=>view!=="themes"},
+  serie:{cible:'.tabs [data-tab="progres"]',txt:"Ta série 🔥 et le compte à rebours sont dans Progrès.",ok:()=>view!=="progres"},
+  moi:{cible:".mcards",txt:"Le mode en ligne arrive bientôt !",ok:()=>view==="moi"}
+};
+let fileBulles=[], bulleCtx=null, minuteurIndice=0;
+const bulleVue=id=>!!ls.get("quatuor-bulle-"+id);
+function proposerBulle(id){
+  if(bulleVue(id)||bulleCtx===id||fileBulles.includes(id)) return;
+  fileBulles.push(id); setTimeout(essayerBulle,400);
+}
+function essayerBulle(){
+  if(bulleCtx||tuto||tutoEtape||BULLE.ouverte||!fileBulles.length||document.hidden) return;
+  if($("sheet").classList.contains("open")||(busy&&!done)) return;
+  for(const id of [...fileBulles]){
+    const B=BULLES[id];
+    if(!B.ok()){ if(id==="indice") fileBulles=fileBulles.filter(x=>x!==id); continue; }   // l'indice n'a de sens que pendant la partie
+    const el=document.querySelector(B.cible), r=el&&el.getBoundingClientRect();
+    if(!r||!r.width||r.bottom<0||r.top>innerHeight) continue;
+    fileBulles=fileBulles.filter(x=>x!==id); bulleCtx=id; ls.set("quatuor-bulle-"+id,"1");
+    BULLE.ouvrir({mode:"ctx",txt:fr(B.txt),cibles:[B.cible],bouton:"OK",ok:()=>BULLE.fermer(),onClose:()=>{ bulleCtx=null; setTimeout(essayerBulle,800); }});
+    return;
+  }
+}
+setInterval(essayerBulle,1000);
+// Une pop-up s'ouvre : la bulle contextuelle se retire et reviendra quand la pop-up sera fermée
+function suspendreBulle(){
+  if(!bulleCtx) return; const id=bulleCtx;
+  ls.del("quatuor-bulle-"+id); fileBulles.unshift(id); BULLE.fermer();
+}
+// Bulles déclenchées par les grilles terminées (et au lancement, pour les joueurs qui ne les ont jamais vues)
+function bullesProgression(gagneeDuJour){
+  if(tuto) return;
+  const n=Object.keys(loadRes()).length;
+  if(n>=1) proposerBulle("bonus");
+  if(n>=2) proposerBulle("themes");
+  if(gagneeDuJour||(load().wins||0)>=1) proposerBulle("serie");
+}
+// Indice : 60 s sans trouver de groupe
+function lancerMinuteurIndice(){
+  clearTimeout(minuteurIndice);
+  if(tuto||done||bulleVue("indice")) return;
+  const id=gameId; minuteurIndice=setTimeout(()=>{ if(id===gameId&&!done&&!tuto) proposerBulle("indice"); },60000);
+}
 
 // Passage à une autre grille : l'ancienne glisse vers la gauche, la nouvelle arrive par la droite
 function switchGame(idx,opts){
@@ -1139,7 +1278,7 @@ function switchGame(idx,opts){
 }
 // En attendant les grilles : tuiles en squelette (jamais d'écran vide)
 function showSkeleton(){
-  busy=true; done=false; selected=new Set(); tuto=false; $("tuto").hidden=true; document.body.classList.remove("notabs");
+  busy=true; done=false; selected=new Set(); tuto=false; document.body.classList.remove("notabs");
   $("sub").classList.remove("tsub"); $("sub").textContent="Chargement des grilles…";
   $("solved").innerHTML=""; $("lives").style.display="none";
   const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","home"); document.body.classList.remove("home");
@@ -1190,7 +1329,6 @@ function toggle(w,b,multi){
   if(done||busy) return;
   if(selected.has(w)) selected.delete(w); else { if(selected.size>=4){ if(!multi) buzz(15); return; } selected.add(w); }   // 5e contact : ignoré
   buzz(8); SON.jouer(selected.has(w)?"sel":"desel"); b.classList.toggle("on",selected.has(w)); b.setAttribute("aria-pressed",selected.has(w)); spring(b); updateUi();
-  if(tuto) flipLayout(tutoUpdate);
 }
 
 // ---- Favoris (« Mon carnet ») ----
@@ -1347,7 +1485,7 @@ function foundGroup(gi,tiles){
       if(hintCat>=0) renderHint();   // l'indice portait peut-être sur ce groupe
       band=addSolved(gi,false,rm?"":"pre");
       busy=false; updateUi();
-      if(found.length===4) finish(true); else { sauverPartie(); tutoUpdate(); }
+      if(found.length===4) finish(true); else { sauverPartie(); lancerMinuteurIndice(); tutoEvent("groupe"); }
     });
     const openFact=()=>{ if(id===gameId&&band.isConnected&&grid[gi].fact) flipLayout(()=>setOpen(band,true)); };
     if(rm){ openFact(); return; }
@@ -1379,19 +1517,21 @@ function submit(){
     foundGroup(gi,tiles);
   } else {
     mistakes++; buzz([40,40,40],"ERROR"); SON.jouer("erreur");
+    if(tuto&&mistakes>=maxErr) mistakes=maxErr-1;   // tutoriel : on ne peut pas perdre
     const c={}; sel.forEach(w=>c[groupOf(w)]=(c[groupOf(w)]||0)+1);
     if(Object.values(c).includes(3)) toast("Presque ! Un seul intrus",true);
     tiles.forEach(t=>{ t.classList.remove("shake","spring"); void t.offsetWidth; t.classList.add("shake"); });
     updateUi();
     if(mistakes>=maxErr){ busy=true; const id=gameId; setTimeout(()=>{ if(id===gameId) finish(false); },500); }
-    else sauverPartie();
+    else { sauverPartie(); if(!tuto&&mistakes>=2) proposerBulle("indice"); }
+    tutoEvent("erreur");
   }
 }
 
 function finish(win){
   done=true; selected.clear(); const id=gameId; lastWin=win;
   if(tuto){ // fin du tutoriel : pas de résultats ni de stats
-    $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoUpdate();
+    $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoEvent("fin");
     setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"FETE"); SON.jouer("victoire"); } },650); return; }
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); });
   oublierPartie(grid.id);   // grille terminée : plus de partie en cours à reprendre
@@ -1416,6 +1556,8 @@ function finish(win){
     }
   }
   planifierRappels();
+  clearTimeout(minuteurIndice);
+  bullesProgression(win&&!practice);
   if(!win){ showPending(700); return; }   // défaite : la solution reste cachée, on propose de réessayer
   const dk=document.querySelector(".dock");
   $("lives").style.display="none"; dk.classList.add("over"); dk.classList.remove("lost","pending");
@@ -1627,6 +1769,7 @@ function renderPage(){
   if($("setBack")) $("setBack").onclick=retourReglages;
   if($("setHelp")) $("setHelp").onclick=openHelp;
   if(view==="reglages") brancherParametres(el);
+  if(view==="moi") proposerBulle("moi");
   brancherReglages();
 }
 // Onglet Jouer › Bonus : jours précédents, grilles à retenter, et les 4 niveaux
@@ -1716,11 +1859,11 @@ function brancherParametres(el){
   const App=plugin("App");
   if(App&&$("setVer")) App.getInfo().then(i=>{ if($("setVer")) $("setVer").textContent=`${i.version} (${i.build})`; }).catch(()=>{});
 }
-// « Revoir le tuto »
+// « Revoir le tuto » : remet à zéro le tutoriel et toutes les bulles, puis relance le tutoriel guidé
 function revoirTuto(){
-  buzz(8); closeSheet();
-  if(!GRIDS.length){ toast("Chargement des grilles…"); return; }
-  newGame(-1); scrollTo(0,0);
+  buzz(8); closeSheet(); BULLE.fermer(true); bulleCtx=null; fileBulles=[];
+  Object.keys(BULLES).forEach(id=>ls.del("quatuor-bulle-"+id));
+  lancerTuto();
 }
 // « Réinitialiser ma progression » : double confirmation. Efface résultats, statistiques, série et parties en cours ;
 // garde les favoris, les réglages et le tutoriel.
@@ -1767,7 +1910,7 @@ $("tabs").addEventListener("click",e=>{
   } else if(view!==t) showPage(t);
 });
 let onSheetClose=null;
-function openSheet(html,onClose){ $("sheetBody").innerHTML=html; $("sheet").scrollTop=0; onSheetClose=onClose||null;
+function openSheet(html,onClose){ suspendreBulle(); $("sheetBody").innerHTML=html; $("sheet").scrollTop=0; onSheetClose=onClose||null;
   $("veil").classList.add("open"); $("sheet").classList.add("open"); document.documentElement.classList.add("lock"); }
 function closeSheet(){ $("veil").classList.remove("open"); $("sheet").classList.remove("open");
   document.documentElement.classList.remove("lock");
@@ -1972,25 +2115,6 @@ function openHelp(){
     <button class="pill main" style="width:100%" id="okHelp">Jouer</button>${legalHtml()}`);
   $("okHelp").onclick=closeSheet;
 }
-function openWelcome(onClose){
-  const mark='<span class="mark"><i></i><i></i><i></i><i></i></span>';
-  openSheet(`<div class="wel">
-    <div class="whead">${mark}<div><h2>Bienvenue !</h2><p>Le défi culture G du jour</p></div></div>
-    <div class="whero"><div class="m16">${"<i></i>".repeat(16)}</div><span class="arr">→</span>
-      <div class="m4"><i class="l0"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i></div>
-      <p><b>16 mots</b><br>à ranger en<br><b>4 groupes de 4</b></p></div>
-    <div class="wgrid">
-      <div class="wc"><div class="v"><span class="mt on">Chat</span><span class="mt on">Chien</span><span class="mt on">Lapin</span><span class="mt on">Cheval</span><span class="mt ok">Valider ✓</span></div>Touche <b>4 mots</b> liés, puis <b>Valider</b></div>
-      <div class="wc"><div class="v"><div class="err"><span class="dd">${"<i></i>".repeat(4)}</span><span>Facile, Moyen</span><span class="dd">${"<i></i>".repeat(3)}</span><span>Difficile</span><span class="dd">${"<i></i>".repeat(2)}</span><span>GOAT 🐐</span></div></div><b>Erreurs</b> autorisées selon la difficulté</div>
-      <div class="wc"><div class="v"><span class="mt">Orange</span><span>→ 🍊 ou 🎨 ?</span></div><b>Gare aux pièges</b> : un mot peut sembler aller dans 2 groupes</div>
-      <div class="wc"><div class="v"><span class="wband l0">💡 Anecdote ⭐</span></div>Chaque groupe trouvé révèle une <b>anecdote</b></div>
-    </div>
-    <p class="whint">💡 Bloqué ? Jusqu'à <b>2 indices</b> par grille.</p>
-    <label class="wchk"><input type="checkbox" id="hideW"${ls.get("quatuor-hide-welcome")?" checked":""}> Ne plus afficher</label>
-    <button class="pill main" style="width:100%" id="goW">C'est parti</button></div>`,onClose);
-  $("hideW").onchange=e=>{ if(e.target.checked) ls.set("quatuor-hide-welcome","1"); else ls.del("quatuor-hide-welcome"); };
-  $("goW").onclick=closeSheet;
-}
 async function share(){
   const head=`Quatuor n°${grid.num} · ${dname(grid.diff)}${attempt>1?` · ${ordinal(attempt)} essai`:""}${hints?` · 💡${hints}`:""}`;
   const text=`${head}\n${history.map(r=>r.map(i=>ICON[i]).join("")).join("\n")}`;
@@ -2014,7 +2138,7 @@ $("shuffle").onclick=()=>{
 $("clear").onclick=()=>{
   if(busy||done) return; selected.clear();
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); spring(t); });
-  updateUi(); if(tuto) flipLayout(tutoUpdate);
+  updateUi();
 };
 $("seeRes").onclick=()=>{ if(done&&!tuto) openResults(lastWin); };
 $("nextG").onclick=nextOrRandom;
@@ -2075,6 +2199,7 @@ function boot(){
     GRIDS=g; THEMES=g.themes||[]; dailyIdx=pickDaily();
     if(!tuto){   // le tutoriel n'a pas besoin des grilles : on ne l'interrompt pas
       newGame(dailyIdx,{accueil:true});
+      bullesProgression(false);   // anciens joueurs : bulles de la nouvelle navigation jamais vues
       if(!RM()) [...$("grid").children].forEach((t,i)=>t.animate([{opacity:0,transform:"scale(.96)"},{opacity:1,transform:"none"}],
         {duration:380,delay:i*18,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     }
@@ -2086,11 +2211,9 @@ function lancer(){
   lireReglages(); appliquerReglages();
   migrateData();
   cdTick();
-  const firstRun=!ls.get("quatuor-tuto-done");
-  const showWelcome=!ls.get("quatuor-hide-welcome");
-  if(firstRun){ ls.set("quatuor-tuto-done","1"); tutoHold=showWelcome; newGame(-1); } else showSkeleton();
+  // Premier lancement : tutoriel guidé (marqué comme vu à la fin ou sur « Passer »)
+  if(!ls.get("quatuor-tuto-done")) lancerTuto(); else showSkeleton();
   boot();
-  if(showWelcome) setTimeout(()=>openWelcome(releaseTuto),300);
   // Appli iOS : l'écran de lancement s'efface dès que le jeu est affiché
   const splash=plugin("SplashScreen"); if(splash) requestAnimationFrame(()=>splash.hide({fadeOutDuration:250}).catch(()=>{}));
 }
