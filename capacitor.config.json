@@ -1,0 +1,19 @@
+{
+  "appId": "fr.playquatuor.app",
+  "appName": "Quatuor",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "never"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "launchFadeOutDuration": 250,
+      "showSpinner": false
+    },
+    "LocalNotifications": {
+      "iconColor": "#45D0B0"
+    }
+  }
+}

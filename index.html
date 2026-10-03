@@ -364,6 +364,29 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 .toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 14px);transform:translate(-50%,-20px);background:var(--ink);color:var(--bg);
   padding:10px 18px;border-radius:12px;font-weight:650;opacity:0;transition:opacity .2s, transform .2s;pointer-events:none;z-index:30}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+/* Réglages et rappels (appli iOS uniquement) */
+.regl{background:var(--bg);border-radius:16px;padding:4px 12px}
+.rrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;cursor:pointer}
+.rrow+.rrow{border-top:1.5px solid var(--edge)}
+.rrow b{display:block;font-weight:700;font-size:.95rem}
+.rrow small{display:block;color:var(--muted);font-size:.8rem;margin-top:1px}
+.rrow.off{opacity:.45}
+.tgl{flex:none;-webkit-appearance:none;appearance:none;width:50px;height:30px;margin:0;border-radius:15px;background:var(--edge);position:relative;cursor:pointer;transition:background .2s}
+.tgl::before{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--card);box-shadow:0 2px 0 rgba(0,0,0,.15);transition:transform .25s cubic-bezier(.3,1.3,.5,1)}
+.tgl:checked{background:var(--l0)}
+.tgl:checked::before{transform:translateX(20px)}
+.rheure{flex:none;border:0;border-radius:10px;padding:7px 10px;font:inherit;font-weight:800;font-size:1rem;background:var(--card);color:var(--ink);box-shadow:0 2px 0 var(--edge)}
+.notif{text-align:center}
+.notif .big{font-size:2.6rem;line-height:1;margin:4px 0 10px;display:inline-block}
+.notif .big.ring{animation:ring 1s ease-in-out .3s both}
+@keyframes ring{0%,100%{transform:none}15%{transform:rotate(16deg)}30%{transform:rotate(-14deg)}45%{transform:rotate(10deg)}60%{transform:rotate(-6deg)}75%{transform:rotate(3deg)}}
+.nex{display:flex;align-items:center;gap:12px;text-align:left;background:var(--bg);border-radius:16px;padding:12px 14px;margin:6px 0 14px}
+.nex .ic{flex:none;width:40px;height:40px;border-radius:10px;background:#1B2040;display:grid;place-items:center}
+.nex .ic .mark{grid-template-columns:repeat(2,9px);gap:3px}
+.nex .ic .mark i{width:9px;height:9px;border-radius:2.5px}
+.nex .ic .mark i:nth-child(4){background:#7888E6}
+.nex b{display:block;font-size:.92rem}
+.nex small{display:block;font-size:.9rem;color:var(--ink)}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:1ms!important;animation-delay:0s!important;transition-duration:1ms!important;transition-delay:0s!important}
 }
@@ -414,11 +437,14 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 const G = (name, words, fact) => ({name, words, fact});
 // Difficulté d'une grille : facile, moyen, difficile ou goat
 const D = (diff, groups) => Object.assign(groups, {diff});
+// ---- Appli iOS (Capacitor) ou PWA ? Le même code sert aux deux ----
+const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+// Plugin natif Capacitor (null dans la PWA)
+const plugin=n=>IS_NATIVE&&window.Capacitor.Plugins&&window.Capacitor.Plugins[n]||null;
 // Les grilles sont chargées depuis grilles.json (voir loadGrids)
-// URL des grilles : relative pour la PWA ; dans l'appli iOS (Capacitor), on va chercher la version en ligne.
-const GRIDS_REMOTE="https://polishman444.github.io/Quatuor/grilles.json";
-const GRIDS_URL=(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())?GRIDS_REMOTE:"grilles.json";
-const GRIDS_LOCAL="grilles.json";   // copie de secours embarquée (mise en cache par le service worker)
+// URL des grilles : relative pour la PWA ; dans l'appli iOS, version en ligne (adresse principale, puis adresse de secours)
+const GRIDS_REMOTE=["https://playquatuor.fr/grilles.json","https://polishman444.github.io/quatuor/grilles.json"];
+const GRIDS_LOCAL="grilles.json";   // copie de secours embarquée (mise en cache par le service worker ; incluse dans l'appli)
 let GRIDS=[];
 let attempt=1, hasard=null;
 let hints=0, hintCat=-1, hintWord=null;   // indices utilisés, catégorie et mot de l'indice
@@ -434,12 +460,41 @@ TUTO.forEach(g=>{ g.fact=fr(g.fact); g.name=fr(g.name); });
 const LEVELS=["Facile","Réflexion","Coriace","Casse-tête"];
 const ICON=["🌱","⚡","🔥","🧠"];
 const $=id=>document.getElementById(id);
-const ls={ get:k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } }, set:(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} }, del:k=>{ try{ localStorage.removeItem(k); }catch(e){} } };
+// ---- Stockage des données du joueur (résultats, stats, série, favoris, parties en cours, réglages) ----
+// PWA : localStorage, comme toujours. Appli iOS : @capacitor/preferences (iOS peut vider le localStorage d'une WebView),
+// avec une copie en mémoire chargée au lancement (initStockage) pour garder une lecture synchrone.
+// Mêmes clés et même format partout ; dans l'appli, le localStorage reste tenu à jour en double.
+let Prefs=plugin("Preferences");
+const memo=new Map();
+const ls={
+  get:k=>{ if(Prefs) return memo.has(k)?memo.get(k):null; try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set:(k,v)=>{ if(Prefs){ v=String(v); memo.set(k,v); Prefs.set({key:k,value:v}).catch(e=>console.warn("Quatuor : écriture impossible ("+k+")",e)); }
+    try{ localStorage.setItem(k,v); }catch(e){} },
+  del:k=>{ if(Prefs){ memo.delete(k); Prefs.remove({key:k}).catch(()=>{}); } try{ localStorage.removeItem(k); }catch(e){} }
+};
+// Appli iOS : charge les préférences en mémoire. Au premier lancement de l'appli avec ce stockage,
+// toutes les données « quatuor… » déjà présentes dans le localStorage sont recopiées (rien n'est perdu).
+async function initStockage(){
+  if(!Prefs) return;
+  try{
+    const {keys}=await Prefs.keys(), vals=await Promise.all(keys.map(key=>Prefs.get({key})));
+    keys.forEach((k,i)=>{ if(vals[i]&&vals[i].value!=null) memo.set(k,vals[i].value); });
+    if(!memo.has("quatuor-stockage-natif")){
+      const anciennes=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith("quatuor")) anciennes.push(k); } }catch(e){}
+      anciennes.forEach(k=>{ if(!memo.has(k)){ const v=localStorage.getItem(k); if(v!=null) ls.set(k,v); } });
+      ls.set("quatuor-stockage-natif","1");
+    }
+  }catch(e){ console.warn("Quatuor : préférences natives indisponibles, utilisation du localStorage",e); Prefs=null; memo.clear(); }
+}
 const start=new Date(2026,9,1), today=new Date(); today.setHours(0,0,0,0);
 const isoDay=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const todayStr=isoDay(today);   // date locale du joueur, ex. 2026-10-01
 const dayNum=Math.floor((today-start)/864e5)+1;
-const buzz=p=>{ try{ navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
+// Vibrations : PWA -> navigator.vibrate(p) ; appli iOS -> retour haptique (impact léger, ou « SUCCESS » / « ERROR »)
+const Haptics=plugin("Haptics");
+const buzz=(p,type)=>{ try{
+  if(Haptics){ (type?Haptics.notification({type}):Haptics.impact({style:"LIGHT"})).catch(()=>{}); return; }
+  navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 // Difficulté des grilles : nombre d'erreurs autorisées et couleur
@@ -515,8 +570,18 @@ function readGrids(text,src){
 // Réseau d'abord (≈3 s max), puis copie locale, puis copie embarquée
 async function loadGrids(){
   // Même arrivée après le délai, une réponse valide est gardée pour le prochain lancement
-  const net=fetch(GRIDS_URL,{cache:"no-cache"}).then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); })
-    .then(t=>{ const g=readGrids(t,"réseau"); if(g) ls.set("quatuor-grilles",t); return g; });
+  // (appli iOS : adresse principale, puis adresse de secours si la première échoue)
+  const urls=IS_NATIVE?GRIDS_REMOTE:[GRIDS_LOCAL];
+  const net=(async()=>{
+    for(let n=0;n<urls.length;n++){
+      try{
+        const ctl=IS_NATIVE&&window.AbortController?new AbortController():null, tm=ctl&&setTimeout(()=>ctl.abort(),8000);
+        const t=await fetch(urls[n],ctl?{cache:"no-cache",signal:ctl.signal}:{cache:"no-cache"}).then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.text(); }).finally(()=>clearTimeout(tm));
+        const g=readGrids(t,"réseau"); if(g) ls.set("quatuor-grilles",t);
+        if(g||n===urls.length-1) return g;
+      }catch(e){ if(n===urls.length-1) throw e; console.warn(`Quatuor : ${urls[n]} indisponible (${e.message}), essai de l'adresse de secours`); }
+    }
+  })();
   net.catch(()=>{});
   try{
     const g=await Promise.race([net,new Promise((_,ko)=>setTimeout(()=>ko(new Error("délai dépassé")),3000))]);
@@ -525,7 +590,7 @@ async function loadGrids(){
   const copy=ls.get("quatuor-grilles");
   if(copy){ const g=readGrids(copy,"copie locale"); if(g) return g; }
   try{
-    let r=("caches" in window)?await caches.match(GRIDS_LOCAL,{ignoreSearch:true}):null;
+    let r=(!IS_NATIVE&&"caches" in window)?await caches.match(GRIDS_LOCAL,{ignoreSearch:true}):null;
     if(!r) r=await fetch(GRIDS_LOCAL);
     const g=readGrids(await r.text(),"copie embarquée"); if(g) return g;
   }catch(e){ console.warn("Quatuor : copie embarquée introuvable",e); }
@@ -545,8 +610,8 @@ function migrateData(){
       ls.set("quatuor-favs",JSON.stringify(f)); } }catch(e){ console.warn("Quatuor : migration des favoris impossible",e); }
   ls.set("quatuor-migr","1");
 }
-function loadRes(){ try{ return JSON.parse(localStorage.getItem("quatuor-res"))||{}; }catch(e){ return {}; } }
-function saveRes(r){ try{ localStorage.setItem("quatuor-res",JSON.stringify(r)); }catch(e){} }
+function loadRes(){ try{ return JSON.parse(ls.get("quatuor-res"))||{}; }catch(e){ return {}; } }
+function saveRes(r){ try{ ls.set("quatuor-res",JSON.stringify(r)); }catch(e){} }
 let grid,gridIdx,practice,words,selected,found,mistakes,maxErr,history,tried,done,busy,gameId=0,menuTab=null,tuto=false,lastWin=false;
 
 // ---- Animations (transform + opacity uniquement) ----
@@ -877,7 +942,7 @@ function showHome(){
   $("hbRes").onclick=()=>{ if(done&&!tuto) openResults(lastWin); };
 }
 // Retour dans l'appli après minuit : on recharge pour la nouvelle grille du jour (la partie en cours est sauvegardée)
-function verifierNouveauJour(){ if(document.visibilityState!=="hidden"&&isoDay(new Date())!==todayStr) location.reload(); }
+function verifierNouveauJour(){ if(document.visibilityState!=="hidden"&&isoDay(new Date())!==todayStr) location.reload(); else if(document.visibilityState==="visible") planifierRappels(); }
 document.addEventListener("visibilitychange",verifierNouveauJour);
 addEventListener("pageshow",e=>{ if(e.persisted) verifierNouveauJour(); });
 
@@ -973,8 +1038,8 @@ function toggle(w,b){
 }
 
 // ---- Favoris (« Mon carnet ») ----
-function loadFavs(){ try{ const f=JSON.parse(localStorage.getItem("quatuor-favs")); return Array.isArray(f)?f:[]; }catch(e){ return []; } }
-function saveFavs(f){ try{ localStorage.setItem("quatuor-favs",JSON.stringify(f)); }catch(e){} }
+function loadFavs(){ try{ const f=JSON.parse(ls.get("quatuor-favs")); return Array.isArray(f)?f:[]; }catch(e){ return []; } }
+function saveFavs(f){ try{ ls.set("quatuor-favs",JSON.stringify(f)); }catch(e){} }
 const favId=(gIdx,gi)=>`${GRIDS[gIdx].id}:${GRIDS[gIdx][gi].name}`;
 const isFav=id=>loadFavs().some(f=>f.id===id);
 function starHtml(gIdx,gi){
@@ -1007,7 +1072,7 @@ document.addEventListener("keydown",e=>{ const st=e.target.closest&&e.target.clo
 document.addEventListener("animationend",e=>{ if(e.animationName==="starPop") e.target.classList.remove("bounce"); });
 
 // ---- Image d'une anecdote (canvas 1080×1080) ----
-const SITE=(location.origin+location.pathname).replace(/index\.html$/,"").replace(/^https?:\/\//,"").replace(/\/$/,"");
+const SITE=IS_NATIVE?"playquatuor.fr":(location.origin+location.pathname).replace(/index\.html$/,"").replace(/^https?:\/\//,"").replace(/\/$/,"");
 function wrapText(x,text,maxW){
   const lines=[]; let line="";
   fr(text).split(/ +/).forEach(w=>{ const t=line?line+" "+w:w; if(line&&x.measureText(t).width>maxW){ lines.push(line); line=w; } else line=t; });
@@ -1045,10 +1110,20 @@ async function factImage(f){
   x.fillStyle=MUTED; x.font=`650 36px ${FONT}`; x.textAlign="center"; x.fillText(SITE,S/2,982);
   return c;
 }
+// Partage natif (appli iOS) ; la PWA garde navigator.share
+const Share=plugin("Share"), Fs=plugin("Filesystem");
+const partageAnnule=e=>/cancel|annul/i.test(String(e&&(e.message||e.errorMessage||e)));
 async function shareFav(f,btn){
   if(btn) btn.disabled=true;
   try{
-    const c=await factImage(f), blob=await new Promise(r=>c.toBlob(r,"image/png"));
+    const c=await factImage(f);
+    // Appli iOS : image écrite dans le cache (@capacitor/filesystem), puis feuille de partage (@capacitor/share)
+    if(Share&&Fs){
+      const {uri}=await Fs.writeFile({path:"quatuor-anecdote.png",data:c.toDataURL("image/png").split(",")[1],directory:"CACHE"});
+      try{ await Share.share({files:[uri]}); }catch(e){ if(!partageAnnule(e)) throw e; }
+      return;
+    }
+    const blob=await new Promise(r=>c.toBlob(r,"image/png"));
     const file=new File([blob],"quatuor-anecdote.png",{type:"image/png"});
     if(navigator.canShare&&navigator.canShare({files:[file]})){
       try{ await navigator.share({files:[file]}); return; }catch(e){ if(e.name==="AbortError") return; }
@@ -1081,7 +1156,7 @@ function addSolved(gi,open,cls){
 // Groupe trouvé : les tuiles sautent, volent vers le bandeau et fusionnent
 function foundGroup(gi,tiles){
   const id=gameId, rm=RM();
-  busy=true; updateUi(); buzz(30);
+  busy=true; updateUi(); buzz(30,"SUCCESS");
   tiles.forEach((t,i)=>{ if(t._fa){ t._fa.cancel(); t._fa=null; } t.classList.remove("spring","shake"); t.style.setProperty("--i",i); t.classList.add("jump"); });
   setTimeout(()=>{
     if(id!==gameId) return;
@@ -1129,7 +1204,7 @@ function submit(){
   if(sel.every(w=>groupOf(w)===gi)){
     foundGroup(gi,tiles);
   } else {
-    mistakes++; buzz([40,40,40]);
+    mistakes++; buzz([40,40,40],"ERROR");
     const c={}; sel.forEach(w=>c[groupOf(w)]=(c[groupOf(w)]||0)+1);
     if(Object.values(c).includes(3)) toast("Presque ! Un seul intrus",true);
     tiles.forEach(t=>{ t.classList.remove("shake","spring"); void t.offsetWidth; t.classList.add("shake"); });
@@ -1143,7 +1218,7 @@ function finish(win){
   done=true; selected.clear(); const id=gameId; lastWin=win;
   if(tuto){ // fin du tutoriel : pas de résultats ni de stats
     $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoUpdate();
-    setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650); return; }
+    setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"SUCCESS"); } },650); return; }
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); });
   oublierPartie(grid.id);   // grille terminée : plus de partie en cours à reprendre
   // Résultats enregistrés dès maintenant (même si l'appli est fermée juste après) :
@@ -1166,16 +1241,17 @@ function finish(win){
       save(s);
     }
   }
+  planifierRappels();
   if(!win){ showPending(700); return; }   // défaite : la solution reste cachée, on propose de réessayer
   const dk=document.querySelector(".dock");
   $("lives").style.display="none"; dk.classList.add("over"); dk.classList.remove("lost","pending");
   if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
-  setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20]); } },650);
+  setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"SUCCESS"); } },650);
   setTimeout(()=>{ if(id===gameId) openResults(win); },RM()?600:1500);
 }
 
-function load(){ try{ return JSON.parse(localStorage.getItem("quatuor"))||{}; }catch(e){ return {}; } }
-function save(s){ try{ localStorage.setItem("quatuor",JSON.stringify(s)); }catch(e){} }
+function load(){ try{ return JSON.parse(ls.get("quatuor"))||{}; }catch(e){ return {}; } }
+function save(s){ try{ ls.set("quatuor",JSON.stringify(s)); }catch(e){} }
 function statsHtml(){
   const s=load(), alive=s.lastWin===dayNum||s.lastWin===dayNum-1, pct=s.played?Math.round((s.wins||0)/s.played*100):0;
   return `<div class="stats"><div><b>${s.played||0}</b><small>${pl(s.played||0,"partie","parties")}</small></div><div><b>${pct}</b><small>% réussite</small></div>
@@ -1211,15 +1287,104 @@ function cdTick(){
 // Après minuit : on recharge pour obtenir la nouvelle grille du jour
 document.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest(".cdgo")) location.reload(); });
 
+// =====================================================================
+// RAPPELS QUOTIDIENS (appli iOS uniquement, @capacitor/local-notifications) — masqués dans la PWA
+// quatuor-rappel = { actif, h, m } (9 h par défaut) ; quatuor-rappel-demande = "1" une fois l'écran explicatif montré.
+// La permission n'est jamais demandée au premier lancement : seulement à la fin de la première grille terminée
+// (proposerRappels), après un écran explicatif. Les rappels des 14 prochains jours sont programmés à l'avance
+// et reprogrammés à chaque lancement, retour dans l'appli, fin de grille ou changement de réglage.
+// Pas de rappel le jour où la grille du jour est déjà faite ; « série en danger » à 20 h.
+// =====================================================================
+const Notifs=plugin("LocalNotifications");
+const RAPPEL_JOURS=14, ID_RAPPEL=1000, ID_SERIE=2000, HEURE_SERIE=20;
+const RAPPEL_TEXTES=["🧩 La grille du jour t'attend !","☕ 16 mots, 4 groupes : ta grille du jour est prête.","🧠 Prêt pour le défi culture G du jour ?",
+  "💡 Une nouvelle anecdote t'attend dans la grille du jour.","🎯 4 groupes à trouver aujourd'hui. À toi de jouer !","✨ Ta pause culture G du jour est servie."].map(fr);
+function lireRappel(){
+  try{ const r=JSON.parse(ls.get("quatuor-rappel")||"null");
+    if(r&&typeof r==="object") return {actif:r.actif===true,h:Number.isInteger(r.h)&&r.h>=0&&r.h<24?r.h:9,m:Number.isInteger(r.m)&&r.m>=0&&r.m<60?r.m:0}; }catch(e){}
+  return {actif:false,h:9,m:0};
+}
+const ecrireRappel=r=>ls.set("quatuor-rappel",JSON.stringify({actif:r.actif,h:r.h,m:r.m}));
+const heureTxt=(h,m)=>`${h} h${m?" "+String(m).padStart(2,"0"):""}`;
+let planif=Promise.resolve();
+function planifierRappels(){ if(Notifs) planif=planif.then(planifier).catch(e=>console.warn("Quatuor : rappels non programmés",e)); return planif; }
+async function planifier(){
+  if(!GRIDS.length||dailyIdx<0) return;   // grilles pas encore chargées
+  const pend=await Notifs.getPending(), nos=((pend&&pend.notifications)||[]).filter(n=>n.id>=ID_RAPPEL&&n.id<ID_SERIE+RAPPEL_JOURS);
+  if(nos.length) await Notifs.cancel({notifications:nos.map(n=>({id:n.id}))});
+  const r=lireRappel(); if(!r.actif) return;
+  if((await Notifs.checkPermissions()).display!=="granted") return;
+  const now=new Date(), fait=!!loadRes()[GRIDS[dailyIdx].id], s=load(), liste=[];
+  const le=(k,h,m)=>new Date(today.getFullYear(),today.getMonth(),today.getDate()+k,h,m,0,0);
+  // Série en danger : aujourd'hui si elle court encore et que la grille du jour n'est pas faite ;
+  // demain si elle vient d'être prolongée (reprogrammé dès que le joueur revient)
+  const danger=new Map();
+  if((s.streak||0)>=2){ if(s.lastWin===dayNum-1&&!fait) danger.set(0,s.streak); if(s.lastWin===dayNum) danger.set(1,s.streak); }
+  for(let k=0;k<RAPPEL_JOURS;k++){
+    if(k===0&&fait) continue;
+    if(danger.has(k)&&r.h>=HEURE_SERIE) continue;   // l'alerte de 20 h remplace un rappel plus tardif
+    const at=le(k,r.h,r.m); if(at<=now) continue;
+    liste.push({id:ID_RAPPEL+k,title:"Quatuor",body:RAPPEL_TEXTES[((dayNum+k)%RAPPEL_TEXTES.length+RAPPEL_TEXTES.length)%RAPPEL_TEXTES.length],schedule:{at,allowWhileIdle:true}});
+  }
+  danger.forEach((n,k)=>{ const at=le(k,HEURE_SERIE,0);
+    if(at>now) liste.push({id:ID_SERIE+k,title:"Quatuor",body:fr(`Ta série de ${n} jours 🔥 est en danger ! Joue la grille du jour avant minuit pour la garder.`),schedule:{at,allowWhileIdle:true}}); });
+  if(liste.length) await Notifs.schedule({notifications:liste});
+}
+// Active ou coupe les rappels ; à l'activation, demande système d'iOS si besoin. Renvoie true si c'est fait.
+async function activerRappels(on){
+  if(!Notifs) return false;
+  const r=lireRappel();
+  if(on){
+    let p=await Notifs.checkPermissions().catch(()=>({display:"denied"}));
+    if(p.display!=="granted") p=await Notifs.requestPermissions().catch(()=>({display:"denied"}));
+    if(p.display!=="granted"){ r.actif=false; ecrireRappel(r); planifierRappels(); toast("Autorise les notifications dans les Réglages d'iOS"); return false; }
+  }
+  r.actif=on; ecrireRappel(r); planifierRappels(); return true;
+}
+// Écran explicatif (une seule fois), puis la demande système d'iOS
+function proposerRappels(){
+  if(!Notifs||ls.get("quatuor-rappel-demande")) return;
+  ls.set("quatuor-rappel-demande","1");
+  const r=lireRappel();
+  openSheet(`<div class="notif"><span class="big${RM()?"":" ring"}">🔔</span><h2>Un petit rappel ?</h2>
+    <p class="lead">Une nouvelle grille t'attend chaque jour. Quatuor peut te le rappeler à <b>${heureTxt(r.h,r.m)}</b>, sans rien dévoiler.</p>
+    <div class="nex"><span class="ic"><span class="mark"><i></i><i></i><i></i><i></i></span></span><div><b>Quatuor</b><small>${RAPPEL_TEXTES[0]}</small></div></div>
+    <p>Pas de rappel les jours où tu as déjà joué. Heure et rappels se règlent dans le menu, rubrique « Réglages ».</p>
+    <button class="pill main full" id="nOui">Oui, me le rappeler</button>
+    <button class="pill soft full" id="nNon">Plus tard</button></div>`);
+  $("nOui").onclick=()=>{ buzz(10); closeSheet(); setTimeout(()=>activerRappels(true).then(ok=>{ if(ok) toast(`C'est noté : rappel à ${heureTxt(r.h,r.m)} 🔔`); }),350); };
+  $("nNon").onclick=closeSheet;
+}
+// Réglages (tiroir) : activer/désactiver, choisir l'heure
+function reglagesHtml(){
+  if(!Notifs) return "";
+  const r=lireRappel(), v=`${String(r.h).padStart(2,"0")}:${String(r.m).padStart(2,"0")}`;
+  return `<p class="sec">Réglages</p><div class="regl">
+    <label class="rrow"><span><b>🔔 Rappel quotidien</b><small>Jamais si la grille du jour est déjà faite</small></span><input type="checkbox" class="tgl" id="rapOn"${r.actif?" checked":""}></label>
+    <label class="rrow${r.actif?"":" off"}" id="rapRow"><span><b>Heure du rappel</b><small>Alerte à 20 h si ta série 🔥 est en danger</small></span><input type="time" class="rheure" id="rapH" value="${v}"${r.actif?"":" disabled"}></label></div>`;
+}
+function brancherReglages(){
+  const on=$("rapOn"), h=$("rapH"); if(!on||!h) return;
+  const maj=a=>{ $("rapRow").classList.toggle("off",!a); h.disabled=!a; };
+  on.onchange=async()=>{ buzz(8); ls.set("quatuor-rappel-demande","1"); const ok=await activerRappels(on.checked); if(on.checked&&!ok) on.checked=false; maj(on.checked); };
+  h.onchange=()=>{ const m=/^(\d{1,2}):(\d{2})/.exec(h.value); if(!m) return;
+    const r=lireRappel(); r.h=+m[1]; r.m=+m[2]; ecrireRappel(r); planifierRappels(); toast(`Rappel à ${heureTxt(r.h,r.m)}`); };
+}
+
+// ---- Barre d'état (appli iOS) : texte foncé en mode clair, clair en mode sombre ----
+const StatusBar=plugin("StatusBar");
+function majBarreEtat(){ if(StatusBar) StatusBar.setStyle({style:matchMedia("(prefers-color-scheme: dark)").matches?"DARK":"LIGHT"}).catch(()=>{}); }
+if(StatusBar){ majBarreEtat(); try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",majBarreEtat); }catch(e){} }
+
 // ---- Pages légales ----
-const SITE_URL="https://polishman444.github.io/Quatuor/";   // adresse du site (pour l'appli native)
+const SITE_URL="https://playquatuor.fr/";   // adresse du site (pour l'appli native)
 const legalHtml=()=>`<nav class="legal" aria-label="Informations légales"><a href="mentions-legales.html" data-legal>Mentions légales</a><span>·</span><a href="confidentialite.html" data-legal>Confidentialité</a><span>·</span><a href="cgu.html" data-legal>CGU</a></nav>`;
 // Point d'entrée unique pour ouvrir une page légale.
 // PWA : la page s'ouvre normalement (nouvel onglet, ou même fenêtre si c'est impossible).
 // Appli native (Capacitor) : navigateur intégré via @capacitor/browser, avec l'adresse complète du site.
 function ouvrirPageLegale(url){
-  const cap=window.Capacitor, browser=cap&&cap.isNativePlatform&&cap.isNativePlatform()&&cap.Plugins&&cap.Plugins.Browser;
-  if(browser){ browser.open({url:new URL(url,SITE_URL).href}); return; }
+  const browser=plugin("Browser");
+  if(browser){ browser.open({url:new URL(url,SITE_URL).href}).catch(()=>{}); return; }
   const w=window.open(url,"_blank");   // (avec "noopener", window.open renvoie toujours null : on détache à la main)
   if(w) w.opener=null; else location.href=url;
 }
@@ -1231,7 +1396,8 @@ function renderDrawer(anim){
   const head=`<div class="mtabs" role="tablist"><button class="mtab${drawerTab==="grids"?" on":""}" data-t="grids" role="tab" aria-selected="${drawerTab==="grids"}">Grilles</button>
     <button class="mtab${drawerTab==="favs"?" on":""}" data-t="favs" role="tab" aria-selected="${drawerTab==="favs"}">Mon carnet ⭐<span class="cnt">${n}</span></button></div>`;
   if(drawerTab==="grids") renderMenu(anim,head); else renderFavs(anim,head);
-  $("drawer").insertAdjacentHTML("beforeend",legalHtml());
+  $("drawer").insertAdjacentHTML("beforeend",reglagesHtml()+legalHtml());
+  brancherReglages();
   $("drawer").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{ if(b.dataset.t===drawerTab) return; buzz(8); drawerTab=b.dataset.t; renderDrawer(true); });
 }
 function renderFavs(anim,head){
@@ -1297,6 +1463,8 @@ function openResults(win){
     ${learned?`<h3>Ce que tu as appris aujourd'hui</h3><div class="learned">${learned}</div>`:""}`);
   $("share").onclick=share;
   $("next").onclick=nextOrRandom;
+  // Appli iOS : première grille terminée -> proposition de rappel quotidien, une fois les résultats fermés
+  if(Notifs&&!ls.get("quatuor-rappel-demande")) onSheetClose=()=>setTimeout(()=>whenSheetFree(proposerRappels),450);
   if(!win) $("retry").onclick=()=>retenter(gridIdx);
 }
 // =====================================================================
@@ -1330,7 +1498,9 @@ const pl=(n,un,plusieurs)=>Math.abs(n)>=2?plusieurs:un;   // accord : 0 et 1 au 
 // =====================================================================
 const RAND_KEYS=["toutes",...DKEYS];
 const randLabel=k=>k==="toutes"?"Toutes":dname(k);
-let randChoice=ls.get("quatuor-hasard"); if(!RAND_KEYS.includes(randChoice)) randChoice="toutes";
+let randChoice;
+const lireHasard=()=>{ randChoice=ls.get("quatuor-hasard"); if(!RAND_KEYS.includes(randChoice)) randChoice="toutes"; };
+lireHasard();
 // =====================================================================
 // PROCHAINE GRILLE (« Suivante », « Grille suivante », « Encore une 🎲 ») : jamais une grille déjà terminée
 // Toute la logique est ici, pour pouvoir la brancher plus tard sur des comptes en ligne :
@@ -1400,7 +1570,6 @@ function nextOrRandom(){ if(hasard) launchRandom(hasard); else if(isTheme()) nex
 // Un thème « publie: false » n'apparaît qu'en local (localhost) pour le tester, jamais dans l'appli native.
 // =====================================================================
 let THEMES=[], view="jeu", themeOpen=null;
-const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const IS_LOCAL=!IS_NATIVE&&["localhost","127.0.0.1","[::1]"].includes(location.hostname);
 const themeOf=id=>THEMES.find(t=>t.id===id)||{id,nom:id,icone:"🗂️",publie:false};
 const themesVisibles=()=>THEMES.filter(t=>t.publie||IS_LOCAL).sort((a,b)=>a.ordre-b.ordre);
@@ -1499,7 +1668,8 @@ function openWelcome(onClose){
 async function share(){
   const head=`Quatuor n°${grid.num} · ${dname(grid.diff)}${attempt>1?` · ${ordinal(attempt)} essai`:""}${hints?` · 💡${hints}`:""}`;
   const text=`${head}\n${history.map(r=>r.map(i=>ICON[i]).join("")).join("\n")}`;
-  if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e.name==="AbortError") return; } }
+  if(Share){ try{ await Share.share({text}); return; }catch(e){ if(partageAnnule(e)) return; } }
+  else if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e.name==="AbortError") return; } }
   try{ await navigator.clipboard.writeText(text); toast("Résultat copié"); }
   catch(e){ const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select();
     try{ document.execCommand("copy"); toast("Résultat copié"); }catch(_){ toast("Copie impossible"); } t.remove(); }
@@ -1575,8 +1745,6 @@ $("statsBtn").onclick=()=>{ openSheet(`<h2>Statistiques</h2><p>Grilles du jour u
 let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>document.querySelectorAll(".tile").forEach(fit),150); });
 
 // Lancement : tutoriel au tout premier lancement, pop-up de bienvenue à chaque ouverture (sauf « Ne plus afficher »)
-migrateData();
-cdTick();
 let gridsReady;
 function boot(){
   gridsReady=loadGrids().then(g=>{
@@ -1587,15 +1755,25 @@ function boot(){
       if(!RM()) [...$("grid").children].forEach((t,i)=>t.animate([{opacity:0,transform:"scale(.96)"},{opacity:1,transform:"none"}],
         {duration:380,delay:i*18,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     }
+    planifierRappels();
     return true;
   });
 }
-const firstRun=!ls.get("quatuor-tuto-done");
-const showWelcome=!ls.get("quatuor-hide-welcome");
-if(firstRun){ ls.set("quatuor-tuto-done","1"); tutoHold=showWelcome; newGame(-1); } else showSkeleton();
-boot();
-if(showWelcome) setTimeout(()=>openWelcome(releaseTuto),300);
-if("serviceWorker" in navigator){ addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
+function lancer(){
+  migrateData();
+  cdTick();
+  const firstRun=!ls.get("quatuor-tuto-done");
+  const showWelcome=!ls.get("quatuor-hide-welcome");
+  if(firstRun){ ls.set("quatuor-tuto-done","1"); tutoHold=showWelcome; newGame(-1); } else showSkeleton();
+  boot();
+  if(showWelcome) setTimeout(()=>openWelcome(releaseTuto),300);
+  // Appli iOS : l'écran de lancement s'efface dès que le jeu est affiché
+  const splash=plugin("SplashScreen"); if(splash) requestAnimationFrame(()=>splash.hide({fadeOutDuration:250}).catch(()=>{}));
+}
+// PWA : lancement immédiat. Appli iOS : d'abord les données du joueur (préférences natives, migration).
+if(IS_NATIVE) initStockage().then(()=>{ lireHasard(); lancer(); }); else lancer();
+// Service worker (hors ligne) : PWA uniquement, jamais dans l'appli native
+if(!IS_NATIVE&&"serviceWorker" in navigator){ addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{})); }
 </script>
 </body>
 </html>

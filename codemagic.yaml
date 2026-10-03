@@ -1,0 +1,73 @@
+# Codemagic : compilation de l'appli iOS Quatuor dans le cloud et envoi sur TestFlight.
+# Aucun secret ici : la clé API App Store Connect (Issuer ID, Key ID, fichier .p8) est enregistrée
+# dans Codemagic (Teams > Integrations > Developer Portal) sous le nom indiqué ci-dessous.
+# Pas à pas : voir GUIDE-TESTFLIGHT.md
+workflows:
+  ios-testflight:
+    name: Quatuor iOS → TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      # Nom EXACT de la clé API App Store Connect ajoutée dans Codemagic
+      app_store_connect: Quatuor App Store Connect
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: fr.playquatuor.app
+      vars:
+        BUNDLE_ID: fr.playquatuor.app
+        XCODE_PROJECT: ios/App/App.xcodeproj   # Swift Package Manager : pas de .xcworkspace ni de CocoaPods
+        XCODE_SCHEME: App
+      node: 22
+      xcode: latest
+    triggering:
+      # Lancement manuel par défaut (bouton « Start new build »).
+      # Pour compiler à chaque envoi sur main, décommenter :
+      # events:
+      #   - push
+      # branch_patterns:
+      #   - pattern: main
+      #     include: true
+      cancel_previous_builds: true
+    scripts:
+      - name: Installation des dépendances
+        script: npm ci
+      - name: Vérification des grilles
+        script: npm run verifier
+      - name: Copie du jeu dans www/ et synchronisation Capacitor
+        script: |
+          npm run build
+          npx cap sync ios
+      - name: Profils de signature (signature automatique)
+        script: xcode-project use-profiles
+      - name: Numéro de build incrémenté automatiquement
+        script: |
+          set -e
+          cd ios/App
+          # Identifiant Apple de l'appli, retrouvé à partir du bundle ID (rien à configurer)
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier "$BUNDLE_ID" --strict-match-identifier --json \
+            | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" 2>/dev/null | tail -1 | tr -dc '0-9' || true)
+          fi
+          LATEST=${LATEST:-0}
+          # Au moins le compteur de builds Codemagic, pour ne jamais redescendre
+          NEXT=$(( LATEST + 1 ))
+          if [ "${BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$BUILD_NUMBER; fi
+          echo "Dernier build TestFlight : $LATEST → nouveau build : $NEXT"
+          sed -i '' -E "s/CURRENT_PROJECT_VERSION = [0-9]+;/CURRENT_PROJECT_VERSION = $NEXT;/g" App.xcodeproj/project.pbxproj
+          grep -m1 "CURRENT_PROJECT_VERSION" App.xcodeproj/project.pbxproj
+      - name: Compilation de l'appli (.ipa)
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false

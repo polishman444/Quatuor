@@ -1,0 +1,36 @@
+# Dépendances
+node_modules/
+
+# Copie web générée (npm run build) : la source de vérité est à la racine
+www/
+
+# Fichiers générés par Capacitor / Xcode
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/App/build/
+ios/App/output/
+ios/App/Pods/
+ios/DerivedData/
+**/xcuserdata/
+*.xcuserstate
+*.ipa
+*.dSYM.zip
+*.dSYM/
+build/
+
+# Clés, certificats et profils : JAMAIS dans le dépôt
+*.p8
+*.p12
+*.pem
+*.key
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.provisionprofile
+.env
+.env.*
+
+# Système
+.DS_Store
+Thumbs.db
