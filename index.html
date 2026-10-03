@@ -442,8 +442,10 @@ const IS_NATIVE=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.C
 // Plugin natif Capacitor (null dans la PWA)
 const plugin=n=>IS_NATIVE&&window.Capacitor.Plugins&&window.Capacitor.Plugins[n]||null;
 // Les grilles sont chargées depuis grilles.json (voir loadGrids)
-// URL des grilles : relative pour la PWA ; dans l'appli iOS, version en ligne (adresse principale, puis adresse de secours)
-const GRIDS_REMOTE=["https://playquatuor.fr/grilles.json","https://polishman444.github.io/quatuor/grilles.json"];
+// URL des grilles : relative pour la PWA ; dans l'appli iOS, version en ligne (adresse principale, puis adresse de secours).
+// Secours : le fichier brut du dépôt GitHub (branche main), indépendant du domaine : l'adresse github.io,
+// elle, redirige vers playquatuor.fr dès que le domaine personnalisé est configuré.
+const GRIDS_REMOTE=["https://playquatuor.fr/grilles.json","https://raw.githubusercontent.com/polishman444/Quatuor/main/grilles.json"];
 const GRIDS_LOCAL="grilles.json";   // copie de secours embarquée (mise en cache par le service worker ; incluse dans l'appli)
 let GRIDS=[];
 let attempt=1, hasard=null;

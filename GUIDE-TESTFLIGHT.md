@@ -163,7 +163,7 @@ Compte 10 à 20 minutes. Un ✅ vert indique que tout s'est bien passé. En cas 
 
 Bon à savoir :
 
-- **Les grilles n'ont pas besoin d'une nouvelle version de l'appli** : l'appli télécharge `grilles.json` en ligne à chaque lancement (sur `playquatuor.fr`, ou sur `polishman444.github.io` en secours). Une nouvelle compilation n'est nécessaire que si tu modifies `index.html`, les pages légales, les icônes, etc.
+- **Les grilles n'ont pas besoin d'une nouvelle version de l'appli** : l'appli télécharge `grilles.json` en ligne à chaque lancement (sur `playquatuor.fr`, ou en secours directement depuis le dépôt GitHub, branche `main`). Une nouvelle compilation n'est nécessaire que si tu modifies `index.html`, les pages légales, les icônes, etc.
 - Pour changer le numéro de version affiché (par exemple **1.1**), modifie `MARKETING_VERSION` dans `ios/App/App.xcodeproj/project.pbxproj` (2 occurrences).
 - Pour compiler automatiquement à chaque envoi sur `main`, décommente la partie `events` dans `codemagic.yaml`.
 - Pour régénérer l'icône et l'écran de lancement après une modification du logo : `npm install` puis `npm run assets` (sur n'importe quel ordinateur, pas besoin de Mac).
