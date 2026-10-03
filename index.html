@@ -15,6 +15,12 @@
 <!-- Police hébergée localement (RGPD : aucun appel à un service tiers) -->
 <link rel="preload" href="fonts/BricolageGrotesque-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts/bricolage.css">
+<script>
+// Réglages d'apparence appliqués avant l'affichage (thème, taille du texte, mode daltonien)
+try{ const r=JSON.parse(localStorage.getItem("quatuor-reglages")||"null"), h=document.documentElement;
+  if(r&&(r.theme==="light"||r.theme==="dark")) h.dataset.theme=r.theme;
+  if(r&&r.texte==="grand") h.classList.add("grand"); if(r&&r.daltonien) h.classList.add("dalto"); }catch(e){}
+</script>
 <style>
 :root{
   --bg:#EEF0F7; --card:#FFFFFF; --edge:#CDD2E3; --ink:#1B2040; --muted:#6B7190; --sel:#1B2040; --sel-ink:#FFFFFF; --sheet:#FFFFFF;
@@ -110,6 +116,36 @@ body:not([data-view="jeu"]) .sub,body:not([data-view="jeu"]) .area,body:not([dat
 .avatar .mark i{width:18px;height:18px;border-radius:5px}
 .avatar .mark i:nth-child(4){background:#7888E6}
 .moi b{font-size:1.35rem;font-weight:800}
+/* Paramètres */
+.rrow.col{flex-direction:column;align-items:stretch;gap:8px;cursor:default}
+a.rrow{text-decoration:none;color:inherit}
+.segc{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:4px;border-radius:12px;background:var(--bg)}
+.segc button{border:0;background:transparent;border-radius:9px;padding:8px 4px;font:inherit;font-weight:800;font-size:.9rem;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.segc button.on{background:var(--ink);color:var(--bg)}
+.rval{flex:none;color:var(--muted);font-weight:700}
+.soon{flex:none;font-size:.72rem;font-weight:800;padding:4px 9px;border-radius:999px;background:var(--bg);color:var(--muted)}
+.rbtn.danger b{color:var(--l2e)}
+.pill.danger{background:var(--l2);color:#fff;box-shadow:0 4px 0 var(--l2e)}
+/* Onglet Moi */
+.moi small{color:var(--muted);font-weight:600;margin-top:-6px}
+.mcards{display:grid;gap:10px;margin-top:18px}
+.mcard{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--edge);padding:14px;opacity:.7}
+.mcard .mic{flex:none;width:44px;height:44px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem}
+.mcard .mtx{flex:1;min-width:0}
+.mcard b{display:block;font-weight:800}
+.mcard small{display:block;color:var(--muted);font-size:.85rem}
+/* Taille du texte : Grande */
+html.grand{font-size:112.5%}
+html.grand body{font-size:19px}
+/* Mode daltonien : couleurs distinguables (bleu, orange, jaune, violet) + un symbole par groupe */
+:root.dalto{--l0:#4FA8E0;--l0e:#2A7DB3;--l1:#F2A33A;--l1e:#C27A12;--l2:#F3E04A;--l2e:#C9B51F;--l3:#8A5CB8;--l3e:#5E3A86}
+:root.dalto .l0{color:#06233A} :root.dalto .l2{color:#2E2800}
+:root.dalto .gitem.win .num,:root.dalto .gitem.win2 .num{color:#06233A}
+:root.dalto .l0,:root.dalto .b0,:root.dalto .c0{--sym:"●"} :root.dalto .l1,:root.dalto .b1,:root.dalto .c1{--sym:"▲"}
+:root.dalto .l2,:root.dalto .b2,:root.dalto .c2{--sym:"■"} :root.dalto .l3,:root.dalto .b3,:root.dalto .c3{--sym:"◆"}
+:root.dalto .solved .lvl::before,:root.dalto .dbadge::before,:root.dalto .learned b::before,:root.dalto .fcard b::before{content:var(--sym) " "}
+:root.dalto .recap i,:root.dalto .legend .sw i{display:grid;place-items:center}
+:root.dalto .recap i::after,:root.dalto .legend .sw i::after{content:var(--sym);font-size:12px;line-height:1;color:rgba(0,0,0,.55)}
 /* Petits écrans (iPhone SE…) : un peu plus compact */
 .modes button{white-space:nowrap}
 .modes .sm{display:none}
@@ -1118,10 +1154,11 @@ function showLoadError(){
 function fit(tile){
   const span=tile.firstChild; if(!span) return;
   const over=()=>span.scrollWidth>tile.clientWidth-6||span.scrollHeight>tile.clientHeight-6;
-  let s=17; span.classList.remove("hy"); tile.style.fontSize=s+"px";
+  const grand=document.documentElement.classList.contains("grand");
+  let s=grand?19:17; span.classList.remove("hy"); tile.style.fontSize=s+"px";
   while(s>9.5&&over()){ s-=.5; tile.style.fontSize=s+"px"; }
   // Mot très long sur petit écran : on le coupe en deux lignes plutôt que de le rendre illisible
-  if(over()){ span.classList.add("hy"); s=14; tile.style.fontSize=s+"px"; while(s>8&&over()){ s-=.5; tile.style.fontSize=s+"px"; } }
+  if(over()){ span.classList.add("hy"); s=grand?15.5:14; tile.style.fontSize=s+"px"; while(s>8&&over()){ s-=.5; tile.style.fontSize=s+"px"; } }
 }
 function draw(){
   const g=$("grid"); g.innerHTML="";
@@ -1428,7 +1465,7 @@ document.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest(".c
 
 // =====================================================================
 // RAPPELS QUOTIDIENS (appli iOS uniquement, @capacitor/local-notifications) — masqués dans la PWA
-// quatuor-rappel = { actif, h, m } (9 h par défaut) ; quatuor-rappel-demande = "1" une fois l'écran explicatif montré.
+// quatuor-rappel = { actif, h, m, serie } (9 h par défaut ; serie = alerte de 20 h, activée par défaut) ; quatuor-rappel-demande = "1" une fois l'écran explicatif montré.
 // La permission n'est jamais demandée au premier lancement : seulement à la fin de la première grille terminée
 // (proposerRappels), après un écran explicatif. Les rappels des 14 prochains jours sont programmés à l'avance
 // et reprogrammés à chaque lancement, retour dans l'appli, fin de grille ou changement de réglage.
@@ -1440,10 +1477,11 @@ const RAPPEL_TEXTES=["🧩 La grille du jour t'attend !","☕ 16 mots, 4 groupes
   "💡 Une nouvelle anecdote t'attend dans la grille du jour.","🎯 4 groupes à trouver aujourd'hui. À toi de jouer !","✨ Ta pause culture G du jour est servie."].map(fr);
 function lireRappel(){
   try{ const r=JSON.parse(ls.get("quatuor-rappel")||"null");
-    if(r&&typeof r==="object") return {actif:r.actif===true,h:Number.isInteger(r.h)&&r.h>=0&&r.h<24?r.h:9,m:Number.isInteger(r.m)&&r.m>=0&&r.m<60?r.m:0}; }catch(e){}
-  return {actif:false,h:9,m:0};
+    if(r&&typeof r==="object") return {actif:r.actif===true,h:Number.isInteger(r.h)&&r.h>=0&&r.h<24?r.h:9,m:Number.isInteger(r.m)&&r.m>=0&&r.m<60?r.m:0,serie:r.serie!==false}; }catch(e){}
+  return {actif:false,h:9,m:0,serie:true};
 }
-const ecrireRappel=r=>ls.set("quatuor-rappel",JSON.stringify({actif:r.actif,h:r.h,m:r.m}));
+// serie : alerte « Série en danger » de 20 h (activée par défaut, désactivable)
+const ecrireRappel=r=>ls.set("quatuor-rappel",JSON.stringify({actif:r.actif,h:r.h,m:r.m,serie:r.serie}));
 const heureTxt=(h,m)=>`${h} h${m?" "+String(m).padStart(2,"0"):""}`;
 let planif=Promise.resolve();
 function planifierRappels(){ if(Notifs) planif=planif.then(planifier).catch(e=>console.warn("Quatuor : rappels non programmés",e)); return planif; }
@@ -1451,15 +1489,15 @@ async function planifier(){
   if(!GRIDS.length||dailyIdx<0) return;   // grilles pas encore chargées
   const pend=await Notifs.getPending(), nos=((pend&&pend.notifications)||[]).filter(n=>n.id>=ID_RAPPEL&&n.id<ID_SERIE+RAPPEL_JOURS);
   if(nos.length) await Notifs.cancel({notifications:nos.map(n=>({id:n.id}))});
-  const r=lireRappel(); if(!r.actif) return;
+  const r=lireRappel(); if(!r.actif&&!r.serie) return;
   if((await Notifs.checkPermissions()).display!=="granted") return;
   const now=new Date(), fait=!!loadRes()[GRIDS[dailyIdx].id], s=load(), liste=[];
   const le=(k,h,m)=>new Date(today.getFullYear(),today.getMonth(),today.getDate()+k,h,m,0,0);
   // Série en danger : aujourd'hui si elle court encore et que la grille du jour n'est pas faite ;
   // demain si elle vient d'être prolongée (reprogrammé dès que le joueur revient)
   const danger=new Map();
-  if((s.streak||0)>=2){ if(s.lastWin===dayNum-1&&!fait) danger.set(0,s.streak); if(s.lastWin===dayNum) danger.set(1,s.streak); }
-  for(let k=0;k<RAPPEL_JOURS;k++){
+  if(r.serie&&(s.streak||0)>=2){ if(s.lastWin===dayNum-1&&!fait) danger.set(0,s.streak); if(s.lastWin===dayNum) danger.set(1,s.streak); }
+  for(let k=0;r.actif&&k<RAPPEL_JOURS;k++){
     if(k===0&&fait) continue;
     if(danger.has(k)&&r.h>=HEURE_SERIE) continue;   // l'alerte de 20 h remplace un rappel plus tardif
     const at=le(k,r.h,r.m); if(at<=now) continue;
@@ -1469,16 +1507,17 @@ async function planifier(){
     if(at>now) liste.push({id:ID_SERIE+k,title:"Quatuor",body:fr(`Ta série de ${n} jours 🔥 est en danger ! Joue la grille du jour avant minuit pour la garder.`),schedule:{at,allowWhileIdle:true}}); });
   if(liste.length) await Notifs.schedule({notifications:liste});
 }
-// Active ou coupe les rappels ; à l'activation, demande système d'iOS si besoin. Renvoie true si c'est fait.
-async function activerRappels(on){
+// Active ou coupe le rappel quotidien (champ "actif") ou l'alerte de série ("serie").
+// À l'activation seulement : demande système d'iOS si besoin. Renvoie true si c'est fait.
+async function activerRappels(on,champ="actif"){
   if(!Notifs) return false;
   const r=lireRappel();
   if(on){
     let p=await Notifs.checkPermissions().catch(()=>({display:"denied"}));
     if(p.display!=="granted") p=await Notifs.requestPermissions().catch(()=>({display:"denied"}));
-    if(p.display!=="granted"){ r.actif=false; ecrireRappel(r); planifierRappels(); toast("Autorise les notifications dans les Réglages d'iOS"); return false; }
+    if(p.display!=="granted"){ r[champ]=false; ecrireRappel(r); planifierRappels(); toast("Autorise les notifications dans les Réglages d'iOS"); return false; }
   }
-  r.actif=on; ecrireRappel(r); planifierRappels(); return true;
+  r[champ]=on; ecrireRappel(r); planifierRappels(); return true;
 }
 // Écran explicatif (une seule fois), puis la demande système d'iOS
 function proposerRappels(){
@@ -1494,16 +1533,18 @@ function proposerRappels(){
   $("nOui").onclick=()=>{ buzz(10); closeSheet(); setTimeout(()=>activerRappels(true).then(ok=>{ if(ok) toast(`C'est noté : rappel à ${heureTxt(r.h,r.m)} 🔔`); }),350); };
   $("nNon").onclick=closeSheet;
 }
-// Réglages (tiroir) : activer/désactiver, choisir l'heure
+// Paramètres › Rappel quotidien : activer/désactiver, heure, alerte « Série en danger »
 function reglagesHtml(){
   if(!Notifs) return "";
   const r=lireRappel(), v=`${String(r.h).padStart(2,"0")}:${String(r.m).padStart(2,"0")}`;
   return `<p class="sec">Rappel quotidien</p><div class="regl">
     <label class="rrow"><span><b>🔔 Rappel quotidien</b><small>Jamais si la grille du jour est déjà faite</small></span><input type="checkbox" class="tgl" id="rapOn"${r.actif?" checked":""}></label>
-    <label class="rrow${r.actif?"":" off"}" id="rapRow"><span><b>Heure du rappel</b><small>Alerte à 20 h si ta série 🔥 est en danger</small></span><input type="time" class="rheure" id="rapH" value="${v}"${r.actif?"":" disabled"}></label></div>`;
+    <label class="rrow${r.actif?"":" off"}" id="rapRow"><span><b>Heure du rappel</b></span><input type="time" class="rheure" id="rapH" value="${v}"${r.actif?"":" disabled"}></label>
+    <label class="rrow"><span><b>🔥 Série en danger</b><small>Alerte à 20 h si ta série (2 jours ou plus) n'est pas encore jouée</small></span><input type="checkbox" class="tgl" id="rapSerie"${r.serie?" checked":""}></label></div>`;
 }
 function brancherReglages(){
-  const on=$("rapOn"), h=$("rapH"); if(!on||!h) return;
+  const on=$("rapOn"), h=$("rapH"), se=$("rapSerie"); if(!on||!h) return;
+  se.onchange=async()=>{ buzz(8); const ok=await activerRappels(se.checked,"serie"); if(se.checked&&!ok) se.checked=false; };
   const maj=a=>{ $("rapRow").classList.toggle("off",!a); h.disabled=!a; };
   on.onchange=async()=>{ buzz(8); ls.set("quatuor-rappel-demande","1"); const ok=await activerRappels(on.checked); if(on.checked&&!ok) on.checked=false; maj(on.checked); };
   h.onchange=()=>{ const m=/^(\d{1,2}):(\d{2})/.exec(h.value); if(!m) return;
@@ -1512,8 +1553,21 @@ function brancherReglages(){
 
 // ---- Barre d'état (appli iOS) : texte foncé en mode clair, clair en mode sombre ----
 const StatusBar=plugin("StatusBar");
-function majBarreEtat(){ if(StatusBar) StatusBar.setStyle({style:matchMedia("(prefers-color-scheme: dark)").matches?"DARK":"LIGHT"}).catch(()=>{}); }
-if(StatusBar){ majBarreEtat(); try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",majBarreEtat); }catch(e){} }
+const sombre=()=>REG.theme==="dark"||(REG.theme!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);
+function majBarreEtat(){
+  const d=sombre(), m=document.querySelector('meta[name="theme-color"]'); if(m) m.content=d?"#12152A":"#EEF0F7";
+  if(StatusBar) StatusBar.setStyle({style:d?"DARK":"LIGHT"}).catch(()=>{});
+}
+majBarreEtat(); try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",majBarreEtat); }catch(e){}
+// Applique les réglages d'apparence (thème Clair / Sombre / Automatique, taille du texte, mode daltonien)
+function appliquerReglages(){
+  const h=document.documentElement;
+  if(REG.theme==="light"||REG.theme==="dark") h.dataset.theme=REG.theme; else delete h.dataset.theme;
+  const grand=h.classList.contains("grand");
+  h.classList.toggle("grand",REG.texte==="grand"); h.classList.toggle("dalto",!!REG.daltonien);
+  majBarreEtat();
+  if(grand!==h.classList.contains("grand")) requestAnimationFrame(()=>document.querySelectorAll(".tile").forEach(fit));
+}
 
 // ---- Pages légales ----
 const SITE_URL="https://playquatuor.fr/";   // adresse du site (pour l'appli native)
@@ -1528,6 +1582,7 @@ function ouvrirPageLegale(url){
   if(w) w.opener=null; else location.href=url;
 }
 document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest("a[data-legal]"); if(!a) return; e.preventDefault(); ouvrirPageLegale(a.getAttribute("href")); });
+const APP_VERSION="1.1";   // version affichée sur le web ; dans l'appli : @capacitor/app (version et n° de build)
 const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
 // =====================================================================
 // NAVIGATION : barre d'onglets en bas (Jouer, Thèmes, Progrès, Moi) + Paramètres (engrenage, en haut à droite)
@@ -1571,6 +1626,7 @@ function renderPage(){
   // Paramètres
   if($("setBack")) $("setBack").onclick=retourReglages;
   if($("setHelp")) $("setHelp").onclick=openHelp;
+  if(view==="reglages") brancherParametres(el);
   brancherReglages();
 }
 // Onglet Jouer › Bonus : jours précédents, grilles à retenter, et les 4 niveaux
@@ -1620,16 +1676,69 @@ function progresHtml(){
     <p class="sec">Par niveau</p><div class="pgnivs">${niv}</div>
     <p class="sec" id="favSec">Mon carnet ⭐<span class="cnt">${loadFavs().length}</span></p>${favsHtml()}`;
 }
+// Onglet Moi : préparé pour le futur mode en ligne (aucun appel réseau)
 function moiHtml(){
-  return `<h2 class="thtitle">Moi</h2><div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b></div>
-    <p class="gempty">Profil, amis, duels et classement : bientôt disponibles.</p>`;
+  const carte=(ic,t,d)=>`<div class="mcard" aria-disabled="true"><span class="mic">${ic}</span><span class="mtx"><b>${t}</b><small>${d}</small></span><span class="soon">Bientôt</span></div>`;
+  return `<h2 class="thtitle">Moi</h2><div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b><small>Hors ligne</small></div>
+    <div class="mcards">${carte("👥","Amis","Ajoute tes amis et compare vos séries")}${carte("⚔️","Duels","Défie un ami sur la même grille")}${carte("🏆","Classement","Mesure-toi aux autres joueurs")}</div>`;
 }
-// Paramètres (engrenage)
+// Paramètres (engrenage) : Apparence, Sons et vibrations, Rappel quotidien (appli), Aide, Compte, Données, À propos
 function reglagesPageHtml(){
+  const seg=(cle,opts,nom)=>`<div class="segc" role="radiogroup" aria-label="${nom}" data-r="${cle}">${opts.map(([v,l])=>`<button role="radio" data-v="${v}" aria-checked="${REG[cle]===v}"${REG[cle]===v?' class="on"':""}>${l}</button>`).join("")}</div>`;
+  const tg=(cle,titre,sous)=>`<label class="rrow"><span><b>${titre}</b>${sous?`<small>${sous}</small>`:""}</span><input type="checkbox" class="tgl" data-r="${cle}"${REG[cle]?" checked":""}></label>`;
+  const lien=(id,titre,sous,attrs="")=>`<button class="rrow rbtn" id="${id}"${attrs}><span><b>${titre}</b><small>${sous}</small></span><span class="chev">›</span></button>`;
   return `<button class="thback" id="setBack">‹ Retour</button><h2 class="thtitle">Paramètres</h2>
+    <p class="sec">Apparence</p><div class="regl">
+      <div class="rrow col"><b>Thème</b>${seg("theme",[["light","☀️ Clair"],["dark","🌙 Sombre"],["auto","Automatique"]],"Thème")}</div>
+      <div class="rrow col"><b>Taille du texte</b>${seg("texte",[["normal","Normale"],["grand","Grande"]],"Taille du texte")}</div>
+      ${tg("daltonien","Mode daltonien","Couleurs bien distinctes et un symbole par groupe : ● ▲ ■ ◆")}</div>
+    <p class="sec">Sons et vibrations</p><div class="regl">${tg("sons","🔊 Sons")}${VIBRE?tg("vibrations","📳 Vibrations"):""}</div>
     ${reglagesHtml()}
-    <p class="sec">Aide</p><div class="regl"><button class="rrow rbtn" id="setHelp"><span><b>📖 Comment jouer</b><small>Les règles en une page</small></span><span class="chev">›</span></button></div>
-    <p class="sec">À propos</p>${legalHtml()}`;
+    <p class="sec">Aide</p><div class="regl">${lien("setTuto","🎓 Revoir le tuto","La prise en main, pas à pas")}${lien("setHelp","📖 Comment jouer","Les règles en une page")}</div>
+    <p class="sec">Compte</p><div class="regl"><div class="rrow" aria-disabled="true"><span><b>👤 Compte Quatuor</b><small>Sauvegarde en ligne, amis et duels</small></span><span class="soon">Bientôt disponible</span></div></div>
+    <p class="sec">Données</p><div class="regl">${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
+    <p class="sec">À propos</p><div class="regl">
+      <div class="rrow"><span><b>Version</b></span><span class="rval" id="setVer">${APP_VERSION}</span></div>
+      <a class="rrow" href="mailto:playquatuor@gmail.com"><span><b>✉️ Contact</b><small>playquatuor@gmail.com</small></span><span class="chev">›</span></a></div>
+    ${legalHtml()}`;
+}
+function brancherParametres(el){
+  el.querySelectorAll(".segc").forEach(g=>g.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+    const cle=g.dataset.r; if(REG[cle]===b.dataset.v) return; buzz(8);
+    REG[cle]=b.dataset.v; ecrireReglages(); appliquerReglages();
+    g.querySelectorAll("button").forEach(x=>{ const on=x===b; x.classList.toggle("on",on); x.setAttribute("aria-checked",on); }); }));
+  el.querySelectorAll(".tgl[data-r]").forEach(t=>t.onchange=()=>{
+    REG[t.dataset.r]=t.checked; ecrireReglages(); appliquerReglages();
+    if(t.checked&&t.dataset.r==="vibrations") buzz(10);
+    if(t.checked&&t.dataset.r==="sons") SON.jouer("groupe",2); });
+  if($("setTuto")) $("setTuto").onclick=revoirTuto;
+  if($("setReset")) $("setReset").onclick=reinitialiser;
+  const App=plugin("App");
+  if(App&&$("setVer")) App.getInfo().then(i=>{ if($("setVer")) $("setVer").textContent=`${i.version} (${i.build})`; }).catch(()=>{});
+}
+// « Revoir le tuto »
+function revoirTuto(){
+  buzz(8); closeSheet();
+  if(!GRIDS.length){ toast("Chargement des grilles…"); return; }
+  newGame(-1); scrollTo(0,0);
+}
+// « Réinitialiser ma progression » : double confirmation. Efface résultats, statistiques, série et parties en cours ;
+// garde les favoris, les réglages et le tutoriel.
+function reinitialiser(){
+  buzz(8);
+  openSheet(`<h2>Réinitialiser ?</h2><p>Tes résultats, tes statistiques, ta série et tes parties en cours seront effacés. Tes favoris ⭐ et tes réglages sont conservés.</p>
+    <button class="pill danger full" id="rz1">Réinitialiser ma progression</button><button class="pill soft full" id="rzNon">Annuler</button>`);
+  $("rzNon").onclick=closeSheet;
+  $("rz1").onclick=()=>{ buzz(8);
+    openSheet(`<h2>Vraiment tout effacer ? 😬</h2><p>C'est définitif : impossible de revenir en arrière.</p>
+      <button class="pill danger full" id="rz2">Oui, tout effacer</button><button class="pill soft full" id="rzNon2">Non, garder ma progression</button>`);
+    $("rzNon2").onclick=closeSheet;
+    $("rz2").onclick=async()=>{
+      const cles=["quatuor-res","quatuor","quatuor-encours","quatuor-bonus"];
+      cles.forEach(k=>ls.del(k));
+      if(Prefs) await Promise.all(cles.map(key=>Prefs.remove({key}).catch(()=>{})));   // écrit avant de recharger
+      location.reload();
+    }; };
 }
 function retourReglages(){
   const v=avantReglages||"jeu"; avantReglages=null; buzz(8);
@@ -1644,7 +1753,7 @@ function goJouer(m){
   if(gridIdx===dailyIdx&&!tuto) setView("jeu"); else switchGame(dailyIdx);
 }
 $("tabs").addEventListener("click",e=>{
-  const b=e.target.closest("button[data-tab]"); if(!b||busy&&view==="jeu"&&GRIDS.length) return; buzz(8);
+  const b=e.target.closest("button[data-tab]"); if(!b||busy&&!done&&view==="jeu"&&GRIDS.length) return; buzz(8);   // (bloqué seulement pendant une animation de jeu)
   const t=b.dataset.tab, cur=ongletDe(view);
   if(t==="jouer"){
     if(cur==="jouer") goJouer("jour");                        // déjà dans Jouer : retour à la grille du jour
@@ -1680,8 +1789,8 @@ function openResults(win){
     ${learned?`<h3>Ce que tu as appris aujourd'hui</h3><div class="learned">${learned}</div>`:""}`);
   $("share").onclick=share;
   $("next").onclick=nextOrRandom;
-  // Appli iOS : première grille terminée -> proposition de rappel quotidien, une fois les résultats fermés
-  if(Notifs&&!ls.get("quatuor-rappel-demande")) onSheetClose=()=>setTimeout(()=>whenSheetFree(proposerRappels),450);
+  // Appli iOS : première grille réussie -> proposition de rappel quotidien, une fois les résultats fermés
+  if(win&&Notifs&&!ls.get("quatuor-rappel-demande")) onSheetClose=()=>setTimeout(()=>whenSheetFree(proposerRappels),450);
   if(!win) $("retry").onclick=()=>retenter(gridIdx);
 }
 // =====================================================================
@@ -1839,7 +1948,7 @@ function nextInTheme(){
   else ouvrirGrille(choix.idx);
 }
 $("modes").addEventListener("click",e=>{
-  const b=e.target.closest("button[data-m]"); if(!b||busy&&view==="jeu"&&GRIDS.length) return; buzz(8);
+  const b=e.target.closest("button[data-m]"); if(!b||busy&&!done&&view==="jeu"&&GRIDS.length) return; buzz(8);   // (bloqué seulement pendant une animation de jeu)
   goJouer(b.dataset.m);
 });
 
@@ -1974,7 +2083,7 @@ function boot(){
   });
 }
 function lancer(){
-  lireReglages();
+  lireReglages(); appliquerReglages();
   migrateData();
   cdTick();
   const firstRun=!ls.get("quatuor-tuto-done");
