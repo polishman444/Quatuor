@@ -35,7 +35,11 @@ html,body,button{touch-action:manipulation}
 body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.35;
   -webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 button{font-family:inherit;color:inherit}
-.app{max-width:480px;margin:0 auto;padding:10px 16px 110px;min-height:100svh;display:flex;flex-direction:column}
+/* Hauteur de la barre d'onglets (0 quand elle est masquée : tutoriel) */
+:root{--tabH:calc(58px + env(safe-area-inset-bottom,0px))}
+body.notabs{--tabH:0px}
+.app{max-width:480px;margin:0 auto;padding:10px 16px calc(100px + var(--tabH));min-height:100svh;display:flex;flex-direction:column}
+body:not([data-view="jeu"]) .app{padding-bottom:calc(28px + var(--tabH))}
 .area{flex:1;display:flex;flex-direction:column;justify-content:center;padding-bottom:10px}
 
 .top{display:flex;align-items:center;justify-content:space-between;height:52px}
@@ -52,11 +56,65 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .ibtn:active{background:var(--edge)}
 .sub{margin:4px 2px 14px;color:var(--muted);font-weight:500}
 /* Sélecteur « Grille du jour | Thèmes » */
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;margin:2px 0 10px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--edge)}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;margin:2px 0 10px;border-radius:14px;background:var(--card);box-shadow:0 3px 0 var(--edge)}
 .modes[hidden]{display:none}
 .modes button{border:0;background:transparent;border-radius:11px;padding:9px 6px;font:inherit;font-weight:800;font-size:.95rem;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
 .modes button.on{background:var(--ink);color:var(--bg)}
-.vthemes .sub,.vthemes .area,.vthemes .dock{display:none!important}
+/* Hors du plateau de jeu : ni sous-titre, ni grille, ni barre de jeu */
+body:not([data-view="jeu"]) .sub,body:not([data-view="jeu"]) .area,body:not([data-view="jeu"]) .dock{display:none!important}
+.ibtn.on{background:var(--edge)}
+/* Barre d'onglets */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:12;background:var(--sheet);box-shadow:0 -1.5px 0 var(--edge);padding:0 8px env(safe-area-inset-bottom,0px)}
+.notabs .tabs{display:none}
+.tabs-in{max-width:480px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:58px}
+.tabs button{border:0;background:none;font:inherit;font-size:.72rem;font-weight:700;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:0;transition:color .2s}
+.tabs svg{width:24px;height:24px;padding:2px 14px;box-sizing:content-box;border-radius:999px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:background .2s,transform .15s}
+.tabs button.on{color:var(--ink)}
+.tabs button.on svg{background:var(--bg)}
+.tabs button:active svg{transform:scale(.9)}
+/* Pages (Bonus, Hasard, Progrès, Moi, Paramètres) */
+.page{padding-bottom:10px}
+.page[hidden]{display:none}
+.page .sec{margin:22px 0 8px;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.page .sec .cnt{display:inline-block;min-width:22px;padding:1px 7px;margin-left:4px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:.72rem;letter-spacing:0;text-align:center}
+.page .gitem{background:var(--card);box-shadow:0 3px 0 var(--edge)}
+.page .rand{background:var(--card);box-shadow:0 4px 0 var(--edge)}
+.page .rpill{background:var(--bg)}
+.page .regl{background:var(--card);box-shadow:0 4px 0 var(--edge)}
+.page .rheure{background:var(--bg)}
+.lvgrid{display:grid;gap:12px}
+.lvcard{background:var(--card);border-radius:18px;box-shadow:0 4px 0 var(--edge);padding:14px}
+.lvhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.lvhead .dbadge{margin:0;font-size:.9rem;padding:4px 11px}
+.lvhead small{color:var(--muted);font-size:.85rem;font-weight:600;text-align:right}
+.lvcard .bar{margin:12px 0}
+.lvbtns{display:flex;gap:8px}
+.lvbtns .pill{height:46px;font-size:1rem}
+.lvbtns .pill.soft{background:var(--bg)}
+.lvcard .glist{margin-top:14px}
+.page .lvcard .gitem{background:var(--bg);box-shadow:none}
+.pserie{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;box-shadow:0 4px 0 var(--edge);padding:14px 16px}
+.pserie .fl{font-size:2.4rem;line-height:1}
+.pserie b{display:block;font-size:1.5rem;font-weight:800;line-height:1.15}
+.pserie small{color:var(--muted);font-weight:600}
+.pgnivs{display:grid;gap:10px}
+.pgniv{display:grid;grid-template-columns:104px 1fr 46px;align-items:center;gap:10px}
+.pgniv .bar{margin:0}
+.pgniv .dbadge{margin:0;text-align:center}
+.pgniv small{color:var(--muted);font-weight:700;font-size:.85rem;text-align:right}
+.rbtn{width:100%;border:0;background:none;font:inherit;color:var(--ink);text-align:left}
+.chev{flex:none;font-size:1.5rem;line-height:1;color:var(--muted);font-weight:700}
+.moi{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 0 4px}
+.avatar{width:84px;height:84px;border-radius:26px;background:#1B2040;display:grid;place-items:center;box-shadow:0 4px 0 var(--edge)}
+.avatar .mark{grid-template-columns:repeat(2,18px);gap:5px}
+.avatar .mark i{width:18px;height:18px;border-radius:5px}
+.avatar .mark i:nth-child(4){background:#7888E6}
+.moi b{font-size:1.35rem;font-weight:800}
+/* Petits écrans (iPhone SE…) : un peu plus compact */
+.modes button{white-space:nowrap}
+.modes .sm{display:none}
+@media (max-width:420px){ .modes .lg{display:none} .modes .sm{display:inline} }
+@media (max-height:700px){ .top{height:44px} .modes{margin:0 0 6px} .modes button{padding:7px 6px} .sub{margin:2px 2px 8px} .grid{gap:8px} .stack{gap:8px} .tile{aspect-ratio:1/.86} .lives{margin-top:10px} }
 /* Écran Thèmes */
 .themes{padding-bottom:20px}
 .themes[hidden]{display:none}
@@ -146,7 +204,7 @@ h1{margin:0;font-size:1.65rem;font-weight:800;letter-spacing:-.03em}
 .round.spin svg{animation:spin .6s cubic-bezier(.25,.8,.35,1)}
 @keyframes spin{from{transform:rotate(-180deg)}to{transform:none}}
 
-.dock{position:fixed;left:0;right:0;bottom:0;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+.dock{position:fixed;left:0;right:0;bottom:var(--tabH);padding:10px 16px 12px;
   background:linear-gradient(to top, var(--bg) 70%, transparent)}
 .dock-in{max-width:480px;margin:0 auto;display:flex;gap:10px;align-items:center}
 .round{flex:none;width:54px;height:54px;border-radius:50%;border:0;background:var(--card);box-shadow:0 4px 0 var(--edge);display:grid;place-items:center;cursor:pointer}
@@ -195,7 +253,8 @@ button:focus-visible{outline:3px solid var(--l2);outline-offset:3px}
 .homebox{display:none;max-width:480px;margin:0 auto;background:var(--card);border-radius:22px;padding:14px 14px 10px;box-shadow:0 4px 0 var(--edge)}
 .dock.home .dock-in{display:none}
 .dock.home .homebox{display:block}
-body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
+body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
+.notabs .dock{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .homebox .hbt{margin:0;text-align:center;font-weight:800;font-size:1.05rem}
 .homebox .hbt span{color:var(--l0e)}
 .homebox .cd{margin:2px 0 12px;font-size:.92rem;color:var(--muted)}
@@ -209,6 +268,7 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 /* libellés selon la largeur (deux boutons côte à côte) */
 .dock .homebox .sm,.dock .homebox .xs{display:none}
 @media (max-width:440px){ .dock .homebox .hbrow .pill:not(:only-child) .lg{display:none} .dock .homebox .hbrow .pill:not(:only-child) .sm{display:inline} }
+@media (max-width:400px){ .dock .homebox .hbrow .pill:not(:only-child){font-size:.92rem;padding:0 4px} }
 @media (max-width:360px){ .dock .homebox .hbrow .pill:not(:only-child) .sm{display:none} .dock .homebox .hbrow .pill:not(:only-child) .xs{display:inline} .homebox{padding:12px 10px 8px} .homebox .pill{font-size:.92rem;padding:0 4px} .hbrow{gap:6px} }
 .gitem .date{font-weight:700}
 
@@ -275,17 +335,6 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 .stats small{color:var(--muted);font-size:.8rem}
 .row{display:flex;gap:10px}
 
-/* Tiroir des grilles */
-.drawer{position:fixed;top:0;bottom:0;left:0;z-index:21;width:min(86vw,360px);background:var(--sheet);
-  padding:calc(18px + env(safe-area-inset-top,0px)) 18px calc(18px + env(safe-area-inset-bottom,0px));
-  transform:translateX(-102%);transition:transform .32s cubic-bezier(.4,0,.6,1);overflow:auto;border-radius:0 22px 22px 0;box-shadow:-60px 0 0 var(--sheet)}
-.drawer.open{transform:translateX(0);transition:transform .5s cubic-bezier(.22,1.06,.4,1)}
-.drawer h2{margin:0 0 -4px;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
-/* Onglets du tiroir : Grilles / Mon carnet */
-.mtabs{display:grid;grid-template-columns:1fr 1.4fr;gap:4px;padding:4px;border-radius:14px;background:var(--bg);margin-bottom:4px}
-.mtab{border:0;background:transparent;border-radius:11px;padding:9px 4px;font:inherit;font-weight:800;font-size:.95rem;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
-.mtab.on{background:var(--card);color:var(--ink);box-shadow:0 2px 0 var(--edge)}
-.mtab .cnt{display:inline-block;min-width:22px;padding:1px 7px;margin-left:3px;border-radius:999px;background:var(--ink);color:var(--bg);font-size:.72rem;vertical-align:2px}
 /* Étoile des favoris */
 .star{position:absolute;top:3px;right:3px;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;cursor:pointer;
   font-size:1.3rem;line-height:1;touch-action:manipulation;-webkit-user-select:none;user-select:none}
@@ -308,15 +357,6 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 .fempty span{display:block;font-size:2.6rem;margin-bottom:8px;color:var(--ink)}
 .prog{margin:4px 0 14px;color:var(--muted);font-weight:500}
 .prog b{color:var(--ink)}
-.drawer .sec{margin:16px 0 8px;font-size:.8rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
-.dtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
-.dtab{border:0;border-radius:12px;padding:8px 2px 7px;background:var(--bg);font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .2s}
-.dtab i{width:12px;height:12px;border-radius:4px;box-shadow:none;display:block}
-.dtab b{font-size:.8rem;font-weight:700;white-space:nowrap}
-.dtab small{font-size:.72rem;color:var(--muted)}
-.dtab.on{background:var(--ink);color:var(--bg)}
-.dtab.on small{color:var(--bg);opacity:.7}
-.dtab:active{transform:scale(.96)}
 .dbadge{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;font-size:.78rem;font-weight:700;box-shadow:none;vertical-align:1px}
 .bar{height:8px;border-radius:4px;background:var(--edge);overflow:hidden;margin:-6px 0 16px}
 .bar i{display:block;height:100%;background:var(--l0);border-radius:4px}
@@ -392,16 +432,15 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 }
 </style>
 </head>
-<body>
+<body data-view="jeu">
 <div class="app">
   <header class="top">
-    <div class="brand"><button class="ibtn" id="menuBtn" aria-label="Toutes les grilles"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h1>Quatuor</h1></div>
+    <div class="brand"><span class="mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><h1>Quatuor</h1></div>
     <div class="icons">
-      <button class="ibtn" id="helpBtn" aria-label="Règles du jeu"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 1c0 1.8-2.5 2.2-2.5 3.8"/><circle cx="12" cy="17.3" r=".6" fill="currentColor"/></svg></button>
-      <button class="ibtn" id="statsBtn" aria-label="Statistiques"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg></button>
+      <button class="ibtn" id="setBtn" aria-label="Paramètres"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </header>
-  <div class="modes" id="modes" role="tablist" hidden><button data-m="jour" role="tab" class="on">Grille du jour</button><button data-m="themes" role="tab">Thèmes</button></div>
+  <div class="modes" id="modes" role="tablist"><button data-m="jour" role="tab" class="on"><span class="lg">Grille du jour</span><span class="sm">Du jour</span></button><button data-m="bonus" role="tab">Bonus</button><button data-m="hasard" role="tab">Hasard 🎲</button></div>
   <div class="sub" id="sub"></div>
   <div class="area">
     <div class="tuto" id="tuto" hidden><span id="tutoTxt"></span></div>
@@ -413,6 +452,7 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
     <div class="lives" id="lives">Erreurs restantes <span class="dots"></span></div>
   </div>
   <section class="themes" id="themesView" hidden aria-label="Thèmes"></section>
+  <section class="page" id="pageView" hidden></section>
 </div>
 
 <nav class="dock"><div class="dock-in">
@@ -429,7 +469,12 @@ body.home:not(.vthemes) .app{padding-bottom:var(--homeH,250px)}
 
 <div class="veil" id="veil"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></div>
-<nav class="drawer" id="drawer" aria-label="Toutes les grilles"></nav>
+<nav class="tabs" id="tabs" aria-label="Navigation"><div class="tabs-in">
+  <button data-tab="jouer" class="on" aria-current="page"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>Jouer</button>
+  <button data-tab="themes"><svg viewBox="0 0 24 24"><path d="M3 7.5a2 2 0 0 1 2-2h4.2l2 2.2H19a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Thèmes</button>
+  <button data-tab="progres"><svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>Progrès</button>
+  <button data-tab="moi"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>Moi</button>
+</div></nav>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -614,7 +659,7 @@ function migrateData(){
 }
 function loadRes(){ try{ return JSON.parse(ls.get("quatuor-res"))||{}; }catch(e){ return {}; } }
 function saveRes(r){ try{ ls.set("quatuor-res",JSON.stringify(r)); }catch(e){} }
-let grid,gridIdx,practice,words,selected,found,mistakes,maxErr,history,tried,done,busy,gameId=0,menuTab=null,tuto=false,lastWin=false;
+let grid,gridIdx,practice,words,selected,found,mistakes,maxErr,history,tried,done,busy,gameId=0,menuTab=null,tuto=false,lastWin=false;   // menuTab : niveau déplié dans « Bonus »
 
 // ---- Animations (transform + opacity uniquement) ----
 const RM=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -701,6 +746,7 @@ function newGame(idx,opts={}){
   $("solved").innerHTML=""; $("lives").style.display=tuto?"none":"flex";
   const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","lost","pending","home"); document.body.classList.remove("home");
   tutoMsg=""; $("tuto").hidden=!tuto||tutoHold; tutoUpdate();
+  document.body.classList.toggle("notabs",tuto);
   setView("jeu");
   if(sv){ restaurerPartie(sv); hasard=opts.hasard||sv.hasard||null; }
   // Lancement avec la grille du jour déjà terminée : plateau terminé + encart (pas l'écran de résultats)
@@ -927,7 +973,7 @@ function ouvrirArchive(i,opts={}){
 function showHome(){
   const dk=document.querySelector(".dock"), r=loadRes();
   const manq=archiveGrids().filter(i=>!r[GRIDS[i].id]), hier=manq.length===1&&GRIDS[manq[0]].jour===dayStr(1);
-  const rep=partieAReprendre(), repLbl=rep==null?"":GRIDS[rep].theme!=="quotidien"?`« ${esc(themeLabel(rep))} »`:`la grille n°${GRIDS[rep].num}`;
+  const rep=partieAReprendre(), repLbl=rep==null?"":repLabel(rep);
   const nM=manq.length;
   const lab=(lg,sm,xs)=>`<span class="lg">${lg}</span><span class="sm">${sm}</span><span class="xs">${xs}</span>`;
   const archBtn=!nM?"":`<button class="pill soft" id="hbArch">${hier?lab("📅 Grille d'hier","📅 Grille d'hier","📅 Hier")
@@ -937,12 +983,14 @@ function showHome(){
     <div class="hbrow">${archBtn}<button class="pill ${rep!=null||nM?"soft":"main"}" id="hbRand">${lab("🎲 Grille au hasard","🎲 Au hasard","🎲 Hasard")}</button></div>
     <button class="hbres" id="hbRes">Voir mes résultats</button>`;
   dk.classList.remove("over","lost","pending"); dk.classList.add("home"); document.body.classList.add("home");
-  document.body.style.setProperty("--homeH",(dk.offsetHeight+24)+"px");
-  if(rep!=null) $("hbRep").onclick=()=>{ buzz(10); const sv=loadEncours()[GRIDS[rep].id]; switchGame(rep,{hasard:sv&&sv.hasard||null}); };
-  if(nM) $("hbArch").onclick=()=>{ buzz(10); if(hier) ouvrirArchive(manq[0]); else openMenu("arch"); };
+  document.body.style.setProperty("--homeH",(dk.offsetHeight+$("tabs").offsetHeight+24)+"px");
+  if(rep!=null) $("hbRep").onclick=()=>reprendre(rep);
+  if(nM) $("hbArch").onclick=()=>{ buzz(10); if(hier) ouvrirArchive(manq[0]); else showPage("bonus",{scroll:"archSec"}); };
   $("hbRand").onclick=()=>launchRandom(randChoice);
   $("hbRes").onclick=()=>{ if(done&&!tuto) openResults(lastWin); };
 }
+const repLabel=i=>GRIDS[i].theme!=="quotidien"?`« ${esc(themeLabel(i))} »`:`la grille n°${GRIDS[i].num}`;
+function reprendre(i){ buzz(10); const sv=loadEncours()[GRIDS[i].id]; switchGame(i,{hasard:sv&&sv.hasard||null}); }
 // Retour dans l'appli après minuit : on recharge pour la nouvelle grille du jour (la partie en cours est sauvegardée)
 function verifierNouveauJour(){ if(document.visibilityState!=="hidden"&&isoDay(new Date())!==todayStr) location.reload(); else if(document.visibilityState==="visible") planifierRappels(); }
 document.addEventListener("visibilitychange",verifierNouveauJour);
@@ -975,20 +1023,23 @@ function endTuto(){ ls.set("quatuor-tuto-done","1"); gridsReady.then(ok=>{ if(ok
 function switchGame(idx,opts){
   const parts=[$("sub"),document.querySelector(".area")];
   if(RM()){ scrollTo(0,0); newGame(idx,opts); return; }
-  busy=true; scrollTo({top:0,behavior:"smooth"});
-  const outs=parts.map(e=>e.animate([{transform:"none",opacity:1},{transform:"translateX(-28px)",opacity:0}],{duration:260,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}));
-  outs[1].onfinish=()=>{
+  const entrer=outs=>{
     newGame(idx,opts);
     parts.forEach((e,i)=>e.animate([{transform:"translateX(28px)",opacity:0},{transform:"none",opacity:1}],{duration:420,delay:i*40,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
-    outs.forEach(a=>a.cancel());
+    if(outs) outs.forEach(a=>a.cancel());
     [...$("grid").children].forEach((t,i)=>t.animate([{transform:"translateY(10px) scale(.96)",opacity:0},{transform:"none",opacity:1}],
       {duration:420,delay:80+i*22,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     const dk=document.querySelector(".dock"); dk.animate([{opacity:0},{opacity:1}],{duration:400,easing:"ease-out"});
   };
+  // Depuis une autre page (Bonus, Thèmes…) : la grille arrive directement
+  if(view!=="jeu"){ scrollTo(0,0); entrer(); return; }
+  busy=true; scrollTo({top:0,behavior:"smooth"});
+  const outs=parts.map(e=>e.animate([{transform:"none",opacity:1},{transform:"translateX(-28px)",opacity:0}],{duration:260,easing:"cubic-bezier(.4,0,1,1)",fill:"forwards"}));
+  outs[1].onfinish=()=>entrer(outs);
 }
 // En attendant les grilles : tuiles en squelette (jamais d'écran vide)
 function showSkeleton(){
-  busy=true; done=false; selected=new Set(); tuto=false; $("tuto").hidden=true;
+  busy=true; done=false; selected=new Set(); tuto=false; $("tuto").hidden=true; document.body.classList.remove("notabs");
   $("sub").classList.remove("tsub"); $("sub").textContent="Chargement des grilles…";
   $("solved").innerHTML=""; $("lives").style.display="none";
   const dk=document.querySelector(".dock"); dk.style.display="block"; dk.classList.remove("over","home"); document.body.classList.remove("home");
@@ -1062,10 +1113,10 @@ function toggleFav(st){
   document.querySelectorAll(".star").forEach(s=>{ if(s.dataset.id!==id) return;
     s.classList.toggle("on",on); s.textContent=on?"★":"☆"; s.setAttribute("aria-pressed",on); s.setAttribute("aria-label",on?"Retirer des favoris":"Ajouter aux favoris");
     if(!RM()){ s.classList.remove("bounce"); void s.offsetWidth; s.classList.add("bounce"); } });
-  const cnt=document.querySelector(".mtab .cnt"); if(cnt) cnt.textContent=f.length;
+  const cnt=document.querySelector("#favSec .cnt"); if(cnt) cnt.textContent=f.length;
   // Retrait depuis le carnet : la carte s'efface puis la liste se met à jour
   const card=st.closest(".fcard");
-  if(card&&!on){ const done_=()=>{ if(drawerTab==="favs") renderDrawer(false); };
+  if(card&&!on){ const done_=()=>{ if(view==="progres") renderPage(); };
     if(RM()) done_(); else card.animate([{opacity:1,transform:"none"},{opacity:0,transform:"scale(.96)"}],{duration:220,easing:"ease-in",fill:"forwards"}).onfinish=done_; }
 }
 // Capture : le clic sur l'étoile ne remonte pas jusqu'au bandeau (qui se replierait)
@@ -1269,7 +1320,7 @@ function gridItem(i,r,label,n){
     <span class="txt"><b>${label?`${label}<span class="dbadge l${DIFFS[GRIDS[i].diff].c}">${dname(GRIDS[i].diff)}</span>`:`Grille n°${GRIDS[i].num}`}</b><small>${sub}</small></span>${i===dailyIdx?'<span class="tag">Aujourd\'hui</span>':""}</button>${lost?`<button class="gretry" data-i="${i}">Retenter 🔄</button>`:""}</div>`;
 }
 function randHtml(){
-  return `<p class="sec">Grille au hasard 🎲</p><div class="rand"><div class="rpills" role="radiogroup" aria-label="Difficulté">${RAND_KEYS.map(k=>
+  return `<div class="rand"><div class="rpills" role="radiogroup" aria-label="Difficulté">${RAND_KEYS.map(k=>
     `<button class="rpill${k===randChoice?" on":""}" data-k="${k}" role="radio" aria-checked="${k===randChoice}">${k==="toutes"?'<i class="all"><b style="background:var(--l0)"></b><b style="background:var(--l1)"></b><b style="background:var(--l2)"></b><b style="background:var(--l3)"></b></i>':`<i class="l${DIFFS[k].c}"></i>`}${randLabel(k)}</button>`).join("")}</div>
     <button class="pill main rgo" id="randGo">Lancer <span class="die">🎲</span></button></div>`;
 }
@@ -1351,7 +1402,7 @@ function proposerRappels(){
   openSheet(`<div class="notif"><span class="big${RM()?"":" ring"}">🔔</span><h2>Un petit rappel ?</h2>
     <p class="lead">Une nouvelle grille t'attend chaque jour. Quatuor peut te le rappeler à <b>${heureTxt(r.h,r.m)}</b>, sans rien dévoiler.</p>
     <div class="nex"><span class="ic"><span class="mark"><i></i><i></i><i></i><i></i></span></span><div><b>Quatuor</b><small>${RAPPEL_TEXTES[0]}</small></div></div>
-    <p>Pas de rappel les jours où tu as déjà joué. Heure et rappels se règlent dans le menu, rubrique « Réglages ».</p>
+    <p>Pas de rappel les jours où tu as déjà joué. Heure et rappels se règlent dans les Paramètres ⚙️.</p>
     <button class="pill main full" id="nOui">Oui, me le rappeler</button>
     <button class="pill soft full" id="nNon">Plus tard</button></div>`);
   $("nOui").onclick=()=>{ buzz(10); closeSheet(); setTimeout(()=>activerRappels(true).then(ok=>{ if(ok) toast(`C'est noté : rappel à ${heureTxt(r.h,r.m)} 🔔`); }),350); };
@@ -1361,7 +1412,7 @@ function proposerRappels(){
 function reglagesHtml(){
   if(!Notifs) return "";
   const r=lireRappel(), v=`${String(r.h).padStart(2,"0")}:${String(r.m).padStart(2,"0")}`;
-  return `<p class="sec">Réglages</p><div class="regl">
+  return `<p class="sec">Rappel quotidien</p><div class="regl">
     <label class="rrow"><span><b>🔔 Rappel quotidien</b><small>Jamais si la grille du jour est déjà faite</small></span><input type="checkbox" class="tgl" id="rapOn"${r.actif?" checked":""}></label>
     <label class="rrow${r.actif?"":" off"}" id="rapRow"><span><b>Heure du rappel</b><small>Alerte à 20 h si ta série 🔥 est en danger</small></span><input type="time" class="rheure" id="rapH" value="${v}"${r.actif?"":" disabled"}></label></div>`;
 }
@@ -1391,61 +1442,139 @@ function ouvrirPageLegale(url){
   if(w) w.opener=null; else location.href=url;
 }
 document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest("a[data-legal]"); if(!a) return; e.preventDefault(); ouvrirPageLegale(a.getAttribute("href")); });
-let drawerTab="grids";
 const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
-function renderDrawer(anim){
-  const n=loadFavs().length;
-  const head=`<div class="mtabs" role="tablist"><button class="mtab${drawerTab==="grids"?" on":""}" data-t="grids" role="tab" aria-selected="${drawerTab==="grids"}">Grilles</button>
-    <button class="mtab${drawerTab==="favs"?" on":""}" data-t="favs" role="tab" aria-selected="${drawerTab==="favs"}">Mon carnet ⭐<span class="cnt">${n}</span></button></div>`;
-  if(drawerTab==="grids") renderMenu(anim,head); else renderFavs(anim,head);
-  $("drawer").insertAdjacentHTML("beforeend",reglagesHtml()+legalHtml());
-  brancherReglages();
-  $("drawer").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{ if(b.dataset.t===drawerTab) return; buzz(8); drawerTab=b.dataset.t; renderDrawer(true); });
+// =====================================================================
+// NAVIGATION : barre d'onglets en bas (Jouer, Thèmes, Progrès, Moi) + Paramètres (engrenage, en haut à droite)
+// Vues : "jeu" (plateau), "bonus" et "hasard" (onglet Jouer), "themes", "progres", "moi", "reglages".
+// Onglet Jouer : sélecteur « Grille du jour | Bonus | Hasard 🎲 ».
+// =====================================================================
+const PAGES=["bonus","hasard","progres","moi","reglages"];
+let derJouer="jeu", avantReglages=null;   // dernière vue de l'onglet Jouer ; vue d'où l'on a ouvert les Paramètres
+const ongletDe=v=>v==="themes"||(v==="jeu"&&isTheme())?"themes":v==="progres"||v==="moi"?v:v==="reglages"?null:"jouer";
+function updateTabs(){
+  const t=ongletDe(view);
+  $("tabs").querySelectorAll("button").forEach(b=>{ const on=b.dataset.tab===t; b.classList.toggle("on",on); if(on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  $("setBtn").classList.toggle("on",view==="reglages");
 }
-function renderFavs(anim,head){
-  const f=loadFavs().sort((a,b)=>b.at-a.at);
-  const list=f.length ? `<div class="flist">${f.map((x,k)=>`<div class="fcard c${x.lvl}" data-k="${k}">
+function showPage(v,opts={}){
+  if(!GRIDS.length&&(v==="bonus"||v==="hasard"||v==="progres")){ toast("Chargement des grilles…"); return; }
+  if(v==="reglages"&&view!=="reglages") avantReglages=view;
+  closeSheet(); setView(v); renderPage(); scrollTo(0,0);
+  const cible=opts.scroll&&$(opts.scroll);
+  if(cible) requestAnimationFrame(()=>scrollTo(0,cible.getBoundingClientRect().top+scrollY-70));
+  else if(!RM()) $("pageView").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:300,easing:"cubic-bezier(.2,.8,.3,1)"});
+}
+function renderPage(){
+  const el=$("pageView");
+  el.innerHTML=({bonus:bonusHtml,hasard:hasardHtml,progres:progresHtml,moi:moiHtml,reglages:reglagesPageHtml})[view]();
+  // listes de grilles (Bonus)
+  el.querySelectorAll(".gitem").forEach(b=>b.onclick=()=>switchGame(+b.dataset.i));
+  el.querySelectorAll(".gretry").forEach(b=>b.onclick=()=>retenter(+b.dataset.i,{hasard:null}));
+  // Grilles des jours précédents : toujours via peutJouerArchive()
+  el.querySelectorAll(".arch .gitem").forEach(b=>b.onclick=()=>{ if(!peutJouerArchive(GRIDS[+b.dataset.i].id)){ toast("Grille non disponible"); return; } switchGame(+b.dataset.i); });
+  el.querySelectorAll(".arch .gretry").forEach(b=>b.onclick=()=>ouvrirArchive(+b.dataset.i,{essai:true}));
+  el.querySelectorAll(".lvgo").forEach(b=>b.onclick=()=>jouerNiveau(b.dataset.k));
+  el.querySelectorAll(".lvlist").forEach(b=>b.onclick=()=>{ buzz(8); menuTab=menuTab===b.dataset.k?null:b.dataset.k; renderPage(); });
+  if($("pgRep")) $("pgRep").onclick=()=>reprendre(+$("pgRep").dataset.i);
+  // Hasard
+  el.querySelectorAll(".rpill").forEach(b=>b.onclick=()=>{ randChoice=b.dataset.k; ls.set("quatuor-hasard",randChoice); buzz(8);
+    el.querySelectorAll(".rpill").forEach(x=>{ const on=x===b; x.classList.toggle("on",on); x.setAttribute("aria-checked",on); }); });
+  if($("randGo")) $("randGo").onclick=()=>launchRandom(randChoice,$("randGo").querySelector(".die"));
+  // Progrès : carnet
+  const fs=favsTries(); el.querySelectorAll(".fshare").forEach(b=>b.onclick=()=>shareFav(fs[+b.dataset.k],b));
+  // Paramètres
+  if($("setBack")) $("setBack").onclick=retourReglages;
+  if($("setHelp")) $("setHelp").onclick=openHelp;
+  brancherReglages();
+}
+// Onglet Jouer › Bonus : jours précédents, grilles à retenter, et les 4 niveaux
+function bonusHtml(){
+  const r=loadRes(), arch=archiveGrids(), rep=partieAReprendre();
+  const perdues=GRIDS.map((_,i)=>i).filter(i=>visible(i)&&i!==dailyIdx&&!arch.includes(i)&&r[GRIDS[i].id]&&!r[GRIDS[i].id].win);
+  const niv=DKEYS.map(k=>{ const ids=idsOf(k), n=ids.filter(i=>r[GRIDS[i].id]).length, D_=DIFFS[k], open=menuTab===k&&ids.length>0;
+    return `<div class="lvcard"><div class="lvhead"><span class="dbadge l${D_.c}">${dname(k)}</span><small>${n}/${ids.length} ${pl(n,"terminée","terminées")} · ${D_.err} ${pl(D_.err,"erreur","erreurs")}</small></div>
+      <div class="bar"><i style="width:${ids.length?n/ids.length*100:0}%;background:var(--l${D_.c})"></i></div>
+      ${ids.length?`<div class="lvbtns"><button class="pill main lvgo" data-k="${k}">Jouer ▸</button><button class="pill soft lvlist" data-k="${k}" aria-expanded="${open}">${open?"Masquer":"Voir les grilles"}</button></div>`
+        :`<p class="gempty">Pas encore de grille ${D_.name.toLowerCase()}. De nouvelles grilles arrivent chaque jour !</p>`}
+      ${open?`<div class="glist">${ids.map(i=>gridItem(i,r)).join("")}</div>`:""}</div>`; }).join("");
+  return `<h2 class="thtitle">Grilles bonus</h2><p class="thsub">Toutes les grilles, par niveau, à ton rythme.</p>
+    ${rep!=null?`<button class="pill main full" id="pgRep" data-i="${rep}">▶️ Reprendre ${repLabel(rep)}</button>`:""}
+    ${arch.length?`<p class="sec" id="archSec">Grilles des jours précédents</p><div class="glist arch">${arch.map(i=>gridItem(i,r,`<span class="date">${dateCourte(GRIDS[i].jour)}</span>`)).join("")}</div>`:""}
+    ${perdues.length?`<p class="sec">À retenter</p><div class="glist">${perdues.map(i=>gridItem(i,r)).join("")}</div>`:""}
+    <p class="sec">Par niveau</p><div class="lvgrid">${niv}</div>`;
+}
+// « Jouer ▸ » d'un niveau : prochaine grille non terminée de ce niveau (anti-répétition : choisirProchaineGrille)
+function jouerNiveau(k){
+  const choix=choisirProchaineGrille({portee:{niveau:k},resultats:loadRes()});
+  if(choix.fini&&!choix.faites.length){ toast(`Pas encore de grille ${DIFFS[k].name} disponible`); return; }
+  buzz(10);
+  if(choix.fini) openTermine(choix,{},`de niveau ${dname(k)}`); else ouvrirGrille(choix.idx);
+}
+function hasardHtml(){
+  return `<h2 class="thtitle">Grille au hasard 🎲</h2><p class="thsub">Une grille que tu n'as pas encore faite, tirée au sort.</p>${randHtml()}`;
+}
+// Onglet Progrès : série, statistiques, progression par niveau, carnet d'anecdotes
+const favsTries=()=>loadFavs().sort((a,b)=>b.at-a.at);
+function favsHtml(){
+  const f=favsTries();
+  return f.length ? `<div class="flist">${f.map((x,k)=>`<div class="fcard c${x.lvl}" data-k="${k}">
       <b>${esc(x.name)}</b><small>Grille n°${x.num} · ${esc(x.words.join(", "))}</small><p>${esc(fr(x.fact))}</p>
       <button class="fshare" data-k="${k}">${SHARE_ICON}Partager en image</button>
       <span class="star on" role="button" tabindex="0" data-id="${esc(x.id)}" aria-pressed="true" aria-label="Retirer des favoris">★</span></div>`).join("")}</div>`
     : `<div class="fempty"><span>☆</span>Touche l'étoile ☆ sur une anecdote pour la garder ici.</div>`;
-  $("drawer").innerHTML=head+`<div class="dpane">${list}</div>`;
-  $("drawer").querySelectorAll(".fshare").forEach(b=>b.onclick=()=>shareFav(f[+b.dataset.k],b));
-  if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
 }
-function renderMenu(anim,head){
-  const arch=archiveGrids(), r=loadRes(), tab=menuTab||grid.diff, ids=idsOf(tab), done_=ids.filter(i=>r[GRIDS[i].id]).length, D_=DIFFS[tab];
-  const tabs=DKEYS.map(k=>{ const n=idsOf(k).filter(i=>r[GRIDS[i].id]).length;
-    return `<button class="dtab${k===tab?" on":""}" data-k="${k}" role="tab" aria-selected="${k===tab}"><i class="l${DIFFS[k].c}"></i><b>${dname(k)}</b><small>${n}/${idsOf(k).length}</small></button>`; }).join("");
-  $("drawer").innerHTML=head+`
-    <p class="sec">${dailyBonus?"Grille bonus":"Grille du jour"}</p><div class="glist">${gridItem(dailyIdx,r)}</div>${r[GRIDS[dailyIdx].id]?`<div class="cdline">${cdHtml()}</div>`:""}
-    ${arch.length?`<p class="sec" id="archSec">Grilles des jours précédents</p><div class="glist arch">${arch.map(i=>gridItem(i,r,`<span class="date">${dateCourte(GRIDS[i].jour)}</span>`)).join("")}</div>`:""}
-    ${randHtml()}
-    <p class="sec">Choisis ta difficulté</p><div class="dtabs" role="tablist">${tabs}</div>
-    <div class="dpane"><p class="prog">${done_} sur ${ids.length} ${pl(done_,"terminée","terminées")} · <b>${D_.err} ${pl(D_.err,"erreur","erreurs")}</b> ${pl(D_.err,"autorisée","autorisées")}</p>
-    <div class="bar"><i style="width:${ids.length?done_/ids.length*100:0}%;background:var(--l${D_.c})"></i></div>
-    <div class="glist">${ids.length?ids.map(i=>gridItem(i,r)).join(""):`<p class="gempty">Pas encore de grille ${D_.name.toLowerCase()} disponible.<br>De nouvelles grilles arrivent chaque jour !</p>`}</div></div>`;
-  $("drawer").querySelectorAll(".gitem").forEach(b=>b.onclick=()=>{ closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
-  $("drawer").querySelectorAll(".gretry").forEach(b=>b.onclick=()=>retenter(+b.dataset.i,{hasard:null}));
-  // Grilles des jours précédents : toujours via peutJouerArchive()
-  $("drawer").querySelectorAll(".arch .gitem").forEach(b=>b.onclick=()=>{ if(!peutJouerArchive(GRIDS[+b.dataset.i].id)){ toast("Grille non disponible"); return; } closeSheet(); setTimeout(()=>switchGame(+b.dataset.i),150); });
-  $("drawer").querySelectorAll(".arch .gretry").forEach(b=>b.onclick=()=>ouvrirArchive(+b.dataset.i,{essai:true}));
-  $("drawer").querySelectorAll(".rpill").forEach(b=>b.onclick=()=>{ randChoice=b.dataset.k; ls.set("quatuor-hasard",randChoice); buzz(8);
-    $("drawer").querySelectorAll(".rpill").forEach(x=>{ const on=x===b; x.classList.toggle("on",on); x.setAttribute("aria-checked",on); }); });
-  $("randGo").onclick=()=>launchRandom(randChoice,$("randGo").querySelector(".die"));
-  $("drawer").querySelectorAll(".dtab").forEach(b=>b.onclick=()=>{ if(b.dataset.k===tab) return; buzz(8); menuTab=b.dataset.k; renderDrawer(true); });
-  if(anim&&!RM()) $("drawer").querySelector(".dpane").animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:"cubic-bezier(.2,.8,.3,1)"});
+function progresHtml(){
+  const s=load(), alive=s.lastWin===dayNum||s.lastWin===dayNum-1, serie=alive?(s.streak||0):0, r=loadRes();
+  const niv=DKEYS.map(k=>{ const ids=idsOf(k), n=ids.filter(i=>r[GRIDS[i].id]).length;
+    return `<div class="pgniv"><span class="dbadge l${DIFFS[k].c}">${dname(k)}</span><div class="bar"><i style="width:${ids.length?n/ids.length*100:0}%;background:var(--l${DIFFS[k].c})"></i></div><small>${n}/${ids.length}</small></div>`; }).join("");
+  return `<h2 class="thtitle">Progrès</h2>
+    <div class="pserie"><span class="fl">🔥</span><div><b>${serie} ${pl(serie,"jour","jours")} de série</b><small>Record : ${s.best||0} ${pl(s.best||0,"jour","jours")}</small></div></div>
+    <div class="cdline">${cdHtml()}</div>
+    <p class="sec">Grilles du jour</p>${statsHtml()}
+    <p class="sec">Par niveau</p><div class="pgnivs">${niv}</div>
+    <p class="sec" id="favSec">Mon carnet ⭐<span class="cnt">${loadFavs().length}</span></p>${favsHtml()}`;
 }
-function openMenu(section){
-  if(!GRIDS.length){ toast("Chargement des grilles…"); return; }
-  menuTab=grid.diff; if(section) drawerTab="grids"; renderDrawer(false);
-  $("veil").classList.add("open"); $("drawer").classList.add("open"); document.documentElement.classList.add("lock");
-  if(section==="arch"&&$("archSec")) requestAnimationFrame(()=>{ $("drawer").scrollTop=Math.max(0,$("archSec").offsetTop-12); });
+function moiHtml(){
+  return `<h2 class="thtitle">Moi</h2><div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b></div>
+    <p class="gempty">Profil, amis, duels et classement : bientôt disponibles.</p>`;
 }
+// Paramètres (engrenage)
+function reglagesPageHtml(){
+  return `<button class="thback" id="setBack">‹ Retour</button><h2 class="thtitle">Paramètres</h2>
+    ${reglagesHtml()}
+    <p class="sec">Aide</p><div class="regl"><button class="rrow rbtn" id="setHelp"><span><b>📖 Comment jouer</b><small>Les règles en une page</small></span><span class="chev">›</span></button></div>
+    <p class="sec">À propos</p>${legalHtml()}`;
+}
+function retourReglages(){
+  const v=avantReglages||"jeu"; avantReglages=null; buzz(8);
+  if(v==="themes") openThemes(themeOpen); else if(PAGES.includes(v)) showPage(v); else setView("jeu");
+}
+$("setBtn").onclick=()=>{ if(view==="reglages") retourReglages(); else { buzz(8); showPage("reglages"); } };
+// Onglet Jouer : « Grille du jour » ramène à la grille du jour, « Bonus » et « Hasard » ouvrent leur page
+function goJouer(m){
+  if(m!=="jour"){ showPage(m); return; }
+  if(!GRIDS.length||dailyIdx<0){ setView("jeu"); return; }
+  if(view==="jeu"&&gridIdx===dailyIdx){ scrollTo({top:0,behavior:RM()?"auto":"smooth"}); return; }
+  if(gridIdx===dailyIdx&&!tuto) setView("jeu"); else switchGame(dailyIdx);
+}
+$("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-tab]"); if(!b||busy&&view==="jeu"&&GRIDS.length) return; buzz(8);
+  const t=b.dataset.tab, cur=ongletDe(view);
+  if(t==="jouer"){
+    if(cur==="jouer") goJouer("jour");                        // déjà dans Jouer : retour à la grille du jour
+    else if(derJouer!=="jeu") showPage(derJouer);
+    else if(GRIDS.length&&isTheme()) switchGame(dailyIdx);    // on quitte une grille de thème
+    else setView("jeu");
+  } else if(t==="themes"){
+    if(!GRIDS.length){ toast("Chargement des grilles…"); return; }
+    if(view==="themes") openThemes(null);
+    else openThemes(view==="jeu"&&isTheme()?grid.theme:themeOpen);
+  } else if(view!==t) showPage(t);
+});
 let onSheetClose=null;
 function openSheet(html,onClose){ $("sheetBody").innerHTML=html; $("sheet").scrollTop=0; onSheetClose=onClose||null;
   $("veil").classList.add("open"); $("sheet").classList.add("open"); document.documentElement.classList.add("lock"); }
-function closeSheet(){ $("veil").classList.remove("open"); $("sheet").classList.remove("open"); $("drawer").classList.remove("open");
+function closeSheet(){ $("veil").classList.remove("open"); $("sheet").classList.remove("open");
   document.documentElement.classList.remove("lock");
   const f=onSheetClose; onSheetClose=null; if(f) f(); }
 $("veil").onclick=closeSheet;
@@ -1536,7 +1665,6 @@ function ouvrirGrille(i,opts={}){
 // Tout est fait dans la portée : « Retenter mes grilles perdues » / « Rejouer au hasard »
 function openTermine(choix,opts,quoi){
   const {perdues,faites}=choix, any=a=>a[Math.floor(Math.random()*a.length)];
-  $("drawer").classList.remove("open");
   openSheet(`<div class="fini"><div class="big">🎉</div><h2>${perdues.length?"Tu as tout terminé !":"Tu as tout réussi !"}</h2>
     <p>Tu as fait ${faites.length===1?`la seule grille ${quoi.replace(/^disponibles$/,"disponible")}`:`les ${faites.length} grilles ${quoi}`}.</p>
     ${perdues.length?`<button class="pill main full" id="finPerdues">Retenter mes grilles perdues (${perdues.length})</button>`:""}
@@ -1582,13 +1710,16 @@ const themeGrids=id=>GRIDS.map((_,i)=>i).filter(i=>GRIDS[i].theme===id)
 const themeLabel=i=>GRIDS[i].titre||`Grille ${themeGrids(GRIDS[i].theme).indexOf(i)+1}`;
 const themeProgress=(id,r)=>{ const ids=themeGrids(id); return {n:ids.length,d:ids.filter(i=>r[GRIDS[i].id]).length}; };
 const progTxt=(d,n)=>n?`${d}/${n} ${pl(n,"grille terminée","grilles terminées")}`:"Bientôt disponible";
+// Sélecteur de l'onglet Jouer : visible seulement dans cet onglet (jamais pendant le tutoriel)
 function updateModes(){
-  const m=$("modes"); m.hidden=tuto||!GRIDS.length||!themesVisibles().length;   // aucun thème publié : sélecteur masqué
-  const cur=view==="themes"||isTheme()?"themes":"jour";
+  const m=$("modes"); m.hidden=tuto||ongletDe(view)!=="jouer";
+  const cur=view==="bonus"||view==="hasard"?view:hasard?"hasard":gridIdx===dailyIdx||!GRIDS.length?"jour":"bonus";
   m.querySelectorAll("button").forEach(b=>{ const on=b.dataset.m===cur; b.classList.toggle("on",on); b.setAttribute("aria-selected",on); });
+  updateTabs();
 }
 function setView(v){
-  view=v; document.body.classList.toggle("vthemes",v==="themes"); $("themesView").hidden=v!=="themes"; updateModes();
+  view=v; document.body.dataset.view=v; if(ongletDe(v)==="jouer") derJouer=v;
+  $("themesView").hidden=v!=="themes"; $("pageView").hidden=!PAGES.includes(v); updateModes();
 }
 function openThemes(id){
   themeOpen=id||null; if(themeOpen) ls.set("quatuor-theme",themeOpen);
@@ -1622,10 +1753,8 @@ function nextInTheme(){
   else ouvrirGrille(choix.idx);
 }
 $("modes").addEventListener("click",e=>{
-  const b=e.target.closest("button[data-m]"); if(!b||busy&&view==="jeu") return; buzz(8);
-  if(b.dataset.m==="themes"){ if(view!=="themes") openThemes(isTheme()?grid.theme:null); else openThemes(null); }
-  else if(view==="themes"&&!isTheme()&&gridIdx===dailyIdx) setView("jeu");
-  else if(gridIdx!==dailyIdx||view==="themes") switchGame(dailyIdx);
+  const b=e.target.closest("button[data-m]"); if(!b||busy&&view==="jeu"&&GRIDS.length) return; buzz(8);
+  goJouer(b.dataset.m);
 });
 
 // Grille suivante : une grille non terminée de la même difficulté, sinon d'une autre difficulté
@@ -1741,9 +1870,6 @@ $("revealP").onclick=revealSolution;
 
 // Pas de zoom au double-tap
 document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});
-$("helpBtn").onclick=openHelp;
-$("menuBtn").onclick=()=>openMenu();
-$("statsBtn").onclick=()=>{ openSheet(`<h2>Statistiques</h2><p>Grilles du jour uniquement.</p>${statsHtml()}<button class="pill main" style="width:100%" id="okS">Fermer</button>`); $("okS").onclick=closeSheet; };
 let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>document.querySelectorAll(".tile").forEach(fit),150); });
 
 // Lancement : tutoriel au tout premier lancement, pop-up de bienvenue à chaque ouverture (sauf « Ne plus afficher »)
