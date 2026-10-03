@@ -541,12 +541,71 @@ const todayStr=isoDay(today);   // date locale du joueur, ex. 2026-10-01
 const dayNum=Math.floor((today-start)/864e5)+1;
 // Vibrations : PWA -> navigator.vibrate(p) ; appli iOS -> retour haptique (impact léger, ou « SUCCESS » / « ERROR »)
 const Haptics=plugin("Haptics");
+// ---- Réglages du joueur (quatuor-reglages) : lus au lancement (lireReglages), modifiables dans les Paramètres ----
+const REG_DEF={theme:"auto",texte:"normal",daltonien:false,sons:true,vibrations:true};
+let REG={...REG_DEF};
+function lireReglages(){
+  try{ const r=JSON.parse(ls.get("quatuor-reglages")||"null"); REG=Object.assign({},REG_DEF,r&&typeof r==="object"?r:{}); }catch(e){ REG={...REG_DEF}; }
+}
+const ecrireReglages=()=>ls.set("quatuor-reglages",JSON.stringify(REG));
+// Vibrations prises en charge ? (appli iOS : toujours ; web : seulement si navigator.vibrate existe)
+const VIBRE=!!Haptics||typeof navigator.vibrate==="function";
 // Plusieurs retours légers en moins de 60 ms (doigts posés ensemble) : un seul
+// type : "SUCCESS" (groupe trouvé), "ERROR" (erreur), "FETE" (grille réussie), sinon impact très léger
 let dernierBuzz=0;
 const buzz=(p,type)=>{ try{
+  if(!REG.vibrations) return;
   if(!type){ const t=performance.now(); if(t-dernierBuzz<60) return; dernierBuzz=t; }
-  if(Haptics){ (type?Haptics.notification({type}):Haptics.impact({style:"LIGHT"})).catch(()=>{}); return; }
+  if(Haptics){
+    if(type==="FETE") [["LIGHT",0],["MEDIUM",110],["HEAVY",220]].forEach(([style,d])=>setTimeout(()=>Haptics.impact({style}).catch(()=>{}),d));
+    else (type?Haptics.notification({type}):Haptics.impact({style:"LIGHT"})).catch(()=>{});
+    return; }
   navigator.vibrate&&navigator.vibrate(p); }catch(e){} };
+
+// ---- Sons (Web Audio, générés : aucun fichier) ----
+// Courts et doux. Session audio « ambient » : respecte le mode silencieux de l'iPhone et ne coupe jamais
+// la musique du joueur (navigator.audioSession sur Safari récent ; dans l'appli, AppDelegate.swift).
+// sel : sélection (aigu) / désélection ; groupe n (0 à 3) : une note de plus à chaque groupe ; erreur ; victoire.
+const SON=(()=>{
+  let ctx=null, sortie=null, dernier=0;
+  const NOTES=[523.25,659.25,783.99,1046.5,1318.5];   // do, mi, sol, do, mi
+  function audio(){
+    if(ctx) return ctx;
+    const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null;
+    try{ if(navigator.audioSession) navigator.audioSession.type="ambient"; }catch(e){}
+    ctx=new AC();
+    const comp=ctx.createDynamicsCompressor(); comp.threshold.value=-18; comp.ratio.value=6;
+    sortie=ctx.createGain(); sortie.gain.value=.55; sortie.connect(comp); comp.connect(ctx.destination);
+    return ctx;
+  }
+  // l'audio se débloque au premier geste (exigence iOS)
+  const debloquer=()=>{ const c=audio(); if(c&&c.state==="suspended") c.resume().catch(()=>{}); };
+  addEventListener("pointerdown",debloquer,{capture:true,passive:true});
+  // une note : oscillateur + enveloppe (attaque courte, décroissance douce)
+  function note(f,{t=0,dur=.35,vol=.18,type="sine",glisse=0}={}){
+    const c=ctx, t0=c.currentTime+.005+t, o=c.createOscillator(), g=c.createGain();
+    o.type=type; o.frequency.setValueAtTime(f,t0); if(glisse) o.frequency.exponentialRampToValueAtTime(f*glisse,t0+dur);
+    g.gain.setValueAtTime(0,t0); g.gain.linearRampToValueAtTime(vol,t0+.008); g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+    o.connect(g); g.connect(sortie); o.start(t0); o.stop(t0+dur+.05);
+  }
+  const cloche=(f,t=0,vol=.16)=>{ note(f,{t,dur:.5,vol}); note(f*2,{t,dur:.25,vol:vol*.25,type:"triangle"}); };
+  return {
+    jouer(quoi,n){
+      if(!REG.sons) return;
+      const c=audio(); if(!c) return;
+      if(c.state==="suspended") c.resume().catch(()=>{});
+      try{
+        if(quoi==="sel"||quoi==="desel"){   // plusieurs mots touchés ensemble : un seul son
+          const t=performance.now(); if(t-dernier<60) return; dernier=t;
+          note(quoi==="sel"?880:660,{dur:.07,vol:.07,type:"triangle"});
+        }
+        else if(quoi==="groupe"){ const k=Math.max(0,Math.min(3,n|0)); note(NOTES[k]/2,{dur:.12,vol:.05,type:"triangle"}); cloche(NOTES[k],.05); }
+        else if(quoi==="erreur") note(220,{dur:.18,vol:.12,type:"sine",glisse:.72});
+        else if(quoi==="victoire") NOTES.forEach((f,i)=>cloche(f,i*.09,.13));
+      }catch(e){}
+    }
+  };
+})();
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 // Difficulté des grilles : nombre d'erreurs autorisées et couleur
@@ -1093,7 +1152,7 @@ function updateUi(){
 function toggle(w,b,multi){
   if(done||busy) return;
   if(selected.has(w)) selected.delete(w); else { if(selected.size>=4){ if(!multi) buzz(15); return; } selected.add(w); }   // 5e contact : ignoré
-  buzz(8); b.classList.toggle("on",selected.has(w)); b.setAttribute("aria-pressed",selected.has(w)); spring(b); updateUi();
+  buzz(8); SON.jouer(selected.has(w)?"sel":"desel"); b.classList.toggle("on",selected.has(w)); b.setAttribute("aria-pressed",selected.has(w)); spring(b); updateUi();
   if(tuto) flipLayout(tutoUpdate);
 }
 
@@ -1234,7 +1293,7 @@ function addSolved(gi,open,cls){
 // Groupe trouvé : les tuiles sautent, volent vers le bandeau et fusionnent
 function foundGroup(gi,tiles){
   const id=gameId, rm=RM();
-  busy=true; updateUi(); buzz(30,"SUCCESS");
+  busy=true; updateUi(); buzz(30,"SUCCESS"); SON.jouer("groupe",found.length);
   tiles.forEach((t,i)=>{ if(t._fa){ t._fa.cancel(); t._fa=null; } t.classList.remove("spring","shake"); t.style.setProperty("--i",i); t.classList.add("jump"); });
   setTimeout(()=>{
     if(id!==gameId) return;
@@ -1264,7 +1323,7 @@ function foundGroup(gi,tiles){
     });
     setTimeout(()=>{
       if(id!==gameId) return;
-      band.classList.remove("pre"); buzz(12);
+      band.classList.remove("pre");
       band.animate([{opacity:0,transform:"scale(.98)"},{opacity:1,transform:"scale(1.01)",offset:.55},{opacity:1,transform:"none"}],
         {duration:500,easing:"ease-out"});
       burst(band.getBoundingClientRect(),gi);
@@ -1282,7 +1341,7 @@ function submit(){
   if(sel.every(w=>groupOf(w)===gi)){
     foundGroup(gi,tiles);
   } else {
-    mistakes++; buzz([40,40,40],"ERROR");
+    mistakes++; buzz([40,40,40],"ERROR"); SON.jouer("erreur");
     const c={}; sel.forEach(w=>c[groupOf(w)]=(c[groupOf(w)]||0)+1);
     if(Object.values(c).includes(3)) toast("Presque ! Un seul intrus",true);
     tiles.forEach(t=>{ t.classList.remove("shake","spring"); void t.offsetWidth; t.classList.add("shake"); });
@@ -1296,7 +1355,7 @@ function finish(win){
   done=true; selected.clear(); const id=gameId; lastWin=win;
   if(tuto){ // fin du tutoriel : pas de résultats ni de stats
     $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoUpdate();
-    setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"SUCCESS"); } },650); return; }
+    setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"FETE"); SON.jouer("victoire"); } },650); return; }
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); });
   oublierPartie(grid.id);   // grille terminée : plus de partie en cours à reprendre
   // Résultats enregistrés dès maintenant (même si l'appli est fermée juste après) :
@@ -1324,7 +1383,9 @@ function finish(win){
   const dk=document.querySelector(".dock");
   $("lives").style.display="none"; dk.classList.add("over"); dk.classList.remove("lost","pending");
   if(!RM()) dk.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:420,easing:"cubic-bezier(.2,.8,.3,1)"});
-  setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"SUCCESS"); } },650);
+  // Célébration : vibrations + petit arpège ; confettis pour une grille réussie sans faute (ni erreur ni indice)
+  const sansFaute=mistakes===0&&!hints;
+  setTimeout(()=>{ if(id===gameId){ if(sansFaute) confetti(); buzz([20,40,20],"FETE"); SON.jouer("victoire"); } },650);
   setTimeout(()=>{ if(id===gameId) openResults(win); },RM()?600:1500);
 }
 
@@ -1913,6 +1974,7 @@ function boot(){
   });
 }
 function lancer(){
+  lireReglages();
   migrateData();
   cdTick();
   const firstRun=!ls.get("quatuor-tuto-done");
