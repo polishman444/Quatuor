@@ -10,6 +10,7 @@
 //   quatuor-favs-suppr  favoris retirés { id: horodatage } (pour propager le retrait aux autres appareils)
 //   quatuor-sync        { compte, baseEnvoyee, reinitVu, reinitAFaire, derniere }
 //   quatuor-auth        session Supabase (gérée par supabase-js)
+//   quatuor-profil      { pseudo, avatar, code_ami } (copie pour l'affichage hors ligne)
 // =====================================================================
 (function (racine, fabrique) {
   const m = fabrique(typeof module === "object" && module.exports ? require("./calculs.js") : racine.QC);
@@ -34,7 +35,8 @@
     function baseDuProfil(p) {
       if (p.base_parties == null) return null;
       return { parties: p.base_parties || 0, victoires: p.base_victoires || 0, record: p.base_record || 0, serie: p.base_serie || 0,
-        derniereVictoire: p.base_derniere_victoire || null, dernierJeu: p.base_dernier_jeu || null };
+        derniereVictoire: p.base_derniere_victoire ? String(p.base_derniere_victoire).slice(0, 10) : null,
+        dernierJeu: p.base_dernier_jeu ? String(p.base_dernier_jeu).slice(0, 10) : null };
     }
     function recalculerStats() {
       const base = lireJson(ls, "quatuor-base", QC.BASE_VIDE), res = lireJson(ls, "quatuor-res", {});
@@ -86,6 +88,7 @@
       // 6. Envoi des différences
       if (aEnvoyer.length) await api.envoyerResultats(aEnvoyer);
       if (favsAEnvoyer.length) await api.envoyerFavoris(favsAEnvoyer);
+      ecrireJson(ls, "quatuor-profil", { pseudo: profil.pseudo || null, avatar: profil.avatar || 0, code_ami: profil.code_ami });
       majEtat({ compte: moi, derniere: Date.now() });
       return { ok: true, profil, recus: distRes.length, envoyes: aEnvoyer.length + favsAEnvoyer.length };
     }
@@ -236,7 +239,33 @@
         return { id: u.id, anonyme: !!u.is_anonymous, apple: fournisseurs.includes("apple"), email: u.email || "" };
       } catch (e) { return null; }
     }
-    return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne, appleDisponible, connexionApple, compte, supprimerCompte };
+    // ---- Profil : pseudo et avatar ----
+    // Erreurs traduites : "pris" | "interdit" | "format" | "trop" | "reseau"
+    const raisonErreur = e => { const m = (e && (e.message || "")) + " " + (e && e.code || "");
+      return /23505|duplicate|unique/.test(m) ? "pris" : /pseudo_interdit/.test(m) ? "interdit" : /pseudo_format|check/.test(m) ? "format"
+        : /trop_de_changements/.test(m) ? "trop" : "reseau"; };
+    async function avecCompte(fn) {
+      if (!pret) throw Object.assign(new Error("hors ligne"), { raison: "reseau" });
+      if (!enLigne()) throw Object.assign(new Error("hors ligne"), { raison: "reseau" });
+      const session = await assurerSession(); const c = await client();
+      return fn(c, session.user.id);
+    }
+    async function verifierPseudo(p) {
+      return avecCompte(async c => { const { data, error } = await c.rpc("verifier_pseudo", { p }); if (error) throw error; return data; });
+    }
+    async function majProfil(champs) {
+      return avecCompte(async (c, moi) => {
+        await c.rpc("assurer_profil");
+        const { data, error } = await c.from("profils").update(champs).eq("id", moi).select("pseudo, avatar, code_ami").single();
+        if (error) throw Object.assign(new Error(error.message), { raison: raisonErreur(error) });
+        ecrireJson(ls, "quatuor-profil", data);
+        return data;
+      });
+    }
+    const profilLocal = () => lireJson(ls, "quatuor-profil", null);
+
+    return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne, appleDisponible, connexionApple, compte, supprimerCompte,
+      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur };
   }
 
   return { creerSynchro, apiSupabase, demarrer, creerConnexionApple, dejaLie };

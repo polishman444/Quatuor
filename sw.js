@@ -1,9 +1,9 @@
 // Service worker Quatuor : rend le jeu utilisable hors ligne
-const CACHE = "quatuor-v25";
+const CACHE = "quatuor-v26";
 const ASSETS = ["./", "./index.html", "./grilles.json", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png",
   "./fonts/bricolage.css", "./fonts/BricolageGrotesque-latin.woff2", "./fonts/BricolageGrotesque-latin-ext.woff2",
   "./mentions-legales.html", "./confidentialite.html", "./cgu.html",
-  "./config-en-ligne.js", "./js/calculs.js", "./js/en-ligne.js"];
+  "./config-en-ligne.js", "./js/calculs.js", "./js/pseudos.js", "./js/en-ligne.js"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

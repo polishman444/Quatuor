@@ -25,7 +25,7 @@ alter default privileges in schema public grant execute on functions to anon, au
 
 async function creerBase() {
   const { PGlite } = await import("@electric-sql/pglite");
-  const db = new PGlite();
+  const db = new PGlite({ parsers: { 1082: v => v } });   // dates renvoyées en texte AAAA-MM-JJ, comme PostgREST
   await db.exec(SUPABASE);
   const dir = path.join(__dirname, "..", "supabase", "migrations");
   for (const f of fs.readdirSync(dir).filter(f => f.endsWith(".sql")).sort()) {

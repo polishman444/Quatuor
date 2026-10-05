@@ -107,6 +107,21 @@ function fauxSupabase(base) {
           const off = +url.searchParams.get("offset") || 0, lim = +url.searchParams.get("limit") || 1000;
           return json(route, 200, await base.en(moi, `select * from public.${table} offset ${off} limit ${lim}`));
         }
+        if (methode === "PATCH") {   // update(...).eq("col", v).select(...)
+          const filtres = [...url.searchParams].filter(([k, v]) => /^eq\./.test(v));
+          const cols = Object.keys(corps || {});
+          const params = [...cols.map(c => corps[c]), ...filtres.map(([, v]) => v.slice(3))];
+          const lignes = await base.en(moi, `update public.${table} set ${cols.map((c, i) => `${c} = $${i + 1}`).join(", ")}
+            where ${filtres.map(([k], i) => `${k}::text = $${cols.length + i + 1}`).join(" and ") || "true"} returning *`, params);
+          const unique = /vnd\.pgrst\.object/.test(req.headers().accept || "");
+          if (unique && lignes.length !== 1) return json(route, 406, { code: "PGRST116", message: "0 ou plusieurs lignes" });
+          return json(route, 200, unique ? lignes[0] : lignes);
+        }
+        if (methode === "DELETE") {
+          const filtres = [...url.searchParams].filter(([k, v]) => /^eq\./.test(v));
+          await base.en(moi, `delete from public.${table} where ${filtres.map(([k], i) => `${k}::text = $${i + 1}`).join(" and ") || "false"}`, filtres.map(([, v]) => v.slice(3)));
+          return json(route, 204);
+        }
         if (methode === "POST") {
           const lignes = Array.isArray(corps) ? corps : [corps], cles = (url.searchParams.get("on_conflict") || "").split(",").filter(Boolean);
           const cols = [...new Set(lignes.flatMap(Object.keys))];

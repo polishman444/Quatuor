@@ -50,6 +50,9 @@ test("iOS, 1er appareil : « Se connecter avec Apple » lie le compte anonyme (m
   const { page, erreurs } = await ouvrirPage();
   const uid = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
   await page.locator('.tabs [data-tab="moi"]').click();
+  // 1er passage dans Moi : on garde le pseudo proposé
+  await page.waitForSelector("#psChamp"); await page.locator("#psOk").click();
+  await page.waitForSelector("#sheet:not(.open)");
   await page.waitForSelector("#moiCompte .bapple");
   assert.match(await page.locator("#moiCompte").innerText(), /Garde ta progression, même si tu changes de téléphone/);
   await page.locator("#moiCompte .bapple").click();
@@ -81,5 +84,59 @@ test("iOS, 2e appareil : « Récupérer ta progression existante ? » puis progr
   await page.waitForFunction(() => { const r = JSON.parse(localStorage.getItem("quatuor-res") || "{}"); return r.g002 && r.g003; });
   await attendre(async () => (await base.admin("select 1 from public.resultats where user_id = $1", [A])).length === 2);
   assert.equal((await base.admin("select 1 from auth.users where id = $1", [anonyme])).length, 0, "compte anonyme orphelin supprimé");
+  assert.deepEqual(erreurs, []);
+});
+
+test("onglet Moi : pseudo choisi au 1er passage (filtre, unicité), avatar, code ami copié, séries", { skip: !pw && "Playwright indisponible" }, async t => {
+  const { base, faux, ouvrirPage } = await contexte(t, { donnees: { quatuor: { played: 5, wins: 5, streak: 2, best: 4, lastPlayed: 4, lastWin: 4 }, "quatuor-migr": "1" } });
+  // un autre joueur a déjà le pseudo « Bob »
+  const autre = await faux.creerCompte(); await base.en(autre, "select public.assurer_profil()");
+  await base.en(autre, "update public.profils set pseudo = 'Bob' where id = $1", [autre]);
+  const { page, erreurs } = await ouvrirPage();
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  const uid = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
+  await attendre(async () => (await base.admin("select 1 from public.profils where id = $1", [uid])).length === 1);
+  await page.locator('.tabs [data-tab="moi"]').click();
+  // la fenêtre « Choisis ton pseudo » s'ouvre seule, avec une proposition valide
+  await page.waitForSelector("#psChamp");
+  const propose = await page.locator("#psChamp").inputValue();
+  assert.equal(require("../js/pseudos.js").valider(propose).ok, true);
+  // pseudo insultant : refusé côté client (bouton désactivé)
+  await page.locator("#psChamp").fill("GrosCon");
+  assert.match(await page.locator("#psMsg").innerText(), /pas autorisé/);
+  assert.equal(await page.locator("#psOk").isDisabled(), true);
+  // pseudo déjà pris (sans tenir compte des majuscules) : refusé par le serveur
+  await page.locator("#psChamp").fill("BOB");
+  await page.locator("#psOk").click();
+  await page.waitForFunction(() => /déjà pris/.test(document.querySelector("#psMsg").textContent));
+  await page.locator("#psChamp").fill("Zoé_42");
+  await page.locator("#psOk").click();
+  await page.waitForSelector("#moiPseudo:not(.vide)");
+  assert.match(await page.locator("#moiPseudo").innerText(), /Zoé_42/);
+  assert.equal((await base.admin("select pseudo from public.profils where id = $1", [uid]))[0].pseudo, "Zoé_42");
+  // avatar
+  await page.locator("#moiAvatar").click();
+  await page.locator('[data-av="5"]').click();
+  await attendre(async () => (await base.admin("select avatar from public.profils where id = $1", [uid]))[0].avatar === 5);
+  // code ami : copié
+  const code = (await base.admin("select code_ami from public.profils where id = $1", [uid]))[0].code_ami;
+  assert.equal(await page.locator("#moiCode").innerText(), code);
+  await page.locator("#codeCopie").click();
+  assert.equal(await page.evaluate(() => navigator.clipboard.readText()), code);
+  // séries
+  assert.match(await page.locator(".mseries").innerText(), /2[\s\S]*Série actuelle[\s\S]*4[\s\S]*Meilleure série/);
+  // Duels et Classement restent « Bientôt »
+  assert.match(await page.locator(".mcards").innerText(), /Duels[\s\S]*Bientôt[\s\S]*Classement[\s\S]*Bientôt/);
+  assert.deepEqual(erreurs, []);
+});
+
+test("onglet Moi hors ligne (mode en ligne configuré, jamais connecté) : message clair, pas d'erreur", { skip: !pw && "Playwright indisponible" }, async t => {
+  const { ouvrirPage } = await contexte(t);
+  const { page, erreurs } = await ouvrirPage();
+  await page.context().setOffline(true);
+  await page.locator('.tabs [data-tab="moi"]').click();
+  await page.waitForSelector(".moi");
+  // (la session a pu se créer avant la coupure : profil en cours de création ou message hors ligne)
+  assert.match(await page.locator(".moi").innerText(), /Joueur|Choisir mon pseudo|Connecte-toi à Internet/);
   assert.deepEqual(erreurs, []);
 });

@@ -128,6 +128,34 @@ a.rrow{text-decoration:none;color:inherit}
 .pill.danger{background:var(--l2);color:#fff;box-shadow:0 4px 0 var(--l2e)}
 /* Onglet Moi */
 .moi small{color:var(--muted);font-weight:600;margin-top:-6px}
+/* Onglet Moi : profil en ligne */
+.avatar.emo{border:0;font-size:2.9rem;line-height:1;cursor:pointer;background:var(--av,#1B2040);position:relative}
+.avatar.emo::after{content:"✏️";position:absolute;right:-6px;bottom:-6px;font-size:.85rem;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:var(--card);box-shadow:0 2px 0 var(--edge)}
+.mpseudo{border:0;background:none;font:inherit;color:var(--ink);font-size:1.35rem;font-weight:800;cursor:pointer;padding:2px 6px;display:inline-flex;align-items:center;gap:6px}
+.mpseudo .ed{font-size:.9rem;opacity:.6}
+.mpseudo.vide{color:var(--l2e);font-size:1.1rem;text-decoration:underline;text-underline-offset:3px}
+.mcode{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--edge);padding:12px 14px;margin-top:14px}
+.mcode small{display:block;color:var(--muted);font-size:.8rem;font-weight:650}
+.mcode b{font-size:1.45rem;letter-spacing:.14em;font-variant-numeric:tabular-nums;font-weight:800}
+.mcode .bt{display:flex;gap:6px}
+.mcode .fshare{padding:8px 11px}
+.mseries{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.mseries div{background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--edge);padding:12px;text-align:center}
+.mseries b{display:block;font-size:1.6rem;font-weight:800;line-height:1.15}
+.mseries small{color:var(--muted);font-weight:650;font-size:.82rem}
+.minfo{margin:12px 0 0;text-align:center;color:var(--muted);font-size:.9rem}
+.avgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 18px}
+.avgrid button{border:0;aspect-ratio:1;border-radius:18px;font-size:2.1rem;cursor:pointer;background:var(--av);box-shadow:0 3px 0 var(--edge)}
+.avgrid button.on{outline:3px solid var(--ink);outline-offset:2px}
+.champ{width:100%;height:52px;border-radius:14px;border:2px solid var(--edge);background:var(--bg);color:var(--ink);font:inherit;font-size:1.15rem;font-weight:700;padding:0 14px;
+  -webkit-user-select:text;user-select:text;outline:none}
+.champ:focus{border-color:var(--ink)}
+.chrow{display:flex;gap:8px;align-items:center;margin:12px 0 6px}
+.chrow .round{width:52px;height:52px;font-size:1.4rem}
+.chmsg{min-height:1.3em;margin:0 2px 12px;font-size:.88rem;font-weight:650;color:var(--muted)}
+.chmsg.ko{color:var(--l2e)} .chmsg.ok{color:var(--l0e)}
+.cgu{font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px}
+.cgu a{color:inherit}
 .mcards{display:grid;gap:10px;margin-top:18px}
 .mcard{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--edge);padding:14px;opacity:.7}
 .mcard .mic{flex:none;width:44px;height:44px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:1.4rem}
@@ -546,6 +574,7 @@ body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
 <!-- Mode en ligne : configuration publique, calculs purs, synchronisation (le jeu fonctionne sans) -->
 <script src="config-en-ligne.js"></script>
 <script src="js/calculs.js"></script>
+<script src="js/pseudos.js"></script>
 <script src="js/en-ligne.js"></script>
 <script>
 // Chaque grille : 4 groupes du plus facile (niveau 0) au plus dur (niveau 3), avec une anecdote
@@ -1258,7 +1287,7 @@ const BULLES={
   indice:{cible:"#hintBtn",txt:"Bloqué ? Touche 💡 pour obtenir un indice.",ok:()=>view==="jeu"&&!done&&!$("hintBtn").disabled},
   themes:{cible:'.tabs [data-tab="themes"]',txt:"Envie d'un sujet précis ? Essaie les Thèmes !",ok:()=>view!=="themes"},
   serie:{cible:'.tabs [data-tab="progres"]',txt:"Ta série 🔥 et le compte à rebours sont dans Progrès.",ok:()=>view!=="progres"},
-  moi:{cible:".mcards",txt:"Le mode en ligne arrive bientôt !",ok:()=>view==="moi"}
+  moi:{cible:".mcards",txt:"Le mode en ligne arrive bientôt !",ok:()=>view==="moi"&&!document.querySelector(".mcode")}
 };
 let fileBulles=[], bulleCtx=null, minuteurIndice=0;
 const bulleVue=id=>!!ls.get("quatuor-bulle-"+id);
@@ -1822,7 +1851,7 @@ function renderPage(){
   if($("setBack")) $("setBack").onclick=retourReglages;
   if($("setHelp")) $("setHelp").onclick=openHelp;
   if(view==="reglages") brancherParametres(el);
-  if(view==="moi") proposerBulle("moi");
+  if(view==="moi"){ proposerBulle("moi"); brancherMoi(); }
   brancherReglages();
   majCompteUi();
 }
@@ -1874,11 +1903,91 @@ function progresHtml(){
     <p class="sec" id="favSec">Mon carnet ⭐<span class="cnt">${loadFavs().length}</span></p>${favsHtml()}`;
 }
 // Onglet Moi : préparé pour le futur mode en ligne (aucun appel réseau)
+// Onglet Moi : avatar, pseudo (modifiable), code ami, séries, connexion Apple ; Duels et Classement « Bientôt »
+const PS=window.QuatuorPseudos||null;
+const AV_COUL=["#45D0B0","#FFA552","#EF5B7C","#7888E6"];
+const avatarHtml=(n,id)=>`<button class="avatar emo"${id?` id="${id}"`:""} style="--av:${AV_COUL[n%4]}" aria-label="Changer d'avatar">${PS?PS.AVATARS[n]||PS.AVATARS[0]:"🙂"}</button>`;
 function moiHtml(){
   const carte=(ic,t,d)=>`<div class="mcard" aria-disabled="true"><span class="mic">${ic}</span><span class="mtx"><b>${t}</b><small>${d}</small></span><span class="soon">Bientôt</span></div>`;
-  return `<h2 class="thtitle">Moi</h2><div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b><small>Hors ligne</small></div>
+  const s=load(), alive=s.lastWin===dayNum||s.lastWin===dayNum-1, serie=alive?(s.streak||0):0;
+  const series=`<div class="mseries"><div><b>🔥 ${serie}</b><small>Série actuelle</small></div><div><b>🏆 ${s.best||0}</b><small>Meilleure série</small></div></div>`;
+  const p=EN_LIGNE&&PS?EN_LIGNE.profilLocal():null;
+  let tete;
+  if(!EN_LIGNE||!PS) tete=`<div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b><small>Hors ligne</small></div>`;
+  else if(!p) tete=`<div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b>
+    <small>${EN_LIGNE.enLigne()?"Création de ton profil…":"Connecte-toi à Internet pour créer ton profil"}</small></div>`;
+  else tete=`<div class="moi">${avatarHtml(p.avatar||0,"moiAvatar")}
+      <button class="mpseudo${p.pseudo?"":" vide"}" id="moiPseudo">${p.pseudo?`${esc(p.pseudo)}<span class="ed" aria-hidden="true">✏️</span>`:"Choisir mon pseudo"}</button></div>
+    <div class="mcode"><span><small>Mon code ami</small><b id="moiCode">${esc(p.code_ami||"")}</b></span>
+      <span class="bt"><button class="fshare" id="codeCopie">Copier</button><button class="fshare" id="codePartage">${SHARE_ICON}Partager</button></span></div>`;
+  return `<h2 class="thtitle">Moi</h2>${tete}${series}
     ${EN_LIGNE?`<div id="moiCompte" data-compte="moi"></div>`:""}
     <div class="mcards">${carte("👥","Amis","Ajoute tes amis et compare vos séries")}${carte("⚔️","Duels","Défie un ami sur la même grille")}${carte("🏆","Classement","Mesure-toi aux autres joueurs")}</div>`;
+}
+let pseudoPropose=false;   // la fenêtre « Choisis ton pseudo » s'ouvre seule une fois par session
+function brancherMoi(){
+  if(!EN_LIGNE||!PS) return;
+  const p=EN_LIGNE.profilLocal();
+  if(!p){ EN_LIGNE.synchroniser(); return; }   // le profil arrive avec la synchro (apresSynchro réaffiche la page)
+  $("moiPseudo").onclick=()=>{ buzz(8); choisirPseudo(); };
+  $("moiAvatar").onclick=()=>{ buzz(8); choisirAvatar(); };
+  $("codeCopie").onclick=()=>copierTexte(p.code_ami,"Copié !");
+  $("codePartage").onclick=()=>partagerTexte(`Ajoute-moi sur Quatuor 🧩\nMon code ami : ${p.code_ami}\nhttps://playquatuor.fr`,"Code copié !");
+  if(!p.pseudo&&!pseudoPropose&&!$("sheet").classList.contains("open")){ pseudoPropose=true; setTimeout(()=>{ if(view==="moi") whenSheetFree(choisirPseudo); },350); }
+}
+// Fenêtre « Choisis ton pseudo » : vérification en direct (client), puis par le serveur (filtre identique, unicité)
+function choisirPseudo(){
+  const p=EN_LIGNE.profilLocal()||{};
+  const premier=!p.pseudo;
+  openSheet(`<h2>${premier?"Choisis ton pseudo":"Modifier mon pseudo"}</h2>
+    <p>C'est le nom que verront tes amis. 3 à 16 caractères : lettres, chiffres, tiret ou underscore.</p>
+    <div class="chrow"><input class="champ" id="psChamp" maxlength="16" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done" value="${esc(p.pseudo||PS.proposer())}" aria-label="Pseudo">
+      <button class="round" id="psDe" aria-label="Proposer un autre pseudo">🎲</button></div>
+    <p class="chmsg" id="psMsg" aria-live="polite"></p>
+    <button class="pill main full" id="psOk">Valider</button>
+    ${premier?"":`<button class="pill soft full" id="psNon">Annuler</button>`}
+    <p class="cgu">En choisissant un pseudo, tu acceptes les <a href="cgu.html" data-legal>conditions d'utilisation</a>.</p>`);
+  const ch=$("psChamp"), msg=$("psMsg"), ok=$("psOk");
+  const maj=()=>{ const v=PS.valider(ch.value); msg.textContent=v.ok?"":v.message; msg.className="chmsg"+(v.ok?"":" ko"); ok.disabled=!v.ok; return v; };
+  ch.oninput=maj; maj();
+  $("psDe").onclick=()=>{ buzz(8); ch.value=PS.proposer(); maj(); };
+  if($("psNon")) $("psNon").onclick=closeSheet;
+  ch.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); ok.click(); } };
+  ok.onclick=async()=>{
+    const v=maj(); if(!v.ok) return;
+    if(v.pseudo===p.pseudo){ closeSheet(); return; }
+    ok.disabled=true; msg.className="chmsg"; msg.textContent="Vérification…";
+    try{ await EN_LIGNE.majProfil({pseudo:v.pseudo}); buzz(10); closeSheet(); toast(`Bienvenue, ${v.pseudo} !`); if(view==="moi") renderPage(); }
+    catch(e){
+      const r=e.raison||"reseau";
+      msg.className="chmsg ko";
+      msg.textContent=r==="pris"?"Ce pseudo est déjà pris : essaie une variante ou touche 🎲.":r==="interdit"?"Ce pseudo n'est pas autorisé."
+        :r==="format"?"Lettres, chiffres, tiret et underscore uniquement.":r==="trop"?"Trop de changements aujourd'hui : réessaie demain.":"Connecte-toi à Internet pour choisir ton pseudo.";
+      ok.disabled=false;
+    }
+  };
+}
+function choisirAvatar(){
+  const p=EN_LIGNE.profilLocal()||{};
+  openSheet(`<h2>Mon avatar</h2><div class="avgrid">${PS.AVATARS.map((a,i)=>`<button data-av="${i}" style="--av:${AV_COUL[i%4]}"${i===(p.avatar||0)?' class="on"':""} aria-label="Avatar ${i+1}">${a}</button>`).join("")}</div>`);
+  $("sheetBody").querySelectorAll("[data-av]").forEach(b=>b.onclick=async()=>{
+    buzz(8);
+    try{ await EN_LIGNE.majProfil({avatar:+b.dataset.av}); closeSheet(); if(view==="moi") renderPage(); }
+    catch(e){ toast("Connecte-toi à Internet pour changer d'avatar"); }
+  });
+}
+// Copier dans le presse-papiers (avec repli pour les anciens navigateurs)
+async function copierTexte(t,msg){
+  buzz(8);
+  try{ await navigator.clipboard.writeText(t); toast(msg||"Copié !"); }
+  catch(e){ const x=document.createElement("textarea"); x.value=t; document.body.appendChild(x); x.select();
+    try{ document.execCommand("copy"); toast(msg||"Copié !"); }catch(_){ toast("Copie impossible"); } x.remove(); }
+}
+// Partager un texte : feuille native (appli), Web Share API (web), sinon copie
+async function partagerTexte(text,msgCopie){
+  if(Share){ try{ await Share.share({text}); return true; }catch(e){ if(partageAnnule(e)) return false; } }
+  else if(navigator.share){ try{ await navigator.share({text}); return true; }catch(e){ if(e.name==="AbortError") return false; } }
+  await copierTexte(text,msgCopie||"Copié !"); return true;
 }
 // Paramètres (engrenage) : Apparence, Sons et vibrations, Rappel quotidien (appli), Aide, Compte, Données, À propos
 function reglagesPageHtml(){
