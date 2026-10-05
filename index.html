@@ -156,7 +156,13 @@ a.rrow{text-decoration:none;color:inherit}
 .chmsg.ko{color:var(--l2e)} .chmsg.ok{color:var(--l0e)}
 .cgu{font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px}
 /* Amis */
-.amis{display:grid;gap:8px}
+.amis{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.amis .pill.full{margin-bottom:2px}
+.arow{flex-wrap:wrap;row-gap:8px}
+.arow .tx{flex:1 1 110px}
+.arow .acts{margin-left:auto}
+.mcode{flex-wrap:wrap;row-gap:8px}
+@media (max-width:400px){ .arow .acts button{padding:7px 9px} .arow{gap:9px;padding:10px} }
 .arow{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--card);border-radius:14px;box-shadow:0 3px 0 var(--edge);padding:10px 12px;text-align:left;font:inherit;color:var(--ink)}
 button.arow{cursor:pointer}
 .arow .av{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:1.45rem;background:var(--av)}

@@ -138,7 +138,12 @@ Vérification : dans l'appli, Paramètres › Compte › Supprimer mon compte (a
 
 Limites anti-abus déjà en place : 20 demandes d'ami par jour (codes essayés compris), 200 amis, 10 signalements
 et 10 changements de pseudo par jour, 50 blocages par jour, 500 favoris, tailles de champs contrôlées.
-Ménage facultatif de temps en temps : `delete from journal_actions where le < now() - interval '7 days';`
+Ménage à faire de temps en temps (par exemple une fois par mois, dans **SQL Editor**), comme annoncé dans la
+politique de confidentialité :
+```sql
+delete from journal_actions where le < now() - interval '7 days';
+delete from signalements where le < now() - interval '12 months';
+```
 
 ---
 
@@ -160,7 +165,12 @@ Ménage facultatif de temps en temps : `delete from journal_actions where le < n
 
 ---
 
-## 9. Publier sur TestFlight
+## 9. App Store Connect : confidentialité
+
+Toutes les réponses (étiquettes de confidentialité, notes pour la revue, classification par âge) sont dans
+**`ETIQUETTES-APP-STORE.md`**. À remplir avant de soumettre la version 1.2 à la revue (pas nécessaire pour TestFlight interne).
+
+## 10. Publier sur TestFlight
 
 1. Fais d'abord les étapes 5a (capacité Apple) et, idéalement, 1 à 8.
 2. **https://codemagic.io** → ton appli → **Start new build** → branche `main` (une fois cette branche fusionnée)
