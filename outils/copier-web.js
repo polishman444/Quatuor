@@ -11,6 +11,7 @@ const www = path.join(racine, "www");
 // Fichiers et dossiers du jeu (tout le reste : outils, ios, docs… n'a rien à faire dans l'appli)
 const FICHIERS = ["index.html", "grilles.json", "manifest.webmanifest", "sw.js",
   "mentions-legales.html", "confidentialite.html", "cgu.html",
+  "config-en-ligne.js", "js", "vendor",
   "icon-192.png", "icon-512.png", "icon-maskable-512.png", "apple-touch-icon.png", "fonts"];
 
 fs.rmSync(www, { recursive: true, force: true });

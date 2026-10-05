@@ -527,6 +527,10 @@ body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
 <div id="spot" hidden><div class="spot-trou"></div><div class="spot-b"></div><div class="spot-b"></div><div class="spot-b"></div><div class="spot-b"></div>
   <div class="bulle" role="dialog" aria-live="polite"><p></p><div class="bulle-act"></div><i class="fl" aria-hidden="true"></i></div></div>
 
+<!-- Mode en ligne : configuration publique, calculs purs, synchronisation (le jeu fonctionne sans) -->
+<script src="config-en-ligne.js"></script>
+<script src="js/calculs.js"></script>
+<script src="js/en-ligne.js"></script>
 <script>
 // Chaque grille : 4 groupes du plus facile (niveau 0) au plus dur (niveau 3), avec une anecdote
 const G = (name, words, fact) => ({name, words, fact});
@@ -587,7 +591,7 @@ async function initStockage(){
 const start=new Date(2026,9,1), today=new Date(); today.setHours(0,0,0,0);
 const isoDay=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const todayStr=isoDay(today);   // date locale du joueur, ex. 2026-10-01
-const dayNum=Math.floor((today-start)/864e5)+1;
+const dayNum=Math.round((today-start)/864e5)+1;   // arrondi : pas de décalage au passage à l'heure d'été
 // Vibrations : PWA -> navigator.vibrate(p) ; appli iOS -> retour haptique (impact léger, ou « SUCCESS » / « ERROR »)
 const Haptics=plugin("Haptics");
 // ---- Réglages du joueur (quatuor-reglages) : lus au lancement (lireReglages), modifiables dans les Paramètres ----
@@ -770,6 +774,21 @@ function migrateData(){
       ls.set("quatuor-favs",JSON.stringify(f)); } }catch(e){ console.warn("Quatuor : migration des favoris impossible",e); }
   ls.set("quatuor-migr","1");
 }
+// ---- Mode en ligne : les stats actuelles deviennent la « base » de calcul (une seule fois) ----
+// Les anciens résultats n'ont pas de date : la série est ensuite recalculée à partir de cette base
+// et des résultats datés (js/calculs.js), à l'identique sur tous les appareils.
+const QC=window.QC||null;
+function migrerVersEnLigne(){
+  if(!QC||ls.get("quatuor-base")) return;
+  ls.set("quatuor-base",JSON.stringify(QC.baseDepuisStats(load())));
+}
+function lireBase(){ try{ return JSON.parse(ls.get("quatuor-base"))||null; }catch(e){ return null; } }
+// Statistiques des grilles du jour recalculées (série, record, parties, % de réussite)
+function recalculerStats(){
+  if(!QC) return;
+  const b=lireBase(); if(!b) return;
+  try{ save(QC.statsLocales(QC.calculerStats(b,loadRes(),todayStr))); }catch(e){ console.warn("Quatuor : calcul des stats impossible",e); }
+}
 function loadRes(){ try{ return JSON.parse(ls.get("quatuor-res"))||{}; }catch(e){ return {}; } }
 function saveRes(r){ try{ ls.set("quatuor-res",JSON.stringify(r)); }catch(e){} }
 let grid,gridIdx,practice,words,selected,found,mistakes,maxErr,history,tried,done,busy,gameId=0,menuTab=null,tuto=false,lastWin=false;   // menuTab : niveau déplié dans « Bonus »
@@ -861,6 +880,7 @@ function newGame(idx,opts={}){
   clearTimeout(minuteurIndice);
   document.body.classList.toggle("notabs",tuto);
   setView("jeu");
+  chrono.depart(sv&&Number.isFinite(sv.ms)?sv.ms:0);
   if(sv){ restaurerPartie(sv); hasard=opts.hasard||sv.hasard||null; }
   // Lancement avec la grille du jour déjà terminée : plateau terminé + encart (pas l'écran de résultats)
   else if(opts.accueil&&prev&&prev.win){ showWonBoard(prev); showHome(); return; }
@@ -1004,11 +1024,17 @@ function sauverPartie(){
   if(tuto||done||!grid||gridIdx<0) return;
   const e=loadEncours();
   if(!history.length&&!hints) delete e[grid.id];   // rien de fait : pas de partie « en cours »
-  else e[grid.id]={words:words.slice(),found:found.slice(),mistakes,hints,hintCat,hintWord,history:history.map(r=>r.slice()),tried:[...tried],attempt,hasard,at:Date.now()};
+  else e[grid.id]={words:words.slice(),found:found.slice(),mistakes,hints,hintCat,hintWord,history:history.map(r=>r.slice()),tried:[...tried],attempt,hasard,at:Date.now(),ms:chrono.ms()};
   // on garde les 20 plus récentes
   Object.keys(e).sort((a,b)=>e[b].at-e[a].at).slice(20).forEach(k=>delete e[k]);
   saveEncours(e);
 }
+// Temps de jeu de la partie en cours (en pause quand l'appli passe en arrière-plan), repris avec la partie
+const chrono=(()=>{ let cumul=0, debut=null;
+  document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden"){ if(debut!=null){ cumul+=Date.now()-debut; debut=null; } }
+    else if(debut===null&&!done) debut=Date.now(); });
+  return { depart(ms){ cumul=ms||0; debut=Date.now(); }, ms:()=>cumul+(debut!=null?Date.now()-debut:0), stop(){ cumul=this.ms(); debut=null; } };
+})();
 function oublierPartie(id){ const e=loadEncours(); if(e[id]){ delete e[id]; saveEncours(e); } }
 // Sauvegarde utilisable pour cette grille ? (grille modifiée depuis, essai différent… : on l'oublie)
 function repriseValide(g,prev){
@@ -1334,6 +1360,12 @@ function toggle(w,b,multi){
 // ---- Favoris (« Mon carnet ») ----
 function loadFavs(){ try{ const f=JSON.parse(ls.get("quatuor-favs")); return Array.isArray(f)?f:[]; }catch(e){ return []; } }
 function saveFavs(f){ try{ ls.set("quatuor-favs",JSON.stringify(f)); }catch(e){} }
+// Mode en ligne : favoris retirés { id: horodatage }, pour que le retrait se propage aux autres appareils
+function noterSuppressionFav(id,retire){
+  let t={}; try{ t=JSON.parse(ls.get("quatuor-favs-suppr"))||{}; }catch(e){}
+  if(retire) t[id]=Date.now(); else delete t[id];
+  ls.set("quatuor-favs-suppr",JSON.stringify(t));
+}
 const favId=(gIdx,gi)=>`${GRIDS[gIdx].id}:${GRIDS[gIdx][gi].name}`;
 const isFav=id=>loadFavs().some(f=>f.id===id);
 function starHtml(gIdx,gi){
@@ -1368,7 +1400,8 @@ function toggleFav(st){
   if(on){ const gr=GRIDS[+st.dataset.g], gi=+st.dataset.gi, g=gr&&gr[gi]; if(!g) return;
     f.push({id,grid:gr.id,num:gr.num,name:g.name,words:g.words.slice(),fact:g.fact,lvl:gi,at:Date.now()}); }
   else f=f.filter(x=>x.id!==id);
-  saveFavs(f); buzz(10);
+  saveFavs(f); noterSuppressionFav(id,!on); buzz(10);
+  if(EN_LIGNE) EN_LIGNE.signaler();
   document.querySelectorAll(".star").forEach(s=>{ if(s.dataset.id!==id) return;
     s.classList.toggle("on",on); s.textContent=on?"★":"☆"; s.setAttribute("aria-pressed",on); s.setAttribute("aria-label",on?"Retirer des favoris":"Ajouter aux favoris");
     if(!RM()){ s.classList.remove("bounce"); void s.offsetWidth; s.classList.add("bounce"); } });
@@ -1534,14 +1567,16 @@ function finish(win){
     $("lives").style.display="none"; document.querySelector(".dock").style.display="none"; tutoEvent("fin");
     setTimeout(()=>{ if(id===gameId){ confetti(); buzz([20,40,20],"FETE"); SON.jouer("victoire"); } },650); return; }
   $("grid").querySelectorAll(".tile.on").forEach(t=>{ t.classList.remove("on"); t.setAttribute("aria-pressed",false); });
+  const duree=Math.min(86400,Math.round(chrono.ms()/1000)); chrono.stop();
   oublierPartie(grid.id);   // grille terminée : plus de partie en cours à reprendre
   // Résultats enregistrés dès maintenant (même si l'appli est fermée juste après) :
   // premier essai, nombre d'essais, dernier plateau, groupes trouvés et « solution vue » (vu)
   const res=loadRes(), prev=res[grid.id];
-  if(!prev) res[grid.id]={win,mistakes,tries:1,first:{win,mistakes},hist:history,found:found.slice(),vu:win,hints};
+  // d : date du jour où elle a été terminée la 1re fois ; jdj : c'était la grille du jour (stats et série) ; s : durée (s)
+  if(!prev) res[grid.id]={win,mistakes,tries:1,first:{win,mistakes},hist:history,found:found.slice(),vu:win,hints,d:todayStr,jdj:!practice,s:duree};
   else if(attempt>1&&!prev.win){
     prev.first=prev.first||{win:prev.win,mistakes:prev.mistakes};
-    prev.tries=attempt; prev.win=win; prev.mistakes=mistakes; prev.hist=history; prev.found=found.slice(); prev.vu=win; prev.hints=hints;
+    prev.tries=attempt; prev.win=win; prev.mistakes=mistakes; prev.hist=history; prev.found=found.slice(); prev.vu=win; prev.hints=hints; prev.s=duree;
   } // (une grille déjà réussie rejouée ne change rien)
   saveRes(res);
   // Stats et série : seul le premier essai de la grille du jour compte
@@ -1555,6 +1590,8 @@ function finish(win){
       save(s);
     }
   }
+  recalculerStats();   // mode en ligne : même calcul sur tous les appareils (à partir des résultats datés)
+  if(EN_LIGNE) EN_LIGNE.signaler();
   planifierRappels();
   clearTimeout(minuteurIndice);
   bullesProgression(win&&!practice);
@@ -1879,7 +1916,14 @@ function reinitialiser(){
     $("rz2").onclick=async()=>{
       const cles=["quatuor-res","quatuor","quatuor-encours","quatuor-bonus"];
       cles.forEach(k=>ls.del(k));
-      if(Prefs) await Promise.all(cles.map(key=>Prefs.remove({key}).catch(()=>{})));   // écrit avant de recharger
+      // Mode en ligne : base remise à zéro, et effacement côté serveur à la prochaine synchro (même hors ligne)
+      const ecr={};
+      if(QC){ ecr["quatuor-base"]=JSON.stringify(QC.BASE_VIDE);
+        let sy={}; try{ sy=JSON.parse(ls.get("quatuor-sync"))||{}; }catch(e){}
+        ecr["quatuor-sync"]=JSON.stringify({...sy,reinitAFaire:true}); }
+      Object.entries(ecr).forEach(([k,v])=>ls.set(k,v));
+      if(Prefs) await Promise.all([...cles.map(key=>Prefs.remove({key}).catch(()=>{})),
+        ...Object.entries(ecr).map(([key,value])=>Prefs.set({key,value}).catch(()=>{}))]);   // écrit avant de recharger
       location.reload();
     }; };
 }
@@ -2191,6 +2235,23 @@ $("revealP").onclick=revealSolution;
 document.addEventListener("dblclick",e=>e.preventDefault(),{passive:false});
 let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>document.querySelectorAll(".tile").forEach(fit),150); });
 
+// =====================================================================
+// MODE EN LIGNE (js/en-ligne.js) : compte anonyme créé automatiquement, synchronisation des résultats,
+// stats, série et favoris. Jamais bloquant : sans réseau (ou sans configuration), rien ne change.
+// =====================================================================
+function chargerScript(src){ return new Promise((ok,ko)=>{ const s=document.createElement("script"); s.src=src; s.async=true; s.onload=ok; s.onerror=()=>ko(new Error("chargement de "+src)); document.head.appendChild(s); }); }
+const EN_LIGNE=(()=>{ try{
+  if(!window.QuatuorEnLigne||!QC) return null;
+  const e=QuatuorEnLigne.demarrer({ls,config:window.QUATUOR_CONFIG,aujourdhui:()=>todayStr,charger:chargerScript,apres:apresSynchro});
+  return e.actif?e:null; }catch(err){ console.warn("Quatuor : mode en ligne indisponible",err); return null; } })();
+// Après une synchronisation : l'affichage suit les données reçues (autre appareil)
+function apresSynchro(r){
+  if(!r||!r.ok) return;
+  if(["progres","bonus","moi"].includes(view)&&!$("sheet").classList.contains("open")) renderPage();
+  else if(view==="themes") renderThemes();
+  planifierRappels();
+}
+
 // Lancement : tutoriel au tout premier lancement, pop-up de bienvenue à chaque ouverture (sauf « Ne plus afficher »)
 let gridsReady;
 function boot(){
@@ -2204,12 +2265,13 @@ function boot(){
         {duration:380,delay:i*18,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     }
     planifierRappels();
+    if(EN_LIGNE) EN_LIGNE.synchroniser();
     return true;
   });
 }
 function lancer(){
   lireReglages(); appliquerReglages();
-  migrateData();
+  migrateData(); migrerVersEnLigne(); recalculerStats();
   cdTick();
   // Premier lancement : tutoriel guidé (marqué comme vu à la fin ou sur « Passer »)
   if(!ls.get("quatuor-tuto-done")) lancerTuto(); else showSkeleton();

@@ -7,7 +7,9 @@
     "build": "node outils/copier-web.js",
     "sync": "npm run build && cap sync ios",
     "assets": "node outils/generer-images.js && capacitor-assets generate --ios --iconBackgroundColor \"#1B2040\" --splashBackgroundColor \"#EEF0F7\" --splashBackgroundColorDark \"#12152A\" && node outils/icones-ios.js",
-    "verifier": "node outils/verifier-grilles.js"
+    "verifier": "node outils/verifier-grilles.js",
+    "vendor": "node -e \"require('fs').copyFileSync('node_modules/@supabase/supabase-js/dist/umd/supabase.js','vendor/supabase.js')\"",
+    "test": "node --test tests/*.test.js"
   },
   "dependencies": {
     "@capacitor/app": "^8.1.2",
@@ -24,6 +26,8 @@
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
-    "@capacitor/cli": "^8.5.2"
+    "@capacitor/cli": "^8.5.2",
+    "@electric-sql/pglite": "^0.5.8",
+    "@supabase/supabase-js": "^2.117.2"
   }
 }
