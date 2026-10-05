@@ -131,6 +131,40 @@
     };
   }
 
+  // ---- Connexion avec Apple (appli iOS) ----
+  // deps : { client() → supabase, jetonApple(nonce) → idToken, demanderRecuperation() → bool,
+  //          synchroniser(), supprimerAncien(jetonAcces), nonce() }
+  // 1. Liaison du jeton Apple au compte anonyme actuel (même identifiant : amis, pseudo et code ami conservés).
+  // 2. Si ce compte Apple appartient déjà à un autre compte Quatuor (ex. nouvel appareil) : on DEMANDE
+  //    « Récupérer ta progression existante ? ». Oui → connexion à ce compte, les grilles de cet appareil y
+  //    sont ajoutées (meilleur résultat gardé), puis le compte anonyme orphelin est supprimé. Non → rien ne change.
+  const dejaLie = e => !!e && (e.code === "identity_already_exists" || /already (been )?(linked|exists)|identity.*exist/i.test(e.message || ""));
+  function creerConnexionApple(d) {
+    return async function connexionApple() {
+      const c = await d.client();
+      let nonce = d.nonce(), jeton = await d.jetonApple(nonce);
+      const { data: s } = await c.auth.getSession();
+      const ancien = s && s.session;
+      if (!ancien) throw new Error("Pas de session");
+      const lien = await c.auth.linkIdentity({ provider: "apple", token: jeton, nonce });
+      if (!lien.error) { await d.synchroniser(); return { etat: "lie" }; }
+      if (!dejaLie(lien.error)) throw lien.error;
+      if (!(await d.demanderRecuperation())) return { etat: "annule" };
+      let r = await c.auth.signInWithIdToken({ provider: "apple", token: jeton, nonce });
+      if (r.error) {   // jeton refusé une 2e fois (déjà utilisé) : nouvelle demande à Apple
+        nonce = d.nonce(); jeton = await d.jetonApple(nonce);
+        r = await c.auth.signInWithIdToken({ provider: "apple", token: jeton, nonce });
+        if (r.error) throw r.error;
+      }
+      if (ancien.user && ancien.user.is_anonymous && r.data.user && r.data.user.id !== ancien.user.id) {
+        try { await d.supprimerAncien(ancien.access_token); } catch (e) { /* sans gravité : compte vide, sans pseudo visible */ }
+      }
+      await d.synchroniser();
+      return { etat: "recupere" };
+    };
+  }
+  const nonceAleatoire = () => { const o = new Uint8Array(32); crypto.getRandomValues(o); return [...o].map(x => x.toString(16).padStart(2, "0")).join(""); };
+
   // ---- Démarrage dans le jeu ----
   // Charge supabase-js à la demande, ouvre (ou crée) le compte anonyme, puis synchronise :
   // au lancement, au retour du réseau, au retour dans l'appli, et après chaque partie ou favori (signaler()).
@@ -173,8 +207,37 @@
       window.addEventListener("online", () => signaler(500));
       document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") signaler(800); });
     }
-    return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne };
+    // Connexion Apple : uniquement dans l'appli iOS (plugin natif local « QuatuorApple »)
+    const Cap = typeof window !== "undefined" && window.Capacitor;
+    const appleDisponible = !!(pret && Cap && Cap.isNativePlatform && Cap.isNativePlatform() && Cap.getPlatform && Cap.getPlatform() === "ios");
+    async function jetonApple(nonce) {
+      const p = Cap.Plugins && Cap.Plugins.QuatuorApple;
+      const r = p && p.connexion ? await p.connexion({ nonce }) : await Cap.nativePromise("QuatuorApple", "connexion", { nonce });
+      if (!r || !r.idToken) throw new Error("Jeton Apple manquant");
+      return r.idToken;
+    }
+    // Suppression d'un compte par la fonction serveur sécurisée « supprimer-compte » (jeton du compte concerné)
+    async function supprimerCompte(jetonAcces) {
+      const r = await fetch(config.supabaseUrl.replace(/\/$/, "") + "/functions/v1/supprimer-compte", { method: "POST",
+        headers: { Authorization: "Bearer " + jetonAcces, apikey: config.supabaseCle, "Content-Type": "application/json" }, body: "{}" });
+      if (!r.ok) throw new Error("Suppression refusée (" + r.status + ")");
+    }
+    function connexionApple(demanderRecuperation) {
+      return creerConnexionApple({ client: async () => { await assurerSession(); return client(); }, jetonApple, demanderRecuperation,
+        synchroniser, supprimerAncien: supprimerCompte, nonce: nonceAleatoire })();
+    }
+    // État du compte (sans réseau : lu dans la session enregistrée)
+    async function compte() {
+      if (!pret) return null;
+      try {
+        const c = await client(); const { data } = await c.auth.getSession(); const u = data && data.session && data.session.user;
+        if (!u) return null;
+        const fournisseurs = (u.app_metadata && u.app_metadata.providers) || (u.identities || []).map(i => i.provider);
+        return { id: u.id, anonyme: !!u.is_anonymous, apple: fournisseurs.includes("apple"), email: u.email || "" };
+      } catch (e) { return null; }
+    }
+    return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne, appleDisponible, connexionApple, compte, supprimerCompte };
   }
 
-  return { creerSynchro, apiSupabase, demarrer };
+  return { creerSynchro, apiSupabase, demarrer, creerConnexionApple, dejaLie };
 });

@@ -134,6 +134,22 @@ a.rrow{text-decoration:none;color:inherit}
 .mcard .mtx{flex:1;min-width:0}
 .mcard b{display:block;font-weight:800}
 .mcard small{display:block;color:var(--muted);font-size:.85rem}
+/* Compte (mode en ligne) : connexion Apple */
+.compte{background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--edge);padding:14px;text-align:center}
+.page .regl .compte{background:none;box-shadow:none;padding:10px 0}
+.compte p{margin:0 0 10px;font-weight:650;line-height:1.3}
+.compte small{display:block;color:var(--muted);font-size:.82rem;margin-top:8px}
+.bapple{width:100%;height:50px;border:0;border-radius:12px;background:#000;color:#fff;font:inherit;font-size:1.05rem;font-weight:650;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;-webkit-appearance:none}
+.bapple .lg{font-size:1.25rem;line-height:1;margin-top:-3px}
+:root[data-theme="dark"] .bapple{background:#fff;color:#000}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .bapple{background:#fff;color:#000} }
+.bapple:disabled{opacity:.5}
+.cok{display:flex;align-items:center;gap:10px;text-align:left}
+.cok .ic{flex:none;width:36px;height:36px;border-radius:10px;background:var(--l0);color:#082A22;display:grid;place-items:center;font-weight:800}
+.cok b{display:block}
+#moiCompte:empty{display:none}
+#moiCompte{margin-top:16px}
 /* Taille du texte : Grande */
 html.grand{font-size:112.5%}
 html.grand body{font-size:19px}
@@ -1808,6 +1824,7 @@ function renderPage(){
   if(view==="reglages") brancherParametres(el);
   if(view==="moi") proposerBulle("moi");
   brancherReglages();
+  majCompteUi();
 }
 // Onglet Jouer › Bonus : jours précédents, grilles à retenter, et les 4 niveaux
 function bonusHtml(){
@@ -1860,6 +1877,7 @@ function progresHtml(){
 function moiHtml(){
   const carte=(ic,t,d)=>`<div class="mcard" aria-disabled="true"><span class="mic">${ic}</span><span class="mtx"><b>${t}</b><small>${d}</small></span><span class="soon">Bientôt</span></div>`;
   return `<h2 class="thtitle">Moi</h2><div class="moi"><span class="avatar"><span class="mark"><i></i><i></i><i></i><i></i></span></span><b>Joueur</b><small>Hors ligne</small></div>
+    ${EN_LIGNE?`<div id="moiCompte" data-compte="moi"></div>`:""}
     <div class="mcards">${carte("👥","Amis","Ajoute tes amis et compare vos séries")}${carte("⚔️","Duels","Défie un ami sur la même grille")}${carte("🏆","Classement","Mesure-toi aux autres joueurs")}</div>`;
 }
 // Paramètres (engrenage) : Apparence, Sons et vibrations, Rappel quotidien (appli), Aide, Compte, Données, À propos
@@ -1875,7 +1893,8 @@ function reglagesPageHtml(){
     <p class="sec">Sons et vibrations</p><div class="regl">${tg("sons","🔊 Sons")}${VIBRE?tg("vibrations","📳 Vibrations"):""}</div>
     ${reglagesHtml()}
     <p class="sec">Aide</p><div class="regl">${lien("setTuto","🎓 Revoir le tuto","La prise en main, pas à pas")}${lien("setHelp","📖 Comment jouer","Les règles en une page")}</div>
-    <p class="sec">Compte</p><div class="regl"><div class="rrow" aria-disabled="true"><span><b>👤 Compte Quatuor</b><small>Sauvegarde en ligne, amis et duels</small></span><span class="soon">Bientôt disponible</span></div></div>
+    <p class="sec">Compte</p><div class="regl">${EN_LIGNE?`<div id="setCompte" data-compte="reglages"></div>`
+      :`<div class="rrow" aria-disabled="true"><span><b>👤 Compte Quatuor</b><small>Sauvegarde en ligne, amis et duels</small></span><span class="soon">Bientôt disponible</span></div>`}</div>
     <p class="sec">Données</p><div class="regl">${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
     <p class="sec">À propos</p><div class="regl">
       <div class="rrow"><span><b>Version</b></span><span class="rval" id="setVer">${APP_VERSION}</span></div>
@@ -2250,6 +2269,50 @@ function apresSynchro(r){
   if(["progres","bonus","moi"].includes(view)&&!$("sheet").classList.contains("open")) renderPage();
   else if(view==="themes") renderThemes();
   planifierRappels();
+}
+
+// ---- Compte : connexion avec Apple (Paramètres › Compte et onglet Moi) ----
+// Appli iOS : fenêtre native Apple, puis liaison au compte anonyme (progression conservée).
+// Web : pas de bouton (la connexion Apple sur le web demande une clé secrète à renouveler tous les 6 mois) ;
+// la progression y est tout de même sauvegardée automatiquement sur le compte anonyme.
+const APPLE_MSG="Garde ta progression, même si tu changes de téléphone.";
+let etatCompte=null;
+async function majCompteUi(){
+  const zones=[...document.querySelectorAll("[data-compte]")]; if(!EN_LIGNE||!zones.length) return;
+  etatCompte=await EN_LIGNE.compte();
+  zones.forEach(z=>{
+    const ou=z.dataset.compte;
+    if(etatCompte&&etatCompte.apple) z.innerHTML=ou==="moi"?"":`<div class="compte"><div class="cok"><span class="ic">✓</span><span><b>Connecté avec Apple</b><small>${etatCompte.email?esc(etatCompte.email)+" · ":""}Ta progression est sauvegardée</small></span></div></div>`;
+    else if(EN_LIGNE.appleDisponible) z.innerHTML=`<div class="compte"><p>${fr(APPLE_MSG)}</p><button class="bapple" data-apple><span class="lg" aria-hidden="true"></span> Se connecter avec Apple</button></div>`;
+    else z.innerHTML=ou==="moi"?"":`<div class="rrow"><span><b>☁️ Sauvegarde automatique</b><small>Ta progression est sauvegardée en ligne. La connexion avec Apple se fait depuis l'appli iPhone.</small></span></div>`;
+  });
+  document.querySelectorAll("[data-apple]").forEach(b=>b.onclick=()=>seConnecterApple(b));
+}
+// « Ce compte Apple a déjà une progression » : on demande avant de changer de compte
+function demanderRecuperation(){
+  return new Promise(ok=>{
+    let rep=false;
+    openSheet(`<div class="fini"><div class="big">☁️</div><h2>Récupérer ta progression existante ?</h2>
+      <p>Ce compte Apple est déjà lié à une progression Quatuor (sans doute sur un autre appareil).</p>
+      <p>Si tu la récupères, les grilles jouées sur cet appareil y seront ajoutées (le meilleur résultat est gardé). Le pseudo et les amis seront ceux de ce compte.</p>
+      <button class="pill main full" id="recOui">Récupérer ma progression</button><button class="pill soft full" id="recNon">Annuler</button></div>`,()=>ok(rep));
+    $("recOui").onclick=()=>{ rep=true; closeSheet(); };
+    $("recNon").onclick=closeSheet;
+  });
+}
+let appleEnCours=false;
+async function seConnecterApple(btn){
+  if(appleEnCours) return;
+  if(!EN_LIGNE.enLigne()){ toast("Connecte-toi à Internet pour continuer"); return; }
+  appleEnCours=true; buzz(10); if(btn) btn.disabled=true;
+  try{
+    const r=await EN_LIGNE.connexionApple(demanderRecuperation);
+    if(r.etat==="lie"){ toast("Connecté avec Apple ✓"); }
+    else if(r.etat==="recupere"){ toast("Progression récupérée ✓"); setTimeout(()=>location.reload(),900); }
+  }catch(e){
+    const code=e&&(e.code||e.errorMessage||e.message)||"";
+    if(!/ANNUL|cancel/i.test(String(code))){ console.warn("Quatuor : connexion Apple impossible",e); toast("Connexion impossible, réessaie plus tard"); }
+  }finally{ appleEnCours=false; if(btn) btn.disabled=false; majCompteUi(); }
 }
 
 // Lancement : tutoriel au tout premier lancement, pop-up de bienvenue à chaque ouverture (sauf « Ne plus afficher »)

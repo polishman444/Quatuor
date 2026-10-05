@@ -70,6 +70,37 @@ Vérification : ouvre le jeu, joue une grille, puis dans Supabase **Table Editor
 
 ---
 
+## 5. Se connecter avec Apple (appli iOS)
+
+### 5a. Apple Developer : activer la capacité « Sign In with Apple »
+1. **https://developer.apple.com/account** → **Certificates, IDs & Profiles** → **Identifiers**.
+2. Touche l'identifiant **fr.playquatuor.app**.
+3. Dans la liste *Capabilities*, coche **Sign In with Apple** (laisse *Enable as a primary App ID*) → **Save** → **Confirm**.
+4. Menu **Profiles** : le profil *App Store* de Quatuor apparaît maintenant **Invalid** (il ne contient pas la nouvelle capacité).
+   Touche-le → **Remove**. Pas d'inquiétude : Codemagic en recrée un automatiquement au prochain build.
+
+> Sans ces étapes, le build Codemagic échoue avec un message du type
+> *Provisioning profile doesn't include the com.apple.developer.applesignin entitlement*.
+
+### 5b. Supabase : activer Apple
+1. **Authentication → Sign In / Providers → Apple** → active **Enable Sign in with Apple**.
+2. **Client IDs** : `fr.playquatuor.app`
+3. Laisse **Secret Key (for OAuth)** vide : il ne sert qu'à la connexion Apple sur le web, que nous n'utilisons pas.
+4. **Save**.
+
+### Pourquoi pas de bouton Apple sur le site web ?
+Sur le web, Apple impose un « Services ID », la vérification du domaine et surtout une **clé secrète qui expire tous les 6 mois**
+et se régénère avec un script sur ordinateur. C'est trop fragile pour un projet géré depuis un iPad : le bouton est donc
+**masqué sur le web**. La progression web reste sauvegardée automatiquement (compte anonyme du navigateur).
+
+### Comment ça marche pour le joueur
+- 1er appareil : « Se connecter avec Apple » relie son compte (anonyme) à Apple → même compte, rien ne change.
+- Nouvel appareil : l'appli crée d'abord un compte anonyme ; à la connexion Apple, elle **demande**
+  « Récupérer ta progression existante ? ». Oui → il retrouve sa progression (les grilles jouées sur le nouvel appareil
+  y sont ajoutées, meilleur résultat gardé) ; le compte anonyme vide est supprimé (fonction de l'étape 7).
+
+---
+
 ## Récapitulatif des tests automatiques
 
 `npm test` (sur un ordinateur, ou ici par Claude) lance :
