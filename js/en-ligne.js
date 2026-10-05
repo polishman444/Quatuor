@@ -264,8 +264,17 @@
     }
     const profilLocal = () => lireJson(ls, "quatuor-profil", null);
 
+    // ---- Amis (toutes les opérations passent par les fonctions du serveur) ----
+    const rpc = (nom, args) => avecCompte(async c => { const { data, error } = await c.rpc(nom, args); if (error) throw error; return data; });
+    const amis = {
+      liste: (grille, jour) => rpc("mes_amis", { grille: grille || "", jour }),
+      ajouter: code => rpc("envoyer_demande", { code }),
+      repondre: (demande, accepter) => rpc("repondre_demande", { demande, accepter }),
+      retirer: ami => rpc("retirer_ami", { ami })
+    };
+
     return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne, appleDisponible, connexionApple, compte, supprimerCompte,
-      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur };
+      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur, rpc, amis };
   }
 
   return { creerSynchro, apiSupabase, demarrer, creerConnexionApple, dejaLie };

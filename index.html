@@ -155,6 +155,21 @@ a.rrow{text-decoration:none;color:inherit}
 .chmsg{min-height:1.3em;margin:0 2px 12px;font-size:.88rem;font-weight:650;color:var(--muted)}
 .chmsg.ko{color:var(--l2e)} .chmsg.ok{color:var(--l0e)}
 .cgu{font-size:.8rem;color:var(--muted);text-align:center;margin-top:8px}
+/* Amis */
+.amis{display:grid;gap:8px}
+.arow{display:flex;align-items:center;gap:12px;width:100%;border:0;background:var(--card);border-radius:14px;box-shadow:0 3px 0 var(--edge);padding:10px 12px;text-align:left;font:inherit;color:var(--ink)}
+button.arow{cursor:pointer}
+.arow .av{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:1.45rem;background:var(--av)}
+.arow .tx{flex:1;min-width:0}
+.arow b{display:block;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.arow small{display:block;color:var(--muted);font-size:.82rem}
+.arow .st{flex:none;font-size:.78rem;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--bg);color:var(--muted);white-space:nowrap}
+.arow .st.ok{background:var(--l0);color:#082A22} .arow .st.ko{background:var(--l2);color:#fff}
+.arow .acts{flex:none;display:flex;gap:6px}
+.arow .acts button{border:0;border-radius:999px;padding:8px 11px;font:inherit;font-size:.82rem;font-weight:800;cursor:pointer;background:var(--bg);color:var(--ink)}
+.arow .acts .oui{background:var(--ink);color:var(--bg)}
+.asub{margin:10px 2px 2px;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.champ.code{text-transform:uppercase;letter-spacing:.3em;text-align:center;font-size:1.5rem}
 .cgu a{color:inherit}
 .mcards{display:grid;gap:10px;margin-top:18px}
 .mcard{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;box-shadow:0 4px 0 var(--edge);padding:14px;opacity:.7}
@@ -1922,12 +1937,14 @@ function moiHtml(){
       <span class="bt"><button class="fshare" id="codeCopie">Copier</button><button class="fshare" id="codePartage">${SHARE_ICON}Partager</button></span></div>`;
   return `<h2 class="thtitle">Moi</h2>${tete}${series}
     ${EN_LIGNE?`<div id="moiCompte" data-compte="moi"></div>`:""}
-    <div class="mcards">${carte("👥","Amis","Ajoute tes amis et compare vos séries")}${carte("⚔️","Duels","Défie un ami sur la même grille")}${carte("🏆","Classement","Mesure-toi aux autres joueurs")}</div>`;
+    ${EN_LIGNE&&PS?`<p class="sec">Amis<span class="cnt" id="amisCnt" hidden></span></p><div class="amis" id="moiAmis"></div>`:""}
+    <div class="mcards">${EN_LIGNE&&PS?"":carte("👥","Amis","Ajoute tes amis et compare vos séries")}${carte("⚔️","Duels","Défie un ami sur la même grille")}${carte("🏆","Classement","Mesure-toi aux autres joueurs")}</div>`;
 }
 let pseudoPropose=false;   // la fenêtre « Choisis ton pseudo » s'ouvre seule une fois par session
 function brancherMoi(){
   if(!EN_LIGNE||!PS) return;
   const p=EN_LIGNE.profilLocal();
+  chargerAmis();
   if(!p){ EN_LIGNE.synchroniser(); return; }   // le profil arrive avec la synchro (apresSynchro réaffiche la page)
   $("moiPseudo").onclick=()=>{ buzz(8); choisirPseudo(); };
   $("moiAvatar").onclick=()=>{ buzz(8); choisirAvatar(); };
@@ -1976,6 +1993,89 @@ function choisirAvatar(){
     catch(e){ toast("Connecte-toi à Internet pour changer d'avatar"); }
   });
 }
+// ---- Amis (onglet Moi) ----
+// Liste : demandes reçues, amis (série, grille du jour sans spoiler), demandes envoyées.
+// Le résultat d'un ami pour la grille du jour n'est envoyé par le serveur qu'une fois la mienne terminée.
+const avPetit=n=>`<span class="av" style="--av:${AV_COUL[(n||0)%4]}" aria-hidden="true">${PS.AVATARS[n||0]||PS.AVATARS[0]}</span>`;
+let amisCache=[];
+function etatDuJour(a){
+  if(a.aujourdhui==="pas_jouee") return `<span class="st">Pas encore jouée</span>`;
+  if(a.aujourdhui==="masque") return `<span class="st">🔒 Termine la grille</span>`;
+  const e=a.erreurs||0, err=`${e} ${pl(e,"erreur","erreurs")}`;
+  if(a.aujourdhui==="reussie") return `<span class="st ok">✓ ${a.essais>1?`${ordinal(a.essais)} essai`:e?err:"Sans faute"}</span>`;
+  if(a.aujourdhui==="ratee") return `<span class="st ko">✗ Ratée</span>`;
+  return "";
+}
+async function chargerAmis(){
+  const z=$("moiAmis"); if(!z) return;
+  const msg=t=>{ z.innerHTML=`<p class="gempty">${t}</p>`; };
+  if(!EN_LIGNE.enLigne()){ msg("Connecte-toi à Internet pour voir tes amis."); return; }
+  if(!z.innerHTML) msg("Chargement de tes amis…");
+  try{
+    const grille=GRIDS.length&&dailyIdx>=0?GRIDS[dailyIdx].id:"";
+    amisCache=await EN_LIGNE.amis.liste(grille,todayStr)||[];
+  }catch(e){ console.warn("Quatuor : amis indisponibles",e); msg(EN_LIGNE.enLigne()?"Impossible de charger tes amis pour l'instant.":"Connecte-toi à Internet pour voir tes amis."); return; }
+  if(!$("moiAmis")) return;
+  const recues=amisCache.filter(a=>a.etat==="recue"), liste=amisCache.filter(a=>a.etat==="ami"), envoyees=amisCache.filter(a=>a.etat==="envoyee");
+  const cnt=$("amisCnt"); if(cnt){ cnt.hidden=!liste.length; cnt.textContent=liste.length; }
+  z.innerHTML=`<button class="pill soft full" id="amiAjout">＋ Ajouter un ami</button>
+    ${recues.length?`<p class="asub">${pl(recues.length,"Demande reçue","Demandes reçues")}</p>${recues.map(a=>`<div class="arow">${avPetit(a.avatar)}<span class="tx"><b>${esc(a.pseudo||"Joueur")}</b><small>veut être ton ami</small></span>
+      <span class="acts"><button class="oui" data-acc="${a.demande}">Accepter</button><button data-ref="${a.demande}">Refuser</button></span></div>`).join("")}`:""}
+    ${liste.length?`${recues.length?`<p class="asub">Mes amis</p>`:""}${liste.map(a=>`<button class="arow" data-ami="${a.ami}">${avPetit(a.avatar)}<span class="tx"><b>${esc(a.pseudo||"Joueur")}</b><small>🔥 ${a.serie||0} ${pl(a.serie||0,"jour","jours")} de série</small></span>${etatDuJour(a)}</button>`).join("")}`
+      :`<p class="gempty">Ajoute tes amis avec leur code ami pour comparer vos séries et vos résultats du jour.</p>`}
+    ${envoyees.length?`<p class="asub">En attente</p>${envoyees.map(a=>`<div class="arow">${avPetit(a.avatar)}<span class="tx"><b>${esc(a.pseudo||"Joueur")}</b><small>Demande envoyée</small></span>
+      <span class="acts"><button data-ann="${a.ami}">Annuler</button></span></div>`).join("")}`:""}`;
+  $("amiAjout").onclick=ajouterAmi;
+  z.querySelectorAll("[data-acc],[data-ref]").forEach(b=>b.onclick=()=>repondreAmi(+(b.dataset.acc||b.dataset.ref),!!b.dataset.acc,b));
+  z.querySelectorAll("[data-ann]").forEach(b=>b.onclick=()=>actionAmi(()=>EN_LIGNE.amis.retirer(b.dataset.ann),"Demande annulée",b));
+  z.querySelectorAll("[data-ami]").forEach(b=>b.onclick=()=>ficheAmi(amisCache.find(a=>a.ami===b.dataset.ami)));
+}
+async function actionAmi(fn,ok,btn){
+  if(btn) btn.disabled=true; buzz(8);
+  try{ await fn(); if(ok) toast(ok); }
+  catch(e){ toast(EN_LIGNE.enLigne()?"Action impossible, réessaie plus tard":"Connecte-toi à Internet"); }
+  chargerAmis();
+}
+function repondreAmi(id,accepter,btn){ actionAmi(()=>EN_LIGNE.amis.repondre(id,accepter),accepter?"Vous êtes maintenant amis !":"Demande refusée",btn); }
+// Fiche d'un ami : retirer (bloquer et signaler : voir la partie sécurité)
+function ficheAmi(a){
+  if(!a) return; buzz(8);
+  openSheet(`<div class="fini"><div class="big">${PS.AVATARS[a.avatar||0]||"🙂"}</div><h2>${esc(a.pseudo||"Joueur")}</h2>
+    <p>🔥 ${a.serie||0} ${pl(a.serie||0,"jour","jours")} de série · 🏆 record ${a.record||0}</p>
+    <button class="pill soft full" id="amiRetirer">Retirer de mes amis</button>${ficheAmiSecurite(a)}</div>`);
+  $("amiRetirer").onclick=()=>{ closeSheet(); actionAmi(()=>EN_LIGNE.amis.retirer(a.ami),`${a.pseudo||"Joueur"} a été retiré de tes amis`); };
+  brancherFicheSecurite(a);
+}
+// Ajouter un ami avec son code
+function ajouterAmi(){
+  buzz(8);
+  const p=EN_LIGNE.profilLocal()||{};
+  if(!p.pseudo){ toast("Choisis d'abord ton pseudo"); choisirPseudo(); return; }
+  openSheet(`<h2>Ajouter un ami</h2><p>Demande son code ami à 6 caractères (onglet Moi de son appli).</p>
+    <div class="chrow"><input class="champ code" id="amiCode" maxlength="7" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="send" placeholder="ABC234" aria-label="Code ami"></div>
+    <p class="chmsg" id="amiMsg" aria-live="polite"></p>
+    <button class="pill main full" id="amiEnv" disabled>Envoyer la demande</button><button class="pill soft full" id="amiNon">Fermer</button>`);
+  const ch=$("amiCode"), msg=$("amiMsg"), env=$("amiEnv");
+  const maj=()=>{ const c=PS.nettoyerCode(ch.value); env.disabled=!PS.codeValide(c); msg.className="chmsg"; msg.textContent=c.length===6&&!PS.codeValide(c)?"Un code ne contient ni 0, ni O, ni 1, ni I.":""; return c; };
+  ch.oninput=maj; $("amiNon").onclick=closeSheet;
+  ch.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); if(!env.disabled) env.click(); } };
+  env.onclick=async()=>{
+    const c=maj(); if(!PS.codeValide(c)) return;
+    if(c===p.code_ami){ msg.className="chmsg ko"; msg.textContent="C'est ton propre code 😄"; return; }
+    env.disabled=true; msg.className="chmsg"; msg.textContent="Envoi…";
+    let r; try{ r=await EN_LIGNE.amis.ajouter(c); }catch(e){ r="reseau"; }
+    const T={envoyee:["ok","Demande envoyée ! Elle apparaîtra quand ton ami l'aura acceptée."],acceptee:["ok","Vous êtes maintenant amis !"],
+      deja_amis:["","Vous êtes déjà amis."],deja_envoyee:["","Demande déjà envoyée."],introuvable:["ko","Aucun joueur avec ce code."],
+      soi_meme:["ko","C'est ton propre code 😄"],pseudo_requis:["ko","Choisis d'abord ton pseudo."],limite:["ko","Trop de demandes aujourd'hui : réessaie demain."],
+      trop_amis:["ko","Tu as atteint le nombre maximum d'amis (200)."],reseau:["ko","Connecte-toi à Internet pour ajouter un ami."]}[r]||["ko","Erreur, réessaie plus tard."];
+    msg.className="chmsg "+T[0]; msg.textContent=T[1]; env.disabled=false;
+    if(r==="envoyee"||r==="acceptee"){ buzz(10); ch.value=""; env.disabled=true; chargerAmis(); }
+  };
+  setTimeout(()=>ch.focus(),400);
+}
+// (Partie sécurité : bloquer et signaler depuis la fiche d'un ami)
+const ficheAmiSecurite=a=>"";
+function brancherFicheSecurite(a){}
 // Copier dans le presse-papiers (avec repli pour les anciens navigateurs)
 async function copierTexte(t,msg){
   buzz(8);

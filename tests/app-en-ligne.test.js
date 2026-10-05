@@ -3,7 +3,7 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { pw, serveur, ouvrir } = require("./aide-navigateur.js");
+const { pw, serveur, ouvrir, jouerGrille } = require("./aide-navigateur.js");
 const { creerBase } = require("./aide-pg.js");
 const { fauxSupabase } = require("./faux-supabase.js");
 const { upsert } = require("./aide-synchro.js");
@@ -138,5 +138,79 @@ test("onglet Moi hors ligne (mode en ligne configuré, jamais connecté) : messa
   await page.waitForSelector(".moi");
   // (la session a pu se créer avant la coupure : profil en cours de création ou message hors ligne)
   assert.match(await page.locator(".moi").innerText(), /Joueur|Choisir mon pseudo|Connecte-toi à Internet/);
+  assert.deepEqual(erreurs, []);
+});
+
+// Joueur créé directement sur le serveur (2e compte de test), avec pseudo
+async function autreJoueur(base, faux, pseudo) {
+  const id = await faux.creerCompte(); await base.en(id, "select public.assurer_profil()");
+  await base.en(id, "update public.profils set pseudo = $1 where id = $2", [pseudo, id]);
+  return { id, code: (await base.admin("select code_ami from public.profils where id = $1", [id]))[0].code_ami };
+}
+async function pseudoPropose(page) {
+  await page.waitForSelector("#psChamp"); await page.locator("#psOk").click(); await page.waitForSelector("#sheet:not(.open)");
+}
+
+test("amis : ajout par code, acceptation, résultat du jour sans spoiler, demande reçue, retrait", { skip: !pw && "Playwright indisponible" }, async t => {
+  const { base, faux, ouvrirPage } = await contexte(t);
+  const B = await autreJoueur(base, faux, "Bruno"), C = await autreJoueur(base, faux, "Chloé");
+  const { page, erreurs } = await ouvrirPage();
+  const A = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
+  await page.locator('.tabs [data-tab="moi"]').click();
+  await pseudoPropose(page);
+  // ajout de Bruno par son code (saisi en minuscules avec un espace)
+  await page.locator("#amiAjout").click();
+  await page.locator("#amiCode").fill(B.code.slice(0, 3).toLowerCase() + " " + B.code.slice(3).toLowerCase());
+  await page.locator("#amiEnv").click();
+  await page.waitForFunction(() => /Demande envoyée/.test(document.querySelector("#amiMsg").textContent));
+  await page.locator("#amiCode").fill("ZZZZZZ"); await page.locator("#amiEnv").click();
+  await page.waitForFunction(() => /Aucun joueur/.test(document.querySelector("#amiMsg").textContent));
+  await page.locator("#amiNon").click();
+  await page.waitForFunction(() => /Demande envoyée/.test(document.querySelector("#moiAmis").textContent));
+  // Bruno accepte (sur son téléphone), Chloé m'envoie une demande
+  const [dem] = await base.en(B.id, "select demande from public.mes_amis('', current_date)");
+  await base.en(B.id, "select public.repondre_demande($1, true)", [dem.demande]);
+  await base.en(C.id, "select public.envoyer_demande($1)", [(await base.admin("select code_ami from public.profils where id = $1", [A]))[0].code_ami]);
+  const grille = await page.evaluate(() => GRIDS[dailyIdx].id), jour = await page.evaluate(() => todayStr);
+  await page.locator('.tabs [data-tab="progres"]').click(); await page.locator('.tabs [data-tab="moi"]').click();
+  await page.waitForSelector('[data-ami]');
+  assert.match(await page.locator("#moiAmis").innerText(), /Bruno[\s\S]*Pas encore jouée/);
+  // Bruno joue la grille du jour (ratée) : je ne vois pas son résultat tant que je n'ai pas fini
+  await upsert(base, B.id, "resultats", [{ user_id: B.id, ...QC.versServeur(grille, { win: false, mistakes: 4, tries: 1, d: jour, jdj: true, hist: [[0, 1, 2, 3]] }) }], ["user_id", "grille_id"]);
+  await page.locator('.tabs [data-tab="progres"]').click(); await page.locator('.tabs [data-tab="moi"]').click();
+  await page.waitForFunction(() => /Termine la grille/.test(document.querySelector("#moiAmis").textContent));
+  // je termine la grille du jour
+  await page.locator('.tabs [data-tab="jouer"]').click();
+  await page.waitForFunction(() => view === "jeu" && gridIdx === dailyIdx);
+  await jouerGrille(page);
+  await page.evaluate(() => closeSheet());
+  await page.locator('.tabs [data-tab="moi"]').click();
+  await page.waitForFunction(() => /Bruno[\s\S]*Ratée/.test(document.querySelector("#moiAmis").textContent));
+  assert.doesNotMatch(await page.locator("#moiAmis").innerText(), new RegExp(await page.evaluate(() => GRIDS[dailyIdx][0].words[0])), "aucun mot de la grille");
+  // demande reçue de Chloé : accepter
+  assert.match(await page.locator("#moiAmis").innerText(), /Chloé[\s\S]*veut être ton ami/);
+  await page.locator("[data-acc]").click();
+  await page.waitForFunction(() => document.querySelectorAll("[data-ami]").length === 2);
+  // retirer Bruno depuis sa fiche
+  await page.locator(`[data-ami="${B.id}"]`).click();
+  await page.locator("#amiRetirer").click();
+  await page.waitForFunction(() => document.querySelectorAll("[data-ami]").length === 1);
+  assert.equal((await base.en(B.id, "select * from public.mes_amis('', current_date)")).length, 0);
+  assert.deepEqual(erreurs, []);
+});
+
+test("amis hors ligne : « Connecte-toi à Internet pour voir tes amis », le reste du jeu fonctionne", { skip: !pw && "Playwright indisponible" }, async t => {
+  const { faux, ouvrirPage } = await contexte(t);
+  const { page, erreurs } = await ouvrirPage();
+  await attendre(() => faux.journal.find(x => x[0] === "anonyme"));
+  await page.locator('.tabs [data-tab="moi"]').click();
+  await pseudoPropose(page);
+  await page.context().setOffline(true);
+  await page.locator('.tabs [data-tab="progres"]').click(); await page.locator('.tabs [data-tab="moi"]').click();
+  await page.waitForFunction(() => /Connecte-toi à Internet pour voir tes amis/.test(document.querySelector("#moiAmis").textContent));
+  await page.locator('.tabs [data-tab="jouer"]').click();
+  await page.waitForFunction(() => view === "jeu" && gridIdx === dailyIdx);
+  await jouerGrille(page);
+  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("quatuor")).played), 1);
   assert.deepEqual(erreurs, []);
 });
