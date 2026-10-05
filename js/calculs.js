@@ -136,6 +136,17 @@
     return { fav_id: id, donnees, supprime: false, maj_le: new Date(maj || f.at || Date.now()).toISOString() };
   }
 
-  return { DEBUT, ajouterJours, estDate, numJour, dateDuNum, versServeur, depuisServeur, memeResultat, fusionnerResultat,
+  // ---- Texte de partage, façon Wordle, SANS spoiler : un carré par mot, une ligne par essai ----
+  // couleurs du jeu (🟩 Facile, 🟧 Réflexion, 🟥 Coriace, 🟦 Casse-tête), ou celles du mode daltonien
+  const CARRES = ["🟩", "🟧", "🟥", "🟦"], CARRES_DALTO = ["🟦", "🟧", "🟨", "🟪"];
+  // titre : « Quatuor #42 », « Quatuor · Grille bonus n°12 (Moyen) »… ; history : niveaux (0-3) des 4 mots de chaque essai
+  function texteDePartage({ titre, history, hints = 0, attempt = 1, daltonien = false, site = "playquatuor.fr" }) {
+    const c = daltonien ? CARRES_DALTO : CARRES;
+    const lignes = (history || []).map(r => r.map(i => c[i] || "⬜").join(""));
+    const extra = [hints ? `💡 ${hints} ${hints > 1 ? "indices" : "indice"}` : "", attempt > 1 ? `🔄 ${attempt}e essai` : ""].filter(Boolean).join(" · ");
+    return [`${titre} 🧩`, ...lignes, ...(extra ? [extra] : []), site].join("\n");
+  }
+
+  return { DEBUT, texteDePartage, ajouterJours, estDate, numJour, dateDuNum, versServeur, depuisServeur, memeResultat, fusionnerResultat,
     baseDepuisStats, BASE_VIDE, calculerStats, statsLocales, fusionnerFavoris, favoriVersServeur };
 });

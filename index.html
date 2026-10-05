@@ -1051,10 +1051,11 @@ function openPending(){
   openSheet(`<h2>Plus d'erreurs disponibles 😬</h2>
     <p>${n?`Tu as trouvé ${n} ${pl(n,"groupe","groupes")} sur 4.`:"Aucun groupe trouvé cette fois."} Retente ta chance avant de découvrir la solution !</p>
     <button class="pill main full" id="pRetry">Réessayer 🔄</button>
-    <button class="pill soft full" id="pReveal">Voir la solution</button>
+    <div class="row" style="margin-bottom:10px"><button class="pill soft" id="pReveal">Voir la solution</button><button class="pill soft" id="pShare">Partager</button></div>
     ${facts?`<h3>${pl(n,"Groupe trouvé","Groupes trouvés")}</h3><div class="learned">${facts}</div>`:""}`);
   $("pRetry").onclick=()=>retenter(gridIdx);
   $("pReveal").onclick=revealSolution;
+  $("pShare").onclick=share;
 }
 // « Voir la solution » : on révèle les groupes manquants avec l'animation habituelle, puis les résultats
 function revealSolution(){
@@ -2460,14 +2461,23 @@ function openHelp(){
     <button class="pill main" style="width:100%" id="okHelp">Jouer</button>${legalHtml()}`);
   $("okHelp").onclick=closeSheet;
 }
+// ---- Partage du résultat, façon Wordle, sans spoiler (texte : js/calculs.js) ----
+// Grille du jour : « Quatuor #42 » ; autres grilles : leur nom (grille bonus, thème…) à la place du numéro.
+function titrePartage(){
+  if(isTheme()){ const t=themeOf(grid.theme); return `Quatuor · ${t.icone} ${t.nom} · ${themeLabel(gridIdx)}`; }
+  if(!practice&&!dailyBonus) return `Quatuor #${grid.num}`;
+  if(!practice&&dailyBonus) return `Quatuor · Grille bonus du ${today.toLocaleDateString("fr-FR",{day:"numeric",month:"long"})}`;
+  if(isArchive(gridIdx)) return `Quatuor #${grid.num}`;
+  return `Quatuor · Grille bonus n°${grid.num} (${DIFFS[grid.diff].name})`;
+}
+// (statistiques anonymes : voir la partie TelemetryDeck)
+function stat(){}
+const textePartage=()=>!QC?`${titrePartage()} 🧩\nplayquatuor.fr`:QC.texteDePartage({titre:titrePartage(),history,hints,attempt,daltonien:!!REG.daltonien,site:"playquatuor.fr"});
 async function share(){
-  const head=`Quatuor n°${grid.num} · ${dname(grid.diff)}${attempt>1?` · ${ordinal(attempt)} essai`:""}${hints?` · 💡${hints}`:""}`;
-  const text=`${head}\n${history.map(r=>r.map(i=>ICON[i]).join("")).join("\n")}`;
-  if(Share){ try{ await Share.share({text}); return; }catch(e){ if(partageAnnule(e)) return; } }
-  else if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e.name==="AbortError") return; } }
-  try{ await navigator.clipboard.writeText(text); toast("Résultat copié"); }
-  catch(e){ const t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select();
-    try{ document.execCommand("copy"); toast("Résultat copié"); }catch(_){ toast("Copie impossible"); } t.remove(); }
+  if(!grid||tuto) return;
+  buzz(8);
+  const fait=await partagerTexte(textePartage(),"Copié !");
+  if(fait) stat("partage",{grille:grid.id});
 }
 let tt; function toast(m,bounce){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),1500);
   if(bounce&&!RM()) t.animate([{transform:"translate(-50%,-16px) scale(.97)",opacity:0},{transform:"translate(-50%,3px) scale(1.01)",opacity:1,offset:.6},
