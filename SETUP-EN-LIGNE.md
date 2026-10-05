@@ -142,6 +142,35 @@ Ménage facultatif de temps en temps : `delete from journal_actions where le < n
 
 ---
 
+## 8. Statistiques anonymes (TelemetryDeck)
+
+1. Va sur **https://dashboard.telemetrydeck.com** → crée un compte (email, ou « Sign in with Apple »).
+2. **Create App** (ou *New App*) → nom : `Quatuor`.
+3. Copie l'**App ID** de l'appli (un identifiant du type `A1B2C3D4-…`, dans les réglages de l'appli ou l'écran de bienvenue).
+4. Mets-le dans `config-en-ligne.js` → `telemetryDeckAppId: "…"` (sur GitHub, ✏️ puis *Commit changes*), ou envoie-le-moi :
+   ce n'est pas un secret.
+
+Événements envoyés : `App.ouverture`, `Tuto.vu` / `Tuto.etape` / `Tuto.passe` / `Tuto.termine`,
+`Grille.commencee` / `Grille.reussie` / `Grille.ratee` (id de grille, type, erreurs, indices, durée, n° d'essai),
+`Partage`, `Ami.ajoute`, `Compte.apple`. Jamais de pseudo, d'email, de mot de grille ni d'identifiant de compte.
+
+- Rien n'est envoyé depuis `localhost` (développement) ; les joueurs peuvent tout couper dans **Paramètres › Données ›
+  Partager des statistiques anonymes** (activé par défaut).
+- Dans TelemetryDeck, les signaux arrivent en quelques minutes (onglet *Signals* / *Recent Signals*).
+
+---
+
+## 9. Publier sur TestFlight
+
+1. Fais d'abord les étapes 5a (capacité Apple) et, idéalement, 1 à 8.
+2. **https://codemagic.io** → ton appli → **Start new build** → branche `main` (une fois cette branche fusionnée)
+   → workflow **Quatuor iOS → TestFlight** → **Start new build**.
+3. Une vingtaine de minutes plus tard, le build arrive dans TestFlight (version **1.2**).
+
+En cas d'échec, envoie-moi le journal (*Build logs*) : les causes les plus probables sont expliquées à l'étape 5a.
+
+---
+
 ## Récapitulatif des tests automatiques
 
 `npm test` (sur un ordinateur, ou ici par Claude) lance :

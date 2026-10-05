@@ -590,6 +590,7 @@ body.home[data-view="jeu"] .app{padding-bottom:var(--homeH,250px)}
 <script src="config-en-ligne.js"></script>
 <script src="js/calculs.js"></script>
 <script src="js/pseudos.js"></script>
+<script src="js/telemetrie.js"></script>
 <script src="js/en-ligne.js"></script>
 <script>
 // Chaque grille : 4 groupes du plus facile (niveau 0) au plus dur (niveau 3), avec une anecdote
@@ -655,7 +656,7 @@ const dayNum=Math.round((today-start)/864e5)+1;   // arrondi : pas de décalage 
 // Vibrations : PWA -> navigator.vibrate(p) ; appli iOS -> retour haptique (impact léger, ou « SUCCESS » / « ERROR »)
 const Haptics=plugin("Haptics");
 // ---- Réglages du joueur (quatuor-reglages) : lus au lancement (lireReglages), modifiables dans les Paramètres ----
-const REG_DEF={theme:"auto",texte:"normal",daltonien:false,sons:true,vibrations:true};
+const REG_DEF={theme:"auto",texte:"normal",daltonien:false,sons:true,vibrations:true,stats:true};   // stats : statistiques anonymes
 let REG={...REG_DEF};
 function lireReglages(){
   try{ const r=JSON.parse(ls.get("quatuor-reglages")||"null"); REG=Object.assign({},REG_DEF,r&&typeof r==="object"?r:{}); }catch(e){ REG={...REG_DEF}; }
@@ -947,6 +948,7 @@ function newGame(idx,opts={}){
   if(lostView){ if(prev.vu===false) showPendingBoard(prev); else { showLostBoard(prev); if(opts.accueil) showHome(); } return; }
   draw();
   if(sv&&hintCat>=0) renderHint();
+  if(!sv&&!tuto) stat("Grille.commencee",{grille:grid.id,typeGrille:typeGrille(),essai:attempt});
   updateNextLabels();
   lancerMinuteurIndice();
 }
@@ -1278,6 +1280,7 @@ const TUTO_ETAPES={
 function tutoAller(n){
   if(!tuto) return;
   tutoEtape=n; const E=TUTO_ETAPES[n]; updateHintUi();
+  stat("Tuto.etape",{etape:n});
   BULLE.ouvrir({mode:"spot",txt:fr(E.txt),cibles:E.cibles,bouton:E.bouton,
     ok:n===3?()=>tutoAller(hints<MAX_HINTS&&!done?4:5):n===6?endTuto:null,
     passer:n<6?endTuto:null});
@@ -1291,8 +1294,9 @@ function tutoEvent(ev){
   else if(ev==="erreur"&&tutoEtape===2) plusTard(()=>{ if(!done) tutoAller(3); },450);
   else if(ev==="indice"&&tutoEtape===4){ BULLE.fermer(); tutoEtape=5; plusTard(()=>{ if(!done) tutoAller(5); },700); }
 }
-function lancerTuto(){ newGame(-1); scrollTo(0,0); const id=gameId; setTimeout(()=>{ if(id===gameId&&tuto) tutoAller(1); },450); }
+function lancerTuto(){ stat("Tuto.vu"); newGame(-1); scrollTo(0,0); const id=gameId; setTimeout(()=>{ if(id===gameId&&tuto) tutoAller(1); },450); }
 function endTuto(){
+  stat(tutoEtape===6?"Tuto.termine":"Tuto.passe",{etape:tutoEtape});
   BULLE.fermer(); tutoEtape=0; ls.set("quatuor-tuto-done","1");
   gridsReady.then(ok=>{ if(ok) switchGame(dailyIdx); else { tuto=false; showLoadError(); } });
 }
@@ -1652,6 +1656,7 @@ function finish(win){
     }
   }
   recalculerStats();   // mode en ligne : même calcul sur tous les appareils (à partir des résultats datés)
+  stat(win?"Grille.reussie":"Grille.ratee",{grille:grid.id,typeGrille:typeGrille(),erreurs:mistakes,indices:hints,duree:duree,essai:attempt});
   if(EN_LIGNE) EN_LIGNE.signaler();
   planifierRappels();
   clearTimeout(minuteurIndice);
@@ -1822,7 +1827,7 @@ function ouvrirPageLegale(url){
   if(w) w.opener=null; else location.href=url;
 }
 document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest("a[data-legal]"); if(!a) return; e.preventDefault(); ouvrirPageLegale(a.getAttribute("href")); });
-const APP_VERSION="1.1";   // version affichée sur le web ; dans l'appli : @capacitor/app (version et n° de build)
+const APP_VERSION="1.2";   // version affichée sur le web ; dans l'appli : @capacitor/app (version et n° de build)
 const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
 // =====================================================================
 // NAVIGATION : barre d'onglets en bas (Jouer, Thèmes, Progrès, Moi) + Paramètres (engrenage, en haut à droite)
@@ -2038,7 +2043,7 @@ async function actionAmi(fn,ok,btn){
   catch(e){ toast(EN_LIGNE.enLigne()?"Action impossible, réessaie plus tard":"Connecte-toi à Internet"); }
   chargerAmis();
 }
-function repondreAmi(id,accepter,btn){ actionAmi(()=>EN_LIGNE.amis.repondre(id,accepter),accepter?"Vous êtes maintenant amis !":"Demande refusée",btn); }
+function repondreAmi(id,accepter,btn){ actionAmi(()=>EN_LIGNE.amis.repondre(id,accepter),accepter?"Vous êtes maintenant amis !":"Demande refusée",btn); if(accepter) stat("Ami.ajoute",{via:"acceptation"}); }
 // Fiche d'un ami : retirer (bloquer et signaler : voir la partie sécurité)
 function ficheAmi(a){
   if(!a) return; buzz(8);
@@ -2071,7 +2076,7 @@ function ajouterAmi(){
       soi_meme:["ko","C'est ton propre code 😄"],pseudo_requis:["ko","Choisis d'abord ton pseudo."],limite:["ko","Trop de demandes aujourd'hui : réessaie demain."],
       trop_amis:["ko","Tu as atteint le nombre maximum d'amis (200)."],reseau:["ko","Connecte-toi à Internet pour ajouter un ami."]}[r]||["ko","Erreur, réessaie plus tard."];
     msg.className="chmsg "+T[0]; msg.textContent=T[1]; env.disabled=false;
-    if(r==="envoyee"||r==="acceptee"){ buzz(10); ch.value=""; env.disabled=true; chargerAmis(); }
+    if(r==="envoyee"||r==="acceptee"){ buzz(10); ch.value=""; env.disabled=true; chargerAmis(); stat("Ami.ajoute",{via:r==="acceptee"?"demande_croisee":"code"}); }
   };
   setTimeout(()=>ch.focus(),400);
 }
@@ -2176,7 +2181,7 @@ function reglagesPageHtml(){
     <p class="sec">Aide</p><div class="regl">${lien("setTuto","🎓 Revoir le tuto","La prise en main, pas à pas")}${lien("setHelp","📖 Comment jouer","Les règles en une page")}</div>
     <p class="sec">Compte</p><div class="regl">${EN_LIGNE?`<div id="setCompte" data-compte="reglages"></div>${lien("setBloques","🚫 Joueurs bloqués","Les débloquer")}${lien("setSuppr","🗑️ Supprimer mon compte","Efface toutes tes données, en ligne et sur cet appareil").replace('class="rrow rbtn"','class="rrow rbtn danger"')}`
       :`<div class="rrow" aria-disabled="true"><span><b>👤 Compte Quatuor</b><small>Sauvegarde en ligne, amis et duels</small></span><span class="soon">Bientôt disponible</span></div>`}</div>
-    <p class="sec">Données</p><div class="regl">${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
+    <p class="sec">Données</p><div class="regl">${STATS?tg("stats","📊 Partager des statistiques anonymes","Aide à améliorer Quatuor. Aucune donnée personnelle."):""}${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
     <p class="sec">À propos</p><div class="regl">
       <div class="rrow"><span><b>Version</b></span><span class="rval" id="setVer">${APP_VERSION}</span></div>
       <a class="rrow" href="mailto:playquatuor@gmail.com"><span><b>✉️ Contact</b><small>playquatuor@gmail.com</small></span><span class="chev">›</span></a></div>
@@ -2470,14 +2475,25 @@ function titrePartage(){
   if(isArchive(gridIdx)) return `Quatuor #${grid.num}`;
   return `Quatuor · Grille bonus n°${grid.num} (${DIFFS[grid.diff].name})`;
 }
-// (statistiques anonymes : voir la partie TelemetryDeck)
-function stat(){}
+// =====================================================================
+// STATISTIQUES ANONYMES (TelemetryDeck, js/telemetrie.js) : ouverture, tuto, grilles, partage, amis, Apple.
+// Aucune donnée personnelle ; désactivables dans Paramètres › Données ; jamais en développement local.
+// =====================================================================
+const STATS=(()=>{ try{
+  const c=window.QUATUOR_CONFIG||{}; if(!window.QuatuorStats||!c.telemetryDeckAppId) return null;
+  const local=!IS_NATIVE&&(IS_LOCAL||location.protocol==="file:");
+  return QuatuorStats.creer({appId:c.telemetryDeckAppId,ls,autorise:()=>REG.stats!==false,local:local&&!c.telemetrieDev,test:!!c.telemetrieDev,
+    commun:{plateforme:IS_NATIVE?"ios":"web",version:APP_VERSION}});
+}catch(e){ return null; } })();
+function stat(type,valeurs){ try{ if(STATS) STATS.signal(type,valeurs); }catch(e){} }
+// Type de grille (sans contenu) : jour, bonus du jour, ancienne grille du jour, thème, hasard, bonus
+const typeGrille=()=>tuto?"tuto":isTheme()?"theme":!practice?(dailyBonus?"bonus_du_jour":"jour"):isArchive(gridIdx)?"jour_precedent":hasard?"hasard":"bonus";
 const textePartage=()=>!QC?`${titrePartage()} 🧩\nplayquatuor.fr`:QC.texteDePartage({titre:titrePartage(),history,hints,attempt,daltonien:!!REG.daltonien,site:"playquatuor.fr"});
 async function share(){
   if(!grid||tuto) return;
   buzz(8);
   const fait=await partagerTexte(textePartage(),"Copié !");
-  if(fait) stat("partage",{grille:grid.id});
+  if(fait) stat("Partage",{grille:grid.id,typeGrille:typeGrille()});
 }
 let tt; function toast(m,bounce){ const t=$("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),1500);
   if(bounce&&!RM()) t.animate([{transform:"translate(-50%,-16px) scale(.97)",opacity:0},{transform:"translate(-50%,3px) scale(1.01)",opacity:1,offset:.6},
@@ -2599,8 +2615,8 @@ async function seConnecterApple(btn){
   appleEnCours=true; buzz(10); if(btn) btn.disabled=true;
   try{
     const r=await EN_LIGNE.connexionApple(demanderRecuperation);
-    if(r.etat==="lie"){ toast("Connecté avec Apple ✓"); }
-    else if(r.etat==="recupere"){ toast("Progression récupérée ✓"); setTimeout(()=>location.reload(),900); }
+    if(r.etat==="lie"){ toast("Connecté avec Apple ✓"); stat("Compte.apple",{issue:"liaison"}); }
+    else if(r.etat==="recupere"){ toast("Progression récupérée ✓"); stat("Compte.apple",{issue:"recuperation"}); if(STATS) STATS.vider(); setTimeout(()=>location.reload(),900); }
   }catch(e){
     const code=e&&(e.code||e.errorMessage||e.message)||"";
     if(!/ANNUL|cancel/i.test(String(code))){ console.warn("Quatuor : connexion Apple impossible",e); toast("Connexion impossible, réessaie plus tard"); }
@@ -2627,6 +2643,7 @@ function boot(){
 function lancer(){
   lireReglages(); appliquerReglages();
   migrateData(); migrerVersEnLigne(); recalculerStats();
+  stat("App.ouverture");
   cdTick();
   // Premier lancement : tutoriel guidé (marqué comme vu à la fin ou sur « Passer »)
   if(!ls.get("quatuor-tuto-done")) lancerTuto(); else showSkeleton();
