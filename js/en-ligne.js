@@ -270,11 +270,29 @@
       liste: (grille, jour) => rpc("mes_amis", { grille: grille || "", jour }),
       ajouter: code => rpc("envoyer_demande", { code }),
       repondre: (demande, accepter) => rpc("repondre_demande", { demande, accepter }),
-      retirer: ami => rpc("retirer_ami", { ami })
+      retirer: ami => rpc("retirer_ami", { ami }),
+      bloquer: cible => rpc("bloquer", { cible }),
+      debloquer: cible => rpc("debloquer", { cible }),
+      bloques: () => rpc("mes_bloques", {}),
+      signaler: (cible, motif) => rpc("signaler", { cible, motif })
     };
+    // Suppression du compte : fonction serveur sécurisée (vérifie le jeton, supprime le compte d'authentification ;
+    // toutes les données suivent par cascade). Renvoie true si le serveur a confirmé (ou s'il n'y avait aucun compte).
+    async function supprimerMonCompte() {
+      if (!pret) return true;
+      if (!enLigne()) throw Object.assign(new Error("hors ligne"), { raison: "reseau" });
+      const c = await client(); const { data } = await c.auth.getSession();
+      const session = data && data.session;
+      if (session) {
+        await supprimerCompte(session.access_token);
+        try { await c.auth.signOut({ scope: "local" }); } catch (e) {}
+      }
+      ls.del("quatuor-auth");
+      return true;
+    }
 
     return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne, appleDisponible, connexionApple, compte, supprimerCompte,
-      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur, rpc, amis };
+      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur, rpc, amis, supprimerMonCompte };
   }
 
   return { creerSynchro, apiSupabase, demarrer, creerConnexionApple, dejaLie };

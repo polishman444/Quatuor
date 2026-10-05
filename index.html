@@ -2020,7 +2020,7 @@ async function chargerAmis(){
   const cnt=$("amisCnt"); if(cnt){ cnt.hidden=!liste.length; cnt.textContent=liste.length; }
   z.innerHTML=`<button class="pill soft full" id="amiAjout">＋ Ajouter un ami</button>
     ${recues.length?`<p class="asub">${pl(recues.length,"Demande reçue","Demandes reçues")}</p>${recues.map(a=>`<div class="arow">${avPetit(a.avatar)}<span class="tx"><b>${esc(a.pseudo||"Joueur")}</b><small>veut être ton ami</small></span>
-      <span class="acts"><button class="oui" data-acc="${a.demande}">Accepter</button><button data-ref="${a.demande}">Refuser</button></span></div>`).join("")}`:""}
+      <span class="acts"><button class="oui" data-acc="${a.demande}">Accepter</button><button data-ref="${a.demande}">Refuser</button><button data-plus="${a.ami}" aria-label="Plus d'options">⋯</button></span></div>`).join("")}`:""}
     ${liste.length?`${recues.length?`<p class="asub">Mes amis</p>`:""}${liste.map(a=>`<button class="arow" data-ami="${a.ami}">${avPetit(a.avatar)}<span class="tx"><b>${esc(a.pseudo||"Joueur")}</b><small>🔥 ${a.serie||0} ${pl(a.serie||0,"jour","jours")} de série</small></span>${etatDuJour(a)}</button>`).join("")}`
       :`<p class="gempty">Ajoute tes amis avec leur code ami pour comparer vos séries et vos résultats du jour.</p>`}
     ${envoyees.length?`<p class="asub">En attente</p>${envoyees.map(a=>`<div class="arow">${avPetit(a.avatar)}<span class="tx"><b>${esc(a.pseudo||"Joueur")}</b><small>Demande envoyée</small></span>
@@ -2029,6 +2029,7 @@ async function chargerAmis(){
   z.querySelectorAll("[data-acc],[data-ref]").forEach(b=>b.onclick=()=>repondreAmi(+(b.dataset.acc||b.dataset.ref),!!b.dataset.acc,b));
   z.querySelectorAll("[data-ann]").forEach(b=>b.onclick=()=>actionAmi(()=>EN_LIGNE.amis.retirer(b.dataset.ann),"Demande annulée",b));
   z.querySelectorAll("[data-ami]").forEach(b=>b.onclick=()=>ficheAmi(amisCache.find(a=>a.ami===b.dataset.ami)));
+  z.querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>ficheAmi(amisCache.find(a=>a.ami===b.dataset.plus)));
 }
 async function actionAmi(fn,ok,btn){
   if(btn) btn.disabled=true; buzz(8);
@@ -2041,9 +2042,9 @@ function repondreAmi(id,accepter,btn){ actionAmi(()=>EN_LIGNE.amis.repondre(id,a
 function ficheAmi(a){
   if(!a) return; buzz(8);
   openSheet(`<div class="fini"><div class="big">${PS.AVATARS[a.avatar||0]||"🙂"}</div><h2>${esc(a.pseudo||"Joueur")}</h2>
-    <p>🔥 ${a.serie||0} ${pl(a.serie||0,"jour","jours")} de série · 🏆 record ${a.record||0}</p>
-    <button class="pill soft full" id="amiRetirer">Retirer de mes amis</button>${ficheAmiSecurite(a)}</div>`);
-  $("amiRetirer").onclick=()=>{ closeSheet(); actionAmi(()=>EN_LIGNE.amis.retirer(a.ami),`${a.pseudo||"Joueur"} a été retiré de tes amis`); };
+    <p>${a.etat==="ami"?`🔥 ${a.serie||0} ${pl(a.serie||0,"jour","jours")} de série · 🏆 record ${a.record||0}`:"veut être ton ami"}</p>
+    <button class="pill soft full" id="amiRetirer">${a.etat==="ami"?"Retirer de mes amis":"Refuser la demande"}</button>${ficheAmiSecurite(a)}</div>`);
+  $("amiRetirer").onclick=()=>{ closeSheet(); if(a.etat==="ami") actionAmi(()=>EN_LIGNE.amis.retirer(a.ami),`${a.pseudo||"Joueur"} a été retiré de tes amis`); else repondreAmi(a.demande,false); };
   brancherFicheSecurite(a);
 }
 // Ajouter un ami avec son code
@@ -2073,9 +2074,79 @@ function ajouterAmi(){
   };
   setTimeout(()=>ch.focus(),400);
 }
-// (Partie sécurité : bloquer et signaler depuis la fiche d'un ami)
-const ficheAmiSecurite=a=>"";
-function brancherFicheSecurite(a){}
+// ---- Sécurité : bloquer et signaler (fiche d'un ami ou d'une demande reçue) ----
+const ficheAmiSecurite=a=>`<div class="row" style="margin-top:2px"><button class="pill soft" id="amiBloquer">🚫 Bloquer</button><button class="pill soft" id="amiSignaler">⚠️ Signaler</button></div>`;
+function brancherFicheSecurite(a){
+  const nom=esc(a.pseudo||"Joueur");
+  $("amiBloquer").onclick=()=>{ buzz(8);
+    openSheet(`<h2>Bloquer ${nom} ?</h2><p>${nom} disparaîtra de tes amis et ne pourra plus t'ajouter. Il n'en sera pas informé. Tu pourras le débloquer dans Paramètres › Compte.</p>
+      <button class="pill danger full" id="blOui">Bloquer</button><button class="pill soft full" id="blNon">Annuler</button>`);
+    $("blNon").onclick=closeSheet;
+    $("blOui").onclick=()=>{ closeSheet(); actionAmi(()=>EN_LIGNE.amis.bloquer(a.ami),`${a.pseudo||"Joueur"} est bloqué`); };
+  };
+  $("amiSignaler").onclick=()=>signalerJoueur(a);
+}
+function signalerJoueur(a){
+  buzz(8);
+  const nom=esc(a.pseudo||"Joueur");
+  openSheet(`<h2>Signaler ${nom}</h2><p>Pourquoi ? Ton signalement est anonyme pour ${nom} et sera examiné.</p>
+    <div class="segc" role="radiogroup" aria-label="Motif" id="sgMotif"><button role="radio" data-v="pseudo" class="on" aria-checked="true">Pseudo inapproprié</button><button role="radio" data-v="autre" aria-checked="false">Autre</button></div>
+    <p></p><button class="pill danger full" id="sgOui">Envoyer le signalement</button><button class="pill soft full" id="sgNon">Annuler</button>`);
+  let motif="pseudo";
+  $("sgMotif").querySelectorAll("button").forEach(b=>b.onclick=()=>{ motif=b.dataset.v; $("sgMotif").querySelectorAll("button").forEach(x=>{ x.classList.toggle("on",x===b); x.setAttribute("aria-checked",x===b); }); });
+  $("sgNon").onclick=closeSheet;
+  $("sgOui").onclick=async()=>{
+    $("sgOui").disabled=true;
+    let r; try{ r=await EN_LIGNE.amis.signaler(a.ami,motif); }catch(e){ r="reseau"; }
+    closeSheet();
+    toast({ok:"Merci, ton signalement a été envoyé",deja:"Tu as déjà signalé ce joueur aujourd'hui",limite:"Trop de signalements aujourd'hui",reseau:"Connecte-toi à Internet pour signaler"}[r]||"Signalement impossible");
+  };
+}
+// Paramètres › Compte : joueurs bloqués (débloquer)
+async function joueursBloques(){
+  buzz(8);
+  if(!EN_LIGNE.enLigne()){ toast("Connecte-toi à Internet pour voir les joueurs bloqués"); return; }
+  openSheet(`<h2>Joueurs bloqués</h2><div class="amis" id="blListe"><p class="gempty">Chargement…</p></div><p></p><button class="pill soft full" id="blFermer">Fermer</button>`);
+  $("blFermer").onclick=closeSheet;
+  const remplir=async()=>{
+    let l; try{ l=await EN_LIGNE.amis.bloques()||[]; }catch(e){ if($("blListe")) $("blListe").innerHTML=`<p class="gempty">Impossible de charger la liste.</p>`; return; }
+    if(!$("blListe")) return;
+    $("blListe").innerHTML=l.length?l.map(x=>`<div class="arow">${avPetit(x.avatar)}<span class="tx"><b>${esc(x.pseudo||"Joueur")}</b></span><span class="acts"><button data-debl="${x.id}">Débloquer</button></span></div>`).join("")
+      :`<p class="gempty">Tu n'as bloqué personne.</p>`;
+    $("blListe").querySelectorAll("[data-debl]").forEach(b=>b.onclick=async()=>{ b.disabled=true;
+      try{ await EN_LIGNE.amis.debloquer(b.dataset.debl); toast("Joueur débloqué"); }catch(e){ toast("Connecte-toi à Internet"); } remplir(); });
+  };
+  remplir();
+}
+// Paramètres › Compte : supprimer mon compte (double confirmation). Toutes les données serveur sont supprimées
+// (fonction serveur sécurisée), puis l'appli est remise à zéro sur cet appareil.
+function supprimerCompte(){
+  buzz(8);
+  openSheet(`<h2>Supprimer mon compte ?</h2><p>Ton profil, ton pseudo, tes amis, tes résultats, tes statistiques, ta série et tes favoris seront supprimés de nos serveurs <b>et</b> de cet appareil.</p>
+    <button class="pill danger full" id="sc1">Supprimer mon compte</button><button class="pill soft full" id="scNon">Annuler</button>`);
+  $("scNon").onclick=closeSheet;
+  $("sc1").onclick=()=>{ buzz(8);
+    openSheet(`<h2>Vraiment tout supprimer ? 😬</h2><p>C'est définitif : impossible de récupérer ta progression ensuite, même avec Apple.</p>
+      <button class="pill danger full" id="sc2">Oui, supprimer définitivement</button><button class="pill soft full" id="scNon2">Non, garder mon compte</button>`);
+    $("scNon2").onclick=closeSheet;
+    $("sc2").onclick=async()=>{
+      const b=$("sc2"); b.disabled=true; b.textContent="Suppression…";
+      try{ await EN_LIGNE.supprimerMonCompte(); }
+      catch(e){ b.disabled=false; b.textContent="Oui, supprimer définitivement";
+        toast(e&&e.raison==="reseau"?"Connecte-toi à Internet pour supprimer ton compte":"Suppression impossible, réessaie plus tard"); return; }
+      await remiseAZeroLocale();
+      location.reload();
+    };
+  };
+}
+// Efface toutes les données Quatuor de cet appareil (résultats, stats, favoris, réglages, session, rappels)
+async function remiseAZeroLocale(){
+  try{ if(Notifs){ const p=await Notifs.getPending(); if(p&&p.notifications&&p.notifications.length) await Notifs.cancel({notifications:p.notifications.map(n=>({id:n.id}))}); } }catch(e){}
+  const cles=new Set(memo.keys());
+  try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k&&k.startsWith("quatuor")) cles.add(k); } }catch(e){}
+  cles.forEach(k=>{ if(k.startsWith("quatuor")) ls.del(k); });
+  if(Prefs) await Prefs.clear().catch(()=>{});
+}
 // Copier dans le presse-papiers (avec repli pour les anciens navigateurs)
 async function copierTexte(t,msg){
   buzz(8);
@@ -2102,7 +2173,7 @@ function reglagesPageHtml(){
     <p class="sec">Sons et vibrations</p><div class="regl">${tg("sons","🔊 Sons")}${VIBRE?tg("vibrations","📳 Vibrations"):""}</div>
     ${reglagesHtml()}
     <p class="sec">Aide</p><div class="regl">${lien("setTuto","🎓 Revoir le tuto","La prise en main, pas à pas")}${lien("setHelp","📖 Comment jouer","Les règles en une page")}</div>
-    <p class="sec">Compte</p><div class="regl">${EN_LIGNE?`<div id="setCompte" data-compte="reglages"></div>`
+    <p class="sec">Compte</p><div class="regl">${EN_LIGNE?`<div id="setCompte" data-compte="reglages"></div>${lien("setBloques","🚫 Joueurs bloqués","Les débloquer")}${lien("setSuppr","🗑️ Supprimer mon compte","Efface toutes tes données, en ligne et sur cet appareil").replace('class="rrow rbtn"','class="rrow rbtn danger"')}`
       :`<div class="rrow" aria-disabled="true"><span><b>👤 Compte Quatuor</b><small>Sauvegarde en ligne, amis et duels</small></span><span class="soon">Bientôt disponible</span></div>`}</div>
     <p class="sec">Données</p><div class="regl">${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
     <p class="sec">À propos</p><div class="regl">
@@ -2121,6 +2192,8 @@ function brancherParametres(el){
     if(t.checked&&t.dataset.r==="sons") SON.jouer("groupe",2); });
   if($("setTuto")) $("setTuto").onclick=revoirTuto;
   if($("setReset")) $("setReset").onclick=reinitialiser;
+  if($("setBloques")) $("setBloques").onclick=joueursBloques;
+  if($("setSuppr")) $("setSuppr").onclick=supprimerCompte;
   const App=plugin("App");
   if(App&&$("setVer")) App.getInfo().then(i=>{ if($("setVer")) $("setVer").textContent=`${i.version} (${i.build})`; }).catch(()=>{});
 }

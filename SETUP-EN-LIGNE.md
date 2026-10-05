@@ -101,6 +101,47 @@ et se régénère avec un script sur ordinateur. C'est trop fragile pour un proj
 
 ---
 
+## 6. Fonction serveur « supprimer-compte » (obligatoire pour Apple)
+
+Elle permet à un joueur de supprimer son compte depuis l'appli (exigence de l'App Store) et sert aussi
+à supprimer le compte anonyme vide quand un joueur récupère sa progression Apple.
+
+1. Supabase → menu **Edge Functions** → **Deploy a new function** → **Via Editor**.
+2. Nom de la fonction : `supprimer-compte` (exactement).
+3. Efface le code d'exemple, puis colle tout le contenu du fichier `supabase/functions/supprimer-compte/index.ts` du dépôt.
+4. **Deploy function**.
+5. Dans les réglages de la fonction (onglet **Details** / **Settings**), laisse **Verify JWT** (ou *Enforce JWT verification*) **activé**.
+
+La fonction utilise la clé d'administration que Supabase lui fournit automatiquement : tu n'as **rien** à copier.
+
+Vérification : dans l'appli, Paramètres › Compte › Supprimer mon compte (avec un compte de test) ; dans
+**Authentication → Users**, l'utilisateur a disparu, et dans **Table Editor** ses lignes aussi.
+> Si la suppression échoue avec une erreur 401 alors que tout semble correct, désactive **Verify JWT** dans
+> les réglages de la fonction : elle vérifie elle-même le jeton du joueur.
+
+## 7. Modération (signalements, pseudos)
+
+- **Voir les signalements** : **SQL Editor** → `select * from signalements_a_traiter;`
+  (pseudo signalé, pseudo actuel, auteur, nombre total de signalements du joueur). Ou **Table Editor → signalements**.
+- **Effacer un pseudo inapproprié** (le joueur devra en choisir un autre) :
+  ```sql
+  update profils set pseudo = null where id = 'IDENTIFIANT-DU-JOUEUR';
+  update signalements set traite = true where cible = 'IDENTIFIANT-DU-JOUEUR';
+  ```
+  (l'identifiant est la colonne `cible` de la vue des signalements).
+- **Ajouter un mot interdit** : `insert into mots_interdits (mot, partout) values ('motsansaccent', true);`
+  (`partout = true` : interdit même au milieu d'un pseudo ; `false` : seulement comme mot entier).
+  Pense à me le dire pour que j'ajoute aussi le mot dans `js/pseudos.js` (vérification immédiate dans l'appli).
+- **Supprimer un compte abusif** : **Authentication → Users** → ⋯ → **Delete user** (toutes ses données suivent).
+- Les joueurs peuvent te signaler un problème à **playquatuor@gmail.com** (indiqué dans les CGU) :
+  Apple exige que tu traites les signalements sous 24 h.
+
+Limites anti-abus déjà en place : 20 demandes d'ami par jour (codes essayés compris), 200 amis, 10 signalements
+et 10 changements de pseudo par jour, 50 blocages par jour, 500 favoris, tailles de champs contrôlées.
+Ménage facultatif de temps en temps : `delete from journal_actions where le < now() - interval '7 days';`
+
+---
+
 ## Récapitulatif des tests automatiques
 
 `npm test` (sur un ordinateur, ou ici par Claude) lance :

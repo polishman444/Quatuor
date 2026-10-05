@@ -214,3 +214,74 @@ test("amis hors ligne : « Connecte-toi à Internet pour voir tes amis », le re
   assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("quatuor")).played), 1);
   assert.deepEqual(erreurs, []);
 });
+
+test("sécurité : signaler et bloquer depuis la fiche d'un ami, puis débloquer dans Paramètres", { skip: !pw && "Playwright indisponible" }, async t => {
+  const { base, faux, ouvrirPage } = await contexte(t);
+  const B = await autreJoueur(base, faux, "Bruno");
+  const { page, erreurs } = await ouvrirPage();
+  const A = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
+  await page.locator('.tabs [data-tab="moi"]').click();
+  await pseudoPropose(page);
+  const codeA = (await base.admin("select code_ami from public.profils where id = $1", [A]))[0].code_ami;
+  await base.en(B.id, "select public.envoyer_demande($1)", [codeA]);
+  await page.locator('.tabs [data-tab="progres"]').click(); await page.locator('.tabs [data-tab="moi"]').click();
+  await page.locator("[data-acc]").click();
+  await page.waitForSelector(`[data-ami="${B.id}"]`);
+  // signaler
+  await page.locator(`[data-ami="${B.id}"]`).click();
+  await page.locator("#amiSignaler").click();
+  await page.locator("#sgOui").click();
+  await attendre(async () => (await base.admin("select * from public.signalements_a_traiter")).length === 1);
+  assert.equal((await base.admin("select pseudo_signale from public.signalements_a_traiter"))[0].pseudo_signale, "Bruno");
+  // bloquer
+  await page.waitForSelector("#sheet:not(.open)");
+  await page.locator(`[data-ami="${B.id}"]`).click();
+  await page.locator("#amiBloquer").click();
+  await page.locator("#blOui").click();
+  await page.waitForFunction(() => document.querySelectorAll("[data-ami]").length === 0 && /Ajoute tes amis/.test(document.querySelector("#moiAmis").textContent));
+  assert.equal((await base.en(B.id, "select public.envoyer_demande($1) r", [codeA]))[0].r, "introuvable");
+  // débloquer
+  await page.locator("#setBtn").click();
+  await page.locator("#setBloques").click();
+  await page.waitForSelector("[data-debl]");
+  assert.match(await page.locator("#blListe").innerText(), /Bruno/);
+  await page.locator("[data-debl]").click();
+  await page.waitForFunction(() => /personne/.test(document.querySelector("#blListe").textContent));
+  assert.equal((await base.admin("select count(*) n from public.blocages"))[0].n, 0);
+  assert.deepEqual(erreurs, []);
+});
+
+test("supprimer mon compte : double confirmation, plus aucune donnée serveur, appli remise à zéro", { skip: !pw && "Playwright indisponible" }, async t => {
+  const { base, faux, ouvrirPage } = await contexte(t, { appleId: "apple-77" });
+  const B = await autreJoueur(base, faux, "Bruno");
+  const { page, erreurs } = await ouvrirPage({ quatuor: { played: 3, wins: 3, streak: 3, best: 3, lastPlayed: 4, lastWin: 4 }, "quatuor-migr": "1",
+    "quatuor-favs": [{ id: "g001:X", grid: "g001", num: 1, name: "X", words: ["a"], fact: "f", lvl: 0, at: 1 }] });
+  const A = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
+  await page.locator('.tabs [data-tab="moi"]').click();
+  await pseudoPropose(page);
+  await page.locator("#moiCompte .bapple").click();
+  await attendre(() => faux.comptes.get(A) && faux.comptes.get(A).apple);
+  const codeB = B.code;
+  await page.locator("#amiAjout").click(); await page.locator("#amiCode").fill(codeB); await page.locator("#amiEnv").click();
+  await page.waitForFunction(() => /Demande envoyée/.test(document.querySelector("#amiMsg").textContent));
+  await page.locator("#amiNon").click();
+  await attendre(async () => (await base.admin("select 1 from public.favoris where user_id = $1", [A])).length === 1);
+  // Paramètres › Compte › Supprimer mon compte (2 confirmations)
+  await page.locator("#setBtn").click();
+  await page.locator("#setSuppr").click();
+  await page.locator("#sc1").click();
+  assert.match(await page.locator("#sheetBody").innerText(), /Vraiment tout supprimer/);
+  await page.locator("#sc2").click();
+  await page.waitForEvent("load");
+  // serveur : plus rien
+  for (const [table, col] of [["profils", "id"], ["resultats", "user_id"], ["favoris", "user_id"], ["amities", "demandeur"], ["journal_actions", "user_id"]])
+    assert.equal((await base.admin(`select count(*) n from public.${table} where ${col} = $1`, [A]))[0].n, 0, table);
+  assert.equal((await base.admin("select count(*) n from auth.users where id = $1", [A]))[0].n, 0);
+  assert.equal(faux.comptes.has(A), false);
+  // appareil : remis à zéro (tutoriel du premier lancement, plus de résultats ni de favoris)
+  await page.waitForFunction(() => typeof tuto !== "undefined" && tuto === true);
+  const local = await page.evaluate(() => ({ favs: JSON.parse(localStorage.getItem("quatuor-favs") || "[]"), res: JSON.parse(localStorage.getItem("quatuor-res") || "{}"),
+    tuto: localStorage.getItem("quatuor-tuto-done"), pseudo: (JSON.parse(localStorage.getItem("quatuor-profil") || "{}")).pseudo || null }));
+  assert.deepEqual(local, { favs: [], res: {}, tuto: null, pseudo: null });
+  assert.deepEqual(erreurs, []);
+});

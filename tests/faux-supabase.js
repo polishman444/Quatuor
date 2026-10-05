@@ -79,12 +79,14 @@ function fauxSupabase(base) {
       }
     }
     // ---- Fonction serveur « supprimer-compte » (voir supabase/functions) ----
-    if (chemin === "/functions/v1/supprimer-compte") {
-      if (!moi) return json(route, 401, { error: "Non connecté" });
-      journal.push(["supprimer", moi]);
-      await base.admin("delete from auth.users where id = $1", [moi]);
-      const c = comptes.get(moi); comptes.delete(moi); if (c && c.apple) apple.delete(c.apple);
-      return json(route, 200, { ok: true });
+    if (chemin === "/functions/v1/supprimer-compte") {   // le vrai code de la fonction, avec une API d'administration factice
+      const { traiter } = await import("../supabase/functions/supprimer-compte/index.ts");
+      const admin = { auth: {
+        getUser: async j => { const u = uidDe(j); return u && comptes.has(u) ? { data: { user: { id: u } }, error: null } : { data: { user: null }, error: { message: "invalide" } }; },
+        admin: { deleteUser: async id => { journal.push(["supprimer", id]); await base.admin("delete from auth.users where id = $1", [id]);
+          const c = comptes.get(id); comptes.delete(id); if (c && c.apple) apple.delete(c.apple); return { error: null }; } } } };
+      const r = await traiter(new Request(req.url(), { method: methode, headers: req.headers(), body: methode === "POST" ? req.postData() : undefined }), admin);
+      return route.fulfill({ status: r.status, headers: Object.fromEntries(r.headers), body: await r.text() });
     }
     // ---- REST (PostgREST) ----
     const rest = chemin.match(/^\/rest\/v1\/(rpc\/)?([a-z_]+)$/);
