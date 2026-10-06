@@ -21,13 +21,13 @@ workflows:
       node: 22
       xcode: latest
     triggering:
-      # Lancement manuel par défaut (bouton « Start new build »).
-      # Pour compiler à chaque envoi sur main, décommenter :
-      # events:
-      #   - push
-      # branch_patterns:
-      #   - pattern: main
-      #     include: true
+      # Lancement manuel (bouton « Start new build »), et automatique à chaque envoi sur la branche
+      # du mode en ligne (version 1.2). Pour compiler aussi à chaque envoi sur main, ajouter « main ».
+      events:
+        - push
+      branch_patterns:
+        - pattern: claude/nifty-ptolemy-f4f4oe
+          include: true
       cancel_previous_builds: true
     scripts:
       - name: Installation des dépendances
@@ -60,9 +60,15 @@ workflows:
           grep -m1 "CURRENT_PROJECT_VERSION" App.xcodeproj/project.pbxproj
       - name: Compilation de l'appli (.ipa)
         script: |
-          xcode-project build-ipa \
+          if ! xcode-project build-ipa \
             --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+            --scheme "$XCODE_SCHEME"; then
+            # En cas d'échec : afficher les vraies erreurs de Xcode (sinon cachées dans les fichiers de journal)
+            echo "================= ERREURS XCODE ================="
+            grep -h -E "error:|\*\* ARCHIVE FAILED|requires a provisioning profile|doesn't include|entitlement" /tmp/xcodebuild_logs/*.log | sort -u | head -40 || true
+            echo "================================================="
+            exit 1
+          fi
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
