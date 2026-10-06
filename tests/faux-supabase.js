@@ -19,9 +19,10 @@ function fauxSupabase(base) {
 
   function session(uid) {
     const c = comptes.get(uid), rt = crypto.randomUUID(); rafraichir.set(rt, uid);
-    const providers = c.apple ? ["apple"] : ["anonymous"];
+    const providers = [c.apple && "apple", c.email && "email"].filter(Boolean);
+    if (!providers.length) providers.push("anonymous");
     return { access_token: jwt(uid), token_type: "bearer", expires_in: 3600, expires_at: Math.floor(Date.now() / 1000) + 3600, refresh_token: rt,
-      user: { id: uid, aud: "authenticated", role: "authenticated", is_anonymous: !c.apple, email: c.email || "",
+      user: { id: uid, aud: "authenticated", role: "authenticated", is_anonymous: !c.apple && !c.email, email: c.email || "",
         app_metadata: { provider: providers[0], providers }, user_metadata: {}, identities: c.apple ? [{ provider: "apple", id: c.apple }] : [],
         created_at: new Date().toISOString() } };
   }
@@ -60,8 +61,41 @@ function fauxSupabase(base) {
 
     // ---- Auth (GoTrue) ----
     if (chemin === "/auth/v1/signup") { const u = await creerCompte(); journal.push(["anonyme", u]); return json(route, 200, session(u)); }
+    // ---- Connexion par code e-mail (le code est toujours 123456 dans les tests) ----
+    const parEmail = e => [...comptes].find(([, c]) => c.email === e)?.[0];
+    if (chemin === "/auth/v1/user" && methode === "PUT") {
+      if (!moi) return json(route, 401, { code: "bad_jwt", msg: "invalid" });
+      if (corps.email) {
+        const autre = parEmail(corps.email);
+        if (autre && autre !== moi) return json(route, 422, { code: "email_exists", msg: "A user with this email address has already been registered" });
+        comptes.get(moi).emailEnAttente = corps.email; journal.push(["code_email", corps.email, "lier"]);
+      }
+      return json(route, 200, session(moi).user);
+    }
+    if (chemin === "/auth/v1/otp") {
+      const u = parEmail(corps.email);
+      if (!u) return json(route, 422, { code: "otp_disabled", msg: "Signups not allowed for otp" });
+      journal.push(["code_email", corps.email, "connexion"]);
+      return json(route, 200, {});
+    }
+    if (chemin === "/auth/v1/verify") {
+      if (corps.token !== "123456") return json(route, 403, { code: "otp_expired", msg: "Token has expired or is invalid" });
+      if (corps.type === "email_change") {
+        // (comme GoTrue : le compte est retrouvé par l'e-mail en attente, sans jeton de session)
+        const id = [...comptes].find(([, c]) => c.emailEnAttente === corps.email)?.[0], u = id && comptes.get(id);
+        if (!u) return json(route, 403, { code: "otp_expired", msg: "Token has expired or is invalid" });
+        u.email = corps.email; delete u.emailEnAttente; journal.push(["email_lie", id]);
+        return json(route, 200, session(id));
+      }
+      const u = parEmail(corps.email);
+      if (!u) return json(route, 403, { code: "otp_expired", msg: "Token has expired or is invalid" });
+      journal.push(["connexion_email", u]);
+      return json(route, 200, session(u));
+    }
     if (chemin === "/auth/v1/user") return moi ? json(route, 200, session(moi).user) : json(route, 401, { code: "bad_jwt", msg: "invalid" });
     if (chemin === "/auth/v1/logout") return json(route, 204);
+    if (chemin === "/auth/v1/user/identities/authorize") { journal.push(["apple_web", url.searchParams.get("redirect_to")]);
+      return json(route, 200, { url: "https://appleid.apple.com/auth/authorize?faux=1" }); }
     if (chemin === "/auth/v1/token") {
       const g = url.searchParams.get("grant_type");
       if (g === "refresh_token") { const u = rafraichir.get(corps.refresh_token); return u && comptes.has(u) ? json(route, 200, session(u)) : json(route, 400, { code: "refresh_token_not_found", msg: "Invalid Refresh Token" }); }
@@ -136,7 +170,9 @@ function fauxSupabase(base) {
     }
     return json(route, 404, { message: "inconnu : " + chemin });
   }
-  return { gerer, comptes, journal, compteApple, creerCompte, session };
+  // Compte déjà relié à un e-mail (ex. créé sur un autre appareil)
+  async function compteEmail(email) { return creerCompte({ email }); }
+  return { gerer, comptes, journal, compteApple, compteEmail, creerCompte, session };
 }
 
 module.exports = { fauxSupabase };

@@ -12,5 +12,7 @@
 window.QUATUOR_CONFIG = {
   supabaseUrl: "https://lnoorsfuoczfbaefgppe.supabase.co",
   supabaseCle: "sb_publishable_o6kouGC4ttP2UdhNIVPMbg_6MmXZXAN",
-  telemetryDeckAppId: "AF21F056-30B3-4885-8849-008AB82C901D"
+  telemetryDeckAppId: "AF21F056-30B3-4885-8849-008AB82C901D",
+  // Connexion Apple sur le site : à passer à true une fois le « Services ID » Apple configuré (SETUP-EN-LIGNE.md, étape 5c)
+  appleWeb: false
 };

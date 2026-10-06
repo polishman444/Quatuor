@@ -38,10 +38,10 @@ test("lancement : compte anonyme créé sans rien demander, progression envoyée
   await attendre(async () => (await base.admin("select 1 from public.resultats where user_id = $1", [uid])).length === 1);
   const [p] = await base.admin("select base_parties, base_serie from public.profils where id = $1", [uid]);
   assert.deepEqual(p, { base_parties: 3, base_serie: 3 });
-  // web : pas de bouton Apple, mais la sauvegarde automatique est indiquée
+  // web : connexion par e-mail proposée ; pas de bouton Apple (tant que appleWeb n'est pas activé)
   await page.locator("#setBtn").click();
-  await page.waitForSelector("#setCompte .rrow");
-  assert.match(await page.locator("#setCompte").innerText(), /Sauvegarde automatique/);
+  await page.waitForSelector("#setCompte [data-email]");
+  assert.match(await page.locator("#setCompte").innerText(), /Garde ta progression[\s\S]*Continuer avec un e-mail/);
   assert.equal(await page.locator(".bapple").count(), 0);
   assert.deepEqual(erreurs, []);
 });

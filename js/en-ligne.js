@@ -166,12 +166,60 @@
       return { etat: "recupere" };
     };
   }
+  // ---- Connexion par code e-mail (site et appli) ----
+  // 1. envoyerCode(email) : compte anonyme → on y rattache l'e-mail (même compte : rien n'est perdu).
+  //    Si l'e-mail appartient déjà à un compte Quatuor : on DEMANDE « Récupérer ta progression existante ? »,
+  //    puis on envoie un code de connexion à ce compte. Renvoie { mode: "lier" | "recuperer" | "annule" }.
+  // 2. verifierCode(email, code, mode) : vérifie le code ; en récupération, le compte anonyme orphelin est supprimé
+  //    et les grilles de cet appareil sont ajoutées au compte (synchro, meilleur résultat gardé).
+  const emailPris = e => !!e && (e.code === "email_exists" || e.code === "user_already_exists" || /already (been )?registered|already exists/i.test(e.message || ""));
+  function creerConnexionEmail(d) {
+    return {
+      async envoyerCode(email) {
+        const c = await d.client();
+        const { data: s } = await c.auth.getSession();
+        const session = s && s.session;
+        if (session && session.user && session.user.is_anonymous) {
+          const r = await c.auth.updateUser({ email });
+          if (!r.error) return { mode: "lier" };
+          if (!emailPris(r.error)) throw r.error;
+          if (!(await d.demanderRecuperation())) return { mode: "annule" };
+        }
+        const r = await c.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+        if (r.error) throw r.error;
+        return { mode: "recuperer" };
+      },
+      async verifierCode(email, code, mode) {
+        const c = await d.client();
+        const { data: s } = await c.auth.getSession();
+        const ancien = s && s.session;
+        const r = await c.auth.verifyOtp({ email, token: code, type: mode === "lier" ? "email_change" : "email" });
+        if (r.error) throw r.error;
+        const nouveau = r.data && (r.data.user || (r.data.session && r.data.session.user));
+        if (mode === "recuperer" && ancien && ancien.user && ancien.user.is_anonymous && nouveau && nouveau.id !== ancien.user.id) {
+          try { await d.supprimerAncien(ancien.access_token); } catch (e) { /* sans gravité */ }
+        }
+        await d.synchroniser();
+        return { etat: mode === "lier" ? "lie" : "recupere" };
+      }
+    };
+  }
+  // Message clair pour les erreurs d'e-mail
+  function messageErreurEmail(e) {
+    const c = (e && e.code) || "", m = (e && e.message) || "";
+    if (c === "over_email_send_rate_limit" || c === "over_request_rate_limit" || /rate limit|too many/i.test(m)) return "Trop de demandes : réessaie dans quelques minutes.";
+    if (c === "otp_expired" || /expired|invalid/i.test(m) && /otp|token|code/i.test(m)) return "Code incorrect ou expiré.";
+    if (c === "email_address_invalid" || c === "validation_failed" || /invalid.*email|email.*invalid/i.test(m)) return "Adresse e-mail invalide.";
+    if (c === "otp_disabled" || c === "signup_disabled" || /signups not allowed/i.test(m)) return "Aucun compte avec cet e-mail.";
+    return "Impossible pour l'instant : vérifie ta connexion et réessaie.";
+  }
+
   const nonceAleatoire = () => { const o = new Uint8Array(32); crypto.getRandomValues(o); return [...o].map(x => x.toString(16).padStart(2, "0")).join(""); };
 
   // ---- Démarrage dans le jeu ----
   // Charge supabase-js à la demande, ouvre (ou crée) le compte anonyme, puis synchronise :
   // au lancement, au retour du réseau, au retour dans l'appli, et après chaque partie ou favori (signaler()).
-  function demarrer({ ls, config, aujourdhui, apres, charger }) {
+  function demarrer({ ls, config, aujourdhui, apres, charger, natif }) {
     // Garde-fou : une clé secrète (sb_secret_… ou ancienne service_role) ne doit jamais être dans l'appli
     const cleSecrete = c => /^sb_secret_/.test(c) || (() => { try { return JSON.parse(atob(c.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).role === "service_role"; } catch (e) { return false; } })();
     if (config && config.supabaseCle && cleSecrete(config.supabaseCle)) console.error("Quatuor : clé SECRÈTE dans config-en-ligne.js, mode en ligne désactivé. Utilise la clé publishable.");
@@ -183,7 +231,8 @@
       if (sb) return sb;
       if (!window.supabase) await charger("vendor/supabase.js");
       sb = window.supabase.createClient(config.supabaseUrl, config.supabaseCle, {
-        auth: { storageKey: "quatuor-auth", persistSession: true, autoRefreshToken: true, detectSessionInUrl: false,
+        // Web : retour de la connexion Apple par redirection (flux PKCE, code dans l'adresse)
+        auth: { storageKey: "quatuor-auth", persistSession: true, autoRefreshToken: true, detectSessionInUrl: !natif, flowType: "pkce",
           storage: { getItem: k => ls.get(k), setItem: (k, v) => ls.set(k, v), removeItem: k => ls.del(k) } }
       });
       synchro = creerSynchro(apiSupabase(sb), { ls, aujourdhui, apres });
@@ -232,6 +281,57 @@
       return creerConnexionApple({ client: async () => { await assurerSession(); return client(); }, jetonApple, demanderRecuperation,
         synchroniser, supprimerAncien: supprimerCompte, nonce: nonceAleatoire })();
     }
+    // ---- Connexion par e-mail ----
+    const connexionEmail = demanderRecuperation => creerConnexionEmail({ client: async () => { await assurerSession(); return client(); },
+      demanderRecuperation, synchroniser, supprimerAncien: supprimerCompte });
+
+    // ---- Connexion Apple sur le site (redirection vers Apple puis retour sur le site) ----
+    // Activée par config.appleWeb (une fois le « Services ID » Apple configuré, voir SETUP-EN-LIGNE.md).
+    const appleWebDisponible = !!(pret && !natif && config.appleWeb);
+    const CLE_RETOUR = "quatuor-apple-web";
+    async function appleWeb(mode) {
+      const c = await client(); await assurerSession();
+      const { data } = await c.auth.getSession(); const session = data && data.session;
+      const retour = location.origin + location.pathname;
+      try { sessionStorage.setItem(CLE_RETOUR, JSON.stringify({ mode, ancien: session && session.user.is_anonymous ? session.access_token : null, at: Date.now() })); } catch (e) {}
+      const r = mode === "lier" ? await c.auth.linkIdentity({ provider: "apple", options: { redirectTo: retour } })
+        : await c.auth.signInWithOAuth({ provider: "apple", options: { redirectTo: retour } });
+      if (r.error) throw r.error;   // sinon, le navigateur part chez Apple
+    }
+    // Au retour d'Apple : { etat: "lie" | "recupere" | "deja_lie" | "erreur" } ou null s'il n'y a rien à traiter
+    async function retourAppleWeb() {
+      if (natif || !pret) return null;
+      let attente = null; try { attente = JSON.parse(sessionStorage.getItem(CLE_RETOUR) || "null"); } catch (e) {}
+      const q = new URLSearchParams(location.search), h = new URLSearchParams(location.hash.replace(/^#/, ""));
+      const erreur = q.get("error_code") || h.get("error_code") || q.get("error") || h.get("error");
+      const descr = q.get("error_description") || h.get("error_description") || "";
+      if (!attente && !erreur && !q.get("code")) return null;
+      const c = await client();
+      try { if (q.get("code") && c.auth.initialize) await c.auth.initialize(); } catch (e) {}
+      try { sessionStorage.removeItem(CLE_RETOUR); } catch (e) {}
+      try { window.history.replaceState(null, "", location.pathname); } catch (e) {}   // (window. : le jeu a sa propre variable « history »)
+      if (!attente || Date.now() - attente.at > 30 * 60000) return null;
+      if (erreur) return dejaLie({ code: erreur, message: descr }) ? { etat: "deja_lie" } : { etat: "erreur", message: descr };
+      const { data } = await c.auth.getSession(); const u = data && data.session && data.session.user;
+      if (!u) return { etat: "erreur" };
+      if (attente.mode === "recuperer" && attente.ancien && attente.ancien !== data.session.access_token) {
+        try { await supprimerCompte(attente.ancien); } catch (e) {}
+      }
+      await synchroniser();
+      return { etat: attente.mode === "lier" ? "lie" : "recupere" };
+    }
+
+    // ---- Se déconnecter : d'abord tout envoyer sur le compte, puis fermer la session ----
+    async function seDeconnecter() {
+      if (!pret) return;
+      if (!enLigne()) throw Object.assign(new Error("hors ligne"), { raison: "reseau" });
+      const r = await synchroniser();
+      if (!r || !r.ok) throw Object.assign(new Error("synchro"), { raison: "synchro" });
+      const c = await client();
+      try { await c.auth.signOut({ scope: "local" }); } catch (e) {}
+      ls.del("quatuor-auth");
+    }
+
     // État du compte (sans réseau : lu dans la session enregistrée)
     async function compte() {
       if (!pret) return null;
@@ -239,7 +339,7 @@
         const c = await client(); const { data } = await c.auth.getSession(); const u = data && data.session && data.session.user;
         if (!u) return null;
         const fournisseurs = (u.app_metadata && u.app_metadata.providers) || (u.identities || []).map(i => i.provider);
-        return { id: u.id, anonyme: !!u.is_anonymous, apple: fournisseurs.includes("apple"), email: u.email || "" };
+        return { id: u.id, anonyme: !!u.is_anonymous, apple: fournisseurs.includes("apple"), emailLie: fournisseurs.includes("email") && !!u.email, email: u.email || "" };
       } catch (e) { return null; }
     }
     // ---- Profil : pseudo et avatar ----
@@ -295,8 +395,9 @@
     }
 
     return { actif: pret, synchroniser, signaler, client, assurerSession, enLigne, appleDisponible, connexionApple, compte, supprimerCompte,
-      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur, rpc, amis, supprimerMonCompte };
+      verifierPseudo, majProfil, profilLocal, avecCompte, raisonErreur, rpc, amis, supprimerMonCompte,
+      connexionEmail, appleWebDisponible, appleWeb, retourAppleWeb, seDeconnecter };
   }
 
-  return { creerSynchro, apiSupabase, demarrer, creerConnexionApple, dejaLie };
+  return { creerSynchro, apiSupabase, demarrer, creerConnexionApple, dejaLie, creerConnexionEmail, messageErreurEmail, emailPris };
 });
