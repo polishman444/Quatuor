@@ -3,7 +3,9 @@
 // Supprime le compte du joueur qui l'appelle : son jeton (Authorization: Bearer …) est vérifié,
 // puis le compte d'authentification est supprimé avec l'API d'administration. Toutes ses données
 // (profil, résultats, favoris, amitiés, blocages, signalements, journal) sont effacées par ON DELETE CASCADE.
-// La clé d'administration (SUPABASE_SERVICE_ROLE_KEY) est fournie par Supabase à la fonction :
+// Le jeton est vérifié auprès du serveur d'authentification (getUser) : compatible avec les nouvelles
+// clés de signature JWT, l'option « Verify JWT » du tableau de bord peut donc être désactivée.
+// La clé d'administration (secret ou service_role) est fournie par Supabase à la fonction :
 // elle n'existe nulle part ailleurs, et jamais dans l'appli.
 // Déploiement : voir SETUP-EN-LIGNE.md (copier-coller dans le tableau de bord Supabase).
 // =====================================================================
@@ -29,9 +31,20 @@ export async function traiter(req: Request, admin: any): Promise<Response> {
   return reponse(200, { ok: true });
 }
 
+// Clé d'administration fournie par Supabase à la fonction : nouvelle clé « secret » (SUPABASE_SECRET_KEYS,
+// dictionnaire JSON) si elle existe, sinon l'ancienne « service_role ». Rien à configurer.
+export function cleAdmin(env: (nom: string) => string | undefined): string {
+  try {
+    const cles = JSON.parse(env("SUPABASE_SECRET_KEYS") || "{}");
+    const cle = cles.default || Object.values(cles)[0];
+    if (typeof cle === "string" && cle) return cle;
+  } catch (_e) { /* ancien format */ }
+  return env("SUPABASE_SERVICE_ROLE_KEY") || "";
+}
+
 if (typeof Deno !== "undefined") {
   const { createClient } = await import("jsr:@supabase/supabase-js@2");
-  const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+  const admin = createClient(Deno.env.get("SUPABASE_URL")!, cleAdmin(n => Deno.env.get(n)),
     { auth: { persistSession: false, autoRefreshToken: false } });
   Deno.serve((req: Request) => traiter(req, admin));
 }

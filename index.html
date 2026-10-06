@@ -1286,7 +1286,6 @@ const TUTO_ETAPES={
 function tutoAller(n){
   if(!tuto) return;
   tutoEtape=n; const E=TUTO_ETAPES[n]; updateHintUi();
-  stat("Tuto.etape",{etape:n});
   BULLE.ouvrir({mode:"spot",txt:fr(E.txt),cibles:E.cibles,bouton:E.bouton,
     ok:n===3?()=>tutoAller(hints<MAX_HINTS&&!done?4:5):n===6?endTuto:null,
     passer:n<6?endTuto:null});
@@ -2649,7 +2648,8 @@ function boot(){
 function lancer(){
   lireReglages(); appliquerReglages();
   migrateData(); migrerVersEnLigne(); recalculerStats();
-  stat("App.ouverture");
+  // Économe (offre gratuite TelemetryDeck) : une seule ouverture comptée par jour et par appareil
+  if(ls.get("quatuor-stats-ouverture")!==todayStr){ ls.set("quatuor-stats-ouverture",todayStr); stat("App.ouverture"); }
   cdTick();
   // Premier lancement : tutoriel guidé (marqué comme vu à la fin ou sur « Passer »)
   if(!ls.get("quatuor-tuto-done")) lancerTuto(); else showSkeleton();

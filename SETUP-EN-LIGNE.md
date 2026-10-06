@@ -52,13 +52,13 @@ conviennent : n'y touche pas.
 ## 4. Brancher l'appli sur le projet
 
 1. Menu **Project Settings** (roue dentée) → **Data API** : copie la **Project URL** (`https://xxxx.supabase.co`).
-2. **Project Settings → API Keys** : copie la clé **anon** (onglet *Legacy API keys*) ou la clé **publishable**
-   (`sb_publishable_…`). ⚠️ Pas la clé *service_role* ni *secret*.
+2. **Project Settings → API Keys** : copie la clé **publishable** (`sb_publishable_…`) — ou, sur un ancien projet, la clé
+   **anon**. ⚠️ Jamais la clé *secret* (`sb_secret_…`) ni *service_role* : l'appli refuse d'ailleurs de s'en servir.
 3. Sur GitHub, ouvre `config-en-ligne.js` → icône ✏️ (*Edit this file*) → remplis :
    ```js
    window.QUATUOR_CONFIG = {
      supabaseUrl: "https://xxxx.supabase.co",
-     supabaseCle: "eyJhbGciOi… ou sb_publishable_…",
+     supabaseCle: "sb_publishable_…",
      telemetryDeckAppId: ""
    };
    ```
@@ -110,14 +110,17 @@ Elle permet à un joueur de supprimer son compte depuis l'appli (exigence de l'A
 2. Nom de la fonction : `supprimer-compte` (exactement).
 3. Efface le code d'exemple, puis colle tout le contenu du fichier `supabase/functions/supprimer-compte/index.ts` du dépôt.
 4. **Deploy function**.
-5. Dans les réglages de la fonction (onglet **Details** / **Settings**), laisse **Verify JWT** (ou *Enforce JWT verification*) **activé**.
+5. Dans les réglages de la fonction (onglet **Details** / **Settings**), **désactive Verify JWT** (*Enforce JWT verification*).
+   Avec les nouvelles clés Supabase (publishable / secret), cette vérification automatique peut refuser les jetons des
+   joueurs ; la fonction fait elle-même une vérification plus stricte (auprès du serveur d'authentification) et refuse
+   tout appel sans jeton de joueur valide.
 
-La fonction utilise la clé d'administration que Supabase lui fournit automatiquement : tu n'as **rien** à copier.
+La fonction utilise la clé d'administration que Supabase lui fournit automatiquement (nouvelle clé *secret*, ou
+ancienne *service_role* si elle existe) : tu n'as **rien** à copier.
 
 Vérification : dans l'appli, Paramètres › Compte › Supprimer mon compte (avec un compte de test) ; dans
 **Authentication → Users**, l'utilisateur a disparu, et dans **Table Editor** ses lignes aussi.
-> Si la suppression échoue avec une erreur 401 alors que tout semble correct, désactive **Verify JWT** dans
-> les réglages de la fonction : elle vérifie elle-même le jeton du joueur.
+> Après une modification du fichier `index.ts` dans le dépôt, recolle-le dans l'éditeur de la fonction et redéploie.
 
 ## 7. Modération (signalements, pseudos)
 
@@ -138,12 +141,10 @@ Vérification : dans l'appli, Paramètres › Compte › Supprimer mon compte (a
 
 Limites anti-abus déjà en place : 20 demandes d'ami par jour (codes essayés compris), 200 amis, 10 signalements
 et 10 changements de pseudo par jour, 50 blocages par jour, 500 favoris, tailles de champs contrôlées.
-Ménage à faire de temps en temps (par exemple une fois par mois, dans **SQL Editor**), comme annoncé dans la
-politique de confidentialité :
-```sql
-delete from journal_actions where le < now() - interval '7 days';
-delete from signalements where le < now() - interval '12 months';
-```
+**Ménage automatique** (pg_cron) : lance **une fois** le fichier `supabase/migrations/0005_menage_automatique.sql`
+dans **SQL Editor**. Chaque 1er du mois à 3 h 17 (UTC), le journal des actions de plus de 7 jours et les signalements de
+plus de 12 mois sont effacés, comme annoncé dans la politique de confidentialité. Rien d'autre à faire.
+Vérification : `select jobname, schedule, active from cron.job;` → une ligne `quatuor-menage-mensuel`.
 
 ---
 
@@ -155,7 +156,7 @@ delete from signalements where le < now() - interval '12 months';
 4. Mets-le dans `config-en-ligne.js` → `telemetryDeckAppId: "…"` (sur GitHub, ✏️ puis *Commit changes*), ou envoie-le-moi :
    ce n'est pas un secret.
 
-Événements envoyés : `App.ouverture`, `Tuto.vu` / `Tuto.etape` / `Tuto.passe` / `Tuto.termine`,
+Événements envoyés : `App.ouverture` (une fois par jour et par appareil), `Tuto.vu` / `Tuto.passe` (avec l'étape) / `Tuto.termine`,
 `Grille.commencee` / `Grille.reussie` / `Grille.ratee` (id de grille, type, erreurs, indices, durée, n° d'essai),
 `Partage`, `Ami.ajoute`, `Compte.apple`. Jamais de pseudo, d'email, de mot de grille ni d'identifiant de compte.
 

@@ -172,7 +172,10 @@
   // Charge supabase-js à la demande, ouvre (ou crée) le compte anonyme, puis synchronise :
   // au lancement, au retour du réseau, au retour dans l'appli, et après chaque partie ou favori (signaler()).
   function demarrer({ ls, config, aujourdhui, apres, charger }) {
-    const pret = !!(config && config.supabaseUrl && config.supabaseCle);
+    // Garde-fou : une clé secrète (sb_secret_… ou ancienne service_role) ne doit jamais être dans l'appli
+    const cleSecrete = c => /^sb_secret_/.test(c) || (() => { try { return JSON.parse(atob(c.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).role === "service_role"; } catch (e) { return false; } })();
+    if (config && config.supabaseCle && cleSecrete(config.supabaseCle)) console.error("Quatuor : clé SECRÈTE dans config-en-ligne.js, mode en ligne désactivé. Utilise la clé publishable.");
+    const pret = !!(config && config.supabaseUrl && config.supabaseCle && !cleSecrete(config.supabaseCle));
     let sb = null, synchro = null, minuteur = 0, connexionEnCours = null;
     const enLigne = () => typeof navigator === "undefined" || navigator.onLine !== false;
 

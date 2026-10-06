@@ -21,13 +21,13 @@ workflows:
       node: 22
       xcode: latest
     triggering:
-      # Lancement manuel par défaut (bouton « Start new build »).
-      # Pour compiler à chaque envoi sur main, décommenter :
-      # events:
-      #   - push
-      # branch_patterns:
-      #   - pattern: main
-      #     include: true
+      # Lancement manuel (bouton « Start new build »), et automatique à chaque envoi sur la branche
+      # du mode en ligne (version 1.2). Pour compiler aussi à chaque envoi sur main, ajouter « main ».
+      events:
+        - push
+      branch_patterns:
+        - pattern: claude/nifty-ptolemy-f4f4oe
+          include: true
       cancel_previous_builds: true
     scripts:
       - name: Installation des dépendances

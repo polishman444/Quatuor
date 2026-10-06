@@ -55,7 +55,7 @@ test("dans le jeu : ouverture, tuto, grille commencée/réussie, partage ; puis 
   await page.waitForFunction(() => document.querySelector("#toast").textContent === "Copié !");
   await page.evaluate(() => STATS.vider());
   const types = signaux.map(s => s.type);
-  for (const ty of ["App.ouverture", "Tuto.vu", "Tuto.etape", "Tuto.passe", "Grille.commencee", "Grille.reussie", "Partage"]) assert.ok(types.includes(ty), ty);
+  for (const ty of ["App.ouverture", "Tuto.vu", "Tuto.passe", "Grille.commencee", "Grille.reussie", "Partage"]) assert.ok(types.includes(ty), ty);
   const fin = signaux.find(s => s.type === "Grille.reussie").payload;
   assert.deepEqual(Object.keys(fin).sort(), ["duree", "erreurs", "essai", "grille", "indices", "plateforme", "typeGrille", "version"]);
   assert.equal(fin.typeGrille, "jour"); assert.equal(signaux[0].isTestMode, "true");

@@ -3,7 +3,8 @@
 "use strict";
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { pw, serveur, ouvrir, jouerGrille } = require("./aide-navigateur.js");
+const { pw, serveur, ouvrir, jouerGrille, jourN } = require("./aide-navigateur.js");
+const HIER = jourN() - 1;   // n° du jour d'hier (les séries restent « en cours » quel que soit le jour du test)
 const { creerBase } = require("./aide-pg.js");
 const { fauxSupabase } = require("./faux-supabase.js");
 const { upsert } = require("./aide-synchro.js");
@@ -30,7 +31,7 @@ async function contexte(t, { appleId, donnees = {} } = {}) {
 const attendre = async (fn, ms = 15000) => { const t0 = Date.now(); for (;;) { const v = await fn(); if (v) return v; if (Date.now() - t0 > ms) throw new Error("délai dépassé"); await new Promise(r => setTimeout(r, 100)); } };
 
 test("lancement : compte anonyme créé sans rien demander, progression envoyée", { skip: !pw && "Playwright indisponible" }, async t => {
-  const { base, faux, ouvrirPage } = await contexte(t, { donnees: { quatuor: { played: 3, wins: 3, streak: 3, best: 3, lastPlayed: 4, lastWin: 4 },
+  const { base, faux, ouvrirPage } = await contexte(t, { donnees: { quatuor: { played: 3, wins: 3, streak: 3, best: 3, lastPlayed: HIER, lastWin: HIER },
     "quatuor-res": { g001: { win: true, mistakes: 0, tries: 1 } }, "quatuor-migr": "1" } });
   const { page, erreurs } = await ouvrirPage();
   const uid = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
@@ -88,7 +89,7 @@ test("iOS, 2e appareil : « Récupérer ta progression existante ? » puis progr
 });
 
 test("onglet Moi : pseudo choisi au 1er passage (filtre, unicité), avatar, code ami copié, séries", { skip: !pw && "Playwright indisponible" }, async t => {
-  const { base, faux, ouvrirPage } = await contexte(t, { donnees: { quatuor: { played: 5, wins: 5, streak: 2, best: 4, lastPlayed: 4, lastWin: 4 }, "quatuor-migr": "1" } });
+  const { base, faux, ouvrirPage } = await contexte(t, { donnees: { quatuor: { played: 5, wins: 5, streak: 2, best: 4, lastPlayed: HIER, lastWin: HIER }, "quatuor-migr": "1" } });
   // un autre joueur a déjà le pseudo « Bob »
   const autre = await faux.creerCompte(); await base.en(autre, "select public.assurer_profil()");
   await base.en(autre, "update public.profils set pseudo = 'Bob' where id = $1", [autre]);
@@ -254,7 +255,7 @@ test("sécurité : signaler et bloquer depuis la fiche d'un ami, puis débloquer
 test("supprimer mon compte : double confirmation, plus aucune donnée serveur, appli remise à zéro", { skip: !pw && "Playwright indisponible" }, async t => {
   const { base, faux, ouvrirPage } = await contexte(t, { appleId: "apple-77" });
   const B = await autreJoueur(base, faux, "Bruno");
-  const { page, erreurs } = await ouvrirPage({ quatuor: { played: 3, wins: 3, streak: 3, best: 3, lastPlayed: 4, lastWin: 4 }, "quatuor-migr": "1",
+  const { page, erreurs } = await ouvrirPage({ quatuor: { played: 3, wins: 3, streak: 3, best: 3, lastPlayed: HIER, lastWin: HIER }, "quatuor-migr": "1",
     "quatuor-favs": [{ id: "g001:X", grid: "g001", num: 1, name: "X", words: ["a"], fact: "f", lvl: 0, at: 1 }] });
   const A = await attendre(() => faux.journal.find(x => x[0] === "anonyme")?.[1]);
   await page.locator('.tabs [data-tab="moi"]').click();
