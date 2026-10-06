@@ -77,7 +77,11 @@ Vérification : ouvre le jeu, joue une grille, puis dans Supabase **Table Editor
 2. Touche l'identifiant **fr.playquatuor.app**.
 3. Dans la liste *Capabilities*, coche **Sign In with Apple** (laisse *Enable as a primary App ID*) → **Save** → **Confirm**.
 4. Menu **Profiles** : le profil *App Store* de Quatuor apparaît maintenant **Invalid** (il ne contient pas la nouvelle capacité).
-   Touche-le → **Remove**. Pas d'inquiétude : Codemagic en recrée un automatiquement au prochain build.
+   Touche-le → **Remove**, puis recrée-le avec le **+** bleu : *App Store Connect* → `fr.playquatuor.app` → certificat
+   *Apple Distribution* → nom `Quatuor App Store` → **Generate**. Le nouveau profil inclut Sign In with Apple.
+5. **Codemagic garde sa propre copie du profil** : *Teams* → *codemagic.yaml settings* → *Code signing identities* →
+   onglet *iOS provisioning profiles* → supprime l'ancien `Quatuor App Store` (🗑️), puis **Fetch profiles** → clé
+   `Quatuor App Store Connect` → coche le nouveau `Quatuor App Store` → **Download selected**.
 
 > Sans ces étapes, le build Codemagic échoue avec un message du type
 > *Provisioning profile doesn't include the com.apple.developer.applesignin entitlement*.
