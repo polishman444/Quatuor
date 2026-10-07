@@ -12,7 +12,7 @@ Ces réponses correspondent exactement à ce que fait la version 1.2 (mode en li
 
 | Catégorie (App Store) | Type | Pourquoi |
 |---|---|---|
-| **Coordonnées** (*Contact Info*) | **Adresse e-mail** (*Email Address*) | Fournie par Apple seulement si le joueur utilise « Se connecter avec Apple » (souvent une adresse relais) |
+| **Coordonnées** (*Contact Info*) | **Adresse e-mail** (*Email Address*) | Seulement si le joueur se connecte : fournie par Apple (souvent une adresse relais) ou saisie pour recevoir un code de connexion |
 | **Identifiants** (*Identifiers*) | **Identifiant utilisateur** (*User ID*) | Identifiant technique du compte Quatuor (anonyme) |
 | **Contenu utilisateur** (*User Content*) | **Contenu de jeu** (*Gameplay Content*) | Résultats par grille, série, favoris |
 | **Contenu utilisateur** (*User Content*) | **Autre contenu utilisateur** (*Other User Content*) | Pseudo, avatar, liste d'amis, signalements |
@@ -40,8 +40,8 @@ Résultat affiché sur la fiche : *Données liées à vous* : Coordonnées, Cont
 - **Suivi / App Tracking Transparency** : l'app ne suit pas les joueurs → pas de fenêtre ATT, réponse « Non ».
 - **Connexion à un compte pour la revue** (*Sign-in required*) : **Non** — le compte est créé automatiquement,
   rien n'est à saisir. Note pour l'équipe de revue (*Review Notes*), à copier :
-  > No login is required: an anonymous account is created automatically. Sign in with Apple is optional
-  > (Settings › Compte, or the "Moi" tab). To test friends, open the "Moi" tab, choose a nickname, then add a friend
+  > No login is required: an anonymous account is created automatically. Sign in with Apple or with an
+  > email code is optional (Settings › Compte, or the "Moi" tab); "Se déconnecter" signs out. To test friends, open the "Moi" tab, choose a nickname, then add a friend
   > with a friend code (two devices or simulators). Account deletion: Settings › Compte › Supprimer mon compte
   > (double confirmation; deletes all server data). Users can block and report players from a friend's card;
   > nicknames are filtered automatically and reports are reviewed within 24 hours.
@@ -51,5 +51,5 @@ Résultat affiché sur la fiche : *Données liées à vous* : Coordonnées, Cont
 - **Classification par âge** (*Age Rating*) : si le questionnaire demande la présence de contenu généré par les
   utilisateurs ou d'interactions entre utilisateurs, réponds **Oui** (pseudos visibles par les amis), **sans**
   messagerie ni discussion. Aucun autre changement par rapport à la version précédente.
-- **Se connecter avec Apple** : proposé comme seule connexion, conforme à la règle 4.8.
+- **Se connecter avec Apple** : proposé à côté de la connexion par code e-mail (sans réseau social tiers), conforme à la règle 4.8.
 - **Chiffrement** : `ITSAppUsesNonExemptEncryption = false` est déjà dans l'app (HTTPS standard uniquement).

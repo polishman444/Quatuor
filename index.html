@@ -2574,7 +2574,7 @@ let rt; addEventListener("resize",()=>{ clearTimeout(rt); rt=setTimeout(()=>docu
 function chargerScript(src){ return new Promise((ok,ko)=>{ const s=document.createElement("script"); s.src=src; s.async=true; s.onload=ok; s.onerror=()=>ko(new Error("chargement de "+src)); document.head.appendChild(s); }); }
 const EN_LIGNE=(()=>{ try{
   if(!window.QuatuorEnLigne||!QC) return null;
-  const e=QuatuorEnLigne.demarrer({ls,config:window.QUATUOR_CONFIG,aujourdhui:()=>todayStr,charger:chargerScript,apres:apresSynchro});
+  const e=QuatuorEnLigne.demarrer({ls,config:window.QUATUOR_CONFIG,aujourdhui:()=>todayStr,charger:chargerScript,apres:apresSynchro,natif:IS_NATIVE});
   return e.actif?e:null; }catch(err){ console.warn("Quatuor : mode en ligne indisponible",err); return null; } })();
 // Après une synchronisation : l'affichage suit les données reçues (autre appareil)
 function apresSynchro(r){
@@ -2584,34 +2584,123 @@ function apresSynchro(r){
   planifierRappels();
 }
 
-// ---- Compte : connexion avec Apple (Paramètres › Compte et onglet Moi) ----
-// Appli iOS : fenêtre native Apple, puis liaison au compte anonyme (progression conservée).
-// Web : pas de bouton (la connexion Apple sur le web demande une clé secrète à renouveler tous les 6 mois) ;
-// la progression y est tout de même sauvegardée automatiquement sur le compte anonyme.
+// ---- Compte : se connecter (Apple ou code e-mail), se déconnecter (Paramètres › Compte et onglet Moi) ----
+// Compte anonyme : « Se connecter avec Apple » (appli iOS ; site si config.appleWeb) et « Continuer avec un e-mail ».
+// Le compte anonyme est relié (même compte, rien n'est perdu) ; si l'Apple ou l'e-mail appartient déjà à un compte
+// Quatuor, on demande « Récupérer ta progression existante ? ». Compte relié : « Se déconnecter » (appareil remis à zéro).
 const APPLE_MSG="Garde ta progression, même si tu changes de téléphone.";
+const LOGO_APPLE='<svg viewBox="0 0 17 20" width="16" height="19" aria-hidden="true"><path fill="currentColor" d="M14.1 10.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9 0 0-2.7-1-2.7-4.1zM11.6 3c.7-.9 1.2-2 1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.2.1 2.3-.6 3.1-1.5z"/></svg>';
 let etatCompte=null;
 async function majCompteUi(){
   const zones=[...document.querySelectorAll("[data-compte]")]; if(!EN_LIGNE||!zones.length) return;
   etatCompte=await EN_LIGNE.compte();
+  const relie=etatCompte&&!etatCompte.anonyme&&(etatCompte.apple||etatCompte.emailLie);
+  const apple=EN_LIGNE.appleDisponible||EN_LIGNE.appleWebDisponible;
   zones.forEach(z=>{
     const ou=z.dataset.compte;
-    if(etatCompte&&etatCompte.apple) z.innerHTML=ou==="moi"?"":`<div class="compte"><div class="cok"><span class="ic">✓</span><span><b>Connecté avec Apple</b><small>${etatCompte.email?esc(etatCompte.email)+" · ":""}Ta progression est sauvegardée</small></span></div></div>`;
-    else if(EN_LIGNE.appleDisponible) z.innerHTML=`<div class="compte"><p>${fr(APPLE_MSG)}</p><button class="bapple" data-apple><span class="lg" aria-hidden="true"></span> Se connecter avec Apple</button></div>`;
-    else z.innerHTML=ou==="moi"?"":`<div class="rrow"><span><b>☁️ Sauvegarde automatique</b><small>Ta progression est sauvegardée en ligne. La connexion avec Apple se fait depuis l'appli iPhone.</small></span></div>`;
+    if(relie) z.innerHTML=ou==="moi"?"":`<div class="compte"><div class="cok"><span class="ic">✓</span><span><b>Connecté ${etatCompte.apple?"avec Apple":"par e-mail"}</b><small>${etatCompte.email?esc(etatCompte.email)+" · ":""}Ta progression est sauvegardée</small></span></div>
+      <button class="pill soft full" data-deco style="margin:12px 0 0">Se déconnecter</button></div>`;
+    else z.innerHTML=`<div class="compte"><p>${fr(APPLE_MSG)}</p>
+      ${apple?`<button class="bapple" data-apple>${LOGO_APPLE} Se connecter avec Apple</button>`:""}
+      <button class="pill soft full" data-email style="margin:${apple?"8px":"0"} 0 0">✉️ Continuer avec un e-mail</button>
+      <small>Déjà un compte ? Le même moyen te permet de retrouver ta progression.</small></div>`;
   });
   document.querySelectorAll("[data-apple]").forEach(b=>b.onclick=()=>seConnecterApple(b));
+  document.querySelectorAll("[data-email]").forEach(b=>b.onclick=connexionEmail);
+  document.querySelectorAll("[data-deco]").forEach(b=>b.onclick=seDeconnecter);
 }
-// « Ce compte Apple a déjà une progression » : on demande avant de changer de compte
-function demanderRecuperation(){
+// « Ce compte Apple / cet e-mail a déjà une progression » : on demande avant de changer de compte
+function demanderRecuperation(quoi="apple"){
   return new Promise(ok=>{
     let rep=false;
     openSheet(`<div class="fini"><div class="big">☁️</div><h2>Récupérer ta progression existante ?</h2>
-      <p>Ce compte Apple est déjà lié à une progression Quatuor (sans doute sur un autre appareil).</p>
+      <p>${quoi==="email"?"Cette adresse e-mail":"Ce compte Apple"} est déjà lié à une progression Quatuor (sans doute sur un autre appareil).</p>
       <p>Si tu la récupères, les grilles jouées sur cet appareil y seront ajoutées (le meilleur résultat est gardé). Le pseudo et les amis seront ceux de ce compte.</p>
       <button class="pill main full" id="recOui">Récupérer ma progression</button><button class="pill soft full" id="recNon">Annuler</button></div>`,()=>ok(rep));
     $("recOui").onclick=()=>{ rep=true; closeSheet(); };
     $("recNon").onclick=closeSheet;
   });
+}
+// Connexion par code e-mail : adresse → (question si le compte existe déjà) → code à 6 chiffres
+function connexionEmail(){
+  buzz(8);
+  if(!EN_LIGNE.enLigne()){ toast("Connecte-toi à Internet pour continuer"); return; }
+  const flux=EN_LIGNE.connexionEmail(()=>demanderRecuperation("email"));
+  const etape1=(valeur="")=>{
+    openSheet(`<h2>Continuer avec un e-mail</h2><p>Tu recevras un code à 6 chiffres. Pas de mot de passe.</p>
+      <div class="chrow"><input class="champ" id="emChamp" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="toi@exemple.fr" value="${esc(valeur)}" aria-label="Adresse e-mail"></div>
+      <p class="chmsg" id="emMsg" aria-live="polite"></p>
+      <button class="pill main full" id="emOk">Recevoir un code</button><button class="pill soft full" id="emNon">Annuler</button>`);
+    const ch=$("emChamp"), msg=$("emMsg"), ok=$("emOk");
+    $("emNon").onclick=closeSheet;
+    ch.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); ok.click(); } };
+    ok.onclick=async()=>{
+      const email=ch.value.trim().toLowerCase();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.className="chmsg ko"; msg.textContent="Adresse e-mail invalide."; return; }
+      ok.disabled=true; msg.className="chmsg"; msg.textContent="Envoi…";
+      try{
+        const r=await flux.envoyerCode(email);
+        if(r.mode==="annule") return;   // (la fenêtre de question s'est fermée)
+        etape2(email,r.mode);
+      }catch(e){ console.warn("Quatuor : envoi du code impossible",e);
+        if(!$("emMsg")) etape1(email);
+        $("emMsg").className="chmsg ko"; $("emMsg").textContent=QuatuorEnLigne.messageErreurEmail(e); $("emOk").disabled=false; }
+    };
+    setTimeout(()=>ch.focus(),400);
+  };
+  const etape2=(email,mode)=>{
+    openSheet(`<h2>Code envoyé ✉️</h2><p>Saisis le code reçu à <b>${esc(email)}</b> (pense à regarder les courriers indésirables).</p>
+      <div class="chrow"><input class="champ code" id="emCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="123456" aria-label="Code reçu par e-mail"></div>
+      <p class="chmsg" id="emMsg" aria-live="polite"></p>
+      <button class="pill main full" id="emOk" disabled>Valider</button><button class="pill soft full" id="emRet">Changer d'adresse</button>`);
+    const ch=$("emCode"), msg=$("emMsg"), ok=$("emOk");
+    ch.oninput=()=>{ ch.value=ch.value.replace(/\D/g,""); ok.disabled=ch.value.length<6; };
+    ch.onkeydown=e=>{ if(e.key==="Enter"&&!ok.disabled){ e.preventDefault(); ok.click(); } };
+    $("emRet").onclick=()=>etape1(email);
+    ok.onclick=async()=>{
+      ok.disabled=true; msg.className="chmsg"; msg.textContent="Vérification…";
+      try{
+        const r=await flux.verifierCode(email,ch.value,mode);
+        closeSheet(); buzz(10);
+        if(r.etat==="lie"){ toast("Connecté par e-mail ✓"); stat("Compte.email",{issue:"liaison"}); majCompteUi(); }
+        else { toast("Progression récupérée ✓"); stat("Compte.email",{issue:"recuperation"}); if(STATS) STATS.vider(); setTimeout(()=>location.reload(),900); }
+      }catch(e){ msg.className="chmsg ko"; msg.textContent=QuatuorEnLigne.messageErreurEmail(e); ok.disabled=false; }
+    };
+    setTimeout(()=>ch.focus(),400);
+  };
+  etape1();
+}
+// Se déconnecter : la progression reste sur le compte ; l'appareil repart à zéro (réglages et tuto conservés)
+function seDeconnecter(){
+  buzz(8);
+  openSheet(`<h2>Se déconnecter ?</h2><p>Ta progression reste sauvegardée sur ton compte : tu la retrouveras en te reconnectant.
+    Sur cet appareil, le jeu repartira à zéro (tes réglages sont conservés).</p>
+    <button class="pill main full" id="decoOui">Se déconnecter</button><button class="pill soft full" id="decoNon">Annuler</button>`);
+  $("decoNon").onclick=closeSheet;
+  $("decoOui").onclick=async()=>{
+    const b=$("decoOui"); b.disabled=true; b.textContent="Sauvegarde…";
+    try{ await EN_LIGNE.seDeconnecter(); }
+    catch(e){ b.disabled=false; b.textContent="Se déconnecter";
+      toast(e&&e.raison==="reseau"?"Connecte-toi à Internet pour te déconnecter":"Sauvegarde impossible pour l'instant : réessaie"); return; }
+    await effacerDonneesJoueur();
+    location.reload();
+  };
+}
+// Données personnelles de cet appareil (progression, favoris, profil, session) ; réglages et tuto conservés
+async function effacerDonneesJoueur(){
+  const cles=["quatuor-res","quatuor","quatuor-encours","quatuor-bonus","quatuor-favs","quatuor-favs-suppr","quatuor-base","quatuor-sync","quatuor-profil","quatuor-auth"];
+  cles.forEach(k=>ls.del(k));
+  if(Prefs) await Promise.all(cles.map(key=>Prefs.remove({key}).catch(()=>{})));
+}
+// Site : retour de la connexion Apple (redirection)
+async function traiterRetourAppleWeb(){
+  if(!EN_LIGNE||IS_NATIVE) return;
+  let r=null; try{ r=await EN_LIGNE.retourAppleWeb(); }catch(e){ console.warn("Quatuor : retour Apple",e); }
+  if(!r) return;
+  if(r.etat==="lie"){ toast("Connecté avec Apple ✓"); stat("Compte.apple",{issue:"liaison"}); majCompteUi(); }
+  else if(r.etat==="recupere"){ toast("Progression récupérée ✓"); stat("Compte.apple",{issue:"recuperation"}); setTimeout(()=>location.reload(),900); }
+  else if(r.etat==="deja_lie"){ if(await demanderRecuperation("apple")) EN_LIGNE.appleWeb("recuperer").catch(()=>toast("Connexion impossible, réessaie plus tard")); }
+  else toast("Connexion Apple impossible, réessaie plus tard");
 }
 let appleEnCours=false;
 async function seConnecterApple(btn){
@@ -2619,7 +2708,8 @@ async function seConnecterApple(btn){
   if(!EN_LIGNE.enLigne()){ toast("Connecte-toi à Internet pour continuer"); return; }
   appleEnCours=true; buzz(10); if(btn) btn.disabled=true;
   try{
-    const r=await EN_LIGNE.connexionApple(demanderRecuperation);
+    if(!IS_NATIVE){ await EN_LIGNE.appleWeb("lier"); return; }   // le navigateur part chez Apple, puis revient (traiterRetourAppleWeb)
+    const r=await EN_LIGNE.connexionApple(()=>demanderRecuperation("apple"));
     if(r.etat==="lie"){ toast("Connecté avec Apple ✓"); stat("Compte.apple",{issue:"liaison"}); }
     else if(r.etat==="recupere"){ toast("Progression récupérée ✓"); stat("Compte.apple",{issue:"recuperation"}); if(STATS) STATS.vider(); setTimeout(()=>location.reload(),900); }
   }catch(e){
@@ -2642,6 +2732,7 @@ function boot(){
     }
     planifierRappels();
     if(EN_LIGNE) EN_LIGNE.synchroniser();
+    traiterRetourAppleWeb();
     return true;
   });
 }

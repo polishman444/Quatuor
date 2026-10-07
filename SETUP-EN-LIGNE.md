@@ -92,20 +92,82 @@ Vérification : ouvre le jeu, joue une grille, puis dans Supabase **Table Editor
 3. Laisse **Secret Key (for OAuth)** vide : il ne sert qu'à la connexion Apple sur le web, que nous n'utilisons pas.
 4. **Save**.
 
-### Pourquoi pas de bouton Apple sur le site web ?
-Sur le web, Apple impose un « Services ID », la vérification du domaine et surtout une **clé secrète qui expire tous les 6 mois**
-et se régénère avec un script sur ordinateur. C'est trop fragile pour un projet géré depuis un iPad : le bouton est donc
-**masqué sur le web**. La progression web reste sauvegardée automatiquement (compte anonyme du navigateur).
+### 5c. Indispensable : autoriser la liaison de comptes
+**Authentication → Sign In / Providers** → section *User Signups* → active **Allow manual linking** → **Save**.
+Sans ce réglage, « Se connecter avec Apple » ne peut pas rattacher Apple au compte du joueur (erreur *manual linking disabled*).
+
+### 5d. Apple sur le site playquatuor.fr (facultatif, ~20 min)
+Le bouton Apple du site reste masqué tant que ces étapes ne sont pas faites. Ton Team ID Apple est `RF62X942X2`.
+1. **developer.apple.com → Identifiers → +** → **Services IDs** → *Description* `Quatuor web`, *Identifier* `fr.playquatuor.web`
+   → **Continue** → **Register**.
+2. Ouvre `fr.playquatuor.web` → coche **Sign In with Apple** → **Configure** :
+   - *Primary App ID* : `fr.playquatuor.app` ;
+   - *Domains and Subdomains* : `lnoorsfuoczfbaefgppe.supabase.co` ;
+   - *Return URLs* : `https://lnoorsfuoczfbaefgppe.supabase.co/auth/v1/callback`
+   → **Next** → **Done** → **Continue** → **Save**.
+3. **Keys → +** → nom `Quatuor Apple web`, coche **Sign In with Apple** → **Configure** → `fr.playquatuor.app` → **Save**
+   → **Continue** → **Register** → **Download** (le fichier `.p8` ne se télécharge **qu'une fois** : garde-le dans Fichiers,
+   jamais sur GitHub) ; note le **Key ID**.
+4. Génère la « clé secrète » : sur https://supabase.com/docs/guides/auth/social-login/auth-apple, outil
+   *Generate a client secret* (en bas de la section « Configuration ») : Team ID `RF62X942X2`, Key ID, Services ID
+   `fr.playquatuor.web`, choisis le fichier `.p8` → copie le résultat (une longue chaîne `eyJ…`).
+5. Supabase → **Authentication → Sign In / Providers → Apple** :
+   - *Client IDs* : `fr.playquatuor.app,fr.playquatuor.web` ;
+   - *Secret Key (for OAuth)* : la chaîne de l'étape 4 → **Save**.
+6. Supabase → **Authentication → URL Configuration** : *Site URL* `https://playquatuor.fr` ; dans *Redirect URLs*, ajoute
+   `https://playquatuor.fr/**` → **Save**.
+7. Dis-le-moi (ou mets `appleWeb: true` dans `config-en-ligne.js`) : le bouton apparaît alors sur le site.
+
+> ⏰ **Tous les 6 mois**, la clé secrète expire : refais l'étape 4 puis colle la nouvelle chaîne (étape 5).
+> Mets-toi un rappel dans ton calendrier. Si tu oublies, seule la connexion Apple **du site** s'arrête (l'appli iOS continue).
 
 ### Comment ça marche pour le joueur
-- 1er appareil : « Se connecter avec Apple » relie son compte (anonyme) à Apple → même compte, rien ne change.
+- Se connecter (Apple ou e-mail) relie son compte anonyme → même compte, rien ne change.
 - Nouvel appareil : l'appli crée d'abord un compte anonyme ; à la connexion Apple, elle **demande**
   « Récupérer ta progression existante ? ». Oui → il retrouve sa progression (les grilles jouées sur le nouvel appareil
   y sont ajoutées, meilleur résultat gardé) ; le compte anonyme vide est supprimé (fonction de l'étape 7).
 
 ---
 
-## 6. Fonction serveur « supprimer-compte » (obligatoire pour Apple)
+## 5 bis. Connexion par code e-mail (site et appli)
+
+Le joueur tape son e-mail et reçoit un **code à 6 chiffres** (pas de mot de passe). L'envoi d'e-mails intégré à Supabase est
+limité à quelques e-mails par heure : il faut brancher un service d'envoi gratuit, **Resend** (3 000 e-mails/mois gratuits).
+
+### a. Resend (envoi des e-mails)
+1. **https://resend.com** → *Sign up* (avec GitHub, c'est le plus simple).
+2. **Domains → Add Domain** → `playquatuor.fr` → région *Ireland (eu-west-1)*.
+3. Resend affiche 3 ou 4 enregistrements DNS (TXT, MX) : ajoute-les chez le gestionnaire de ton nom de domaine
+   (là où tu as acheté playquatuor.fr : OVH, Gandi, GoDaddy… → zone DNS → ajouter une entrée), en copiant exactement
+   *Type*, *Name* et *Value*. Ne touche pas aux entrées existantes de GitHub Pages.
+4. Reviens sur Resend → **Verify DNS Records** (cela peut prendre de quelques minutes à quelques heures).
+5. **API Keys → Create API Key** → nom `supabase`, permission *Sending access* → copie la clé (`re_…`, affichée une seule fois).
+
+### b. Supabase : brancher Resend
+**Authentication → Emails → SMTP Settings** → active **Enable custom SMTP** :
+- *Sender email* : `noreply@playquatuor.fr` — *Sender name* : `Quatuor`
+- *Host* : `smtp.resend.com` — *Port* : `465` — *Username* : `resend` — *Password* : la clé `re_…`
+→ **Save**. Puis **Authentication → Rate Limits** → *Rate limit for sending emails* : `100` par heure → **Save**.
+
+### c. Supabase : modèles d'e-mail avec le code
+**Authentication → Emails → Templates**. Pour **Magic Link** *et* pour **Change Email Address**, remplace :
+- *Subject* : `Ton code Quatuor : {{ .Token }}`
+- *Body* :
+```html
+<h2>Ton code Quatuor</h2>
+<p>Voici ton code de connexion :</p>
+<p style="font-size:32px;font-weight:bold;letter-spacing:6px">{{ .Token }}</p>
+<p>Il est valable une heure. Si tu n'as rien demandé, ignore cet e-mail.</p>
+```
+→ **Save** pour chacun. (Sans `{{ .Token }}`, l'e-mail contiendrait un lien au lieu du code, et la connexion échouerait.)
+
+### d. Vérifier
+**Authentication → Sign In / Providers → Email** : *Enable Email provider* activé, *Confirm email* activé, *Email OTP length* `6`.
+Puis sur le site : Paramètres › Compte › **Continuer avec un e-mail** → tu reçois le code → « Connecté par e-mail ».
+
+---
+
+## 6. Fonction serveur « supprimer-compte » (obligatoire)
 
 Elle permet à un joueur de supprimer son compte depuis l'appli (exigence de l'App Store) et sert aussi
 à supprimer le compte anonyme vide quand un joueur récupère sa progression Apple.

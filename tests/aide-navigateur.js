@@ -34,7 +34,7 @@ async function ouvrir(nav, url, donnees, { route, config, ctx } = {}) {
   });
   // Bulles d'aide contextuelles déjà vues (sinon elles peuvent recouvrir un bouton pendant le test)
   donnees = { ...Object.fromEntries(["bonus", "indice", "themes", "serie", "moi"].map(b => ["quatuor-bulle-" + b, "1"])), ...donnees };
-  await page.addInitScript(d => { if (!sessionStorage.getItem("init")) { sessionStorage.setItem("init", "1");
+  await page.addInitScript(d => { let deja = true; try { deja = !!sessionStorage.getItem("init"); } catch (e) {} if (!deja) { sessionStorage.setItem("init", "1");
     for (const [k, v] of Object.entries(d)) localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v)); } }, donnees);
   await page.goto(url);
   await page.waitForFunction(() => typeof GRIDS !== "undefined" && GRIDS.length > 0 && document.querySelectorAll("#grid .tile:not(.sk)").length + document.querySelectorAll("#solved .solved").length > 0);
