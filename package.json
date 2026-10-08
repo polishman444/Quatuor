@@ -1,6 +1,6 @@
 {
   "name": "quatuor",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "private": true,
   "description": "Quatuor : le jeu quotidien de culture G (PWA + appli iOS via Capacitor)",
   "scripts": {
@@ -9,7 +9,8 @@
     "assets": "node outils/generer-images.js && capacitor-assets generate --ios --iconBackgroundColor \"#1B2040\" --splashBackgroundColor \"#EEF0F7\" --splashBackgroundColorDark \"#12152A\" && node outils/icones-ios.js",
     "verifier": "node outils/verifier-grilles.js",
     "vendor": "node -e \"require('fs').copyFileSync('node_modules/@supabase/supabase-js/dist/umd/supabase.js','vendor/supabase.js')\"",
-    "test": "node --test --test-concurrency=2 tests/*.test.js"
+    "test": "node --test --test-concurrency=2 tests/*.test.js",
+    "nouvelle-version": "node outils/version.js"
   },
   "dependencies": {
     "@capacitor/app": "^8.1.2",
