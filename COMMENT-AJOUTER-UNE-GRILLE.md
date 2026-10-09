@@ -29,7 +29,7 @@ Ouvre `grilles.json` et ajoute un bloc à la **fin** de la liste `"grilles"` (n'
 | `id` | Identifiant **unique et définitif** : le suivant de la liste (`g033`, `g034`…). **Ne jamais modifier l'id d'une grille existante** : les résultats et les favoris des joueurs y sont attachés. |
 | `num` | Numéro affiché au joueur (« Grille n°33 »). Unique. |
 | `difficulte` | `facile`, `moyen`, `difficile` ou `goat`. Erreurs autorisées : 4, 4, 3 et 2. |
-| `jour` | *Optionnel.* Date `AAAA-MM-JJ` à laquelle ce sera la **grille du jour**. Une seule grille par jour, et jamais une grille `goat`. Sans `jour`, c'est une **grille libre**, jouable tout de suite depuis le tiroir. |
+| `jour` | *Optionnel.* Date `AAAA-MM-JJ` à laquelle ce sera la **grille du jour**. Une seule grille par jour, **uniquement `moyen` ou `difficile`** : jamais `facile` (trop simple pour la grille du jour) ni `goat` (le vérificateur refuse les deux). Sans `jour`, c'est une **grille libre**, jouable tout de suite depuis le tiroir. |
 | `toujours_visible` | *Optionnel* (`true` ou `false`). Marque une **grille libre** (jouable à tout moment). **Une grille `toujours_visible` ne peut jamais être une grille du jour** : elle ne doit pas avoir de `jour` aujourd'hui ou dans le futur, sinon les joueurs pourraient la faire à l'avance (le vérificateur le signale comme une erreur). Seule une date passée peut être conservée, pour l'historique. **Ne le mets jamais sur une grille du calendrier.** |
 | `groupes` | Exactement **4 groupes de 4 mots**, du plus facile au plus dur (l'ordre donne les couleurs : menthe, abricot, framboise, bleu nuit). Les **16 mots doivent être tous différents**. |
 
@@ -39,7 +39,8 @@ Conseils :
 - Pas besoin d'espaces insécables avant `:` `!` `?` `»` : l'appli les ajoute toute seule.
 - **Deux sortes de grilles** :
   - **grille du calendrier** : un `jour`, **pas** de `toujours_visible`. Elle reste **secrète** jusqu'à son jour, puis rejoint le tiroir ;
-  - **grille libre** : pas de `jour` (ou `toujours_visible`). Jouable tout de suite, et utilisée comme « Grille bonus » les jours sans grille planifiée.
+  - **grille libre** : pas de `jour` (ou `toujours_visible`). Jouable tout de suite depuis Bonus et Hasard. Les grilles libres `moyen` et `difficile` servent aussi de « Grille bonus » de secours si un jour n'a pas de grille planifiée.
+- **Évite les répétitions** : pas un nom de groupe déjà utilisé, ni un groupe qui reprend 3 mots d'un groupe existant, ni un mot qui revient sans cesse. Le vérificateur liste tout ça (rubrique 🔁).
 - Pour planifier, utilise toujours des **grilles inédites** : jamais une grille déjà visible dans le tiroir.
 
 ## Ajouter une grille de thème (mode « Thèmes »)
@@ -72,7 +73,9 @@ node outils/verifier-grilles.js
 - `✓ grilles.json est valide.` : tout est bon.
 - `✗ … erreur(s)` : corrige chaque ligne indiquée, puis relance.
 - Le script affiche chaque thème avec son statut (**publié** / **non publié**) et son nombre de grilles.
-- Il liste aussi les **jours des 30 prochains jours sans grille inédite planifiée**. Ces jours-là, l'appli propose une « Grille bonus » choisie parmi les grilles libres non GOAT (de préférence une que le joueur n'a pas encore faite). Pense à planifier ces jours.
+- Il affiche le nombre de **grilles libres par niveau** (objectif : au moins 40 par niveau).
+- Il liste les **répétitions** entre grilles (🔁) : même nom de groupe, groupe presque identique (3 mots en commun ou plus), mot présent dans 3 grilles ou plus. Ce ne sont que des avertissements, mais évite-les dans les nouvelles grilles.
+- **Aucun jour sans grille** : un jour sans grille du jour planifiée dans les **7 prochains jours** est une **erreur** ; entre 8 et 30 jours, c'est un avertissement. Si cela arrivait quand même, l'appli proposerait une « Grille bonus » de secours : une grille libre `moyen` ou `difficile`, **la même pour tous les joueurs** (elle ne dépend que de la date).
 
 Si une grille invalide est quand même publiée, l'appli l'ignore simplement (sans planter), et elle n'apparaîtra pas.
 

@@ -140,13 +140,25 @@
   // couleurs du jeu (🟩 Facile, 🟧 Réflexion, 🟥 Coriace, 🟦 Casse-tête), ou celles du mode daltonien
   const CARRES = ["🟩", "🟧", "🟥", "🟦"], CARRES_DALTO = ["🟦", "🟧", "🟨", "🟪"];
   // titre : « Quatuor #42 », « Quatuor · Grille bonus n°12 (Moyen) »… ; history : niveaux (0-3) des 4 mots de chaque essai
-  function texteDePartage({ titre, history, hints = 0, attempt = 1, daltonien = false, site = "playquatuor.fr" }) {
+  // Durée de jeu lisible : « 45 s », « 3 min 07 s », « 1 h 05 min » ("" si inconnue)
+  function dureeTexte(s) {
+    if (s == null || s === "") return "";
+    s = Math.round(Number(s));
+    if (!Number.isFinite(s) || s < 0) return "";
+    if (s < 60) return `${s} s`;
+    const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), sec = s % 60;
+    return h ? `${h} h ${String(m).padStart(2, "0")} min` : `${m} min ${String(sec).padStart(2, "0")} s`;
+  }
+
+  // duree : temps de jeu en secondes (facultatif)
+  function texteDePartage({ titre, history, hints = 0, attempt = 1, daltonien = false, site = "playquatuor.fr", duree = null }) {
     const c = daltonien ? CARRES_DALTO : CARRES;
     const lignes = (history || []).map(r => r.map(i => c[i] || "⬜").join(""));
-    const extra = [hints ? `💡 ${hints} ${hints > 1 ? "indices" : "indice"}` : "", attempt > 1 ? `🔄 ${attempt}e essai` : ""].filter(Boolean).join(" · ");
+    const temps = duree == null ? "" : dureeTexte(duree);
+    const extra = [temps ? `⏱️ ${temps}` : "", hints ? `💡 ${hints} ${hints > 1 ? "indices" : "indice"}` : "", attempt > 1 ? `🔄 ${attempt}e essai` : ""].filter(Boolean).join(" · ");
     return [`${titre} 🧩`, ...lignes, ...(extra ? [extra] : []), site].join("\n");
   }
 
-  return { DEBUT, texteDePartage, ajouterJours, estDate, numJour, dateDuNum, versServeur, depuisServeur, memeResultat, fusionnerResultat,
+  return { DEBUT, texteDePartage, dureeTexte, ajouterJours, estDate, numJour, dateDuNum, versServeur, depuisServeur, memeResultat, fusionnerResultat,
     baseDepuisStats, BASE_VIDE, calculerStats, statsLocales, fusionnerFavoris, favoriVersServeur };
 });

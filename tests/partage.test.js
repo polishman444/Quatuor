@@ -12,6 +12,16 @@ test("texte : une ligne par essai, une couleur par groupe, indices et essai, adr
   assert.equal(QC.texteDePartage({ titre: "Q", history: [[0, 1, 2, 3]], daltonien: true }).split("\n")[1], "🟦🟧🟨🟪");
 });
 
+test("temps de jeu : lisible, et dans le texte de partage", () => {
+  assert.equal(QC.dureeTexte(0), "0 s");
+  assert.equal(QC.dureeTexte(45), "45 s");
+  assert.equal(QC.dureeTexte(187), "3 min 07 s");
+  assert.equal(QC.dureeTexte(3900), "1 h 05 min");
+  assert.equal(QC.dureeTexte(null), "");
+  assert.equal(QC.texteDePartage({ titre: "Quatuor #3", history: [[0, 0, 0, 0]], attempt: 2, hints: 1, duree: 187 }),
+    "Quatuor #3 🧩\n🟩🟩🟩🟩\n⏱️ 3 min 07 s · 💡 1 indice · 🔄 2e essai\nplayquatuor.fr");
+});
+
 const navOk = pw ? undefined : "Playwright indisponible";
 async function partie(t, donnees, cible) {
   const srv = await serveur(), nav = await pw.chromium.launch();
@@ -34,7 +44,9 @@ test("web : grille du jour réussie → « Copié ! », texte sans spoiler", { s
   const texte = await page.evaluate(() => navigator.clipboard.readText()), num = await page.evaluate(() => grid.num);
   const lignes = await page.evaluate(() => history.map(r => r.map(i => ["🟩", "🟧", "🟥", "🟦"][i]).join("")));
   assert.equal(lignes.length, 4);
-  assert.equal(texte, [`Quatuor #${num} 🧩`, ...lignes, "playquatuor.fr"].join("\n"));
+  const temps = await page.evaluate(() => `⏱️ ${QC.dureeTexte(duree)}`);
+  assert.equal(texte, [`Quatuor #${num} 🧩`, ...lignes, temps, "playquatuor.fr"].join("\n"));
+  assert.match(await page.locator("#sheetBody").innerText(), /Grille résolue en \d+ s avec 0 erreur/);
   sansSpoiler(texte, await motsDe(page));
   assert.deepEqual(erreurs, []);
 });
@@ -83,6 +95,6 @@ test("appli iOS : feuille de partage native (@capacitor/share) avec le texte", {
   await page.locator("#share").click();
   await page.waitForFunction(() => window.__partages.length === 1);
   const { text } = await page.evaluate(() => window.__partages[0]);
-  assert.match(text, /^Quatuor #\d+ 🧩\n([🟩🟧🟥🟦]{4}\n){4}playquatuor\.fr$/u);
+  assert.match(text, /^Quatuor #\d+ 🧩\n([🟩🟧🟥🟦]{4}\n){4}⏱️ \d+ s\nplayquatuor\.fr$/u);
   assert.deepEqual(erreurs, []);
 });

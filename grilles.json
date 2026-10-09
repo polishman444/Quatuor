@@ -428,7 +428,6 @@
       "num": 33,
       "difficulte": "facile",
       "theme": "quotidien",
-      "jour": "2026-10-01",
       "groupes": [
         { "nom": "Sports collectifs", "mots": ["Football", "Rugby", "Handball", "Volley"], "anecdote": "Le volley-ball a été inventé en 1895 aux États-Unis par William Morgan, comme une alternative plus douce au basket." },
         { "nom": "Mammifères marins", "mots": ["Dauphin", "Baleine", "Phoque", "Morse"], "anecdote": "Le morse se sert de ses longues défenses pour se hisser hors de l'eau sur la glace." },
@@ -467,7 +466,6 @@
       "num": 36,
       "difficulte": "facile",
       "theme": "quotidien",
-      "jour": "2026-10-04",
       "groupes": [
         { "nom": "Moyens de transport", "mots": ["Train", "Avion", "Métro", "Tramway"], "anecdote": "Le premier métro du monde a ouvert à Londres en 1863." },
         { "nom": "Insectes", "mots": ["Fourmi", "Abeille", "Coccinelle", "Libellule"], "anecdote": "La coccinelle est l'alliée des jardiniers : une seule peut dévorer des dizaines de pucerons par jour." },
@@ -506,7 +504,6 @@
       "num": 39,
       "difficulte": "facile",
       "theme": "quotidien",
-      "jour": "2026-10-07",
       "groupes": [
         { "nom": "Animaux de la ferme", "mots": ["Vache", "Cochon", "Mouton", "Chèvre"], "anecdote": "Le cochon ne transpire presque pas : il se roule dans la boue pour se rafraîchir." },
         { "nom": "Pays nordiques", "mots": ["Norvège", "Suède", "Finlande", "Danemark"], "anecdote": "La Finlande compte environ 188 000 lacs, d'où son surnom de « pays des mille lacs »." },
@@ -571,7 +568,6 @@
       "num": 44,
       "difficulte": "facile",
       "theme": "quotidien",
-      "jour": "2026-10-10",
       "groupes": [
         { "nom": "Vêtements", "mots": ["Jupe", "Chemise", "Manteau", "Chaussette"], "anecdote": "Le mot « chemise » vient du latin camisia." },
         { "nom": "Métiers", "mots": ["Boulanger", "Plombier", "Facteur", "Pompier"], "anecdote": "En France, environ quatre pompiers sur cinq sont des volontaires." },
@@ -1625,6 +1621,1469 @@
         { "nom": "Statues célèbres", "mots": ["Penseur", "Discobole", "Moïse", "Laocoon"], "anecdote": "Le Moïse de Michel-Ange porte des cornes, à cause d'une erreur de traduction dans la Bible latine. Et le David ? Il allait avec les rois !" },
         { "nom": "Peintres surréalistes", "mots": ["Magritte", "Ernst", "Tanguy", "Delvaux"], "anecdote": "Sous le dessin d'une pipe, Magritte a écrit : « Ceci n'est pas une pipe »." },
         { "nom": "Nombres et suites mathématiques", "mots": ["Fibonacci", "Mersenne", "Catalan", "Bernoulli"], "anecdote": "Dans la suite de Fibonacci, chaque nombre est la somme des deux précédents : 1, 1, 2, 3, 5, 8, 13…" }
+      ]
+    },
+    {
+      "id": "g133",
+      "num": 133,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-10",
+      "groupes": [
+        { "nom": "Dents", "mots": ["Incisive", "Canine", "Molaire", "Prémolaire"], "anecdote": "Un adulte possède en général 32 dents, dont 4 dents de sagesse qui ne poussent pas chez tout le monde." },
+        { "nom": "Nages", "mots": ["Crawl", "Brasse", "Papillon", "Dos"], "anecdote": "Le papillon est né d'une variante de la brasse dans les années 1930 ; il n'est devenu une épreuve olympique à part entière qu'en 1956." },
+        { "nom": "Signes sur les voyelles", "mots": ["Aigu", "Grave", "Circonflexe", "Tréma"], "anecdote": "L'accent circonflexe remplace souvent un « s » disparu : « hôpital » s'écrivait autrefois « hospital »." },
+        { "nom": "Angles", "mots": ["Droit", "Obtus", "Plat", "Rentrant"], "anecdote": "Un angle plat mesure 180 degrés, soit exactement deux angles droits." }
+      ]
+    },
+    {
+      "id": "g134",
+      "num": 134,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-13",
+      "groupes": [
+        { "nom": "Les sept nains", "mots": ["Prof", "Grincheux", "Simplet", "Dormeur"], "anecdote": "Dans la version originale du film de Disney (1937), Simplet s'appelle Dopey et Dormeur s'appelle Sleepy." },
+        { "nom": "Champignons", "mots": ["Cèpe", "Girolle", "Morille", "Trompette-de-la-mort"], "anecdote": "La morille se cueille au printemps, alors que la plupart des champignons se ramassent en automne." },
+        { "nom": "Fruits à coque", "mots": ["Amande", "Pistache", "Noix", "Cajou"], "anecdote": "La noix de cajou pousse au bout d'un faux fruit charnu, la « pomme de cajou »." },
+        { "nom": "Couleurs des yeux", "mots": ["Bleu", "Gris", "Noir", "Noisette"], "anecdote": "Les yeux bleus ne contiennent aucun pigment bleu : leur couleur vient de la façon dont l'iris diffuse la lumière." }
+      ]
+    },
+    {
+      "id": "g135",
+      "num": 135,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-14",
+      "groupes": [
+        { "nom": "Interprètes de James Bond", "mots": ["Connery", "Moore", "Brosnan", "Craig"], "anecdote": "Sean Connery a été le premier James Bond du cinéma, dans « James Bond 007 contre Dr No » en 1962." },
+        { "nom": "Peintres américains", "mots": ["Hopper", "Pollock", "Warhol", "Rothko"], "anecdote": "Andy Warhol a peint ses célèbres boîtes de soupe Campbell en 1962." },
+        { "nom": "Auteurs de dystopies", "mots": ["Orwell", "Huxley", "Bradbury", "Atwood"], "anecdote": "« 1984 » de George Orwell a été publié en 1949 ; l'expression « Big Brother » vient de ce roman." },
+        { "nom": "Musées de New York", "mots": ["MoMA", "Guggenheim", "Whitney", "Met"], "anecdote": "Le musée Guggenheim de New York, en forme de spirale, a été dessiné par l'architecte Frank Lloyd Wright." }
+      ]
+    },
+    {
+      "id": "g136",
+      "num": 136,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-15",
+      "groupes": [
+        { "nom": "Super-héros Marvel", "mots": ["Hulk", "Wolverine", "Iron Man", "Black Panther"], "anecdote": "Black Panther, créé en 1966, est le premier super-héros noir des grands comics américains." },
+        { "nom": "Métaux", "mots": ["Fer", "Cuivre", "Zinc", "Plomb"], "anecdote": "Le zinc couvre la plupart des toits de Paris depuis les grands travaux du XIXe siècle." },
+        { "nom": "Ceintures de judo", "mots": ["Blanche", "Jaune", "Verte", "Marron"], "anecdote": "La ceinture noire n'est pas la dernière : à partir du 6e dan, un judoka peut porter une ceinture rouge et blanche." },
+        { "nom": "Avionneurs", "mots": ["Airbus", "Boeing", "Dassault", "Embraer"], "anecdote": "Embraer, l'avionneur brésilien, est l'un des plus grands constructeurs d'avions régionaux au monde." }
+      ]
+    },
+    {
+      "id": "g137",
+      "num": 137,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-16",
+      "groupes": [
+        { "nom": "Héroïnes de Shakespeare", "mots": ["Juliette", "Ophélie", "Desdémone", "Cordelia"], "anecdote": "Juliette n'a pas encore 14 ans dans « Roméo et Juliette » de Shakespeare." },
+        { "nom": "Sondes spatiales", "mots": ["Voyager", "Rosetta", "Pioneer", "Cassini"], "anecdote": "En 2014, la sonde européenne Rosetta a posé le petit robot Philae sur une comète." },
+        { "nom": "Héroïnes de tragédies grecques", "mots": ["Antigone", "Électre", "Médée", "Iphigénie"], "anecdote": "« Médée », d'Euripide, a été jouée pour la première fois à Athènes en 431 avant J.-C." },
+        { "nom": "Conquêtes amoureuses de Zeus", "mots": ["Léda", "Danaé", "Sémélé", "Alcmène"], "anecdote": "Selon la légende, Zeus s'est changé en cygne pour séduire Léda, et en pluie d'or pour rejoindre Danaé." }
+      ]
+    },
+    {
+      "id": "g138",
+      "num": 138,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-17",
+      "groupes": [
+        { "nom": "Dinosaures", "mots": ["Tyrannosaure", "Tricératops", "Diplodocus", "Vélociraptor"], "anecdote": "Le vrai vélociraptor était à peu près de la taille d'une dinde, et couvert de plumes." },
+        { "nom": "Périodes géologiques", "mots": ["Jurassique", "Crétacé", "Trias", "Permien"], "anecdote": "Le Jurassique doit son nom au massif du Jura, où ses roches ont été étudiées." },
+        { "nom": "Variétés de pommes de terre", "mots": ["Amandine", "Bintje", "Agata", "Ratte"], "anecdote": "La bintje a été créée aux Pays-Bas en 1905 et porte le prénom d'une élève de l'instituteur qui l'a obtenue." },
+        { "nom": "Groupes de rock britanniques", "mots": ["Queen", "Oasis", "Blur", "Muse"], "anecdote": "Freddie Mercury, le chanteur de Queen, est né à Zanzibar en 1946." }
+      ]
+    },
+    {
+      "id": "g139",
+      "num": 139,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-18",
+      "groupes": [
+        { "nom": "Romans de Jules Verne", "mots": ["Michel Strogoff", "Le Rayon vert", "L'Île mystérieuse", "Mathias Sandorf"], "anecdote": "Jules Verne a écrit plus de 60 romans, réunis sous le nom de « Voyages extraordinaires »." },
+        { "nom": "Couches de l'atmosphère", "mots": ["Troposphère", "Stratosphère", "Mésosphère", "Thermosphère"], "anecdote": "La couche d'ozone, qui nous protège des UV, se trouve dans la stratosphère." },
+        { "nom": "Figures du patinage artistique", "mots": ["Axel", "Lutz", "Salchow", "Boucle"], "anecdote": "Le lutz, le salchow et l'axel portent le nom des patineurs qui les ont inventés." },
+        { "nom": "Prénoms de rois de Suède", "mots": ["Gustave", "Oscar", "Charles", "Eric"], "anecdote": "Le roi Charles XIV Jean de Suède était un Français : Jean-Baptiste Bernadotte, maréchal de Napoléon." }
+      ]
+    },
+    {
+      "id": "g140",
+      "num": 140,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-19",
+      "groupes": [
+        { "nom": "Ustensiles de cuisine", "mots": ["Louche", "Fouet", "Passoire", "Écumoire"], "anecdote": "L'écumoire, percée de petits trous, sert à retirer l'écume d'un bouillon ou d'une confiture." },
+        { "nom": "Danses latines", "mots": ["Rumba", "Samba", "Mambo", "Bachata"], "anecdote": "La bachata est née en République dominicaine dans les années 1960." },
+        { "nom": "Pains", "mots": ["Baguette", "Ficelle", "Fougasse", "Brioche"], "anecdote": "Depuis 2022, le savoir-faire de la baguette de pain est inscrit au patrimoine culturel immatériel de l'Unesco." },
+        { "nom": "Mots avant « -feu »", "mots": ["Couvre", "Pare", "Contre", "Cessez"], "anecdote": "Le couvre-feu vient du Moyen Âge : le soir, on devait couvrir les feux des maisons pour éviter les incendies." }
+      ]
+    },
+    {
+      "id": "g141",
+      "num": 141,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-20",
+      "groupes": [
+        { "nom": "Chutes d'eau", "mots": ["Niagara", "Iguazú", "Angel", "Victoria"], "anecdote": "Les chutes Angel, au Venezuela, sont les plus hautes du monde : près de 1 000 mètres de chute." },
+        { "nom": "Reines de France", "mots": ["Aliénor", "Blanche de Castille", "Anne de Bretagne", "Marie Leszczynska"], "anecdote": "Anne de Bretagne a été deux fois reine de France, épouse de Charles VIII puis de Louis XII." },
+        { "nom": "Canaux", "mots": ["Suez", "Panama", "Corinthe", "Kiel"], "anecdote": "Le canal de Corinthe, ouvert en 1893, est si étroit (environ 25 mètres) que les grands navires ne peuvent pas l'emprunter." },
+        { "nom": "Tableaux de Monet", "mots": ["Impression soleil levant", "Les Nymphéas", "Les Coquelicots", "La Pie"], "anecdote": "« Impression, soleil levant » de Claude Monet a donné son nom au mouvement impressionniste." }
+      ]
+    },
+    {
+      "id": "g142",
+      "num": 142,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-21",
+      "groupes": [
+        { "nom": "Personnages de Star Wars", "mots": ["Yoda", "Chewbacca", "Leia", "Obi-Wan"], "anecdote": "Le nom de Chewbacca s'inspire du mot russe « sobaka », qui veut dire « chien »." },
+        { "nom": "Gratte-ciel", "mots": ["Burj Khalifa", "Empire State Building", "Chrysler Building", "Shard"], "anecdote": "Le Burj Khalifa, à Dubaï, mesure 828 mètres : c'est le plus haut bâtiment du monde depuis 2010." },
+        { "nom": "Thés", "mots": ["Earl Grey", "Darjeeling", "Matcha", "Oolong"], "anecdote": "Le thé Earl Grey est parfumé à la bergamote, un agrume." },
+        { "nom": "Mots qui changent de sens au féminin", "mots": ["Livre", "Moule", "Mousse", "Poêle"], "anecdote": "Le mousse est un jeune marin, la mousse une plante ou une écume : même mot, autre genre, autre sens !" }
+      ]
+    },
+    {
+      "id": "g143",
+      "num": 143,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-22",
+      "groupes": [
+        { "nom": "Poètes français", "mots": ["Rimbaud", "Verlaine", "Baudelaire", "Apollinaire"], "anecdote": "Rimbaud a écrit toute son œuvre avant 21 ans, puis a arrêté la poésie pour devenir commerçant en Afrique." },
+        { "nom": "Compositeurs russes", "mots": ["Tchaïkovski", "Stravinsky", "Moussorgski", "Prokofiev"], "anecdote": "Dans « Pierre et le Loup » (1936), Prokofiev fait jouer chaque personnage par un instrument différent." },
+        { "nom": "Physiciens", "mots": ["Bohr", "Heisenberg", "Schrödinger", "Dirac"], "anecdote": "Le « chat de Schrödinger », à la fois mort et vivant, est une expérience de pensée imaginée en 1935." },
+        { "nom": "Mers de la Lune", "mots": ["Tranquillité", "Sérénité", "Crises", "Pluies"], "anecdote": "En 1969, Neil Armstrong et Buzz Aldrin se sont posés dans la mer de la Tranquillité, une plaine de lave sans une goutte d'eau." }
+      ]
+    },
+    {
+      "id": "g144",
+      "num": 144,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-23",
+      "groupes": [
+        { "nom": "Viennoiseries", "mots": ["Croissant", "Pain au chocolat", "Chausson aux pommes", "Pain aux raisins"], "anecdote": "Le mot « viennoiserie » vient de Vienne, en Autriche, d'où serait arrivé l'ancêtre du croissant." },
+        { "nom": "Sports nautiques", "mots": ["Aviron", "Canoë", "Ski nautique", "Planche à voile"], "anecdote": "Aux premiers Jeux olympiques modernes, en 1896, les courses d'aviron ont été annulées à cause du mauvais temps." },
+        { "nom": "Réseaux sociaux", "mots": ["Instagram", "TikTok", "Snapchat", "Pinterest"], "anecdote": "Avant de s'appeler Instagram, l'application s'appelait Burbn et servait surtout à partager l'endroit où l'on se trouvait." },
+        { "nom": "Phases de la Lune", "mots": ["Nouvelle lune", "Premier quartier", "Pleine lune", "Gibbeuse"], "anecdote": "Il faut environ 29 jours et demi à la Lune pour passer d'une nouvelle lune à la suivante." }
+      ]
+    },
+    {
+      "id": "g145",
+      "num": 145,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-24",
+      "groupes": [
+        { "nom": "Écrivains américains", "mots": ["Hemingway", "Steinbeck", "Faulkner", "Fitzgerald"], "anecdote": "Ernest Hemingway a reçu le prix Nobel de littérature en 1954, deux ans après « Le Vieil Homme et la Mer »." },
+        { "nom": "Cathédrales gothiques", "mots": ["Chartres", "Reims", "Amiens", "Bourges"], "anecdote": "Pendant des siècles, les rois de France ont été sacrés dans la cathédrale de Reims." },
+        { "nom": "Philosophes français du XXe siècle", "mots": ["Foucault", "Derrida", "Bergson", "Deleuze"], "anecdote": "Le philosophe Henri Bergson a reçu le prix Nobel de littérature en 1927." },
+        { "nom": "Maisons de champagne", "mots": ["Krug", "Bollinger", "Ruinart", "Taittinger"], "anecdote": "Ruinart, fondée à Reims en 1729, est considérée comme la plus ancienne maison de champagne." }
+      ]
+    },
+    {
+      "id": "g146",
+      "num": 146,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-25",
+      "groupes": [
+        { "nom": "Princesses Disney", "mots": ["Pocahontas", "Raiponce", "Ariel", "Mulan"], "anecdote": "« Raiponce », sorti en 2010, est le 50e long métrage d'animation des studios Disney." },
+        { "nom": "Animaux de la savane", "mots": ["Lion", "Girafe", "Zèbre", "Hyène"], "anecdote": "Les rayures de chaque zèbre sont uniques, comme une empreinte digitale." },
+        { "nom": "Quartiers de Paris", "mots": ["Marais", "Montmartre", "Belleville", "Batignolles"], "anecdote": "La butte Montmartre, à environ 130 mètres, est le point naturel le plus haut de Paris." },
+        { "nom": "Signes du zodiaque chinois", "mots": ["Rat", "Buffle", "Tigre", "Singe"], "anecdote": "Selon la légende, le Rat a gagné la course des animaux en voyageant sur le dos du Buffle, puis en sautant devant lui à l'arrivée." }
+      ]
+    },
+    {
+      "id": "g147",
+      "num": 147,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-26",
+      "groupes": [
+        { "nom": "Particules", "mots": ["Électron", "Proton", "Neutron", "Quark"], "anecdote": "Le mot « quark » a été emprunté par le physicien Murray Gell-Mann à un vers du roman « Finnegans Wake » de James Joyce." },
+        { "nom": "Romans d'Alexandre Dumas", "mots": ["Le Comte de Monte-Cristo", "La Reine Margot", "Vingt ans après", "La Tulipe noire"], "anecdote": "Alexandre Dumas est entré au Panthéon en 2002, plus de 130 ans après sa mort." },
+        { "nom": "Peintres néerlandais", "mots": ["Rembrandt", "Mondrian", "Bosch", "Hals"], "anecdote": "« La Ronde de nuit » de Rembrandt montre en fait une scène de jour : c'est le vernis, en noircissant, qui l'a assombrie." },
+        { "nom": "Batailles de la guerre de Sécession", "mots": ["Gettysburg", "Antietam", "Bull Run", "Shiloh"], "anecdote": "La bataille de Gettysburg, en 1863, a été la plus meurtrière de la guerre de Sécession." }
+      ]
+    },
+    {
+      "id": "g148",
+      "num": 148,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-27",
+      "groupes": [
+        { "nom": "Fleurs", "mots": ["Pivoine", "Tulipe", "Jonquille", "Lilas"], "anecdote": "Au XVIIe siècle, aux Pays-Bas, un bulbe de tulipe rare pouvait coûter plus cher qu'une maison : c'est la « tulipomanie »." },
+        { "nom": "Plats japonais", "mots": ["Sushi", "Ramen", "Tempura", "Gyoza"], "anecdote": "La tempura aurait été apportée au Japon par des missionnaires portugais au XVIe siècle." },
+        { "nom": "Consoles de jeux", "mots": ["Switch", "PlayStation", "Xbox", "Game Boy"], "anecdote": "La Game Boy de Nintendo, sortie en 1989, était vendue avec le jeu Tetris." },
+        { "nom": "Personnages de Mario", "mots": ["Luigi", "Yoshi", "Peach", "Bowser"], "anecdote": "Dans le jeu Donkey Kong de 1981, Mario s'appelait encore « Jumpman »." }
+      ]
+    },
+    {
+      "id": "g149",
+      "num": 149,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-28",
+      "groupes": [
+        { "nom": "Muscles", "mots": ["Biceps", "Triceps", "Quadriceps", "Deltoïde"], "anecdote": "Le muscle le plus long du corps humain est le sartorius, ou « couturier », à l'avant de la cuisse." },
+        { "nom": "Prix Nobel de la paix", "mots": ["Mandela", "Mère Teresa", "Malala", "Gorbatchev"], "anecdote": "Malala Yousafzai a reçu le prix Nobel de la paix en 2014, à 17 ans : la plus jeune lauréate de l'histoire." },
+        { "nom": "Affluents du Rhône", "mots": ["Saône", "Isère", "Durance", "Ardèche"], "anecdote": "La Saône rejoint le Rhône à Lyon, au quartier du Confluent." },
+        { "nom": "Départements nommés d'après une rivière", "mots": ["Lot", "Tarn", "Var", "Cher"], "anecdote": "Plus de la moitié des départements français portent le nom d'un cours d'eau." }
+      ]
+    },
+    {
+      "id": "g150",
+      "num": 150,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-29",
+      "groupes": [
+        { "nom": "Boissons au café", "mots": ["Expresso", "Cappuccino", "Latte", "Ristretto"], "anecdote": "Le cappuccino doit son nom à la couleur de la robe des moines capucins." },
+        { "nom": "Chaussures", "mots": ["Escarpin", "Mocassin", "Sandale", "Ballerine"], "anecdote": "Le mocassin vient des peuples amérindiens d'Amérique du Nord." },
+        { "nom": "Coiffures", "mots": ["Chignon", "Tresse", "Frange", "Couette"], "anecdote": "La frange se dit « bangs » en anglais américain, mais « fringe » en anglais britannique." },
+        { "nom": "Postes au football", "mots": ["Gardien", "Défenseur", "Milieu", "Attaquant"], "anecdote": "Jusqu'en 1912, le gardien pouvait prendre le ballon à la main n'importe où dans sa moitié de terrain." }
+      ]
+    },
+    {
+      "id": "g151",
+      "num": 151,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-10-30",
+      "groupes": [
+        { "nom": "Étoiles", "mots": ["Sirius", "Véga", "Bételgeuse", "Rigel"], "anecdote": "Sirius est l'étoile la plus brillante du ciel nocturne." },
+        { "nom": "Rois des Belges", "mots": ["Léopold", "Albert", "Baudouin", "Philippe"], "anecdote": "Le roi Baudouin a régné 42 ans, de 1951 à 1993." },
+        { "nom": "Grands voyageurs", "mots": ["Alexandra David-Néel", "Ibn Battûta", "Xuanzang", "Zheng He"], "anecdote": "Au XIVe siècle, Ibn Battûta a parcouru plus de 100 000 km, du Maroc jusqu'en Chine." },
+        { "nom": "Œuvres de Ravel", "mots": ["Boléro", "Ma mère l'Oye", "Daphnis et Chloé", "La Valse"], "anecdote": "Ravel disait de son « Boléro » que c'était un simple exercice d'orchestre, « sans musique »." }
+      ]
+    },
+    {
+      "id": "g152",
+      "num": 152,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-10-31",
+      "groupes": [
+        { "nom": "Créatures d'Halloween", "mots": ["Vampire", "Sorcière", "Fantôme", "Loup-garou"], "anecdote": "Halloween vient de « All Hallows' Eve », la veille de la Toussaint en anglais." },
+        { "nom": "Courges", "mots": ["Citrouille", "Potiron", "Butternut", "Pâtisson"], "anecdote": "En Irlande, avant les citrouilles, on creusait des navets pour fabriquer les lanternes d'Halloween." },
+        { "nom": "Maîtres de l'épouvante", "mots": ["Stephen King", "Mary Shelley", "Bram Stoker", "Edgar Poe"], "anecdote": "Mary Shelley a commencé « Frankenstein » à 18 ans, pendant l'été pluvieux de 1816, au bord du lac Léman." },
+        { "nom": "Tueurs de films d'horreur", "mots": ["Freddy", "Michael Myers", "Chucky", "Ghostface"], "anecdote": "Freddy Krueger est apparu en 1984 dans « Les Griffes de la nuit », de Wes Craven." }
+      ]
+    },
+    {
+      "id": "g153",
+      "num": 153,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-01",
+      "groupes": [
+        { "nom": "Saints patrons de pays", "mots": ["Patrick", "Georges", "André", "Denis"], "anecdote": "Selon la légende, saint Patrick utilisait la feuille de trèfle pour expliquer la Trinité aux Irlandais." },
+        { "nom": "Glaciers", "mots": ["Mer de Glace", "Aletsch", "Perito Moreno", "Vatnajökull"], "anecdote": "Le glacier d'Aletsch, en Suisse, est le plus grand glacier des Alpes." },
+        { "nom": "Mots venus de l'hindi", "mots": ["Punch", "Shampooing", "Bungalow", "Jungle"], "anecdote": "« Shampooing » vient du hindi « chāmpo », qui veut dire « masser »." },
+        { "nom": "Instruments indiens", "mots": ["Sitar", "Tabla", "Tanpura", "Sarangi"], "anecdote": "Ravi Shankar a fait découvrir le sitar au monde entier, et l'a enseigné à George Harrison, des Beatles." }
+      ]
+    },
+    {
+      "id": "g154",
+      "num": 154,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-02",
+      "groupes": [
+        { "nom": "Arbres", "mots": ["Chêne", "Hêtre", "Bouleau", "Érable"], "anecdote": "La feuille d'érable figure sur le drapeau du Canada depuis 1965." },
+        { "nom": "Personnages de Friends", "mots": ["Ross", "Rachel", "Monica", "Chandler"], "anecdote": "La série « Friends » a duré dix saisons, de 1994 à 2004." },
+        { "nom": "Outils de bricolage", "mots": ["Tournevis", "Scie", "Perceuse", "Clé à molette"], "anecdote": "La clé à molette a été mise au point par le Suédois Johan Petter Johansson à la fin du XIXe siècle." },
+        { "nom": "Agrès de gymnastique", "mots": ["Barres", "Poutre", "Anneaux", "Cheval d'arçons"], "anecdote": "La poutre de gymnastique ne mesure que 10 centimètres de large." }
+      ]
+    },
+    {
+      "id": "g155",
+      "num": 155,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-03",
+      "groupes": [
+        { "nom": "Ponts célèbres", "mots": ["Golden Gate", "Rialto", "Tower Bridge", "Pont Charles"], "anecdote": "Le Golden Gate n'est pas doré : sa couleur officielle s'appelle « orange international »." },
+        { "nom": "Genres littéraires", "mots": ["Nouvelle", "Fable", "Conte", "Épopée"], "anecdote": "Jean de La Fontaine a écrit plus de 240 fables, dont beaucoup s'inspirent du Grec Ésope." },
+        { "nom": "Peintres allemands", "mots": ["Dürer", "Holbein", "Friedrich", "Cranach"], "anecdote": "En 1515, Albrecht Dürer a gravé un rhinocéros sans en avoir jamais vu un, d'après une simple description." },
+        { "nom": "Styles architecturaux", "mots": ["Roman", "Baroque", "Rococo", "Art déco"], "anecdote": "Le mot « baroque » viendrait du portugais « barroco », qui désigne une perle de forme irrégulière." }
+      ]
+    },
+    {
+      "id": "g156",
+      "num": 156,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-04",
+      "groupes": [
+        { "nom": "Bijoux", "mots": ["Bague", "Collier", "Bracelet", "Broche"], "anecdote": "La bague de fiançailles en diamant s'est répandue au XXe siècle, en grande partie grâce aux publicités du diamantaire De Beers." },
+        { "nom": "Plats français", "mots": ["Cassoulet", "Choucroute", "Ratatouille", "Bouillabaisse"], "anecdote": "La bouillabaisse est née à Marseille, où les pêcheurs cuisinaient les poissons qu'ils n'avaient pas vendus." },
+        { "nom": "Personnages de Pixar", "mots": ["Woody", "Buzz", "Flash McQueen", "Wall-E"], "anecdote": "« Toy Story », sorti en 1995, est le premier long métrage entièrement réalisé en images de synthèse." },
+        { "nom": "Tissus", "mots": ["Velours", "Satin", "Soie", "Lin"], "anecdote": "La soie est produite par la chenille d'un papillon, le bombyx du mûrier, qu'on appelle « ver à soie »." }
+      ]
+    },
+    {
+      "id": "g157",
+      "num": 157,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-05",
+      "groupes": [
+        { "nom": "Femmes de lettres", "mots": ["Colette", "Duras", "Yourcenar", "Sagan"], "anecdote": "Marguerite Yourcenar a été la première femme élue à l'Académie française, en 1980." },
+        { "nom": "Inventeurs", "mots": ["Gutenberg", "Daguerre", "Bell", "Marconi"], "anecdote": "Graham Bell a déposé son brevet du téléphone en 1876, le même jour que son rival Elisha Gray, mais quelques heures avant lui." },
+        { "nom": "Grandes écoles", "mots": ["Polytechnique", "Centrale", "HEC", "Normale"], "anecdote": "L'École polytechnique, fondée en 1794, est surnommée « l'X »." },
+        { "nom": "Opérations de la Seconde Guerre mondiale", "mots": ["Torch", "Barbarossa", "Market Garden", "Dynamo"], "anecdote": "L'opération Dynamo a permis d'évacuer plus de 330 000 soldats alliés de Dunkerque, en 1940." }
+      ]
+    },
+    {
+      "id": "g158",
+      "num": 158,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-06",
+      "groupes": [
+        { "nom": "Bonbons", "mots": ["Carambar", "Fraise Tagada", "Malabar", "Chupa Chups"], "anecdote": "Les blagues sont apparues sur les papiers des Carambar à la fin des années 1960." },
+        { "nom": "Petit électroménager", "mots": ["Mixeur", "Grille-pain", "Bouilloire", "Cafetière"], "anecdote": "Le premier grille-pain électrique vendu en grand nombre a été lancé par General Electric en 1909." },
+        { "nom": "Drapeaux tricolores verticaux", "mots": ["France", "Italie", "Belgique", "Irlande"], "anecdote": "Sur le drapeau irlandais, le blanc symbolise la paix entre les catholiques (le vert) et les protestants (l'orange)." },
+        { "nom": "Mains au poker", "mots": ["Brelan", "Carré", "Quinte", "Full"], "anecdote": "Au poker, la meilleure main possible est la quinte flush royale : de l'as au dix, dans la même couleur." }
+      ]
+    },
+    {
+      "id": "g159",
+      "num": 159,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-07",
+      "groupes": [
+        { "nom": "Opéras français", "mots": ["Carmen", "Faust", "Lakmé", "Les Troyens"], "anecdote": "« Carmen », de Bizet, a été mal accueilli à sa création en 1875 ; Bizet est mort trois mois plus tard, sans connaître son triomphe." },
+        { "nom": "Chefs de guerre de l'Antiquité", "mots": ["Hannibal", "Léonidas", "Attila", "Xerxès"], "anecdote": "En 218 avant J.-C., Hannibal a traversé les Alpes avec ses éléphants pour attaquer Rome." },
+        { "nom": "Périodes de la préhistoire", "mots": ["Paléolithique", "Mésolithique", "Néolithique", "Chalcolithique"], "anecdote": "La grotte Chauvet, en Ardèche, abrite des peintures vieilles d'environ 36 000 ans." },
+        { "nom": "Peintres fauves", "mots": ["Matisse", "Derain", "Vlaminck", "Dufy"], "anecdote": "Le fauvisme doit son nom à un critique qui, au Salon d'automne de 1905, parla d'une « cage aux fauves »." }
+      ]
+    },
+    {
+      "id": "g160",
+      "num": 160,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-08",
+      "groupes": [
+        { "nom": "Super-héros DC", "mots": ["Batman", "Superman", "Flash", "Aquaman"], "anecdote": "Superman est apparu pour la première fois en 1938, dans le premier numéro d'« Action Comics »." },
+        { "nom": "Condiments", "mots": ["Moutarde", "Ketchup", "Mayonnaise", "Cornichon"], "anecdote": "La « moutarde de Dijon » est une recette, pas une origine : elle peut être fabriquée n'importe où." },
+        { "nom": "Types de voitures", "mots": ["Berline", "Coupé", "Cabriolet", "Break"], "anecdote": "Le mot « break » vient d'une voiture à cheval qui servait à dresser (en anglais « to break ») les jeunes chevaux." },
+        { "nom": "Races de vaches", "mots": ["Charolaise", "Limousine", "Normande", "Prim'Holstein"], "anecdote": "La Prim'Holstein, noire et blanche, est la vache laitière la plus répandue en France." }
+      ]
+    },
+    {
+      "id": "g161",
+      "num": 161,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-09",
+      "groupes": [
+        { "nom": "Fêtes religieuses", "mots": ["Diwali", "Hanoukka", "Aïd", "Pessah"], "anecdote": "Diwali, la fête des lumières, est célébrée chaque automne par des centaines de millions d'hindous." },
+        { "nom": "Dieux hindous", "mots": ["Shiva", "Vishnou", "Brahma", "Ganesh"], "anecdote": "Ganesh, le dieu à tête d'éléphant, est celui qui écarte les obstacles : on l'invoque avant de commencer quelque chose." },
+        { "nom": "Écrivains latino-américains", "mots": ["Borges", "Neruda", "García Márquez", "Cortázar"], "anecdote": "Gabriel García Márquez, l'auteur de « Cent ans de solitude », a reçu le prix Nobel de littérature en 1982." },
+        { "nom": "Libérateurs d'Amérique latine", "mots": ["Bolívar", "San Martín", "Sucre", "O'Higgins"], "anecdote": "La Bolivie doit son nom à Simón Bolívar, et sa capitale constitutionnelle, Sucre, à son lieutenant Antonio José de Sucre." }
+      ]
+    },
+    {
+      "id": "g162",
+      "num": 162,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-10",
+      "groupes": [
+        { "nom": "Jeux vidéo cultes", "mots": ["Tetris", "Pac-Man", "Zelda", "Minecraft"], "anecdote": "Tetris a été créé en 1984 par Alexeï Pajitnov, un ingénieur soviétique." },
+        { "nom": "Personnages des Simpson", "mots": ["Homer", "Bart", "Lisa", "Marge"], "anecdote": "Matt Groening a donné aux Simpson les prénoms de sa propre famille : son père s'appelait Homer et sa mère Margaret." },
+        { "nom": "Desserts glacés", "mots": ["Sorbet", "Granité", "Esquimau", "Sundae"], "anecdote": "L'esquimau glacé est né aux États-Unis au début des années 1920, sous le nom d'« Eskimo Pie »." },
+        { "nom": "Animaux venimeux", "mots": ["Vipère", "Cobra", "Veuve noire", "Poisson-pierre"], "anecdote": "Le poisson-pierre, champion du camouflage, est considéré comme le poisson le plus venimeux du monde." }
+      ]
+    },
+    {
+      "id": "g163",
+      "num": 163,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-11",
+      "groupes": [
+        { "nom": "Tableaux célèbres", "mots": ["La Joconde", "Le Cri", "Guernica", "La Nuit étoilée"], "anecdote": "« La Joconde » a été volée au Louvre en 1911 et retrouvée deux ans plus tard, en Italie." },
+        { "nom": "Chanteurs de la chanson française", "mots": ["Brassens", "Brel", "Aznavour", "Piaf"], "anecdote": "Édith Piaf mesurait moins d'un mètre cinquante : on l'appelait « la môme Piaf », le petit moineau." },
+        { "nom": "Fleuves d'Italie", "mots": ["Tibre", "Arno", "Adige", "Piave"], "anecdote": "Selon la légende, Romulus et Remus ont été abandonnés bébés sur les eaux du Tibre, dans un panier." },
+        { "nom": "Maréchaux de la Grande Guerre", "mots": ["Foch", "Joffre", "Pétain", "Gallieni"], "anecdote": "L'armistice du 11 novembre 1918 a été signé dans un wagon, en forêt de Compiègne, en présence du maréchal Foch." }
+      ]
+    },
+    {
+      "id": "g164",
+      "num": 164,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-12",
+      "groupes": [
+        { "nom": "Animaux des pôles", "mots": ["Ours blanc", "Manchot", "Renard polaire", "Bœuf musqué"], "anecdote": "Les manchots vivent dans l'hémisphère Sud et les ours blancs dans l'Arctique : dans la nature, ils ne se croisent jamais." },
+        { "nom": "Métiers du cinéma", "mots": ["Réalisateur", "Cascadeur", "Scénariste", "Monteur"], "anecdote": "Le cascadeur français Rémy Julienne a réglé les poursuites en voiture de plusieurs James Bond." },
+        { "nom": "Fromages de chèvre", "mots": ["Crottin de Chavignol", "Sainte-Maure", "Valençay", "Rocamadour"], "anecdote": "Le crottin de Chavignol vient du Berry, d'un petit village voisin de Sancerre." },
+        { "nom": "Termes du tarot", "mots": ["Excuse", "Petit", "Garde", "Chelem"], "anecdote": "Au tarot, le Petit, le 21 et l'Excuse sont les trois « bouts » : plus on en a, moins il faut de points pour gagner." }
+      ]
+    },
+    {
+      "id": "g165",
+      "num": 165,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-13",
+      "groupes": [
+        { "nom": "Châteaux près de Paris", "mots": ["Chantilly", "Fontainebleau", "Vaux-le-Vicomte", "Compiègne"], "anecdote": "Vaux-le-Vicomte était si somptueux que Louis XIV, piqué, fit arrêter son propriétaire Nicolas Fouquet quelques semaines après une fête donnée en son honneur." },
+        { "nom": "Chimistes", "mots": ["Lavoisier", "Mendeleïev", "Berthollet", "Nobel"], "anecdote": "En 1869, le Russe Dmitri Mendeleïev a publié le premier tableau périodique des éléments." },
+        { "nom": "Romans de Balzac", "mots": ["Le Père Goriot", "Eugénie Grandet", "La Peau de chagrin", "Le Lys dans la vallée"], "anecdote": "Balzac buvait des quantités énormes de café pour écrire des nuits entières." },
+        { "nom": "Mots venus de l'allemand", "mots": ["Vasistas", "Bivouac", "Chope", "Trinquer"], "anecdote": "« Vasistas » vient de l'allemand « Was ist das ? », qui veut dire « Qu'est-ce que c'est ? »." }
+      ]
+    },
+    {
+      "id": "g166",
+      "num": 166,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "jour": "2026-11-14",
+      "groupes": [
+        { "nom": "Genres musicaux", "mots": ["Jazz", "Reggae", "Blues", "Funk"], "anecdote": "Le reggae de la Jamaïque est inscrit au patrimoine culturel immatériel de l'Unesco depuis 2018." },
+        { "nom": "Desserts italiens", "mots": ["Tiramisu", "Panna cotta", "Cannoli", "Zabaglione"], "anecdote": "« Tiramisu » veut dire « tire-moi vers le haut » en italien." },
+        { "nom": "Fournitures scolaires", "mots": ["Trousse", "Compas", "Équerre", "Rapporteur"], "anecdote": "Le rapporteur, qui sert à mesurer les angles, est gradué de 0 à 180 degrés." },
+        { "nom": "Villes de Bretagne", "mots": ["Brest", "Quimper", "Vannes", "Lorient"], "anecdote": "Lorient doit son nom à la Compagnie des Indes orientales, qui y installa ses chantiers au XVIIe siècle." }
+      ]
+    },
+    {
+      "id": "g167",
+      "num": 167,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "jour": "2026-11-15",
+      "groupes": [
+        { "nom": "Comédies musicales", "mots": ["Cats", "Grease", "Hair", "Evita"], "anecdote": "« Cats », d'Andrew Lloyd Webber, est tiré d'un recueil de poèmes de T. S. Eliot sur les chats." },
+        { "nom": "Mers", "mots": ["Baltique", "Caspienne", "Égée", "Adriatique"], "anecdote": "Selon la légende, la mer Égée doit son nom au roi Égée, qui s'y jeta en croyant son fils Thésée mort." },
+        { "nom": "Parfums célèbres", "mots": ["N°5", "Shalimar", "Opium", "J'adore"], "anecdote": "Le N°5 de Chanel, créé en 1921, serait le cinquième échantillon que le parfumeur Ernest Beaux présenta à Coco Chanel." },
+        { "nom": "Titans", "mots": ["Cronos", "Rhéa", "Hypérion", "Thémis"], "anecdote": "Selon la mythologie grecque, le titan Cronos dévorait ses enfants à la naissance, de peur d'être détrôné." }
+      ]
+    },
+    {
+      "id": "g168",
+      "num": 168,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Saisons", "mots": ["Printemps", "Été", "Automne", "Hiver"], "anecdote": "Quand c'est l'été en France, c'est l'hiver en Australie : les saisons sont inversées entre les deux hémisphères." },
+        { "nom": "Animaux de compagnie", "mots": ["Chat", "Chien", "Hamster", "Lapin"], "anecdote": "Un chat dort en moyenne entre 12 et 16 heures par jour." },
+        { "nom": "Vaisselle", "mots": ["Assiette", "Bol", "Saladier", "Tasse"], "anecdote": "Le mot « bol » vient de l'anglais « bowl »." },
+        { "nom": "Grands magasins parisiens", "mots": ["Galeries Lafayette", "Bon Marché", "Samaritaine", "BHV"], "anecdote": "Le Bon Marché, ouvert à Paris au XIXe siècle, est souvent présenté comme le premier grand magasin du monde." }
+      ]
+    },
+    {
+      "id": "g169",
+      "num": 169,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Points cardinaux", "mots": ["Nord", "Sud", "Est", "Ouest"], "anecdote": "L'aiguille d'une boussole indique le nord magnétique, qui n'est pas exactement au même endroit que le pôle Nord." },
+        { "nom": "Oiseaux du jardin", "mots": ["Moineau", "Merle", "Rouge-gorge", "Pinson"], "anecdote": "Le rouge-gorge est l'un des rares oiseaux qui chantent aussi en plein hiver." },
+        { "nom": "Doigts de la main", "mots": ["Pouce", "Index", "Majeur", "Auriculaire"], "anecdote": "L'auriculaire doit son nom au latin « auris », l'oreille : c'est le petit doigt qu'on peut glisser dans l'oreille !" },
+        { "nom": "Fête foraine", "mots": ["Manège", "Grande roue", "Auto-tamponneuse", "Barbe à papa"], "anecdote": "La première grande roue a été construite à Chicago en 1893 par l'ingénieur George Ferris." }
+      ]
+    },
+    {
+      "id": "g170",
+      "num": 170,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Continents", "mots": ["Afrique", "Asie", "Océanie", "Antarctique"], "anecdote": "L'Antarctique est le continent le plus froid, mais aussi le plus sec : c'est un immense désert de glace." },
+        { "nom": "Légumes verts", "mots": ["Brocoli", "Épinard", "Petit pois", "Haricot vert"], "anecdote": "Le brocoli est un chou, de la même famille que le chou-fleur et le chou de Bruxelles." },
+        { "nom": "Cirque", "mots": ["Clown", "Jongleur", "Acrobate", "Dompteur"], "anecdote": "En anglais, le mot « clown » désignait d'abord un paysan un peu maladroit." },
+        { "nom": "Méchants de Disney", "mots": ["Ursula", "Jafar", "Scar", "Cruella"], "anecdote": "En anglais, Cruella d'Enfer s'appelle Cruella de Vil : un jeu de mots avec « cruel » et « devil », le diable." }
+      ]
+    },
+    {
+      "id": "g171",
+      "num": 171,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Notes de musique", "mots": ["Do", "Ré", "Mi", "Sol"], "anecdote": "Les noms des notes viennent des premières syllabes d'un chant latin du Moyen Âge, l'hymne à saint Jean-Baptiste." },
+        { "nom": "Animaux de la forêt", "mots": ["Cerf", "Sanglier", "Renard", "Écureuil"], "anecdote": "Les bois du cerf tombent chaque année à la fin de l'hiver, puis repoussent." },
+        { "nom": "Commerces", "mots": ["Boulangerie", "Boucherie", "Pharmacie", "Librairie"], "anecdote": "La France compte plus de 30 000 boulangeries." },
+        { "nom": "Personnages de Peter Pan", "mots": ["Wendy", "Clochette", "Capitaine Crochet", "Monsieur Mouche"], "anecdote": "Peter Pan est apparu en 1902 dans un roman de l'Écossais J. M. Barrie." }
+      ]
+    },
+    {
+      "id": "g172",
+      "num": 172,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Jours de la semaine", "mots": ["Lundi", "Mardi", "Jeudi", "Samedi"], "anecdote": "Mardi doit son nom à Mars, le dieu romain de la guerre, et jeudi à Jupiter." },
+        { "nom": "Reptiles", "mots": ["Crocodile", "Tortue", "Caméléon", "Iguane"], "anecdote": "Le caméléon peut bouger ses deux yeux indépendamment l'un de l'autre." },
+        { "nom": "Fast-food", "mots": ["Hamburger", "Pizza", "Hot-dog", "Kebab"], "anecdote": "La pizza Margherita aurait été créée à Naples en 1889, en l'honneur de la reine Marguerite." },
+        { "nom": "Matériel de peinture", "mots": ["Pinceau", "Palette", "Chevalet", "Toile"], "anecdote": "Les tubes de peinture, inventés en 1841, ont permis aux peintres de travailler facilement en plein air." }
+      ]
+    },
+    {
+      "id": "g173",
+      "num": 173,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Mois de l'année", "mots": ["Janvier", "Avril", "Juillet", "Octobre"], "anecdote": "Juillet doit son nom à Jules César, et août à l'empereur Auguste." },
+        { "nom": "Poissons d'eau douce", "mots": ["Truite", "Brochet", "Carpe", "Sandre"], "anecdote": "Une carpe peut vivre plusieurs dizaines d'années." },
+        { "nom": "Jouets", "mots": ["Toupie", "Poupée", "Yo-yo", "Cerf-volant"], "anecdote": "Le cerf-volant a été inventé en Chine il y a plus de 2 000 ans." },
+        { "nom": "Bâtiments d'une ville", "mots": ["Mairie", "Église", "Gare", "Poste"], "anecdote": "La devise « Liberté, Égalité, Fraternité » est inscrite sur la façade de nombreuses mairies." }
+      ]
+    },
+    {
+      "id": "g174",
+      "num": 174,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Émotions", "mots": ["Joie", "Colère", "Peur", "Tristesse"], "anecdote": "Dans le film Pixar « Vice-Versa » (2015), les émotions de la petite Riley sont Joie, Tristesse, Colère, Peur et Dégoût." },
+        { "nom": "Fruits de mer", "mots": ["Huître", "Crevette", "Homard", "Langouste"], "anecdote": "Une huître peut changer de sexe plusieurs fois au cours de sa vie." },
+        { "nom": "Vêtements d'hiver", "mots": ["Écharpe", "Bonnet", "Moufle", "Doudoune"], "anecdote": "Dans une moufle, les doigts se réchauffent entre eux : elle tient plus chaud qu'un gant." },
+        { "nom": "Contes d'Andersen", "mots": ["La Petite Sirène", "Le Vilain Petit Canard", "La Reine des neiges", "La Petite Fille aux allumettes"], "anecdote": "Une statue de la Petite Sirène accueille les visiteurs du port de Copenhague depuis 1913." }
+      ]
+    },
+    {
+      "id": "g175",
+      "num": 175,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Boissons chaudes", "mots": ["Café", "Thé", "Chocolat chaud", "Tisane"], "anecdote": "Après l'eau, le thé est la boisson la plus bue au monde." },
+        { "nom": "Mobilier urbain", "mots": ["Kiosque", "Lampadaire", "Abribus", "Fontaine"], "anecdote": "Les fontaines Wallace, ces fontaines vertes de Paris, ont été offertes par le Britannique Richard Wallace en 1872." },
+        { "nom": "Animaux marins", "mots": ["Pieuvre", "Requin", "Étoile de mer", "Hippocampe"], "anecdote": "Chez l'hippocampe, c'est le mâle qui porte les œufs jusqu'à leur éclosion." },
+        { "nom": "Personnages de Winnie l'ourson", "mots": ["Porcinet", "Tigrou", "Bourriquet", "Coco Lapin"], "anecdote": "Winnie l'ourson doit son nom à une vraie ourse du zoo de Londres, Winnipeg." }
+      ]
+    },
+    {
+      "id": "g176",
+      "num": 176,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Opérations", "mots": ["Addition", "Soustraction", "Multiplication", "Division"], "anecdote": "Le signe « = » a été inventé en 1557 par le Gallois Robert Recorde." },
+        { "nom": "Céréales", "mots": ["Maïs", "Orge", "Seigle", "Avoine"], "anecdote": "La bière est le plus souvent fabriquée avec de l'orge." },
+        { "nom": "Cuissons de la viande", "mots": ["Rosé", "Saignant", "À point", "Bien cuit"], "anecdote": "Une viande « bleue » est à peine saisie : encore moins cuite qu'une viande saignante." },
+        { "nom": "Sports de combat", "mots": ["Boxe", "Lutte", "Sumo", "Taekwondo"], "anecdote": "Le taekwondo, un art martial coréen, est au programme des Jeux olympiques depuis 2000." }
+      ]
+    },
+    {
+      "id": "g177",
+      "num": 177,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Pièces de la maison", "mots": ["Cuisine", "Salon", "Chambre", "Grenier"], "anecdote": "Le mot « salon » vient de l'italien « salone », qui veut dire « grande salle »." },
+        { "nom": "Animaux nocturnes", "mots": ["Hibou", "Chauve-souris", "Chouette", "Raton laveur"], "anecdote": "La chauve-souris est le seul mammifère capable de vraiment voler." },
+        { "nom": "Héros de dessins animés", "mots": ["Bob l'éponge", "Scooby-Doo", "Bugs Bunny", "Titi"], "anecdote": "Bob l'éponge vit dans un ananas, au fond de l'océan, dans la ville de Bikini Bottom." },
+        { "nom": "Jardinage", "mots": ["Râteau", "Arrosoir", "Brouette", "Sécateur"], "anecdote": "La brouette était déjà utilisée en Chine il y a près de 2 000 ans." }
+      ]
+    },
+    {
+      "id": "g178",
+      "num": 178,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Langues étrangères", "mots": ["Anglais", "Chinois", "Allemand", "Russe"], "anecdote": "Le chinois mandarin est la langue maternelle la plus parlée au monde." },
+        { "nom": "Petites bêtes du jardin", "mots": ["Escargot", "Limace", "Ver de terre", "Araignée"], "anecdote": "L'araignée n'est pas un insecte : elle a huit pattes, alors que les insectes n'en ont que six." },
+        { "nom": "Fruits d'automne", "mots": ["Poire", "Raisin", "Châtaigne", "Coing"], "anecdote": "Le coing, trop dur pour être croqué cru, se mange surtout en gelée ou en pâte de fruits." },
+        { "nom": "Unités de temps", "mots": ["Seconde", "Minute", "Heure", "Siècle"], "anecdote": "Une journée compte 86 400 secondes." }
+      ]
+    },
+    {
+      "id": "g179",
+      "num": 179,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Couleurs en anglais", "mots": ["Red", "Blue", "Green", "Yellow"], "anecdote": "Le mot anglais « blue » vient du vieux français « bleu »." },
+        { "nom": "Mots espagnols courants", "mots": ["Hola", "Gracias", "Amigo", "Fiesta"], "anecdote": "En espagnol, une question commence par un point d'interrogation à l'envers : « ¿ »." },
+        { "nom": "Véhicules à deux roues", "mots": ["Vélo", "Moto", "Scooter", "Trottinette"], "anecdote": "L'ancêtre du vélo, la draisienne (1817), n'avait pas de pédales : on avançait en poussant avec les pieds." },
+        { "nom": "Parties du visage", "mots": ["Nez", "Menton", "Sourcil", "Joue"], "anecdote": "Les sourcils empêchent la sueur et la pluie de couler dans les yeux." }
+      ]
+    },
+    {
+      "id": "g180",
+      "num": 180,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Accessoires", "mots": ["Nœud papillon", "Ceinture", "Montre", "Lunettes"], "anecdote": "La montre-bracelet s'est répandue pendant la Première Guerre mondiale : plus pratique que la montre de poche pour les soldats." },
+        { "nom": "Matières scolaires", "mots": ["Mathématiques", "Physique", "Musique", "Géographie"], "anecdote": "Le baccalauréat a été créé en 1808, sous Napoléon Ier." },
+        { "nom": "Animaux de la jungle", "mots": ["Gorille", "Toucan", "Anaconda", "Paresseux"], "anecdote": "Le paresseux est si lent que des algues poussent parfois dans son pelage." },
+        { "nom": "Noël", "mots": ["Sapin", "Guirlande", "Bûche", "Crèche"], "anecdote": "La tradition du sapin de Noël est attestée en Alsace dès le XVIe siècle." }
+      ]
+    },
+    {
+      "id": "g181",
+      "num": 181,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Femelles d'animaux", "mots": ["Jument", "Brebis", "Truie", "Hase"], "anecdote": "La hase est la femelle du lièvre, et la brebis celle du bélier." },
+        { "nom": "Instruments de rock", "mots": ["Guitare", "Batterie", "Basse", "Synthétiseur"], "anecdote": "La guitare électrique Fender Stratocaster, lancée en 1954, est l'une des plus célèbres du monde." },
+        { "nom": "Plage", "mots": ["Sable", "Parasol", "Coquillage", "Serviette"], "anecdote": "Le sable de certaines plages d'Hawaï est noir : c'est de la lave volcanique réduite en grains." },
+        { "nom": "Fêtes de famille", "mots": ["Mariage", "Baptême", "Anniversaire", "Communion"], "anecdote": "« Joyeux anniversaire » se chante sur l'air américain de « Happy Birthday to You », l'une des chansons les plus chantées au monde." }
+      ]
+    },
+    {
+      "id": "g182",
+      "num": 182,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Synonymes de « content »", "mots": ["Joyeux", "Heureux", "Ravi", "Gai"], "anecdote": "« Ravi » voulait d'abord dire « enlevé, emporté » : être ravi, c'est être transporté de joie." },
+        { "nom": "Monuments du monde", "mots": ["Colisée", "Taj Mahal", "Big Ben", "Statue de la Liberté"], "anecdote": "La statue de la Liberté a été offerte par la France aux États-Unis et inaugurée en 1886." },
+        { "nom": "Catastrophes naturelles", "mots": ["Séisme", "Inondation", "Ouragan", "Avalanche"], "anecdote": "Les ouragans de l'Atlantique reçoivent des prénoms choisis à l'avance par l'Organisation météorologique mondiale." },
+        { "nom": "Gâteaux", "mots": ["Fraisier", "Forêt-noire", "Fondant", "Quatre-quarts"], "anecdote": "Le quatre-quarts doit son nom à ses quatre ingrédients en parts égales : beurre, sucre, farine et œufs." }
+      ]
+    },
+    {
+      "id": "g183",
+      "num": 183,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Sports avec un ballon", "mots": ["Volley-ball", "Futsal", "Water-polo", "Football américain"], "anecdote": "Le volley-ball a été inventé aux États-Unis en 1895." },
+        { "nom": "Camping", "mots": ["Tente", "Sac de couchage", "Lampe frontale", "Réchaud"], "anecdote": "Le mot « camping » vient de l'anglais et s'est répandu en France au début du XXe siècle." },
+        { "nom": "Fruits d'été", "mots": ["Pêche", "Abricot", "Pastèque", "Prune"], "anecdote": "La pastèque contient plus de 90 % d'eau." },
+        { "nom": "Plats à base de riz", "mots": ["Paella", "Risotto", "Riz cantonais", "Biryani"], "anecdote": "La vraie paella de Valence se prépare avec du poulet et du lapin, pas avec des fruits de mer." }
+      ]
+    },
+    {
+      "id": "g184",
+      "num": 184,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Héros des films Disney", "mots": ["Simba", "Aladdin", "Bambi", "Dumbo"], "anecdote": "« Bambi », sorti en 1942, s'inspire d'un roman autrichien de Felix Salten." },
+        { "nom": "Desserts", "mots": ["Crêpe", "Gaufre", "Tarte Tatin", "Crème brûlée"], "anecdote": "La tarte Tatin serait née d'une maladresse des sœurs Tatin, en Sologne, qui auraient cuit leur tarte aux pommes à l'envers." },
+        { "nom": "Mâles d'animaux", "mots": ["Jars", "Étalon", "Verrat", "Bouc"], "anecdote": "Le verrat est le mâle de la truie, et le jars celui de l'oie." },
+        { "nom": "Petit-déjeuner", "mots": ["Tartine", "Céréales", "Jus d'orange", "Confiture"], "anecdote": "Les corn-flakes ont été inventés aux États-Unis à la fin du XIXe siècle par les frères Kellogg." }
+      ]
+    },
+    {
+      "id": "g185",
+      "num": 185,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Phénomènes du ciel", "mots": ["Arc-en-ciel", "Éclipse", "Aurore boréale", "Étoile filante"], "anecdote": "Une étoile filante n'est pas une étoile : c'est une poussière venue de l'espace qui brûle en entrant dans l'atmosphère." },
+        { "nom": "Jeux de société pour enfants", "mots": ["Puissance 4", "Mikado", "Dominos", "Jeu de l'oie"], "anecdote": "Le jeu de l'oie existe depuis au moins le XVIe siècle." },
+        { "nom": "Animaux de la montagne", "mots": ["Marmotte", "Chamois", "Bouquetin", "Aigle royal"], "anecdote": "La marmotte hiberne jusqu'à six mois par an." },
+        { "nom": "Personnages du Petit Prince", "mots": ["Rose", "Aviateur", "Allumeur de réverbères", "Businessman"], "anecdote": "« Le Petit Prince », d'Antoine de Saint-Exupéry, est l'un des livres les plus traduits au monde." }
+      ]
+    },
+    {
+      "id": "g186",
+      "num": 186,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Métiers de la santé", "mots": ["Infirmier", "Dentiste", "Pharmacien", "Chirurgien"], "anecdote": "Le serment que prêtent les médecins porte le nom d'Hippocrate, un médecin de la Grèce antique." },
+        { "nom": "Animaux d'Asie", "mots": ["Panda", "Yak", "Orang-outan", "Dragon de Komodo"], "anecdote": "Le panda géant passe plus de dix heures par jour à manger du bambou." },
+        { "nom": "Légumes racines", "mots": ["Carotte", "Betterave", "Rutabaga", "Céleri-rave"], "anecdote": "Autrefois, les carottes n'étaient pas orange mais surtout violettes ou jaunes." },
+        { "nom": "Maisons de Poudlard", "mots": ["Gryffondor", "Serpentard", "Poufsouffle", "Serdaigle"], "anecdote": "À Poudlard, c'est le Choixpeau magique qui répartit les nouveaux élèves dans les quatre maisons." }
+      ]
+    },
+    {
+      "id": "g187",
+      "num": 187,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Les cinq sens", "mots": ["Vue", "Ouïe", "Odorat", "Toucher"], "anecdote": "Le cinquième sens, le goût, reconnaît le sucré, le salé, l'acide, l'amer et l'umami." },
+        { "nom": "Fournitures de bureau", "mots": ["Agrafeuse", "Trombone", "Scotch", "Classeur"], "anecdote": "Le trombone de bureau doit son nom à sa forme, qui rappelle l'instrument de musique." },
+        { "nom": "Boissons fraîches", "mots": ["Limonade", "Sirop", "Jus de pomme", "Diabolo"], "anecdote": "Un diabolo, c'est de la limonade mélangée à un sirop : diabolo menthe, diabolo fraise…" },
+        { "nom": "Héros de jeux vidéo", "mots": ["Sonic", "Link", "Kirby", "Lara Croft"], "anecdote": "Sonic, le hérisson bleu de Sega, est apparu en 1991." }
+      ]
+    },
+    {
+      "id": "g188",
+      "num": 188,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Signes de ponctuation", "mots": ["Virgule", "Point", "Tiret", "Parenthèse"], "anecdote": "Le point d'exclamation viendrait du mot latin « io », un cri de joie, écrit avec le i au-dessus du o." },
+        { "nom": "Animaux de la basse-cour", "mots": ["Canard", "Oie", "Dinde", "Pintade"], "anecdote": "La pintade est originaire d'Afrique." },
+        { "nom": "Tenues de sport", "mots": ["Jogging", "Short", "Survêtement", "Kimono"], "anecdote": "Au Japon, la tenue du judoka ne s'appelle pas « kimono » mais « judogi »." },
+        { "nom": "Stations balnéaires", "mots": ["Nice", "Biarritz", "Deauville", "La Baule"], "anecdote": "Deauville a été créée de toutes pièces au XIXe siècle, à l'initiative du duc de Morny." }
+      ]
+    },
+    {
+      "id": "g189",
+      "num": 189,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Arbres fruitiers", "mots": ["Pommier", "Cerisier", "Olivier", "Figuier"], "anecdote": "Un olivier peut vivre plus de 1 000 ans." },
+        { "nom": "Mots de politesse", "mots": ["Merci", "Pardon", "Bonjour", "S'il vous plaît"], "anecdote": "« Merci » vient du latin « merces », qui voulait dire « salaire, récompense »." },
+        { "nom": "Moyens de communication", "mots": ["Téléphone", "Lettre", "Courriel", "SMS"], "anecdote": "Le premier SMS a été envoyé en 1992 ; il disait simplement « Merry Christmas »." },
+        { "nom": "Sports sur glace", "mots": ["Hockey", "Short-track", "Patinage de vitesse", "Bobsleigh"], "anecdote": "Le hockey sur glace moderne est né au Canada, à la fin du XIXe siècle." }
+      ]
+    },
+    {
+      "id": "g190",
+      "num": 190,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Personnages des Schtroumpfs", "mots": ["Grand Schtroumpf", "Schtroumpfette", "Gargamel", "Azraël"], "anecdote": "Les Schtroumpfs ont été créés en 1958 par le dessinateur belge Peyo." },
+        { "nom": "Sortes de chocolat", "mots": ["Noir", "Au lait", "Blanc", "Praliné"], "anecdote": "Le chocolat blanc ne contient pas de cacao en poudre, seulement du beurre de cacao." },
+        { "nom": "Activités de vacances", "mots": ["Randonnée", "Plongée", "Équitation", "Canyoning"], "anecdote": "Le canyoning consiste à descendre des gorges en marchant, en nageant, en sautant et en glissant." },
+        { "nom": "Pays d'Asie", "mots": ["Chine", "Inde", "Thaïlande", "Vietnam"], "anecdote": "En 2023, l'Inde est devenue le pays le plus peuplé du monde, devant la Chine." }
+      ]
+    },
+    {
+      "id": "g191",
+      "num": 191,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Animaux du désert", "mots": ["Dromadaire", "Fennec", "Gerboise", "Crotale"], "anecdote": "Un dromadaire peut boire plus de 100 litres d'eau en quelques minutes." },
+        { "nom": "Pains du monde", "mots": ["Pita", "Naan", "Bagel", "Bretzel"], "anecdote": "Le bagel est plongé dans l'eau bouillante avant d'être cuit au four." },
+        { "nom": "Couleurs de cheveux", "mots": ["Blond", "Brun", "Roux", "Châtain"], "anecdote": "Les roux ne représentent que 1 à 2 % de la population mondiale." },
+        { "nom": "Marionnettes", "mots": ["Guignol", "Pinocchio", "Polichinelle", "Kermit"], "anecdote": "Guignol est né à Lyon au début du XIXe siècle, créé par le marionnettiste Laurent Mourguet." }
+      ]
+    },
+    {
+      "id": "g192",
+      "num": 192,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Appareils électroniques", "mots": ["Ordinateur", "Tablette", "Smartphone", "Télévision"], "anecdote": "Le premier iPhone a été présenté par Steve Jobs en 2007." },
+        { "nom": "Fleurs des champs", "mots": ["Marguerite", "Bleuet", "Pissenlit", "Bouton-d'or"], "anecdote": "Le pissenlit doit son nom à ses propriétés diurétiques… qui font faire pipi !" },
+        { "nom": "Chiens de fiction", "mots": ["Lassie", "Snoopy", "Rintintin", "Pluto"], "anecdote": "Rintintin était un vrai chien, recueilli en France en 1918 par un soldat américain, avant de devenir une star d'Hollywood." },
+        { "nom": "Courses à pied", "mots": ["Sprint", "Marathon", "Relais", "Steeple"], "anecdote": "Le marathon mesure 42,195 km, une distance fixée lors des Jeux de Londres en 1908." }
+      ]
+    },
+    {
+      "id": "g193",
+      "num": 193,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Voix", "mots": ["Soprano", "Alto", "Ténor", "Baryton"], "anecdote": "« Soprano » vient de l'italien « sopra », qui veut dire « au-dessus »." },
+        { "nom": "Salle de bains", "mots": ["Baignoire", "Lavabo", "Douche", "Miroir"], "anecdote": "Le miroir en verre a été perfectionné à Venise, sur l'île de Murano." },
+        { "nom": "Super-pouvoirs", "mots": ["Invisibilité", "Télépathie", "Vol", "Super-force"], "anecdote": "Dans ses premières aventures, Superman ne volait pas : il faisait seulement des bonds immenses." },
+        { "nom": "Personnages de Robin des bois", "mots": ["Petit Jean", "Frère Tuck", "Lady Marianne", "Shérif de Nottingham"], "anecdote": "Selon la légende, Robin des bois vivait dans la forêt de Sherwood, en Angleterre." }
+      ]
+    },
+    {
+      "id": "g194",
+      "num": 194,
+      "difficulte": "facile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Activités artistiques", "mots": ["Dessin", "Sculpture", "Poterie", "Photographie"], "anecdote": "La plus ancienne photographie connue a été prise par Nicéphore Niépce vers 1826." },
+        { "nom": "Transports d'autrefois", "mots": ["Diligence", "Calèche", "Dirigeable", "Paquebot"], "anecdote": "Les dirigeables Zeppelin doivent leur nom au comte allemand Ferdinand von Zeppelin." },
+        { "nom": "Sandwichs", "mots": ["Croque-monsieur", "Club", "Panini", "Jambon-beurre"], "anecdote": "Le jambon-beurre est le sandwich le plus vendu en France." },
+        { "nom": "Personnages de La Reine des neiges", "mots": ["Elsa", "Anna", "Olaf", "Kristoff"], "anecdote": "Le film « La Reine des neiges » de Disney s'inspire librement d'un conte d'Andersen." }
+      ]
+    },
+    {
+      "id": "g195",
+      "num": 195,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Parties d'un château fort", "mots": ["Donjon", "Pont-levis", "Créneau", "Douves"], "anecdote": "Quand l'ennemi approchait, on relevait le pont-levis pour couper l'accès au château." },
+        { "nom": "Titres de noblesse", "mots": ["Duc", "Comte", "Marquis", "Baron"], "anecdote": "Dans la noblesse française, le titre de duc était le plus élevé, juste après celui de prince." },
+        { "nom": "Armes médiévales", "mots": ["Arbalète", "Hallebarde", "Fléau", "Masse d'armes"], "anecdote": "L'arbalète était si redoutée qu'en 1139 l'Église a tenté de l'interdire dans les combats entre chrétiens." },
+        { "nom": "Chevaliers célèbres", "mots": ["Bayard", "Du Guesclin", "Roland", "Godefroy de Bouillon"], "anecdote": "Bayard était surnommé « le chevalier sans peur et sans reproche »." }
+      ]
+    },
+    {
+      "id": "g196",
+      "num": 196,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Chanteuses latines", "mots": ["Shakira", "Rosalía", "Jennifer Lopez", "Gloria Estefan"], "anecdote": "La Colombienne Shakira a chanté « Waka Waka », l'hymne de la Coupe du monde 2010." },
+        { "nom": "Villes du Mexique", "mots": ["Puebla", "Guadalajara", "Monterrey", "Cancún"], "anecdote": "Cancún n'était qu'un petit village de pêcheurs avant la construction de sa station balnéaire, dans les années 1970." },
+        { "nom": "Pays d'Amérique centrale", "mots": ["Salvador", "Honduras", "Guatemala", "Nicaragua"], "anecdote": "Le Guatemala abrite de grandes cités mayas, comme Tikal, perdue dans la jungle." },
+        { "nom": "Langues amérindiennes", "mots": ["Quechua", "Guarani", "Nahuatl", "Maya"], "anecdote": "Le guarani est une langue officielle du Paraguay, à côté de l'espagnol." }
+      ]
+    },
+    {
+      "id": "g197",
+      "num": 197,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Jeux de casino", "mots": ["Roulette", "Blackjack", "Baccara", "Machine à sous"], "anecdote": "À la roulette, c'est la case du zéro qui donne l'avantage au casino." },
+        { "nom": "Festivals de musique", "mots": ["Vieilles Charrues", "Hellfest", "Eurockéennes", "Solidays"], "anecdote": "Les Vieilles Charrues, à Carhaix, en Bretagne, sont l'un des plus grands festivals de musique de France." },
+        { "nom": "Sacs de luxe", "mots": ["Kelly", "Birkin", "Speedy", "Lady Dior"], "anecdote": "Le sac Kelly d'Hermès doit son nom à l'actrice Grace Kelly, devenue princesse de Monaco." },
+        { "nom": "Famille princière de Monaco", "mots": ["Rainier", "Caroline", "Stéphanie", "Charlène"], "anecdote": "En 1956, le prince Rainier III a épousé l'actrice américaine Grace Kelly." }
+      ]
+    },
+    {
+      "id": "g198",
+      "num": 198,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Villes du Texas", "mots": ["Houston", "Dallas", "Austin", "San Antonio"], "anecdote": "Pendant la mission Apollo 13, en 1970, la célèbre phrase « Houston, we've had a problem » s'adressait au centre de contrôle de la NASA, au Texas." },
+        { "nom": "Séries policières américaines", "mots": ["Mentalist", "Dexter", "NCIS", "Les Experts"], "anecdote": "« Les Experts » a donné naissance à plusieurs séries dérivées, à Miami, à Manhattan…" },
+        { "nom": "Jazzmen", "mots": ["Mingus", "Coltrane", "Ellington", "Parker"], "anecdote": "Duke Ellington a composé plus d'un millier de morceaux." },
+        { "nom": "Astronautes français", "mots": ["Pesquet", "Haigneré", "Chrétien", "Clervoy"], "anecdote": "Jean-Loup Chrétien a été le premier Français à aller dans l'espace, en 1982." }
+      ]
+    },
+    {
+      "id": "g199",
+      "num": 199,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Cours d'eau", "mots": ["Ruisseau", "Torrent", "Rivière", "Fleuve"], "anecdote": "En France, un fleuve se jette dans la mer, alors qu'une rivière se jette dans un autre cours d'eau." },
+        { "nom": "Rongeurs", "mots": ["Chinchilla", "Cochon d'Inde", "Porc-épic", "Capybara"], "anecdote": "Le capybara, d'Amérique du Sud, est le plus grand rongeur du monde : il peut dépasser 60 kg." },
+        { "nom": "Barrages", "mots": ["Hoover", "Trois-Gorges", "Assouan", "Itaipu"], "anecdote": "Le barrage des Trois-Gorges, en Chine, abrite la plus puissante centrale hydroélectrique du monde." },
+        { "nom": "Ouvrages d'art sur l'eau", "mots": ["Écluse", "Digue", "Aqueduc", "Viaduc"], "anecdote": "Le pont du Gard est un aqueduc construit par les Romains au Ier siècle pour amener l'eau jusqu'à Nîmes." }
+      ]
+    },
+    {
+      "id": "g200",
+      "num": 200,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Biscuits", "mots": ["Financier", "Tuile", "Palmier", "Langue de chat"], "anecdote": "Le financier devrait son nom à un pâtissier du quartier de la Bourse, à Paris, qui le vendait aux financiers pressés." },
+        { "nom": "Villes de Normandie", "mots": ["Rouen", "Caen", "Évreux", "Alençon"], "anecdote": "Jeanne d'Arc a été brûlée vive à Rouen, sur la place du Vieux-Marché, en 1431." },
+        { "nom": "Métiers de la finance", "mots": ["Trader", "Banquier", "Courtier", "Comptable"], "anecdote": "Le mot « banque » vient de l'italien « banca », le banc sur lequel les changeurs posaient leurs pièces." },
+        { "nom": "Personnages de Proust", "mots": ["Swann", "Charlus", "Odette", "Albertine"], "anecdote": "Marcel Proust a écrit la fin de son œuvre dans une chambre tapissée de liège, pour ne pas entendre le bruit." }
+      ]
+    },
+    {
+      "id": "g201",
+      "num": 201,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Plats indiens", "mots": ["Tandoori", "Dal", "Samossa", "Tikka masala"], "anecdote": "Le poulet tikka masala est souvent présenté comme l'un des plats préférés des Britanniques." },
+        { "nom": "Desserts anglais", "mots": ["Crumble", "Scone", "Trifle", "Pudding"], "anecdote": "Le crumble se serait répandu au Royaume-Uni pendant la Seconde Guerre mondiale, quand on manquait de farine et de beurre pour faire des tartes." },
+        { "nom": "Personnages de Sherlock Holmes", "mots": ["Watson", "Moriarty", "Mrs Hudson", "Lestrade"], "anecdote": "L'adresse de Sherlock Holmes, au 221B Baker Street, abrite aujourd'hui un musée à Londres." },
+        { "nom": "Pays où l'on roule à gauche", "mots": ["Japon", "Australie", "Afrique du Sud", "Nouvelle-Zélande"], "anecdote": "Environ un tiers de l'humanité vit dans un pays où l'on roule à gauche." }
+      ]
+    },
+    {
+      "id": "g202",
+      "num": 202,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Chaînes de restauration rapide", "mots": ["McDonald's", "Burger King", "KFC", "Subway"], "anecdote": "McDonald's a été fondé en 1940 en Californie par les frères Richard et Maurice McDonald." },
+        { "nom": "Parcs nationaux américains", "mots": ["Yellowstone", "Yosemite", "Grand Canyon", "Everglades"], "anecdote": "Yellowstone, créé en 1872, est le premier parc national du monde." },
+        { "nom": "Ours célèbres", "mots": ["Paddington", "Baloo", "Petit Ours Brun", "Colargol"], "anecdote": "L'ours Paddington doit son nom à la gare de Londres où une famille l'a trouvé." },
+        { "nom": "Espèces d'ours", "mots": ["Grizzly", "Baribal", "Kodiak", "Ours à lunettes"], "anecdote": "L'ours kodiak, qui vit sur une île d'Alaska, est l'un des plus gros ours du monde." }
+      ]
+    },
+    {
+      "id": "g203",
+      "num": 203,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Grades militaires", "mots": ["Caporal", "Sergent", "Lieutenant", "Capitaine"], "anecdote": "Napoléon Bonaparte était surnommé « le Petit Caporal » par ses soldats." },
+        { "nom": "Hiérarchie de l'Église", "mots": ["Pape", "Cardinal", "Évêque", "Abbé"], "anecdote": "« Cardinal » vient du latin « cardo », le gond : le cardinal est un pivot de l'Église." },
+        { "nom": "Nœuds marins", "mots": ["Chaise", "Cabestan", "Pêcheur", "Huit"], "anecdote": "Le nœud de chaise, surnommé le « roi des nœuds », forme une boucle qui ne glisse pas." },
+        { "nom": "Mots après « garde- »", "mots": ["Robe", "Manger", "Boue", "Côte"], "anecdote": "Au Moyen Âge, la « garde-robe » désignait aussi… les toilettes du château." }
+      ]
+    },
+    {
+      "id": "g204",
+      "num": 204,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Héros de BD franco-belge", "mots": ["Boule et Bill", "Achille Talon", "Iznogoud", "Yoko Tsuno"], "anecdote": "Iznogoud n'a qu'un rêve : « devenir calife à la place du calife »." },
+        { "nom": "Desserts orientaux", "mots": ["Baklava", "Loukoum", "Halva", "Makrout"], "anecdote": "Le loukoum est une confiserie venue de Turquie, souvent parfumée à l'eau de rose." },
+        { "nom": "Titres de souverains orientaux", "mots": ["Calife", "Sultan", "Émir", "Vizir"], "anecdote": "Le mot « amiral » vient de l'arabe « amir », le chef, comme « émir »." },
+        { "nom": "Les Mille et Une Nuits", "mots": ["Ali Baba", "Sinbad", "Shéhérazade", "Shahriar"], "anecdote": "Dans « Les Mille et Une Nuits », Shéhérazade raconte une histoire chaque nuit au roi Shahriar pour échapper à la mort." }
+      ]
+    },
+    {
+      "id": "g205",
+      "num": 205,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Cantons suisses", "mots": ["Genève", "Vaud", "Valais", "Berne"], "anecdote": "La Suisse compte 26 cantons." },
+        { "nom": "Montres", "mots": ["Rolex", "Omega", "Swatch", "Tissot"], "anecdote": "En 1969, une montre Omega Speedmaster était au poignet de Buzz Aldrin sur la Lune." },
+        { "nom": "Chocolats suisses", "mots": ["Lindt", "Cailler", "Suchard", "Toblerone"], "anecdote": "La forme triangulaire du Toblerone rappellerait celle du mont Cervin." },
+        { "nom": "Inventions suisses", "mots": ["Velcro", "Cellophane", "Couteau suisse", "Absinthe"], "anecdote": "Le Suisse George de Mestral a inventé le Velcro en observant les fleurs de bardane accrochées aux poils de son chien." }
+      ]
+    },
+    {
+      "id": "g206",
+      "num": 206,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Marques de jouets", "mots": ["Lego", "Playmobil", "Barbie", "Meccano"], "anecdote": "Le nom Lego vient du danois « leg godt », qui veut dire « joue bien »." },
+        { "nom": "Comptines", "mots": ["Frère Jacques", "Au clair de la lune", "Une souris verte", "Alouette"], "anecdote": "« Au clair de la lune » est le plus ancien enregistrement connu d'une voix humaine, réalisé en 1860." },
+        { "nom": "Looney Tunes", "mots": ["Daffy Duck", "Porky Pig", "Grosminet", "Taz"], "anecdote": "Le nom « Looney Tunes » est un clin d'œil moqueur aux « Silly Symphonies » de Disney." },
+        { "nom": "Jouets d'autrefois", "mots": ["Bilboquet", "Osselets", "Cerceau", "Kaléidoscope"], "anecdote": "On jouait déjà aux osselets dans la Grèce antique, avec de vrais petits os de mouton." }
+      ]
+    },
+    {
+      "id": "g207",
+      "num": 207,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Pays d'Afrique de l'Ouest", "mots": ["Sénégal", "Mali", "Côte d'Ivoire", "Burkina Faso"], "anecdote": "Le Burkina Faso s'appelait la Haute-Volta jusqu'en 1984." },
+        { "nom": "Plats d'Afrique", "mots": ["Mafé", "Yassa", "Thiéboudienne", "Attiéké"], "anecdote": "Le thiéboudienne, à base de riz et de poisson, est le plat national du Sénégal." },
+        { "nom": "Animaux de Madagascar", "mots": ["Lémurien", "Fossa", "Aye-aye", "Tenrec"], "anecdote": "À l'état sauvage, les lémuriens ne vivent qu'à Madagascar." },
+        { "nom": "Musiciens africains", "mots": ["Youssou N'Dour", "Fela Kuti", "Salif Keita", "Angélique Kidjo"], "anecdote": "Le Nigérian Fela Kuti est considéré comme le père de l'afrobeat." }
+      ]
+    },
+    {
+      "id": "g208",
+      "num": 208,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Géants de la tech", "mots": ["Google", "Apple", "Amazon", "Microsoft"], "anecdote": "Google tire son nom du « googol », le nombre 1 suivi de 100 zéros." },
+        { "nom": "Logiciels", "mots": ["Word", "Excel", "Photoshop", "PowerPoint"], "anecdote": "PowerPoint a été racheté par Microsoft en 1987, l'année même de sa sortie." },
+        { "nom": "Mots anglais de l'informatique", "mots": ["Hacker", "Cookie", "Spam", "Wi-Fi"], "anecdote": "Le mot « spam » vient d'une marque de jambon en conserve, rendue célèbre par un sketch des Monty Python." },
+        { "nom": "Fondateurs de la tech", "mots": ["Jobs", "Gates", "Zuckerberg", "Bezos"], "anecdote": "Steve Jobs a fondé Apple en 1976 avec Steve Wozniak." }
+      ]
+    },
+    {
+      "id": "g209",
+      "num": 209,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Symboles de la République", "mots": ["Marianne", "Coq", "Bonnet phrygien", "Drapeau tricolore"], "anecdote": "Brigitte Bardot et Catherine Deneuve ont, entre autres, prêté leurs traits aux bustes de Marianne." },
+        { "nom": "Hymnes nationaux", "mots": ["La Marseillaise", "God Save the King", "La Brabançonne", "Hatikvah"], "anecdote": "« La Marseillaise » a été composée à Strasbourg en 1792 par Rouget de Lisle." },
+        { "nom": "Institutions françaises", "mots": ["Sénat", "Assemblée nationale", "Conseil d'État", "Cour des comptes"], "anecdote": "Le Sénat siège au palais du Luxembourg, à Paris." },
+        { "nom": "Clubs de la Révolution", "mots": ["Jacobins", "Cordeliers", "Girondins", "Feuillants"], "anecdote": "Le club des Jacobins doit son nom au couvent parisien où il se réunissait." }
+      ]
+    },
+    {
+      "id": "g210",
+      "num": 210,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Maisons traditionnelles", "mots": ["Chalet", "Mas", "Longère", "Chaumière"], "anecdote": "Le mas est la maison traditionnelle de Provence." },
+        { "nom": "Matériaux de construction", "mots": ["Béton", "Parpaing", "Brique", "Torchis"], "anecdote": "Les Romains utilisaient déjà le béton : le dôme du Panthéon de Rome en est fait." },
+        { "nom": "Architectes", "mots": ["Le Corbusier", "Eiffel", "Gaudí", "Niemeyer"], "anecdote": "Gustave Eiffel a aussi conçu la structure intérieure de la statue de la Liberté." },
+        { "nom": "Monuments de Barcelone", "mots": ["Sagrada Família", "Parc Güell", "Casa Batlló", "Casa Milà"], "anecdote": "La Sagrada Família, de Gaudí, est en construction depuis 1882." }
+      ]
+    },
+    {
+      "id": "g211",
+      "num": 211,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Plats américains", "mots": ["Brownie", "Cheesecake", "Pancake", "Mac and cheese"], "anecdote": "Le brownie serait né à Chicago, à la fin du XIXe siècle." },
+        { "nom": "États américains", "mots": ["Ohio", "Alaska", "Hawaï", "Texas"], "anecdote": "Les États-Unis ont acheté l'Alaska à la Russie en 1867." },
+        { "nom": "Universités américaines", "mots": ["Harvard", "Yale", "Stanford", "Princeton"], "anecdote": "Fondée en 1636, Harvard est la plus ancienne université des États-Unis." },
+        { "nom": "Grands événements du sport américain", "mots": ["Super Bowl", "Stanley Cup", "World Series", "Finales NBA"], "anecdote": "Chaque année, la finale du Super Bowl est l'émission de télévision la plus regardée aux États-Unis." }
+      ]
+    },
+    {
+      "id": "g212",
+      "num": 212,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Mots venus des langues polynésiennes", "mots": ["Tabou", "Tatouage", "Paréo", "Ukulélé"], "anecdote": "« Tatouage » vient du tahitien « tatau », rapporté en Europe par l'expédition de James Cook." },
+        { "nom": "Oiseaux qui ne volent pas", "mots": ["Autruche", "Émeu", "Casoar", "Nandou"], "anecdote": "L'autruche est le plus grand oiseau du monde : elle ne vole pas, mais court à plus de 60 km/h." },
+        { "nom": "Îles du Pacifique", "mots": ["Tahiti", "Fidji", "Samoa", "Tonga"], "anecdote": "Les Tonga sont l'une des dernières monarchies du Pacifique." },
+        { "nom": "Équipes de rugby", "mots": ["All Blacks", "Wallabies", "Springboks", "Pumas"], "anecdote": "Les All Blacks dansent le haka, une danse maorie, avant chaque match." }
+      ]
+    },
+    {
+      "id": "g213",
+      "num": 213,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Émissions de cuisine", "mots": ["Top Chef", "MasterChef", "Le Meilleur Pâtissier", "Cauchemar en cuisine"], "anecdote": "« Top Chef » est diffusé en France depuis 2010." },
+        { "nom": "Couteaux", "mots": ["Laguiole", "Opinel", "Économe", "Santoku"], "anecdote": "Le couteau Opinel est né en Savoie en 1890." },
+        { "nom": "Plats en croûte", "mots": ["Pâté en croûte", "Bœuf Wellington", "Vol-au-vent", "Tourte"], "anecdote": "Le bœuf Wellington porterait le nom du duc de Wellington, vainqueur de Napoléon à Waterloo." },
+        { "nom": "Techniques de cuisine", "mots": ["Mijoter", "Flamber", "Paner", "Blanchir"], "anecdote": "Les crêpes Suzette sont flambées, traditionnellement au Grand Marnier." }
+      ]
+    },
+    {
+      "id": "g214",
+      "num": 214,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Signes mathématiques", "mots": ["Plus", "Moins", "Racine", "Infini"], "anecdote": "Le symbole de l'infini, ∞, a été introduit par le mathématicien anglais John Wallis en 1655." },
+        { "nom": "Lettres grecques", "mots": ["Lambda", "Sigma", "Epsilon", "Thêta"], "anecdote": "Le mot « alphabet » vient des deux premières lettres grecques : alpha et bêta." },
+        { "nom": "Galaxies", "mots": ["Grand Nuage de Magellan", "Voie lactée", "Sombrero", "Tourbillon"], "anecdote": "Le Grand Nuage de Magellan, une petite galaxie voisine de la nôtre, se voit à l'œil nu depuis l'hémisphère Sud." },
+        { "nom": "Préfixes de nombres", "mots": ["Mono", "Bi", "Tri", "Quadri"], "anecdote": "Un quadrige était un char antique tiré par quatre chevaux de front." }
+      ]
+    },
+    {
+      "id": "g215",
+      "num": 215,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Spécialités de montagne", "mots": ["Diots", "Fondue", "Tartiflette", "Pierrade"], "anecdote": "La tartiflette a été inventée dans les années 1980 pour relancer les ventes de reblochon." },
+        { "nom": "Stations de ski", "mots": ["Courchevel", "Tignes", "Val Thorens", "Avoriaz"], "anecdote": "Val Thorens, à 2 300 mètres d'altitude, est la plus haute station de ski d'Europe." },
+        { "nom": "Sports de montagne", "mots": ["Alpinisme", "Ski de fond", "Ski de randonnée", "Via ferrata"], "anecdote": "Le mont Blanc a été gravi pour la première fois en 1786, par Jacques Balmat et Michel Paccard." },
+        { "nom": "Reliefs", "mots": ["Col", "Pic", "Vallée", "Versant"], "anecdote": "Un col est le passage le plus bas entre deux sommets, pour aller d'une vallée à l'autre." }
+      ]
+    },
+    {
+      "id": "g216",
+      "num": 216,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Spécialités belges", "mots": ["Speculoos", "Waterzooi", "Carbonade", "Cuberdon"], "anecdote": "Le cuberdon, un bonbon belge violet en forme de cône, est surnommé « chapeau de curé »." },
+        { "nom": "Chanteurs belges", "mots": ["Stromae", "Angèle", "Adamo", "Annie Cordy"], "anecdote": "En 2010, « Alors on danse » de Stromae a été numéro un dans de nombreux pays d'Europe." },
+        { "nom": "Auteurs de BD belges", "mots": ["Hergé", "Franquin", "Morris", "Roba"], "anecdote": "Hergé a pris pour pseudonyme ses initiales inversées : Georges Remi, R.G., « Hergé »." },
+        { "nom": "Bières trappistes", "mots": ["Chimay", "Orval", "Westmalle", "Rochefort"], "anecdote": "Les bières trappistes sont brassées dans des abbayes, par des moines ou sous leur contrôle." }
+      ]
+    },
+    {
+      "id": "g217",
+      "num": 217,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Variétés de chou", "mots": ["Chou-fleur", "Chou de Bruxelles", "Kale", "Romanesco"], "anecdote": "Le chou romanesco a une forme fractale : chaque petite pointe ressemble au chou entier." },
+        { "nom": "Cervidés", "mots": ["Chevreuil", "Daim", "Élan", "Renne"], "anecdote": "Chez le renne, la femelle porte aussi des bois : c'est le seul cervidé dans ce cas." },
+        { "nom": "Petits noms affectueux", "mots": ["Minou", "Biche", "Loulou", "Cocotte"], "anecdote": "Beaucoup de petits noms affectueux sont des noms d'animaux : ma biche, mon minou, ma cocotte…" },
+        { "nom": "Marchés célèbres", "mots": ["Saint-Ouen", "Rungis", "Grand Bazar", "Borough Market"], "anecdote": "Le marché de Rungis, au sud de Paris, est le plus grand marché de produits frais du monde." }
+      ]
+    },
+    {
+      "id": "g218",
+      "num": 218,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Enseignes de mode", "mots": ["Zara", "H&M", "Uniqlo", "Primark"], "anecdote": "Zara a ouvert son premier magasin en 1975, à La Corogne, en Espagne." },
+        { "nom": "Motifs de tissu", "mots": ["Écossais", "Pied-de-poule", "Rayures", "Pois"], "anecdote": "Le pied-de-poule doit son nom à sa ressemblance avec l'empreinte d'une patte de poule." },
+        { "nom": "Coupes de jean", "mots": ["Slim", "Bootcut", "Baggy", "Flare"], "anecdote": "Le jean doit son nom à la ville de Gênes, en Italie, d'où venait sa toile." },
+        { "nom": "Mannequins", "mots": ["Naomi Campbell", "Kate Moss", "Claudia Schiffer", "Gisele Bündchen"], "anecdote": "La Brésilienne Gisele Bündchen a longtemps été le mannequin le mieux payé du monde." }
+      ]
+    },
+    {
+      "id": "g219",
+      "num": 219,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Magiciens", "mots": ["Merlin", "Gandalf", "Dumbledore", "Mandrake"], "anecdote": "Dans « Le Seigneur des anneaux », Gandalf le Gris revient sous le nom de Gandalf le Blanc." },
+        { "nom": "Objets légendaires", "mots": ["Excalibur", "Graal", "Toison d'or", "Boîte de Pandore"], "anecdote": "La Toison d'or était la peau d'un bélier ailé, que Jason partit chercher avec les Argonautes." },
+        { "nom": "Fées", "mots": ["Morgane", "Carabosse", "Mélusine", "Viviane"], "anecdote": "Selon la légende, la fée Mélusine, à queue de serpent, serait l'ancêtre de la famille de Lusignan." },
+        { "nom": "Légendes bretonnes", "mots": ["Korrigan", "Ys", "Ankou", "Brocéliande"], "anecdote": "Selon la légende, la ville d'Ys a été engloutie par la mer, au large de Douarnenez." }
+      ]
+    },
+    {
+      "id": "g220",
+      "num": 220,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Plats d'Europe de l'Est", "mots": ["Goulash", "Bortsch", "Pierogi", "Pelmeni"], "anecdote": "Le goulash est le plat national de la Hongrie." },
+        { "nom": "Pays des Balkans", "mots": ["Macédoine du Nord", "Croatie", "Albanie", "Monténégro"], "anecdote": "Le Monténégro utilise l'euro, sans faire partie de l'Union européenne." },
+        { "nom": "Langues slaves", "mots": ["Polonais", "Tchèque", "Serbe", "Bulgare"], "anecdote": "Le bulgare s'écrit en alphabet cyrillique, comme le russe." },
+        { "nom": "Villes de Pologne", "mots": ["Cracovie", "Gdańsk", "Wrocław", "Poznań"], "anecdote": "Le syndicat Solidarność est né en 1980 dans les chantiers navals de Gdańsk." }
+      ]
+    },
+    {
+      "id": "g221",
+      "num": 221,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Villes japonaises", "mots": ["Nagoya", "Osaka", "Kobe", "Sapporo"], "anecdote": "Sapporo, sur l'île d'Hokkaido, a accueilli les Jeux olympiques d'hiver en 1972." },
+        { "nom": "Marques japonaises", "mots": ["Sony", "Toyota", "Nintendo", "Canon"], "anecdote": "Nintendo a été fondé en 1889 à Kyoto… pour fabriquer des cartes à jouer." },
+        { "nom": "Arts japonais", "mots": ["Origami", "Ikebana", "Bonsaï", "Haïku"], "anecdote": "Un haïku est un poème japonais très court : 17 syllabes réparties en trois vers." },
+        { "nom": "Inventions japonaises", "mots": ["Walkman", "Shinkansen", "QR code", "Nouilles instantanées"], "anecdote": "Les nouilles instantanées ont été inventées en 1958 par le Japonais Momofuku Ando." }
+      ]
+    },
+    {
+      "id": "g222",
+      "num": 222,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Récompenses du cinéma", "mots": ["Ours d'or", "Palme d'or", "Lion d'or", "Golden Globe"], "anecdote": "L'Ours d'or récompense le meilleur film du festival de Berlin : l'ours est l'emblème de la ville." },
+        { "nom": "Acteurs français", "mots": ["Gabin", "Belmondo", "Delon", "Ventura"], "anecdote": "Jean-Paul Belmondo réalisait lui-même la plupart de ses cascades." },
+        { "nom": "Films de Spielberg", "mots": ["Les Dents de la mer", "E.T.", "Jurassic Park", "Il faut sauver le soldat Ryan"], "anecdote": "Le requin mécanique des « Dents de la mer » tombait si souvent en panne que Spielberg a dû le montrer le moins possible." },
+        { "nom": "Films de James Cameron", "mots": ["Titanic", "Avatar", "Terminator", "Abyss"], "anecdote": "« Avatar », sorti en 2009, est le plus gros succès de l'histoire du cinéma au box-office mondial." }
+      ]
+    },
+    {
+      "id": "g223",
+      "num": 223,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Composants d'ordinateur", "mots": ["Processeur", "Carte mère", "Disque dur", "Mémoire vive"], "anecdote": "Le premier disque dur, fabriqué par IBM en 1956, pesait près d'une tonne." },
+        { "nom": "Robots de fiction", "mots": ["R2-D2", "C-3PO", "Goldorak", "Astro"], "anecdote": "Goldorak a été un immense succès à la télévision française dès 1978." },
+        { "nom": "Écrivains de science-fiction", "mots": ["Asimov", "Herbert", "Barjavel", "Philip K. Dick"], "anecdote": "Isaac Asimov a imaginé les « trois lois de la robotique » dans les années 1940." },
+        { "nom": "Planètes de fiction", "mots": ["Tatooine", "Arrakis", "Pandora", "Solaris"], "anecdote": "Tatooine, la planète désertique de « Star Wars », doit son nom à la ville tunisienne de Tataouine, près des lieux de tournage." }
+      ]
+    },
+    {
+      "id": "g224",
+      "num": 224,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Fêtes régionales", "mots": ["Fête des Lumières", "Carnaval de Nice", "Fête du citron", "Braderie de Lille"], "anecdote": "La fête des Lumières de Lyon a lieu chaque année autour du 8 décembre." },
+        { "nom": "Douceurs régionales", "mots": ["Kouign-amann", "Canelé", "Calisson", "Bêtise de Cambrai"], "anecdote": "Le calisson d'Aix est fait de pâte d'amande et de melon confit." },
+        { "nom": "Apéritifs régionaux", "mots": ["Pastis", "Pineau", "Floc", "Kir"], "anecdote": "Le kir doit son nom au chanoine Félix Kir, ancien maire de Dijon." },
+        { "nom": "Instruments traditionnels", "mots": ["Cornemuse", "Vielle à roue", "Accordéon", "Biniou"], "anecdote": "La vielle à roue, dont on frotte les cordes en tournant une manivelle, existe depuis le Moyen Âge." }
+      ]
+    },
+    {
+      "id": "g225",
+      "num": 225,
+      "difficulte": "moyen",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Éléments chimiques", "mots": ["Hydrogène", "Oxygène", "Carbone", "Azote"], "anecdote": "L'hydrogène est l'élément le plus abondant de l'Univers." },
+        { "nom": "Parties d'une fleur", "mots": ["Tige", "Pétale", "Étamine", "Pistil"], "anecdote": "Le pistil est l'organe femelle de la fleur, tandis que les étamines produisent le pollen." },
+        { "nom": "Matériel de laboratoire", "mots": ["Éprouvette", "Pipette", "Bécher", "Microscope"], "anecdote": "Au XVIIe siècle, le Néerlandais Antoni van Leeuwenhoek a été le premier à observer des bactéries au microscope." },
+        { "nom": "Sciences", "mots": ["Botanique", "Géologie", "Zoologie", "Météorologie"], "anecdote": "La météorologie doit son nom au traité « Les Météorologiques » du philosophe grec Aristote." }
+      ]
+    },
+    {
+      "id": "g226",
+      "num": 226,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Héros nationaux", "mots": ["Guillaume Tell", "Jeanne d'Arc", "Skanderbeg", "William Wallace"], "anecdote": "William Wallace, héros de l'indépendance écossaise, a inspiré le film « Braveheart » en 1995." },
+        { "nom": "Sommets suisses", "mots": ["Cervin", "Eiger", "Jungfrau", "Pilate"], "anecdote": "Le Cervin a été gravi pour la première fois en 1865 ; quatre des sept alpinistes sont morts pendant la descente." },
+        { "nom": "Opéras de Rossini", "mots": ["Le Barbier de Séville", "La Cenerentola", "L'Italienne à Alger", "Sémiramis"], "anecdote": "Rossini aurait composé « Le Barbier de Séville » en moins de trois semaines, en 1816." },
+        { "nom": "Écrivains suisses", "mots": ["Ramuz", "Cendrars", "Dürrenmatt", "Frisch"], "anecdote": "Blaise Cendrars, né en Suisse, a perdu son bras droit en 1915 en combattant pour la France." }
+      ]
+    },
+    {
+      "id": "g227",
+      "num": 227,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Ordres de chevalerie", "mots": ["Templiers", "Hospitaliers", "Chevaliers teutoniques", "Ordre de la Jarretière"], "anecdote": "Philippe le Bel a fait arrêter tous les Templiers du royaume le vendredi 13 octobre 1307." },
+        { "nom": "Sultans", "mots": ["Saladin", "Baybars", "Soliman", "Mehmed II"], "anecdote": "Mehmed II a pris Constantinople en 1453, à seulement 21 ans." },
+        { "nom": "Villes des croisades", "mots": ["Acre", "Antioche", "Édesse", "Tripoli"], "anecdote": "Saint-Jean-d'Acre a été la dernière grande place forte des croisés en Terre sainte ; elle est tombée en 1291." },
+        { "nom": "Papes d'Avignon", "mots": ["Clément V", "Jean XXII", "Benoît XII", "Urbain V"], "anecdote": "De 1309 à 1377, sept papes successifs ont résidé à Avignon." }
+      ]
+    },
+    {
+      "id": "g228",
+      "num": 228,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Grands musées d'Europe", "mots": ["Prado", "Offices", "Rijksmuseum", "Ermitage"], "anecdote": "L'Ermitage, à Saint-Pétersbourg, occupe notamment l'ancien palais d'Hiver des tsars." },
+        { "nom": "Techniques de peinture", "mots": ["Fresque", "Aquarelle", "Gouache", "Sfumato"], "anecdote": "Le sfumato, ce flou vaporeux des contours, est la signature de Léonard de Vinci dans « La Joconde »." },
+        { "nom": "Peintres romantiques", "mots": ["Géricault", "Delacroix", "Turner", "Constable"], "anecdote": "Pour peindre « Le Radeau de la Méduse », Géricault a étudié des corps à la morgue de l'hôpital." },
+        { "nom": "Tableaux du Louvre", "mots": ["Le Radeau de la Méduse", "La Liberté guidant le peuple", "Le Sacre de Napoléon", "Les Noces de Cana"], "anecdote": "« Les Noces de Cana », de Véronèse, est le plus grand tableau du Louvre : près de 70 m²." }
+      ]
+    },
+    {
+      "id": "g229",
+      "num": 229,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Livres de la Bible", "mots": ["Genèse", "Exode", "Lévitique", "Apocalypse"], "anecdote": "La Bible a été le premier grand livre imprimé par Gutenberg, vers 1455." },
+        { "nom": "Personnages de l'Ancien Testament", "mots": ["Abraham", "Noé", "Jonas", "Job"], "anecdote": "Selon la Bible, Jonas a passé trois jours et trois nuits dans le ventre d'un grand poisson." },
+        { "nom": "Évangélistes", "mots": ["Matthieu", "Marc", "Luc", "Jean"], "anecdote": "Les quatre évangélistes sont souvent représentés par un homme, un lion, un taureau et un aigle." },
+        { "nom": "Autres apôtres", "mots": ["Pierre", "Thomas", "Judas", "Barthélemy"], "anecdote": "L'expression « je ne crois que ce que je vois » est associée à l'apôtre Thomas, qui doutait de la résurrection de Jésus." }
+      ]
+    },
+    {
+      "id": "g230",
+      "num": 230,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Journaux étrangers", "mots": ["The Times", "Le Soir", "El País", "Der Spiegel"], "anecdote": "« Der Spiegel », le grand hebdomadaire allemand, a été fondé en 1947." },
+        { "nom": "Journalistes de fiction", "mots": ["Rouletabille", "Clark Kent", "Ric Hochet", "Peter Parker"], "anecdote": "Joseph Rouletabille, le jeune reporter de Gaston Leroux, enquête dans « Le Mystère de la chambre jaune » (1907)." },
+        { "nom": "Agences de presse", "mots": ["AFP", "Reuters", "Associated Press", "Tass"], "anecdote": "L'Agence France-Presse descend de l'agence Havas, fondée à Paris en 1835." },
+        { "nom": "Patrons de presse", "mots": ["Hearst", "Pulitzer", "Beuve-Méry", "Murdoch"], "anecdote": "Hubert Beuve-Méry a fondé le journal « Le Monde » en 1944." }
+      ]
+    },
+    {
+      "id": "g231",
+      "num": 231,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Parcs et bois de Paris", "mots": ["Boulogne", "Vincennes", "Buttes-Chaumont", "Monceau"], "anecdote": "Le parc des Buttes-Chaumont a été aménagé sous Napoléon III sur d'anciennes carrières de gypse." },
+        { "nom": "Portes de Paris", "mots": ["Maillot", "Clignancourt", "Dauphine", "Vanves"], "anecdote": "Les portes de Paris rappellent les accès de l'enceinte de Thiers, la muraille construite autour de la capitale dans les années 1840." },
+        { "nom": "Stations de métro au nom de bataille", "mots": ["Rivoli", "Pyramides", "Alma", "Crimée"], "anecdote": "La station Pyramides doit son nom à la rue des Pyramides, qui rappelle la victoire de Bonaparte en Égypte en 1798." },
+        { "nom": "Grands officiers de la Couronne", "mots": ["Connétable", "Sénéchal", "Chambellan", "Bailli"], "anecdote": "Le connétable commandait les armées du roi de France ; Du Guesclin a été l'un des plus célèbres." }
+      ]
+    },
+    {
+      "id": "g232",
+      "num": 232,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Fourrures", "mots": ["Vison", "Hermine", "Zibeline", "Astrakan"], "anecdote": "En hiver, l'hermine devient toute blanche, sauf le bout de la queue, qui reste noir." },
+        { "nom": "Poèmes à forme fixe", "mots": ["Sonnet", "Ballade", "Rondeau", "Pantoum"], "anecdote": "Un sonnet compte 14 vers : deux quatrains, puis deux tercets." },
+        { "nom": "Homophones de « vert »", "mots": ["Ver", "Verre", "Vers", "Vair"], "anecdote": "Selon une vieille hypothèse, la pantoufle de Cendrillon aurait été en vair, une fourrure, et non en verre." },
+        { "nom": "Homophones de « sain »", "mots": ["Saint", "Sein", "Ceint", "Seing"], "anecdote": "Un « blanc-seing » est une feuille signée en blanc, qui donne carte blanche à quelqu'un." }
+      ]
+    },
+    {
+      "id": "g233",
+      "num": 233,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Calendriers", "mots": ["Julien", "Grégorien", "Hégirien", "Républicain"], "anecdote": "En passant au calendrier grégorien en 1582, on est allé directement du jeudi 4 au vendredi 15 octobre." },
+        { "nom": "Instruments pour mesurer le temps", "mots": ["Clepsydre", "Sablier", "Gnomon", "Chronomètre"], "anecdote": "La clepsydre, une horloge à eau, était déjà utilisée dans l'Égypte antique." },
+        { "nom": "Termes d'astronomie", "mots": ["Équinoxe", "Solstice", "Périhélie", "Aphélie"], "anecdote": "La Terre passe au plus près du Soleil (le périhélie) début janvier, en plein hiver dans l'hémisphère Nord." },
+        { "nom": "Heures canoniales", "mots": ["Matines", "Laudes", "Vêpres", "Complies"], "anecdote": "Les vêpres sont la prière du soir, vers le coucher du soleil." }
+      ]
+    },
+    {
+      "id": "g234",
+      "num": 234,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Royaumes himalayens", "mots": ["Népal", "Bhoutan", "Sikkim", "Ladakh"], "anecdote": "Le Bhoutan mesure son « bonheur national brut », et pas seulement sa richesse." },
+        { "nom": "Animaux de l'Himalaya", "mots": ["Panda roux", "Léopard des neiges", "Takin", "Bharal"], "anecdote": "Le léopard des neiges s'enroule dans sa longue queue épaisse comme dans une écharpe pour se tenir chaud." },
+        { "nom": "Alpinistes", "mots": ["Hillary", "Tenzing", "Messner", "Herzog"], "anecdote": "En 1950, Maurice Herzog a dirigé l'ascension de l'Annapurna, premier sommet de plus de 8 000 m jamais gravi." },
+        { "nom": "Courants du bouddhisme", "mots": ["Zen", "Theravada", "Mahayana", "Vajrayana"], "anecdote": "Le bouddhisme zen est né en Chine, où il s'appelait « chan », avant de gagner le Japon." }
+      ]
+    },
+    {
+      "id": "g235",
+      "num": 235,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Fondateurs d'ordres religieux", "mots": ["Benoît", "François d'Assise", "Dominique", "Ignace de Loyola"], "anecdote": "Ignace de Loyola a fondé la Compagnie de Jésus, les jésuites, en 1540." },
+        { "nom": "Monastères célèbres", "mots": ["Mont-Cassin", "Saint-Gall", "Grande Chartreuse", "Mont-Saint-Michel"], "anecdote": "Le monastère du Mont-Cassin, fondé par saint Benoît vers 529, a été détruit en 1944 puis reconstruit." },
+        { "nom": "Pères de l'Église", "mots": ["Augustin", "Jérôme", "Ambroise", "Grégoire"], "anecdote": "Saint Jérôme a traduit la Bible en latin : c'est la « Vulgate »." },
+        { "nom": "Hérésies", "mots": ["Arianisme", "Catharisme", "Pélagianisme", "Nestorianisme"], "anecdote": "Les cathares ont été combattus par la croisade des Albigeois, lancée en 1209." }
+      ]
+    },
+    {
+      "id": "g236",
+      "num": 236,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Amours de George Sand", "mots": ["Musset", "Manceau", "Mérimée", "Sandeau"], "anecdote": "Aurore Dupin a tiré son pseudonyme de « George Sand » du nom de son compagnon Jules Sandeau." },
+        { "nom": "Romans de George Sand", "mots": ["La Mare au diable", "Indiana", "Consuelo", "La Petite Fadette"], "anecdote": "George Sand s'appelait en réalité Amantine Aurore Lucile Dupin." },
+        { "nom": "Pièces de Musset", "mots": ["Lorenzaccio", "On ne badine pas avec l'amour", "Les Caprices de Marianne", "Il ne faut jurer de rien"], "anecdote": "« Lorenzaccio » a longtemps été jugé injouable ; Sarah Bernhardt a tenu le rôle-titre en 1896." },
+        { "nom": "Héroïnes romantiques", "mots": ["Emma Bovary", "Atala", "Corinne", "Mathilde de La Mole"], "anecdote": "« Atala », de Chateaubriand, se déroule chez les Amérindiens de Louisiane." }
+      ]
+    },
+    {
+      "id": "g237",
+      "num": 237,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Organisations internationales", "mots": ["OTAN", "ONU", "OMC", "OPEP"], "anecdote": "L'Organisation des Nations unies a été fondée en 1945, à San Francisco." },
+        { "nom": "Villes sièges d'institutions", "mots": ["Bruxelles", "Strasbourg", "La Haye", "Francfort"], "anecdote": "La Cour internationale de justice siège à La Haye, au palais de la Paix." },
+        { "nom": "Secrétaires généraux de l'ONU", "mots": ["Kofi Annan", "Ban Ki-moon", "Boutros-Ghali", "Guterres"], "anecdote": "Kofi Annan a reçu le prix Nobel de la paix en 2001, avec l'ONU." },
+        { "nom": "Accords de paix", "mots": ["Arusha", "Dayton", "Camp David", "Évian"], "anecdote": "Les accords d'Évian, signés en 1962, ont mis fin à la guerre d'Algérie." }
+      ]
+    },
+    {
+      "id": "g238",
+      "num": 238,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Courses au large", "mots": ["Vendée Globe", "Route du Rhum", "Transat Jacques-Vabre", "Solitaire du Figaro"], "anecdote": "Le Vendée Globe se court en solitaire, sans escale et sans assistance, autour du monde." },
+        { "nom": "Navigateurs français", "mots": ["Tabarly", "Moitessier", "Kersauson", "Joyon"], "anecdote": "Éric Tabarly a disparu en mer en 1998, tombé de son bateau, le Pen Duick." },
+        { "nom": "Grades de la Marine", "mots": ["Second-maître", "Quartier-maître", "Enseigne", "Amiral"], "anecdote": "Dans la Marine nationale, l'enseigne de vaisseau correspond au grade de lieutenant dans l'armée de terre." },
+        { "nom": "Phares", "mots": ["Ar-Men", "Cordouan", "Kéréon", "Eckmühl"], "anecdote": "Le phare de Cordouan, à l'embouchure de la Gironde, est surnommé le « Versailles de la mer »." }
+      ]
+    },
+    {
+      "id": "g239",
+      "num": 239,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Écritures anciennes", "mots": ["Cunéiforme", "Hiéroglyphe", "Linéaire B", "Runes"], "anecdote": "Les hiéroglyphes égyptiens ont été déchiffrés par Champollion en 1822, grâce à la pierre de Rosette." },
+        { "nom": "Sites antiques du Moyen-Orient", "mots": ["Baalbek", "Pétra", "Palmyre", "Ninive"], "anecdote": "Pétra, en Jordanie, a été taillée dans la roche rose par les Nabatéens." },
+        { "nom": "Rois de l'Orient ancien", "mots": ["Hammurabi", "Nabuchodonosor", "Cyrus", "Darius"], "anecdote": "Le code de Hammurabi, gravé vers 1750 avant J.-C., est l'un des plus anciens recueils de lois." },
+        { "nom": "Divinités mésopotamiennes", "mots": ["Ishtar", "Marduk", "Enlil", "Tiamat"], "anecdote": "La porte d'Ishtar, l'une des entrées de Babylone, a été reconstruite au musée de Pergame, à Berlin." }
+      ]
+    },
+    {
+      "id": "g240",
+      "num": 240,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Spiritueux", "mots": ["Rhum", "Gin", "Vodka", "Mezcal"], "anecdote": "Le gin doit son goût aux baies de genièvre." },
+        { "nom": "Verres", "mots": ["Flûte", "Coupe", "Ballon", "Shooter"], "anecdote": "Selon une légende, la coupe à champagne aurait été moulée sur le sein de Marie-Antoinette." },
+        { "nom": "Liqueurs", "mots": ["Chartreuse", "Bénédictine", "Cointreau", "Limoncello"], "anecdote": "La Chartreuse est fabriquée par des moines chartreux, selon une recette gardée secrète depuis des siècles." },
+        { "nom": "Régions du whisky écossais", "mots": ["Speyside", "Islay", "Highlands", "Lowlands"], "anecdote": "Pour avoir droit au nom de « scotch », un whisky doit vieillir au moins trois ans en fût de chêne en Écosse." }
+      ]
+    },
+    {
+      "id": "g241",
+      "num": 241,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Casse-tête", "mots": ["Rubik's Cube", "Sudoku", "Tangram", "Taquin"], "anecdote": "Le Rubik's Cube a été inventé en 1974 par le Hongrois Ernő Rubik." },
+        { "nom": "Jeux de stratégie", "mots": ["Go", "Dames", "Shogi", "Awalé"], "anecdote": "Le jeu de go est né en Chine il y a plus de 2 500 ans." },
+        { "nom": "Ouvertures aux échecs", "mots": ["Sicilienne", "Française", "Espagnole", "Caro-Kann"], "anecdote": "La défense sicilienne est la réponse la plus jouée au premier coup 1.e4." },
+        { "nom": "Ordinateurs champions", "mots": ["Deep Blue", "AlphaGo", "Stockfish", "Watson"], "anecdote": "En 1997, l'ordinateur Deep Blue d'IBM a battu le champion du monde d'échecs Garry Kasparov." }
+      ]
+    },
+    {
+      "id": "g242",
+      "num": 242,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Formes musicales", "mots": ["Fugue", "Sonate", "Symphonie", "Concerto"], "anecdote": "Une symphonie classique compte généralement quatre mouvements." },
+        { "nom": "Termes de musique", "mots": ["Crescendo", "Staccato", "Legato", "Pizzicato"], "anecdote": "« Pizzicato » veut dire « pincé » : on joue en pinçant les cordes avec les doigts." },
+        { "nom": "Chefs d'orchestre", "mots": ["Karajan", "Bernstein", "Toscanini", "Boulez"], "anecdote": "Leonard Bernstein a composé la musique de « West Side Story »." },
+        { "nom": "Chorégraphes", "mots": ["Béjart", "Petipa", "Pina Bausch", "Preljocaj"], "anecdote": "Marius Petipa, né à Marseille, a créé en Russie la chorégraphie de « La Belle au bois dormant », en 1890." }
+      ]
+    },
+    {
+      "id": "g243",
+      "num": 243,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Énergies", "mots": ["Solaire", "Éolien", "Nucléaire", "Géothermie"], "anecdote": "La géothermie utilise la chaleur du sous-sol : l'Islande en tire l'essentiel de son chauffage." },
+        { "nom": "Gaz à effet de serre", "mots": ["Méthane", "Ozone", "Protoxyde d'azote", "Dioxyde de carbone"], "anecdote": "À quantité égale, le méthane réchauffe bien plus l'atmosphère que le CO₂, mais il y reste moins longtemps." },
+        { "nom": "Centrales nucléaires françaises", "mots": ["Flamanville", "Gravelines", "Fessenheim", "Tricastin"], "anecdote": "La centrale de Fessenheim, en Alsace, a été définitivement arrêtée en 2020." },
+        { "nom": "Accidents nucléaires", "mots": ["Tchernobyl", "Fukushima", "Three Mile Island", "Kychtym"], "anecdote": "La catastrophe de Tchernobyl a eu lieu le 26 avril 1986, en Ukraine." }
+      ]
+    },
+    {
+      "id": "g244",
+      "num": 244,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Bandes dessinées américaines", "mots": ["Peanuts", "Garfield", "Dilbert", "Calvin et Hobbes"], "anecdote": "Calvin et Hobbes portent les noms de deux penseurs : le théologien Jean Calvin et le philosophe Thomas Hobbes." },
+        { "nom": "Écoles anglaises", "mots": ["Eton", "Harrow", "Rugby", "Winchester"], "anecdote": "Le rugby doit son nom au collège de Rugby, en Angleterre, où il serait né en 1823." },
+        { "nom": "Philosophes britanniques", "mots": ["Locke", "Hume", "Hobbes", "Mill"], "anecdote": "Thomas Hobbes a écrit dans « Le Léviathan » que, sans État, la vie humaine serait « solitaire, misérable, brutale et courte »." },
+        { "nom": "Peintres britanniques", "mots": ["Bacon", "Hockney", "Gainsborough", "Hogarth"], "anecdote": "Le peintre Francis Bacon, né en 1909, porte exactement le même nom que le philosophe anglais du XVIIe siècle." }
+      ]
+    },
+    {
+      "id": "g245",
+      "num": 245,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Îles de la Méditerranée", "mots": ["Sardaigne", "Majorque", "Elbe", "Gozo"], "anecdote": "Majorque, aux Baléares, est la plus grande île d'Espagne." },
+        { "nom": "Lacs", "mots": ["Aral", "Balaton", "Ladoga", "Constance"], "anecdote": "La mer d'Aral, en Asie centrale, a perdu la plus grande partie de sa surface à cause de l'irrigation des champs de coton." },
+        { "nom": "Caps", "mots": ["Horn", "Bonne-Espérance", "Finisterre", "Nord"], "anecdote": "Selon la tradition, les marins qui avaient franchi le cap Horn gagnaient le droit de porter une boucle d'oreille en or." },
+        { "nom": "Péninsules", "mots": ["Jutland", "Péloponnèse", "Kamtchatka", "Yucatán"], "anecdote": "Le cratère de Chicxulub, au Yucatán, a été creusé par la météorite qui aurait fait disparaître les dinosaures." }
+      ]
+    },
+    {
+      "id": "g246",
+      "num": 246,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Romans de Victor Hugo", "mots": ["Les Misérables", "Notre-Dame de Paris", "Quatrevingt-treize", "L'Homme qui rit"], "anecdote": "Victor Hugo a passé près de vingt ans en exil, notamment sur l'île de Guernesey." },
+        { "nom": "Romans de Maupassant", "mots": ["Bel-Ami", "Une vie", "Pierre et Jean", "Fort comme la mort"], "anecdote": "Maupassant a été l'élève et le protégé de Gustave Flaubert." },
+        { "nom": "Romans de Flaubert", "mots": ["Madame Bovary", "Salammbô", "L'Éducation sentimentale", "Bouvard et Pécuchet"], "anecdote": "En 1857, Flaubert a été jugé pour « Madame Bovary », accusé d'atteinte aux bonnes mœurs, puis acquitté." },
+        { "nom": "Romans de Stendhal", "mots": ["Le Rouge et le Noir", "La Chartreuse de Parme", "Lucien Leuwen", "Armance"], "anecdote": "« Le Rouge et le Noir » s'inspire d'un fait divers réel, l'affaire Berthet." }
+      ]
+    },
+    {
+      "id": "g247",
+      "num": 247,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Spécialités médicales", "mots": ["Cardiologie", "Pédiatrie", "Dermatologie", "Ophtalmologie"], "anecdote": "« Pédiatrie » vient du grec « pais, paidos », qui veut dire « enfant »." },
+        { "nom": "Grandes épidémies", "mots": ["Peste", "Choléra", "Variole", "Lèpre"], "anecdote": "La variole est la seule maladie humaine officiellement éradiquée, depuis 1980." },
+        { "nom": "Instruments chirurgicaux", "mots": ["Scalpel", "Bistouri", "Trocart", "Clamp"], "anecdote": "Le bistouri électrique coupe et cautérise en même temps, ce qui limite les saignements." },
+        { "nom": "Médecins célèbres", "mots": ["Galien", "Laennec", "Fleming", "Semmelweis"], "anecdote": "En 1816, René Laennec a inventé le stéthoscope en roulant une feuille de papier pour écouter le cœur d'une patiente." }
+      ]
+    },
+    {
+      "id": "g248",
+      "num": 248,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Sites mégalithiques", "mots": ["Carnac", "Stonehenge", "Newgrange", "Locmariaquer"], "anecdote": "Les alignements de Carnac comptent près de 3 000 menhirs." },
+        { "nom": "Peuples gaulois", "mots": ["Arvernes", "Éduens", "Parisii", "Vénètes"], "anecdote": "Paris doit son nom aux Parisii, le peuple gaulois installé sur les bords de la Seine." },
+        { "nom": "Batailles de la guerre des Gaules", "mots": ["Alésia", "Gergovie", "Bibracte", "Avaricum"], "anecdote": "En 52 avant J.-C., Vercingétorix a battu César à Gergovie, avant de devoir se rendre à Alésia." },
+        { "nom": "Divinités gauloises", "mots": ["Lug", "Cernunnos", "Épona", "Toutatis"], "anecdote": "Lyon, l'antique Lugdunum, porterait le nom du dieu celte Lug." }
+      ]
+    },
+    {
+      "id": "g249",
+      "num": 249,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Ouvrages de référence", "mots": ["Larousse", "Robert", "Littré", "Bescherelle"], "anecdote": "Le dictionnaire d'Émile Littré a été publié entre 1863 et 1873." },
+        { "nom": "Familles de langues", "mots": ["Indo-européen", "Sémitique", "Bantou", "Finno-ougrien"], "anecdote": "Le hongrois, le finnois et l'estonien appartiennent tous les trois à la famille des langues finno-ougriennes." },
+        { "nom": "Linguistes", "mots": ["Champollion", "Ventris", "Saussure", "Chomsky"], "anecdote": "En 1952, Michael Ventris a déchiffré le linéaire B : c'était du grec ancien." },
+        { "nom": "Langues mortes", "mots": ["Sanskrit", "Akkadien", "Étrusque", "Gotique"], "anecdote": "L'étrusque s'écrit avec un alphabet proche du grec, mais la langue reste en grande partie mystérieuse." }
+      ]
+    },
+    {
+      "id": "g250",
+      "num": 250,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Villes de Russie", "mots": ["Iekaterinbourg", "Novossibirsk", "Vladivostok", "Kazan"], "anecdote": "Le Transsibérien relie Moscou à Vladivostok sur plus de 9 000 km." },
+        { "nom": "Peintres russes", "mots": ["Kandinsky", "Chagall", "Malevitch", "Repine"], "anecdote": "Le « Carré blanc sur fond blanc » de Malevitch date de 1918." },
+        { "nom": "Romans de Dostoïevski", "mots": ["Crime et Châtiment", "L'Idiot", "Les Frères Karamazov", "Les Démons"], "anecdote": "En 1849, Dostoïevski a été condamné à mort, puis gracié au dernier moment, devant le peloton d'exécution." },
+        { "nom": "Impératrices de Russie", "mots": ["Catherine", "Élisabeth Petrovna", "Anna", "Alexandra"], "anecdote": "Catherine II, dite la Grande, était une princesse allemande devenue impératrice de Russie." }
+      ]
+    },
+    {
+      "id": "g251",
+      "num": 251,
+      "difficulte": "difficile",
+      "theme": "quotidien",
+      "groupes": [
+        { "nom": "Créatures nordiques", "mots": ["Troll", "Valkyrie", "Elfe", "Nain"], "anecdote": "Selon la mythologie nordique, les Valkyries conduisaient les guerriers morts au combat jusqu'au Valhalla." },
+        { "nom": "Lieux et objets de la mythologie nordique", "mots": ["Yggdrasil", "Valhalla", "Bifröst", "Mjöllnir"], "anecdote": "Yggdrasil est le frêne géant qui relie les neuf mondes de la mythologie nordique." },
+        { "nom": "Héros des sagas", "mots": ["Sigurd", "Beowulf", "Ragnar", "Erik le Rouge"], "anecdote": "Vers 985, Erik le Rouge a fondé les premières colonies vikings au Groenland." },
+        { "nom": "Rois scandinaves", "mots": ["Valdemar", "Knut", "Haakon", "Sven"], "anecdote": "Au XIe siècle, Knut le Grand a régné à la fois sur l'Angleterre, le Danemark et la Norvège." }
       ]
     }
   ]
