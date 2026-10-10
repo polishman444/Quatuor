@@ -9,5 +9,6 @@ Jeu quotidien de culture G : 16 mots, 4 groupes. PWA (https://playquatuor.fr) et
   sans numéro, vérifie qu'ils concordent.
 - Mode en ligne (comptes anonymes, connexion Apple, amis, synchronisation) : `js/`, `supabase/`,
   configuration publique dans `config-en-ligne.js`. Mise en place : **`SETUP-EN-LIGNE.md`**.
+- Pubs récompensées de l'appli iOS (Google AdMob, `js/pubs.js`) : **`SETUP-PUBS.md`**.
 - Confidentialité App Store : `ETIQUETTES-APP-STORE.md` ; TestFlight : `GUIDE-TESTFLIGHT.md`.
 - Tests : `npm test` (base Postgres en mémoire avec RLS, synchronisation, jeu dans Chromium).

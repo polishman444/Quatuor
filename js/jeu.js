@@ -17,8 +17,9 @@ const GRIDS_REMOTE=["https://playquatuor.fr/grilles.json","https://raw.githubuse
 const GRIDS_LOCAL="grilles.json";   // copie de secours embarquée (mise en cache par le service worker ; incluse dans l'appli)
 let GRIDS=[];
 let attempt=1, hasard=null;
-let hints=0, hintCat=-1, hintWord=null;   // indices utilisés, catégorie et mot de l'indice
-const MAX_HINTS=2;   // n° de l'essai en cours ; difficulté du mode « Grille au hasard » (null hors de ce mode)
+let hints=0, hintCat=-1, hintWords=[];   // indices utilisés, catégorie de l'indice et mots mis en évidence
+const MAX_HINTS=6;          // indices par grille (dans l'appli, chacun se débloque avec une pub récompensée)
+const MAX_MOTS_INDICE=3;    // mots mis en évidence au plus par groupe (le 4e donnerait la réponse)
 // Grille d'entraînement du premier lancement (hors GRIDS : aucun impact sur stats, résultats ou favoris)
 // Grille d'entraînement du tutoriel, très facile (hors GRIDS : aucun impact sur stats, série, résultats, favoris ni anti-répétition)
 const TUTO = D("facile",[G("Fruits",["Pomme","Banane","Fraise","Cerise"],"Pour un botaniste, la banane est une baie… mais pas la fraise !"),
@@ -310,7 +311,7 @@ const groupOf=w=>grid.findIndex(g=>g.words.includes(w));
 function newGame(idx,opts={}){
   tuto=idx===-1; gridIdx=idx; grid=tuto?TUTO:GRIDS[idx]; practice=tuto||idx!==dailyIdx; gameId++;
   hasard=opts.hasard||null;
-  hints=0; hintCat=-1; hintWord=null; $("hintBar").hidden=true;
+  hints=0; hintCat=-1; hintWords=[]; $("hintBar").hidden=true;
   const prev=tuto?null:loadRes()[grid.id];
   // Partie en cours sauvegardée (reprise exacte) ; une nouvelle tentative déjà autorisée se reprend sans redemander
   const sv=tuto?null:repriseValide(grid,prev);
@@ -362,37 +363,73 @@ function showLostBoard(prev){
   updateNextLabels();
 }
 // =====================================================================
-// INDICES 💡 (2 au maximum par grille)
-// ⚠️ autoriserIndice() est le SEUL point d'entrée pour obtenir un indice.
-// Pour l'instant elle autorise toujours (idGrille vaut "tuto" pour la grille d'entraînement : jamais de pub).
-// Plus tard (appli iOS), c'est ici qu'on affichera
-// une pub récompensée AdMob : ne renvoyer true que si la pub a été regardée jusqu'au bout,
-// false si le joueur l'a fermée avant ou si elle n'a pas pu se charger.
+// PUBS RÉCOMPENSÉES (js/pubs.js) : appli iOS uniquement. Le joueur choisit de regarder une courte pub
+// pour obtenir un indice ou voir la solution d'une grille perdue. Sur le site et dans le tutoriel : gratuit, sans pub.
+// =====================================================================
+const PUBS=(()=>{ try{
+  if(!window.QuatuorPubs) return null;
+  const p=QuatuorPubs.creer({admob:plugin("AdMob"),config:(window.QUATUOR_CONFIG||{}).admob,journal:(m,e)=>console.warn("Quatuor : "+m,e)});
+  return p.actif?p:null; }catch(e){ return null; } })();
+// Première pub : on explique d'abord le principe (une seule fois). Renvoie true si le joueur accepte.
+function expliquerPub(usage){
+  return new Promise(ok=>{
+    let rep=false;
+    openSheet(`<div class="fini"><div class="big">📺</div><h2>Une courte pub ?</h2>
+      <p>Dans l'appli, ${usage==="indice"?"chaque indice se débloque":"la solution d'une grille perdue se débloque"} en regardant une courte vidéo publicitaire, jusqu'au bout.</p>
+      <p>C'est ce qui permet à Quatuor de rester gratuit. Jamais de pub pendant ta partie si tu ne la demandes pas.</p>
+      <button class="pill main full" id="pubOui">Regarder la pub</button><button class="pill soft full" id="pubNon">Non merci</button></div>`,()=>ok(rep));
+    $("pubOui").onclick=()=>{ rep=true; closeSheet(); };
+    $("pubNon").onclick=closeSheet;
+  });
+}
+// Une pub récompensée pour « usage » ("indice" | "solution"). true : récompense gagnée.
+// Pub fermée avant la fin : refusé. Aucune pub à montrer (réseau, stock vide) : on ne bloque pas le joueur.
+async function avecPub(usage){
+  if(!PUBS) return true;
+  if(!ls.get("quatuor-pub-explique")){
+    if(!(await expliquerPub(usage))) return false;
+    ls.set("quatuor-pub-explique","1");
+    await new Promise(r=>setTimeout(r,350));   // le temps que le panneau se ferme
+  }
+  const r=await PUBS.regarder();
+  stat("Pub",{usage,issue:r});
+  if(r==="annule"){ toast(usage==="indice"?"Pub interrompue : pas d'indice cette fois":"Pub interrompue : la solution reste cachée"); return false; }
+  return true;
+}
+
+// =====================================================================
+// INDICES 💡 (6 au maximum par grille) : le nom d'un groupe, puis ses mots un par un (3 au plus),
+// puis le groupe suivant. Le groupe le plus facile pas encore trouvé passe en premier.
+// ⚠️ autoriserIndice() est le SEUL point d'entrée pour obtenir un indice : dans l'appli, une pub récompensée
+// (idGrille vaut "tuto" pour la grille d'entraînement : jamais de pub).
 // donnerIndice() refuse d'agir sans JETON_INDICE, que seul demanderIndice() transmet.
 // =====================================================================
 async function autoriserIndice(idGrille){
-  return true;
+  if(idGrille==="tuto") return true;
+  return avecPub("indice");
 }
 const JETON_INDICE=Symbol("indice autorisé");
 let indiceEnCours=false;
+// Encore un indice possible ? (avec 3 groupes trouvés, le dernier se devine tout seul)
+const indicePossible=()=>!!grid&&!done&&hints<MAX_HINTS&&found.length<3;
 async function demanderIndice(){
-  if((tuto&&tutoEtape!==4)||done||busy||hints>=MAX_HINTS||indiceEnCours||!grid||(!tuto&&gridIdx<0)) return;
+  if((tuto&&tutoEtape!==4)||busy||!indicePossible()||indiceEnCours||(!tuto&&gridIdx<0)) return;
   indiceEnCours=true; const id=gameId;
   try{
     const ok=await autoriserIndice(tuto?"tuto":grid.id);
-    if(!ok){ toast("Indice non disponible"); return; }
+    if(!ok) return;
     if(id===gameId&&!done) donnerIndice(JETON_INDICE);
   }finally{ indiceEnCours=false; updateHintUi(); }
 }
 function donnerIndice(jeton){
-  if(jeton!==JETON_INDICE) return;
-  const facile=[0,1,2,3].find(gi=>!found.includes(gi)); if(facile===undefined) return;
-  if(hintCat<0||found.includes(hintCat)) hintCat=facile;      // groupe trouvé entre-temps : on passe au suivant
+  if(jeton!==JETON_INDICE||!indicePossible()) return;
+  const restants=[0,1,2,3].filter(gi=>!found.includes(gi));
+  const libres=gi=>grid[gi].words.filter(w=>words.includes(w)&&!hintWords.includes(w));
+  if(hintCat<0||found.includes(hintCat)){ hintCat=restants[0]; hintWords=[]; }        // 1er indice, ou groupe trouvé entre-temps : le nom du suivant
+  else if(hintWords.length<MAX_MOTS_INDICE&&libres(hintCat).length){                   // un mot de plus de ce groupe (sans le sélectionner)
+    const c=libres(hintCat); hintWords.push(c.find(w=>!selected.has(w))||c[0]); }
+  else { const autre=restants.find(gi=>gi!==hintCat); if(autre===undefined) return; hintCat=autre; hintWords=[]; }
   hints++; buzz(12);
-  if(hints>=2){   // 2e indice : un mot de cette catégorie en évidence (sans le sélectionner)
-    const c=grid[hintCat].words.filter(w=>words.includes(w));
-    hintWord=c.find(w=>!selected.has(w))||c[0]||null;
-  }
   sauverPartie();
   flipLayout(renderHint);
   tutoEvent("indice");
@@ -402,17 +439,18 @@ function renderHint(){
   const bar=$("hintBar"), actif=hintCat>=0&&!found.includes(hintCat);
   bar.hidden=!actif;
   if(actif) bar.innerHTML=`💡 Indice : un groupe = <b>${esc(grid[hintCat].name)}</b>`;
-  else hintWord=null;
-  $("grid").querySelectorAll(".tile").forEach(t=>t.classList.toggle("hintw",!!hintWord&&t.dataset.w===hintWord));
+  else hintWords=[];
+  $("grid").querySelectorAll(".tile").forEach(t=>t.classList.toggle("hintw",hintWords.includes(t.dataset.w)));
   updateHintUi();
 }
 function updateHintUi(){
   const b=$("hintBtn"); if(!b) return;
-  const left=MAX_HINTS-hints;
+  const left=MAX_HINTS-hints, pub=!!PUBS&&!tuto;
   b.querySelector(".hcount").textContent=left;
   b.style.display="";
-  b.disabled=(tuto&&tutoEtape!==4)||done||busy||left<=0||!grid;
-  b.setAttribute("aria-label",`Indice (${left} ${pl(left,"restant","restants")})`);
+  b.classList.toggle("pub",pub);
+  b.disabled=(tuto&&tutoEtape!==4)||busy||!indicePossible();
+  b.setAttribute("aria-label",`Indice${pub?" contre une pub":""} (${left} ${pl(left,"restant","restants")})`);
 }
 
 // Grille perdue dont la solution n'a pas été vue : groupes trouvés + tuiles restantes, solution cachée
@@ -446,16 +484,29 @@ function openPending(){
   openSheet(`<h2>Plus d'erreurs disponibles 😬</h2>
     <p>${n?`Tu as trouvé ${n} ${pl(n,"groupe","groupes")} sur 4.`:"Aucun groupe trouvé cette fois."} Retente ta chance avant de découvrir la solution !</p>
     <button class="pill main full" id="pRetry">Réessayer 🔄</button>
-    <div class="row" style="margin-bottom:10px"><button class="pill soft" id="pReveal">Voir la solution</button><button class="pill soft" id="pShare">Partager</button></div>
+    <div class="row" style="margin-bottom:10px"><button class="pill soft" id="pReveal">${libelleSolution()}</button><button class="pill soft" id="pShare">Partager</button></div>
     ${facts?`<h3>${pl(n,"Groupe trouvé","Groupes trouvés")}</h3><div class="learned">${facts}</div>`:""}`);
   $("pRetry").onclick=()=>retenter(gridIdx);
-  $("pReveal").onclick=revealSolution;
+  $("pReveal").onclick=demanderSolution;
   $("pShare").onclick=share;
 }
-// « Voir la solution » : on révèle les groupes manquants avec l'animation habituelle, puis les résultats
-function revealSolution(){
+// « Voir la solution » d'une grille perdue : dans l'appli, avec une pub récompensée (sur le site : gratuit).
+// ⚠️ autoriserSolution() est le SEUL point d'entrée ; revealSolution() refuse d'agir sans JETON_SOLUTION.
+const libelleSolution=()=>PUBS?"Voir la solution 📺":"Voir la solution";
+async function autoriserSolution(idGrille){ return avecPub("solution"); }
+const JETON_SOLUTION=Symbol("solution autorisée");
+let solutionEnCours=false;
+const solutionCachee=()=>done&&!lastWin&&!tuto&&document.querySelector(".dock").classList.contains("pending");
+async function demanderSolution(){
+  if(!solutionCachee()||solutionEnCours) return;
+  solutionEnCours=true; const id=gameId;
+  try{ if(await autoriserSolution(grid.id)&&id===gameId) revealSolution(JETON_SOLUTION); }
+  finally{ solutionEnCours=false; }
+}
+// On révèle les groupes manquants avec l'animation habituelle, puis les résultats
+function revealSolution(jeton){
   const dk=document.querySelector(".dock");
-  if(!done||lastWin||!dk.classList.contains("pending")) return;
+  if(jeton!==JETON_SOLUTION||!solutionCachee()) return;
   const res=loadRes(), x=res[grid.id]; if(x){ x.vu=true; saveRes(res); }
   closeSheet(); dk.classList.remove("pending");
   const id=gameId, rest=[0,1,2,3].filter(gi=>!found.includes(gi)); let delay=300;
@@ -471,7 +522,7 @@ function revealSolution(){
 
 // =====================================================================
 // PARTIES EN COURS : sauvegarde automatique après chaque action, par identifiant de grille
-// quatuor-encours = { idGrille: { words (ordre), found, mistakes, hints, hintCat, hintWord, history, tried, attempt, hasard, at } }
+// quatuor-encours = { idGrille: { words (ordre), found, mistakes, hints, hintCat, hintWords, history, tried, attempt, hasard, at } }
 // Supprimée quand la grille est terminée (finish).
 // =====================================================================
 function loadEncours(){ try{ const e=JSON.parse(ls.get("quatuor-encours")||"{}"); return e&&typeof e==="object"?e:{}; }catch(e){ return {}; } }
@@ -480,7 +531,7 @@ function sauverPartie(){
   if(tuto||done||!grid||gridIdx<0) return;
   const e=loadEncours();
   if(!history.length&&!hints) delete e[grid.id];   // rien de fait : pas de partie « en cours »
-  else e[grid.id]={words:words.slice(),found:found.slice(),mistakes,hints,hintCat,hintWord,history:history.map(r=>r.slice()),tried:[...tried],attempt,hasard,at:Date.now(),ms:chrono.ms()};
+  else e[grid.id]={words:words.slice(),found:found.slice(),mistakes,hints,hintCat,hintWords:hintWords.slice(),history:history.map(r=>r.slice()),tried:[...tried],attempt,hasard,at:Date.now(),ms:chrono.ms()};
   // on garde les 20 plus récentes
   Object.keys(e).sort((a,b)=>e[b].at-e[a].at).slice(20).forEach(k=>delete e[k]);
   saveEncours(e);
@@ -511,7 +562,9 @@ function repriseValide(g,prev){
 function restaurerPartie(sv){
   words=sv.words.slice(); found=sv.found.slice(); mistakes=sv.mistakes; hints=sv.hints;
   hintCat=Number.isInteger(sv.hintCat)&&sv.hintCat>=0&&sv.hintCat<4?sv.hintCat:-1;
-  hintWord=typeof sv.hintWord==="string"&&words.includes(sv.hintWord)?sv.hintWord:null;
+  // (anciennes sauvegardes : un seul mot, « hintWord »)
+  const mh=Array.isArray(sv.hintWords)?sv.hintWords:typeof sv.hintWord==="string"?[sv.hintWord]:[];
+  hintWords=mh.filter(w=>typeof w==="string"&&words.includes(w)).slice(0,MAX_MOTS_INDICE);
   history=sv.history.map(r=>r.slice()); tried=new Set(sv.tried);
   found.forEach(gi=>addSolved(gi,false));
   // vies déjà perdues : pas d'animation
@@ -691,6 +744,7 @@ function endTuto(){
   stat(tutoEtape===6?"Tuto.termine":"Tuto.passe",{etape:tutoEtape});
   BULLE.fermer(); tutoEtape=0; ls.set("quatuor-tuto-done","1");
   gridsReady.then(ok=>{ if(ok) switchGame(dailyIdx); else { tuto=false; showLoadError(); } });
+  if(PUBS) setTimeout(()=>PUBS.demarrer(),1500);   // consentement publicitaire : après le tutoriel, jamais pendant
 }
 
 // ---- B. Bulles contextuelles ----
@@ -790,7 +844,7 @@ function draw(){
     b.setAttribute("aria-pressed",selected.has(w)); b.dataset.w=w;
     // Clavier (Entrée, Espace) uniquement : le doigt et la souris passent par pointerdown
     b.onclick=e=>{ if(e.pointerType!==undefined?e.pointerType==="":performance.now()-dernierContact>1000) toggle(w,b); };
-    if(w===hintWord) b.classList.add("hintw");
+    if(hintWords.includes(w)) b.classList.add("hintw");
     b.addEventListener("animationend",e=>{ if(e.animationName.startsWith("spr")) b.classList.remove("spring"); else if(e.animationName==="shake") b.classList.remove("shake"); });
     g.appendChild(b);
   });
@@ -1219,7 +1273,7 @@ function ouvrirPageLegale(url){
   if(w) w.opener=null; else location.href=url;
 }
 document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest("a[data-legal]"); if(!a) return; e.preventDefault(); ouvrirPageLegale(a.getAttribute("href")); });
-const APP_VERSION="1.2";   // version affichée sur le web ; dans l'appli : @capacitor/app (version et n° de build)
+const APP_VERSION="1.3";   // version affichée sur le web ; dans l'appli : @capacitor/app (version et n° de build)
 const SHARE_ICON='<svg viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
 // =====================================================================
 // NAVIGATION : barre d'onglets en bas (Jouer, Thèmes, Progrès, Moi) + Paramètres (engrenage, en haut à droite)
@@ -1573,7 +1627,7 @@ function reglagesPageHtml(){
     <p class="sec">Aide</p><div class="regl">${lien("setTuto","🎓 Revoir le tuto","La prise en main, pas à pas")}${lien("setHelp","📖 Comment jouer","Les règles en une page")}</div>
     <p class="sec">Compte</p><div class="regl">${EN_LIGNE?`<div id="setCompte" data-compte="reglages"></div>${lien("setBloques","🚫 Joueurs bloqués","Les débloquer")}${lien("setSuppr","🗑️ Supprimer mon compte","Efface toutes tes données, en ligne et sur cet appareil").replace('class="rrow rbtn"','class="rrow rbtn danger"')}`
       :`<div class="rrow" aria-disabled="true"><span><b>👤 Compte Quatuor</b><small>Sauvegarde en ligne, amis et duels</small></span><span class="soon">Bientôt disponible</span></div>`}</div>
-    <p class="sec">Données</p><div class="regl">${STATS?tg("stats","📊 Partager des statistiques anonymes","Aide à améliorer Quatuor. Aucune donnée personnelle."):""}${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
+    <p class="sec">Données</p><div class="regl">${PUBS&&PUBS.choixRequis()?lien("setPubs","📺 Mes choix publicitaires","Consentement aux pubs personnalisées"):""}${STATS?tg("stats","📊 Partager des statistiques anonymes","Aide à améliorer Quatuor. Aucune donnée personnelle."):""}${lien("setReset","🗑️ Réinitialiser ma progression","Résultats, statistiques, série (favoris et réglages conservés)",' data-danger').replace('class="rrow rbtn"','class="rrow rbtn danger"')}</div>
     <p class="sec">À propos</p><div class="regl">
       <div class="rrow"><span><b>Version</b></span><span class="rval" id="setVer">${APP_VERSION}</span></div>
       <a class="rrow" href="mailto:playquatuor@gmail.com"><span><b>✉️ Contact</b><small>playquatuor@gmail.com</small></span><span class="chev">›</span></a></div>
@@ -1589,6 +1643,7 @@ function brancherParametres(el){
     if(t.checked&&t.dataset.r==="vibrations") buzz(10);
     if(t.checked&&t.dataset.r==="sons") SON.jouer("groupe",2); });
   if($("setTuto")) $("setTuto").onclick=revoirTuto;
+  if($("setPubs")) $("setPubs").onclick=()=>{ buzz(8); PUBS.optionsConfidentialite().catch(()=>toast("Connecte-toi à Internet pour modifier tes choix")); };
   if($("setReset")) $("setReset").onclick=reinitialiser;
   if($("setBloques")) $("setBloques").onclick=joueursBloques;
   if($("setSuppr")) $("setSuppr").onclick=supprimerCompte;
@@ -1853,7 +1908,7 @@ function openHelp(){
     <div class="rule"><span class="n">1</span><div>Touche 4 mots, puis <b>Valider</b>.</div></div>
     <div class="rule"><span class="n">2</span><div>Tu as droit à <b>4 erreurs</b> (3 en Difficile, 2 en GOAT 🐐). Gare aux pièges !</div></div>
     <div class="rule"><span class="n">3</span><div>Chaque groupe trouvé révèle une <b>anecdote</b>.</div></div>
-    <div class="rule"><span class="n">4</span><div>Bloqué ? Touche 💡 : jusqu'à <b>2 indices</b> par grille (le nom d'un groupe, puis un de ses mots).</div></div>
+    <div class="rule"><span class="n">4</span><div>Bloqué ? Touche 💡 : jusqu'à <b>${MAX_HINTS} indices</b> par grille (le nom d'un groupe, puis ses mots un par un)${PUBS?". Chaque indice se débloque avec une courte pub":""}.</div></div>
     <div class="legend"><span class="t">La couleur d'un groupe indique sa difficulté :</span>
       <div class="sw">${LEVELS.map((l,i)=>`<span><i class="l${i}"></i>${l}</span>`).join("")}</div>
       <div class="ax"><span>plus facile</span><span>plus difficile →</span></div></div>
@@ -1910,7 +1965,8 @@ $("nextG").onclick=nextOrRandom;
 $("hintBtn").onclick=demanderIndice;
 $("retryD").onclick=()=>{ if(done&&!tuto&&!lastWin) retenter(gridIdx); };
 $("retryP").onclick=()=>{ if(done&&!tuto&&!lastWin) retenter(gridIdx); };
-$("revealP").onclick=revealSolution;
+$("revealP").onclick=demanderSolution;
+$("revealP").textContent=libelleSolution();
 
 // ---- Panneau du bas : le faire glisser vers le bas pour le fermer ----
 (function(){
@@ -2117,6 +2173,7 @@ function boot(){
     if(!tuto){   // le tutoriel n'a pas besoin des grilles : on ne l'interrompt pas
       newGame(dailyIdx,{accueil:true});
       bullesProgression(false);   // anciens joueurs : bulles de la nouvelle navigation jamais vues
+      if(PUBS) PUBS.demarrer();   // pubs récompensées : consentement (RGPD puis Apple) et première pub chargée à l'avance
       if(!RM()) [...$("grid").children].forEach((t,i)=>t.animate([{opacity:0,transform:"scale(.96)"},{opacity:1,transform:"none"}],
         {duration:380,delay:i*18,easing:"cubic-bezier(.2,.8,.3,1)",fill:"backwards"}));
     }
