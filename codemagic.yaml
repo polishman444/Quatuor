@@ -21,12 +21,13 @@ workflows:
       node: 22
       xcode: latest
     triggering:
-      # Lancement manuel (bouton « Start new build »), et automatique à chaque envoi sur la branche
-      # du mode en ligne (version 1.2). Pour compiler aussi à chaque envoi sur main, ajouter « main ».
+      # Lancement manuel (bouton « Start new build », sur main pour une version à publier), et automatique
+      # à chaque envoi sur la branche de la version 1.3 (pubs), pour la tester sur TestFlight.
+      # Pas de compilation automatique sur main : une nouvelle grille n'a pas besoin d'une nouvelle appli.
       events:
         - push
       branch_patterns:
-        - pattern: claude/nifty-ptolemy-f4f4oe
+        - pattern: claude/sleepy-wright-21li5g
           include: true
       cancel_previous_builds: true
     scripts:
