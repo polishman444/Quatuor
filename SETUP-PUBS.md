@@ -12,6 +12,16 @@ si aucune pub n'est disponible (réseau, stock vide), la récompense est donnée
 Le code est prêt et fonctionne déjà avec les **identifiants de test de Google** (pubs factices marquées « Test Ad »,
 aucun revenu). Pour gagner de l'argent, il faut créer ton compte AdMob et remplacer ces identifiants.
 
+## Où on en est
+
+- ✅ Compte AdMob créé, appli **Quatuor - Culture G** ajoutée (iOS).
+- ✅ Bloc d'annonces **Indice ou solution** (avec récompense) créé.
+- ✅ Identifiants dans le code : appli `ca-app-pub-1202848161795834~3903065414` (`Info.plist`),
+  bloc `ca-app-pub-1202848161795834/1142179866` (`config-en-ligne.js`), encore en `test: true`.
+- ⏳ Profil de paiement AdMob (après la décision sur la micro-entreprise : le type Individuel / Entreprise ne se change plus).
+- ⏳ Message de consentement RGPD (étape 4), fichier app-ads.txt (étape 5), étapes de publication (étape 6).
+- ⏳ Au moment de publier : `test: false` dans `config-en-ligne.js`.
+
 ## 1. Créer le compte AdMob
 
 1. Va sur **admob.google.com** (Safari) et connecte-toi avec ton compte Google.

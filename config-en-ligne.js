@@ -13,10 +13,11 @@ window.QUATUOR_CONFIG = {
   supabaseUrl: "https://lnoorsfuoczfbaefgppe.supabase.co",
   supabaseCle: "sb_publishable_o6kouGC4ttP2UdhNIVPMbg_6MmXZXAN",
   telemetryDeckAppId: "AF21F056-30B3-4885-8849-008AB82C901D",
-  // Pubs récompensées de l'appli iOS (Google AdMob) : bloc d'annonces « avec récompense ». Mise en place : SETUP-PUBS.md
-  // ⚠️ Ce sont pour l'instant les identifiants de TEST de Google (pubs factices, aucun revenu). À remplacer par les tiens,
-  // avec test: false, au moment de publier (et l'identifiant de l'appli AdMob dans ios/App/App/Info.plist).
-  admob: { recompense: "ca-app-pub-3940256099942544/1712485313", test: true },
+  // Pubs récompensées de l'appli iOS (Google AdMob) : bloc d'annonces « Indice ou solution » (avec récompense).
+  // L'ID de l'appli AdMob est dans ios/App/App/Info.plist (GADApplicationIdentifier). Mise en place : SETUP-PUBS.md
+  // test: true → l'appli affiche les pubs de TEST de Google (aucun revenu, aucun risque pour le compte).
+  // ⚠️ Passer à test: false seulement au moment de publier, une fois le profil de paiement AdMob rempli.
+  admob: { recompense: "ca-app-pub-1202848161795834/1142179866", test: true },
   // Connexion Apple sur le site : à passer à true une fois le « Services ID » Apple configuré (SETUP-EN-LIGNE.md, étape 5c)
   appleWeb: false
 };
