@@ -19,7 +19,8 @@ aucun revenu). Pour gagner de l'argent, il faut créer ton compte AdMob et rempl
 - ✅ Identifiants dans le code : appli `ca-app-pub-1202848161795834~3903065414` (`Info.plist`),
   bloc `ca-app-pub-1202848161795834/1142179866` (`config-en-ligne.js`), encore en `test: true`.
 - ⏳ Profil de paiement AdMob (après la décision sur la micro-entreprise : le type Individuel / Entreprise ne se change plus).
-- ⏳ Message de consentement RGPD (étape 4), fichier app-ads.txt (étape 5), étapes de publication (étape 6).
+- ✅ Message de consentement RGPD publié (« Quatuor RGPD », français + anglais), partenaires publicitaires choisis.
+- ⏳ Message explicatif IDFA (étape 4), fichier app-ads.txt (étape 5), étapes de publication (étape 6).
 - ⏳ Au moment de publier : `test: false` dans `config-en-ligne.js`.
 
 ## 1. Créer le compte AdMob
