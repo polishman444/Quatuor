@@ -34,7 +34,7 @@
     const detail = { hist: histValide(x.hist), vu: x.vu === undefined ? !!x.win : !!x.vu };
     const f = trouvesValides(x.found); if (f) detail.found = f;
     return {
-      grille_id: id, gagne: !!x.win, erreurs: borne(x.mistakes, 0, 10, 0), indices: borne(x.hints || 0, 0, 2, 0),
+      grille_id: id, gagne: !!x.win, erreurs: borne(x.mistakes, 0, 10, 0), indices: borne(x.hints || 0, 0, 6, 0),
       essais: borne(x.tries || 1, 1, 99, 1), premier_gagne: !!p.win, premier_erreurs: borne(p.mistakes, 0, 10, 0),
       duree_s: Number.isFinite(x.s) ? borne(x.s, 0, 86400, null) : null, joue_le: d, du_jour: !!(x.jdj && d), detail
     };
