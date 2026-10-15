@@ -15,9 +15,9 @@ window.QUATUOR_CONFIG = {
   telemetryDeckAppId: "AF21F056-30B3-4885-8849-008AB82C901D",
   // Pubs récompensées de l'appli iOS (Google AdMob) : bloc d'annonces « Indice ou solution » (avec récompense).
   // L'ID de l'appli AdMob est dans ios/App/App/Info.plist (GADApplicationIdentifier). Mise en place : SETUP-PUBS.md
-  // test: true → l'appli affiche les pubs de TEST de Google (aucun revenu, aucun risque pour le compte).
-  // ⚠️ Passer à test: false seulement au moment de publier, une fois le profil de paiement AdMob rempli.
-  admob: { recompense: "ca-app-pub-1202848161795834/1142179866", test: true },
+  // test: false → vraies pubs (tant que le profil de paiement AdMob n'est pas rempli, Google n'en diffuse pas :
+  // l'appli donne alors l'indice ou la solution sans pub). test: true → pubs de TEST de Google, pour tester sans risque.
+  admob: { recompense: "ca-app-pub-1202848161795834/1142179866", test: false },
   // Connexion Apple sur le site : à passer à true une fois le « Services ID » Apple configuré (SETUP-EN-LIGNE.md, étape 5c)
   appleWeb: false
 };

@@ -26,7 +26,7 @@ aucun revenu). Pour gagner de l'argent, il faut créer ton compte AdMob et rempl
   URL marketing `https://playquatuor.fr`, version renommée en 1.3.
 - ⏳ Supabase : migration `0006_indices.sql` (étape 6).
 - ⏳ Test TestFlight de la version 1.3 (pubs « Test Ad »), fusion de la pull request dans `main`.
-- ⏳ Au moment de publier : `test: false` dans `config-en-ligne.js`.
+- ✅ `test: false` dans `config-en-ligne.js` (vraies pubs) pour la version soumise à Apple.
 
 ## 1. Créer le compte AdMob
 
