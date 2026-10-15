@@ -22,8 +22,11 @@ aucun revenu). Pour gagner de l'argent, il faut créer ton compte AdMob et rempl
 - ✅ Message de consentement RGPD publié (« Quatuor RGPD », français + anglais), partenaires publicitaires choisis.
 - ✅ Fichier `app-ads.txt` à la racine du site (en ligne dès que la branche est fusionnée dans `main`).
 - ✅ Message explicatif IDFA publié.
-- ⏳ Site du développeur dans App Store Connect (étape 5), étapes de publication (étape 6).
-- ⏳ Au moment de publier : `test: false` dans `config-en-ligne.js`.
+- ✅ App Store Connect : confidentialité de l'app remplie (11 types de données, suivi publicitaire),
+  URL marketing `https://playquatuor.fr`, version renommée en 1.3.
+- ⏳ Supabase : migration `0006_indices.sql` (étape 6).
+- ⏳ Test TestFlight de la version 1.3 (pubs « Test Ad »), fusion de la pull request dans `main`.
+- ✅ `test: false` dans `config-en-ligne.js` (vraies pubs) pour la version soumise à Apple.
 
 ## 1. Créer le compte AdMob
 
